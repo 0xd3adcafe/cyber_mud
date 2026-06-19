@@ -1,15 +1,19 @@
 from __future__ import annotations
 
+import asyncio
 from dataclasses import dataclass, field
 
 from commands import register_builtin_commands
 from commands.registry import CommandContext, dispatch, player_meta
 from entities.player import Player
 from persistence.save import save_player
+from persistence.world_state import load_world_state, save_world_state
 from shared.i18n import t, t_list
 from shared.protocol import MOTD_PREFIX, meta_line
+from world.clock import load_time_config
 from world.loader import load_world
 from world.state import WorldState
+from world.tick import process_tick
 
 register_builtin_commands()
 
@@ -96,6 +100,8 @@ class Game:
                 await session.send_meta(look.meta)
             save_player(session.player)
 
+        if result.world_changed:
+            save_world_state(self.state)
         if session.player.named and (result.world_changed or result.moved or result.auth_event):
             save_player(session.player)
 
@@ -111,8 +117,33 @@ class Game:
                 name=session.player.name,
             )
 
+    async def broadcast_time_meta(self) -> None:
+        for session in self.sessions:
+            if not session.player.named:
+                continue
+            ctx = CommandContext(session.player, self.state, "")
+            await session.send_meta(
+                {
+                    "time": ctx.state.clock.format_clock(session.player.locale),
+                    "period": ctx.state.clock.format_period(session.player.locale, self.state.time_config),
+                }
+            )
+
+    async def tick_loop(self) -> None:
+        interval = self.state.time_config.tick_interval_seconds
+        try:
+            while True:
+                await asyncio.sleep(interval)
+                if process_tick(self.state, self.state.time_config):
+                    save_world_state(self.state)
+                    await self.broadcast_time_meta()
+        except asyncio.CancelledError:
+            save_world_state(self.state)
+            raise
+
 
 def create_game() -> Game:
     world = load_world()
-    state = WorldState(world=world, room_items={"square": ["glowstick"]})
+    config = load_time_config()
+    state = load_world_state(world, config)
     return Game(state=state)

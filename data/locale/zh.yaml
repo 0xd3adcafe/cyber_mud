@@ -34,10 +34,36 @@ help_cmds:
   take: "撿起地上物品"
   drop: "丟下背包物品"
   inventory: "查看背包"
+  pda: "個人終端（vitals）"
+  time: "查詢世界時間"
   login: "登入（login <名稱> <密碼>）"
   register: "註冊（register <名稱> <密碼>）"
   help: "顯示說明"
   quit: "離開遊戲"
+
+periods:
+  dawn: "黎明"
+  morning: "上午"
+  noon: "正午"
+  afternoon: "午後"
+  dusk: "黃昏"
+  night: "夜晚"
+
+time:
+  clock: "第{day}天 {hour}:{minute}"
+  now: "現在是 {clock}（{period}）。"
+
+pda:
+  header: "◈ PDA — {name}"
+  vitals: "生存  HP {hp}  │  ${gold}"
+  time: "時間  {clock}  │  {period}"
+  stats: "五維  肉體 {body} │ 反應 {reflex} │ 技術 {tech} │ 冷靜 {cool} │ 智力 {intelligence}"
+  ram: "駭客  RAM {ram}"
+  social: "人性  {humanity}  │  聲望  {reputation}"
+  implants_header: "義體"
+  skills_header: "協定"
+  no_implants: "  （無義體）"
+  no_skills: "  （無協定）"
 
 auth:
   required: "請先登入或註冊：login <名稱> <密碼> 或 register <名稱> <密碼>"

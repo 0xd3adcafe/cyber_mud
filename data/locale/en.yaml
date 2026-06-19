@@ -34,10 +34,36 @@ help_cmds:
   take: "Pick up an item"
   drop: "Drop an item"
   inventory: "Show inventory"
+  pda: "Personal agent (vitals)"
+  time: "Show world time"
   login: "Log in (login <name> <password>)"
   register: "Register (register <name> <password>)"
   help: "Show help"
   quit: "Quit"
+
+periods:
+  dawn: "Dawn"
+  morning: "Morning"
+  noon: "Noon"
+  afternoon: "Afternoon"
+  dusk: "Dusk"
+  night: "Night"
+
+time:
+  clock: "Day {day} {hour}:{minute}"
+  now: "It is {clock} ({period})."
+
+pda:
+  header: "◈ PDA — {name}"
+  vitals: "Vitals  HP {hp}  │  ${gold}"
+  time: "Time  {clock}  │  {period}"
+  stats: "Stats  Body {body} │ Reflex {reflex} │ Tech {tech} │ Cool {cool} │ Int {intelligence}"
+  ram: "Net  RAM {ram}"
+  social: "Humanity {humanity}  │  Rep {reputation}"
+  implants_header: "Implants"
+  skills_header: "Protocols"
+  no_implants: "  (none)"
+  no_skills: "  (none)"
 
 auth:
   required: "Please log in or register: login <name> <password> or register <name> <password>"

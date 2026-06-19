@@ -1,17 +1,12 @@
 from __future__ import annotations
 
 from commands.registry import dispatch
-from entities.player import Player
 from persistence.save import load_player, save_player
-from world.loader import load_world
-from world.state import WorldState
+from tests.conftest import make_player, make_state
 
 
 def _ctx():
-    world = load_world()
-    state = WorldState(world=world, room_items={"square": ["glowstick"]})
-    player = Player(room_id="square", locale="zh", named=True, name="V")
-    return player, state
+    return make_player(), make_state()
 
 
 def test_take_glowstick():

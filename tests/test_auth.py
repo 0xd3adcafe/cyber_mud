@@ -1,17 +1,12 @@
 from __future__ import annotations
 
 from commands.registry import dispatch
-from entities.player import Player
 from persistence.save import load_player, player_exists
-from world.loader import load_world
-from world.state import WorldState
+from tests.conftest import make_player, make_state
 
 
 def _ctx(*, named: bool = False, name: str = "旅人"):
-    world = load_world()
-    state = WorldState(world=world, room_items={"square": ["glowstick"]})
-    player = Player(room_id="square", locale="zh", named=named, name=name)
-    return player, state
+    return make_player(named=named, name=name), make_state()
 
 
 def test_unauthenticated_gate():

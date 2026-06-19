@@ -39,11 +39,19 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
 
 async def run_server(host: str, port: int) -> None:
     game = create_game()
+    tick_task = asyncio.create_task(game.tick_loop())
     server = await asyncio.start_server(lambda r, w: handle_client(r, w, game), host=host, port=port)
     addrs = ", ".join(str(sock.getsockname()) for sock in server.sockets or [])
     print(f"cyber_mud server 監聽 {addrs}")
-    async with server:
-        await server.serve_forever()
+    try:
+        async with server:
+            await server.serve_forever()
+    finally:
+        tick_task.cancel()
+        try:
+            await tick_task
+        except asyncio.CancelledError:
+            pass
 
 
 def main(argv: list[str] | None = None) -> None:

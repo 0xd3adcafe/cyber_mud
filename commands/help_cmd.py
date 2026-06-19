@@ -8,6 +8,8 @@ HELP_ENTRIES = (
     ("take", "take"),
     ("drop", "drop"),
     ("inventory", "inventory"),
+    ("pda", "pda"),
+    ("time", "time"),
     ("login", "login"),
     ("register", "register"),
     ("help", "help"),

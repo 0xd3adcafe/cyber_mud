@@ -70,6 +70,8 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
     room = ctx.state.world.room(ctx.player.room_id)
     from shared.locale_content import room_name
 
+    clock = ctx.state.clock
+    config = ctx.state.time_config
     return {
         "name": ctx.player.name if ctx.player.named else "",
         "room": room_name(room, ctx.player.locale) if room else "—",
@@ -78,6 +80,11 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
         "gold": str(ctx.player.gold),
         "locale": ctx.player.locale,
         "auth": "1" if ctx.player.named else "0",
+        "time": clock.format_clock(ctx.player.locale),
+        "period": clock.format_period(ctx.player.locale, config),
+        "ram": f"{ctx.player.ram}/{ctx.player.max_ram}",
+        "humanity": str(ctx.player.humanity),
+        "reputation": str(ctx.player.reputation),
     }
 
 
@@ -113,4 +120,16 @@ def dispatch(line: str, player: Player, state: WorldState, peers: list[Player], 
 
 
 def register_builtin_commands() -> None:
-    from commands import drop, go, help_cmd, inventory, login, look, quit_cmd, register, take  # noqa: F401
+    from commands import (  # noqa: F401
+        drop,
+        go,
+        help_cmd,
+        inventory,
+        login,
+        look,
+        pda,
+        quit_cmd,
+        register,
+        take,
+        time_cmd,
+    )

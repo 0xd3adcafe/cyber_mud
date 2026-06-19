@@ -29,6 +29,8 @@ class CyberMudApp(App):
         self._room = "—"
         self._hp = "—"
         self._gold = "—"
+        self._time = "—"
+        self._period = "—"
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -40,7 +42,10 @@ class CyberMudApp(App):
         yield Footer()
 
     def _status_text(self) -> str:
-        return f"  房間 {self._room}  │  HP {self._hp}  │  ${self._gold}  │  {self.host}:{self.port}"
+        return (
+            f"  房間 {self._room}  │  HP {self._hp}  │  ${self._gold}"
+            f"  │  {self._time} {self._period}  │  {self.host}:{self.port}"
+        )
 
     def _update_status(self) -> None:
         self.query_one("#status", Static).update(self._status_text())
@@ -53,6 +58,10 @@ class CyberMudApp(App):
             self._hp = value
         elif key == "gold":
             self._gold = value
+        elif key == "time":
+            self._time = value
+        elif key == "period":
+            self._period = value
         self._update_status()
 
     async def on_mount(self) -> None:

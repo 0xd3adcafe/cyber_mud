@@ -35,6 +35,17 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.gold = loaded.gold
     session_player.inventory = list(loaded.inventory)
     session_player.equipment = dict(loaded.equipment)
+    session_player.body = loaded.body
+    session_player.reflex = loaded.reflex
+    session_player.tech = loaded.tech
+    session_player.cool = loaded.cool
+    session_player.intelligence = loaded.intelligence
+    session_player.humanity = loaded.humanity
+    session_player.reputation = loaded.reputation
+    session_player.ram = loaded.ram
+    session_player.max_ram = loaded.max_ram
+    session_player.implants = list(loaded.implants)
+    session_player.skills = list(loaded.skills)
     session_player.password_hash = loaded.password_hash
 
 
