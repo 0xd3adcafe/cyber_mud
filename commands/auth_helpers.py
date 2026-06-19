@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 
 from commands.registry import CommandContext, ok
+from entities.player import Player
 from persistence.save import load_player, player_exists, save_player
 from shared.i18n import t
 
@@ -23,6 +24,43 @@ def find_online_player(ctx: CommandContext, name: str):
         if player.named and player.name.lower() == target:
             return player
     return None
+
+
+def reset_player_to_guest(player, start_room: str) -> None:
+    locale = player.locale
+    fresh = Player(room_id=start_room, locale=locale)
+    player.name = fresh.name
+    player.room_id = fresh.room_id
+    player.locale = fresh.locale
+    player.named = False
+    player.hp = fresh.hp
+    player.max_hp = fresh.max_hp
+    player.gold = fresh.gold
+    player.body = fresh.body
+    player.reflex = fresh.reflex
+    player.tech = fresh.tech
+    player.cool = fresh.cool
+    player.intelligence = fresh.intelligence
+    player.humanity = fresh.humanity
+    player.reputation = fresh.reputation
+    player.faction = fresh.faction
+    player.ram = fresh.ram
+    player.max_ram = fresh.max_ram
+    player.inventory = list(fresh.inventory)
+    player.equipment = dict(fresh.equipment)
+    player.implants = list(fresh.implants)
+    player.visited_rooms = list(fresh.visited_rooms)
+    player.prompt_mud = fresh.prompt_mud
+    player.skills = list(fresh.skills)
+    player.password_hash = fresh.password_hash
+    player.in_combat = False
+    player.encounter_id = ""
+    player.active_quest = fresh.active_quest
+    player.quest_flags = dict(fresh.quest_flags)
+    player.quest_hint = fresh.quest_hint
+    player.net_shell = False
+    player.weapon_mods = dict(fresh.weapon_mods)
+    player.chased_by_npc = fresh.chased_by_npc
 
 
 def apply_loaded_player(session_player, loaded) -> None:

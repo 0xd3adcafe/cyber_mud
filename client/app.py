@@ -32,6 +32,7 @@ from client.themes import (
     theme_label,
 )
 from client.animated_log import AnimatedLogBuffer
+from commands.aliases import DEFAULT_ALIASES
 from client.status_indicators import status_needs_animation
 from client.completion import MudPrompt, MudSuggester, complete_from_view
 from client.history import CommandHistory
@@ -97,6 +98,7 @@ class CyberMudApp(App):
         self._command_history = CommandHistory.load()
         self._pending_credential_save: tuple[str, str, str, str] | None = None
         self._startup_hint = ""
+        self._pending_logout = False
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -353,6 +355,32 @@ class CyberMudApp(App):
         self.query_one("#login_pin_setup", Input).value = ""
         self.query_one("#login_pin_confirm", Input).value = ""
 
+    def _is_server_quit_command(self, text: str) -> bool:
+        parts = text.strip().split(maxsplit=1)
+        if not parts:
+            return False
+        verb = parts[0].lower()
+        if verb in ("quit", "q"):
+            return True
+        return DEFAULT_ALIASES.get(verb) == "quit"
+
+    def _return_to_login_screen(self, *, message: str = "") -> None:
+        self._cancel_reconnect_task()
+        self._reconnecting = False
+        self._reconnect_attempts = 0
+        self._needs_reauth = False
+        self._last_auth_line = ""
+        self._auth_pending = False
+        self._pending_logout = False
+        self.view = ClientViewState()
+        self._log_buffer = AnimatedLogBuffer()
+        log = self.query_one("#log", RichLog)
+        log.clear()
+        self._set_auth_ui(False)
+        if message:
+            self._set_login_status(message)
+        self._refresh_credential_ui()
+
     def _persist_credentials_if_pending(self) -> None:
         pending = self._pending_credential_save
         if pending is None:
@@ -438,6 +466,8 @@ class CyberMudApp(App):
                 self._update_status()
                 if self.view.sidebar_open and self.view.sidebar_stack:
                     asyncio.create_task(self._refresh_sidebar_panels(list(self.view.sidebar_stack)))
+        elif key == "auth" and value == "0" and was_auth:
+            self._return_to_login_screen()
         self._update_status()
         if key == "ui_panel_end":
             self._render_sidebar()
@@ -682,6 +712,9 @@ class CyberMudApp(App):
             while self.conn.connected:
                 line = await self.conn.read_line()
                 if line is None:
+                    if self._pending_logout:
+                        self._return_to_login_screen()
+                        break
                     was_authenticated = self.view.authenticated
                     if self.view.authenticated:
                         self._append_log(log, f"{SYS_PREFIX}神經連結中斷。", kind="sys")
@@ -718,6 +751,10 @@ class CyberMudApp(App):
                 if kind == "ui":
                     handle_ui_json(self.view, line[len(UI_PREFIX):])
                     self._render_sidebar()
+                    self._complete_command_if_pending(log)
+                    continue
+                if self._pending_logout and self.view.authenticated:
+                    self._return_to_login_screen(message=line)
                     self._complete_command_if_pending(log)
                     continue
                 self._append_log(log, line)
@@ -887,6 +924,8 @@ class CyberMudApp(App):
                 return
             if text.startswith("/") and is_netrun_exit_command(text):
                 text = text[1:].strip().split()[0]
+        if self._is_server_quit_command(text):
+            self._pending_logout = True
         self._log_buffer.mark_last_pending()
         self._update_spinner_accent()
         self._refresh_log_display(log, preserve_scroll=True)

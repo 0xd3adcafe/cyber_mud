@@ -12,7 +12,7 @@ game:
   offline: "{name} went offline."
   unknown_verb: "Unknown command: {verb}"
   no_exit: "You cannot go that way."
-  quit: "Neural link closed. Goodbye."
+  quit: "Logged out. Please sign in again."
 
 look:
   header: "◈ {name}"

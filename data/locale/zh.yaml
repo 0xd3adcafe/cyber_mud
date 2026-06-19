@@ -12,7 +12,7 @@ game:
   offline: "{name} 離線了。"
   unknown_verb: "未知指令：{verb}"
   no_exit: "那個方向沒有路。"
-  quit: "神經連結已關閉。再見。"
+  quit: "已登出。請重新登入。"
 
 look:
   header: "◈ {name}"
