@@ -1,0 +1,63 @@
+start_room: square
+
+factions:
+  arasaka: 荒坂公司
+  maelstrom: 漩渦幫
+  militech: 軍武科技
+  tyrell: 泰瑞公司
+
+rooms:
+  square:
+    name_zh: 霓虹廣場
+    name_en: Neon Square
+    description_zh: |
+      全息廣告在酸雨後的積水上閃爍。情報販子與企業特工混雜在人群中。
+      出口：北（小巷）、東（訓練場）、南（碼頭）。
+    description_en: |
+      Holographic ads flicker on rain-slick pavement. Fixers and corpo agents mingle in the crowd.
+      Exits: north (alley), east (tutorial), south (docks).
+    district: watson
+    exits:
+      north: alley
+      east: tutorial
+      south: docks
+  alley:
+    name_zh: 陰暗小巷
+    name_en: Dark Alley
+    description_zh: 霓虹反光在潮濕牆面上流動。南邊回到廣場。
+    description_en: Neon reflections crawl across wet walls. South leads back to the square.
+    district: watson
+    exits:
+      south: square
+  tutorial:
+    name_zh: 新手訓練場
+    name_en: Training Yard
+    description_zh: 教官的全息投影正在等待新進邊緣人。西邊回到霓虹廣場。
+    description_en: An instructor holo waits for new edgerunners. West returns to Neon Square.
+    district: tutorial
+    exits:
+      west: square
+  docks:
+    name_zh: 貨櫃碼頭
+    name_en: Container Docks
+    description_zh: 起重機低鳴，走私貨櫃堆疊至霧中。北邊是霓虹廣場。
+    description_en: Cranes groan as smuggler containers vanish into the fog. North leads to the square.
+    district: docks
+    exits:
+      north: square
+
+items:
+  glowstick:
+    name_zh: 螢光棒
+    name_en: Glowstick
+    description_zh: 廉價的化学光源，在酸雨中仍亮得刺眼。
+    description_en: A cheap chem-light that burns bright even in acid rain.
+    takeable: true
+
+npcs:
+  broker:
+    name_zh: 情報經紀人
+    name_en: Info Broker
+    room_id: square
+    description_zh: 半張臉藏在全息面具後，低聲兜售傳聞與座標。
+    description_en: Half a face hides behind a holo-mask, whispering rumors and coordinates.

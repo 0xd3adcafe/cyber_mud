@@ -1,0 +1,3 @@
+from commands.registry import register_builtin_commands
+
+register_builtin_commands()

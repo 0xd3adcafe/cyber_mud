@@ -1,0 +1,14 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+
+from world.world import World
+
+
+@dataclass
+class WorldState:
+    world: World
+    room_items: dict[str, list[str]] = field(default_factory=dict)
+
+    def items_in_room(self, room_id: str) -> list[str]:
+        return list(self.room_items.get(room_id, []))

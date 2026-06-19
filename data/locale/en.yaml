@@ -1,0 +1,34 @@
+motd:
+  lines:
+    - "═══════════════════════════════════════"
+    - "◈ Night City Neural Link"
+    - "═══════════════════════════════════════"
+    - "Link established. Type look to explore, go <dir> to move."
+
+game:
+  enter: "{name} jacked into the neural net."
+  leave: "{name} disconnected."
+  offline: "{name} went offline."
+  unknown_verb: "Unknown command: {verb}"
+  no_exit: "You cannot go that way."
+  quit: "Neural link closed. Goodbye."
+
+look:
+  header: "◈ {name}"
+  exits: "Exits: {exits}"
+  items: "On the ground: {items}"
+  npcs: "Here: {npcs}"
+  empty: "Nothing notable here."
+
+go:
+  ok: "You go {direction}."
+
+help:
+  header: "◈ Commands"
+  line: "  {name} — {desc}"
+
+help_cmds:
+  look: "Look around"
+  go: "Move (e.g. go north)"
+  help: "Show help"
+  quit: "Quit"
