@@ -3,7 +3,7 @@ from __future__ import annotations
 from commands.helpers import current_room
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
-from shared.locale_content import item_label, room_name
+from shared.locale_content import item_label_with_id, npc_label_with_id, room_name
 
 
 def handle(ctx: CommandContext):
@@ -26,15 +26,14 @@ def handle(ctx: CommandContext):
         for item_id in item_ids:
             item = ctx.state.world.item(item_id)
             if item:
-                labels.append(item_label(item, ctx.player.locale))
+                labels.append(item_label_with_id(item, ctx.player.locale))
         lines.append(t(ctx.player.locale, "scan.items", items="、".join(labels)))
 
     npc_labels = []
     for npc_id in ctx.state.npcs_in_room(ctx.player.room_id):
         npc = ctx.state.world.npc(npc_id)
         if npc:
-            name = npc.name_zh if ctx.player.locale == "zh" else (npc.name_en or npc.name_zh)
-            npc_labels.append(name)
+            npc_labels.append(npc_label_with_id(npc, ctx.player.locale))
     if npc_labels:
         lines.append(t(ctx.player.locale, "scan.npcs", npcs="、".join(npc_labels)))
 

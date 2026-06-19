@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from commands.registry import CommandContext
 from shared.i18n import t
-from shared.locale_content import item_label, room_description, room_name
+from shared.locale_content import item_label_with_id, npc_label_with_id, room_description, room_name
 from shared.names import matches_name
 from world.state import WorldState
 from world.weather import weather_label
@@ -121,7 +121,7 @@ def format_look(ctx: CommandContext) -> list[str]:
         for item_id in item_ids:
             item = ctx.state.world.item(item_id)
             if item:
-                labels.append(item.name_zh if ctx.player.locale == "zh" else (item.name_en or item.name_zh))
+                labels.append(item_label_with_id(item, ctx.player.locale))
         if labels:
             lines.append(t(ctx.player.locale, "look.items", items="、".join(labels)))
 
@@ -129,7 +129,7 @@ def format_look(ctx: CommandContext) -> list[str]:
     for npc_id in ctx.state.npcs_in_room(ctx.player.room_id):
         npc = ctx.state.world.npc(npc_id)
         if npc:
-            npc_labels.append(npc.name_zh if ctx.player.locale == "zh" else (npc.name_en or npc.name_zh))
+            npc_labels.append(npc_label_with_id(npc, ctx.player.locale))
     if npc_labels:
         lines.append(t(ctx.player.locale, "look.npcs", npcs="、".join(npc_labels)))
 

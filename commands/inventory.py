@@ -1,6 +1,6 @@
 from commands.registry import CommandContext, ok_document, player_meta, register
 from shared.i18n import t
-from shared.locale_content import item_label
+from shared.locale_content import item_label_with_id
 
 
 def format_inventory(ctx: CommandContext) -> list[str]:
@@ -10,7 +10,7 @@ def format_inventory(ctx: CommandContext) -> list[str]:
         return lines
     for item_id in ctx.player.inventory:
         item = ctx.state.world.item(item_id)
-        lines.append(f"  • {item_label(item, ctx.player.locale)}")
+        lines.append(f"  • {item_label_with_id(item, ctx.player.locale)}")
     return lines
 
 
