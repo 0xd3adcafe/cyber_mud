@@ -65,9 +65,10 @@ class CyberMudApp(App):
             with Vertical(id="login_form"):
                 yield Static("◈ 夜城神經連結", id="login_title")
                 yield Select(
-                    (("login", "登入既有帳號"), ("register", "註冊新帳號")),
+                    (("登入既有帳號", "login"), ("註冊新帳號", "register")),
                     id="auth_mode",
                     value="login",
+                    allow_blank=False,
                 )
                 yield Input(placeholder="使用者名稱", id="login_name")
                 yield Input(placeholder="密碼", id="login_password", password=True)
