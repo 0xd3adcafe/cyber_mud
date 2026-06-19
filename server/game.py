@@ -4,13 +4,15 @@ import asyncio
 from dataclasses import dataclass, field
 
 from commands import register_builtin_commands
-from combat.encounter import encounter_for_player, end_encounter
-from commands.registry import CommandContext, dispatch, player_meta
+from combat.encounter import COMBAT_TICK_SECONDS, encounter_for_player, end_encounter
+from combat.tick import process_combat_tick
+from commands.registry import CommandContext
 from entities.player import Player
 from persistence.save import save_player
 from persistence.world_state import load_world_state, save_world_state
 from shared.i18n import t, t_list
-from shared.protocol import MOTD_PREFIX, PANEL_PREFIX, meta_line, ui_line
+from shared.protocol import MOTD_PREFIX, PANEL_PREFIX, SYS_PREFIX, meta_line, ui_line
+from shared.startup import StartupReport
 from world.clock import load_time_config
 from world.loader import load_world
 from world.state import WorldState
@@ -49,6 +51,7 @@ class ClientSession:
 class Game:
     state: WorldState
     sessions: list[ClientSession] = field(default_factory=list)
+    startup: StartupReport | None = None
 
     def peers_in_room(self, room_id: str, *, exclude: Player | None = None) -> list[Player]:
         return [
@@ -77,11 +80,29 @@ class Game:
         self.state.world = world
         clear_locale_cache()
 
+    async def notify_dev_reload(self, kind: str, *, failures: list[tuple[str, str]] | None = None) -> None:
+        from commands.registry import player_meta
+
+        if kind == "data":
+            message = "世界資料已重載。"
+        else:
+            message = "程式碼已重載。"
+            if failures:
+                message = f"程式碼重載完成（{len(failures)} 個模組失敗）。"
+        for session in self.sessions:
+            await session.send(f"{SYS_PREFIX}{message}")
+            if session.player.named:
+                await session.send_meta(player_meta(CommandContext(session.player, self.state, "")))
+
     async def add_session(self, session: ClientSession) -> None:
+        from commands.registry import player_meta
+
         self.sessions.append(session)
         locale = session.player.locale
         for line in t_list(locale, "motd.lines"):
             await session.send(f"{MOTD_PREFIX}{line}")
+        if self.startup is not None:
+            await session.send(f"{SYS_PREFIX}伺服器 {self.startup.format_brief()}")
         await session.send_meta(player_meta(CommandContext(session.player, self.state, "")))
 
     async def broadcast_room(self, room_id: str, lines: list[str], *, exclude: ClientSession | None = None) -> None:
@@ -96,6 +117,8 @@ class Game:
             await target.send(t(target.player.locale, key, **kwargs))
 
     async def handle_command(self, session: ClientSession, line: str) -> bool:
+        from commands.registry import dispatch, player_meta
+
         unnamed_before = not session.player.named
         peers = self.peers_in_room(session.player.room_id, exclude=session.player)
         result = dispatch(line, session.player, self.state, peers, self.all_named_players())
@@ -209,6 +232,8 @@ class Game:
                     if hint:
                         await target.send_meta({"hint": hint})
             elif event.kind == "chase_restart":
+                from commands.registry import player_meta
+
                 for target in self.sessions:
                     if target.player.name != event.player_name:
                         continue
@@ -218,22 +243,44 @@ class Game:
                     await target.send_meta(player_meta(CommandContext(target.player, self.state, "")))
 
     async def _handle_combat_tick_results(self, combat_results) -> None:
+        from combat.encounter import combat_meta
+
         for player, combat_result in combat_results:
             session = self.session_for_player(player)
             if session and combat_result.lines:
                 await session.send_lines(combat_result.lines)
             if session:
-                ctx = CommandContext(player, self.state, "")
-                await session.send_meta(player_meta(ctx))
+                meta = combat_meta(self.state, player)
+                meta["hp"] = f"{player.hp}/{player.max_hp}"
+                if combat_result.ended:
+                    meta["combat"] = "0"
+                await session.send_meta(meta)
             if combat_result.broadcast_key:
                 await self.broadcast_localized(
                     player.room_id,
                     combat_result.broadcast_key,
                     **(combat_result.broadcast_kwargs or {}),
                 )
-            if combat_result.world_changed or combat_result.ended:
+            if combat_result.ended or combat_result.lines:
                 save_player(player)
                 save_world_state(self.state)
+
+    async def combat_tick_loop(self) -> None:
+        try:
+            while True:
+                interval = (
+                    COMBAT_TICK_SECONDS
+                    if self.state.encounters
+                    else self.state.time_config.tick_interval_seconds
+                )
+                await asyncio.sleep(interval)
+                if not self.state.encounters:
+                    continue
+                combat_results = process_combat_tick(self.state, self.all_named_players())
+                if combat_results:
+                    await self._handle_combat_tick_results(combat_results)
+        except asyncio.CancelledError:
+            raise
 
     async def tick_loop(self) -> None:
         interval = self.state.time_config.tick_interval_seconds
@@ -258,8 +305,13 @@ class Game:
             raise
 
 
-def create_game() -> Game:
-    world = load_world()
-    config = load_time_config()
-    state = load_world_state(world, config)
-    return Game(state=state)
+def create_game() -> tuple[Game, StartupReport]:
+    startup = StartupReport()
+    with startup.measure("世界資料"):
+        world = load_world()
+    with startup.measure("時鐘設定"):
+        config = load_time_config()
+    with startup.measure("世界狀態"):
+        state = load_world_state(world, config)
+    game = Game(state=state, startup=startup)
+    return game, startup

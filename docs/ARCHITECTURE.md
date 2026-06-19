@@ -114,7 +114,7 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 - [x] 指令註冊制與別名
 - [x] 世界 YAML 載入與驗證
 - [x] 玩家存檔與 world_state
-- [x] Textual client（log、狀態、側欄、歷史、完成）
+- [x] Textual client（log、狀態、側欄、Tab 補全、快捷鍵列、即時旋轉 spinner、主題）
 - [x] i18n（zh/en）
 - [x] 分頁長文（look、help 等）
 
@@ -127,11 +127,11 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 - [x] CP2077 風格屬性欄位
 - [x] 天氣（區域）
 - [x] NPC tick 移動／閒置
-- [x] 即時戰鬥 encounter
+- [x] 即時戰鬥 encounter（`combat_cd` 秒級 meta、client 即時倒數）
 - [x] NETRUN 子 shell（server `net` + client `net_shell` meta）
 - [x] PDA／地圖／說明／裝備側欄
 - [x] Prompt 自訂（server + client 覆寫）
-- [x] 開發熱重載、client 自動重連
+- [x] 開發熱重載（`data/*.yaml` + 程式碼 `reload_application_code`）、client 自動重連與 `/reconnect`
 - [x] 側欄裝備自動刷新
 
 ### 工具
@@ -142,7 +142,9 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 
 ## 規劃中
 
-見 [PHASES.md — Backlog](PHASES.md#backlog)：
+變更紀錄與待辦以 [PHASES.md — Backlog](PHASES.md#backlog) 為準；**每次交付前須更新**（見 [Backlog 維護慣例](PHASES.md#backlog-維護慣例)）。
+
+節錄：
 
 - 天氣／時段對玩法數值修正
 - 完整被動技能與義體觸發

@@ -83,7 +83,7 @@ cyber_mud/
 ### 5. 內建 Client 基礎 UI
 
 - 狀態列：`room`、`hp`、`gold`（來自 `@meta`）
-- 輸入框、歷史（上下鍵）、Tab 自動完成（可後補）
+- 輸入框、Tab 自動完成（`shared/completion.py`）；輸入歷史（上下鍵）待補
 - F2–F5 側邊欄骨架（可先只做 PDA）
 
 **驗證**：`./run.sh --client` 可遊玩 MVP，不需 `nc`。

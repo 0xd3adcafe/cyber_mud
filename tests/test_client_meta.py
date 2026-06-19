@@ -1,17 +1,51 @@
 from client.meta_handlers import (
     ClientViewState,
+    SidebarPanel,
     active_prompt,
     apply_meta,
     classify_server_line,
+    format_sidebar_content,
     handle_panel_line,
+    handle_ui_json,
     hint_text,
     is_local_command,
     is_netrun_exit_command,
     netrun_blocks_server_command,
+    ordered_sidebar_stack,
     parse_local_command,
+    panels_to_refresh_on_move,
     reconnect_delay,
+    should_refresh_sidebar_on_room_change,
     status_text,
+    toggle_sidebar_panel,
 )
+
+
+def test_apply_meta_combat_cd():
+    import time
+
+    state = ClientViewState()
+    apply_meta(state, "combat", "1")
+    apply_meta(state, "combat_cd", "P:60 N:30")
+    assert state.in_combat
+    assert state.combat_player_cd == 60
+    assert state.combat_npc_cd == 30
+    assert state.combat_cd_synced_at > 0
+    apply_meta(state, "combat", "0")
+    assert not state.in_combat
+    assert state.combat_player_cd == 0
+
+
+def test_apply_meta_completion_fields():
+    state = ClientViewState()
+    apply_meta(state, "complete_room_items", "glowstick,knife")
+    apply_meta(state, "complete_npcs", "broker")
+    apply_meta(state, "complete_exits", "north,south")
+    apply_meta(state, "complete_inventory", "jacket")
+    assert state.complete_room_items == ["glowstick", "knife"]
+    assert state.complete_npcs == ["broker"]
+    assert state.complete_exits == ["north", "south"]
+    assert state.complete_inventory == ["jacket"]
 
 
 def test_apply_meta_auth():
@@ -37,20 +71,47 @@ def test_panel_stream_lifecycle():
     handle_panel_line(state, "◈ PDA")
     apply_meta(state, "ui_panel_end", "1")
     assert state.sidebar_open
-    assert state.sidebar_panel == "pda"
-    assert state.sidebar_lines == ["◈ PDA"]
+    assert state.sidebar_stack == ["pda"]
+    assert state.sidebar_panels["pda"].lines == ["◈ PDA"]
+
+
+def test_sidebar_stack_pda_and_map():
+    state = ClientViewState()
+    apply_meta(state, "ui_panel", "pda")
+    handle_ui_json(state, '{"panel":"pda","sections":[{"kind":"row","label":"HP","value":"100/100"}]}')
+    apply_meta(state, "ui_panel_end", "1")
+    apply_meta(state, "ui_panel", "map")
+    handle_ui_json(state, '{"panel":"map","sections":[{"kind":"text","lines":["[@] square"]}]}')
+    apply_meta(state, "ui_panel_end", "1")
+    assert ordered_sidebar_stack(state.sidebar_stack) == ["pda", "map"]
+    text = format_sidebar_content(state)
+    assert "100/100" in text
+    assert "square" in text or "[@]" in text
+
+
+def test_toggle_sidebar_panel():
+    state = ClientViewState(sidebar_open=True, sidebar_stack=["pda"])
+    assert not toggle_sidebar_panel(state, "pda")
+    assert state.sidebar_stack == []
+    assert not state.sidebar_open
+    assert toggle_sidebar_panel(state, "map")
+    assert state.sidebar_open
 
 
 def test_combat_hint_priority():
-    state = ClientViewState(combat_log="P:0 N:1", hint="任務提示")
-    assert hint_text(state) == "P:0 N:1"
+    state = ClientViewState(in_combat=True, combat_log="P:0 N:1", hint="任務提示")
+    text = hint_text(state)
+    assert "P:0 N:1" in text
+    assert "任務提示" in text
 
 
 def test_local_commands():
     assert is_local_command("/reconnect")
     assert is_local_command("/prompt set %n>")
+    assert is_local_command("/theme matrix")
     assert not is_local_command("look")
     assert parse_local_command("/prompt set %h>") == ("prompt", "set %h>")
+    assert parse_local_command("/theme tron") == ("theme", "tron")
 
 
 def test_classify_server_line():
@@ -64,6 +125,52 @@ def test_reconnect_backoff():
     assert reconnect_delay(1) == 1.0
     assert reconnect_delay(2) == 2.0
     assert reconnect_delay(5) == 16.0
+
+
+def test_should_refresh_map_sidebar_on_room_change():
+    state = ClientViewState(sidebar_open=True, sidebar_stack=["map"], room_id="square")
+    assert should_refresh_sidebar_on_room_change(
+        state,
+        old_room_id="square",
+        new_room_id="alley",
+    )
+    assert panels_to_refresh_on_move(state) == ["map"]
+    assert not should_refresh_sidebar_on_room_change(
+        state,
+        old_room_id="alley",
+        new_room_id="alley",
+    )
+    state.sidebar_stack = ["pda", "map"]
+    assert should_refresh_sidebar_on_room_change(
+        state,
+        old_room_id="square",
+        new_room_id="alley",
+    )
+    state.sidebar_stack = ["pda"]
+    assert not should_refresh_sidebar_on_room_change(
+        state,
+        old_room_id="square",
+        new_room_id="alley",
+    )
+
+
+def test_sidebar_ui_text_sections():
+    state = ClientViewState()
+    apply_meta(state, "ui_panel", "map")
+    handle_ui_json(state, '{"title":"地圖","sections":[{"kind":"text","lines":["[@]"," ■ "]}]}')
+    apply_meta(state, "ui_panel_end", "1")
+    text = format_sidebar_content(state)
+    assert "[@]" in text or "[/]" in text
+
+
+def test_sidebar_prefers_ui_json_over_panel_lines():
+    state = ClientViewState(sidebar_open=True, sidebar_stack=["pda"])
+    state.sidebar_panels["pda"] = SidebarPanel(
+        lines=["◈ PDA", "HP 100/100", "HP 100/100"],
+        ui={"title": "PDA", "sections": [{"kind": "row", "label": "HP", "value": "100/100"}]},
+    )
+    text = format_sidebar_content(state)
+    assert text.count("100/100") == 1
 
 
 def test_netrun_prompt_and_blocking():

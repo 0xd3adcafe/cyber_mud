@@ -58,4 +58,18 @@ cd cyber_mud
 ./admin.sh validate # 驗證世界 + 測試
 ```
 
+## 版本控制（Git）
+
+本專案以 **git** 管理原始碼；執行期資料（`data/saves/`、`data/world_state.json`）與 `.venv/` 不納入版本庫。
+
+```bash
+git status
+git log --oneline -10
+./admin.sh validate   # 提交前建議全過
+git add <檔案>
+git commit -m "feat: 簡述"
+```
+
+慣例見 [CLAUDE.md](CLAUDE.md#版本控制)：一個大項目一個 commit、訊息格式 `<type>: <簡述>`、變更須同步 [PHASES.md](docs/PHASES.md) backlog。
+
 依 [PHASES.md](docs/PHASES.md) 擴充登入、戰鬥、NETRUN 等功能。

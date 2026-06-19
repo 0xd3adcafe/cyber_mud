@@ -80,6 +80,7 @@
 1. [步驟] → 驗證：[檢查點]
 2. [步驟] → 驗證：[檢查點]
 3. [步驟] → 驗證：[檢查點]
+4. 更新 backlog → 驗證：PHASES.md「已完成」或「Backlog」已反映變更
 ```
 
 ---
@@ -98,8 +99,8 @@
 - 不使用 MUDlet、TinTin++、`nc` 等作為正式遊玩方式。
 - 伺服器保留 TCP 換行文字協定供除錯；產品體驗以內建 client 為準。
 
-**目前 MVP 已具備：** `look`／`go`／`help`／`quit`、夜城起點世界（`square` 等）、Textual client、基礎測試。  
-**待擴充：** 登入存檔、物品、戰鬥、NETRUN、tick 等——見 [`docs/PHASES.md`](docs/PHASES.md)。
+**目前已具備：** 登入存檔、物品、戰鬥、NETRUN、tick、側欄（PDA／地圖／裝備）、Tab 補全、自動重連、`--dev` 熱重載等——完整清單見 [`docs/PHASES.md`](docs/PHASES.md)「已完成」。  
+**待擴充：** Phase E.4 文件格式等——見 [`docs/PHASES.md`](docs/PHASES.md#backlog)。
 
 ## 安裝與執行
 
@@ -115,7 +116,7 @@
 # 內建 TUI client（另開終端）
 ./run.sh --client
 
-# 開發模式（預留；目前同一般模式）
+# 開發模式（data + 程式碼熱重載）
 ./run.sh --dev
 ```
 
@@ -173,10 +174,13 @@
 流程：
 
 1. 完成一個大項目 → 跑 `pytest tests/` 或 `./admin.sh validate`
-2. 通過後 `git add` 相關檔案 → `git commit`
-3. 需要時 `git push`
+2. **更新 backlog** → [`docs/PHASES.md`](docs/PHASES.md)「已完成」或「Backlog」；本檔 Backlog 摘要表同步
+3. 通過後 `git add` 相關檔案 → `git commit`
+4. 需要時 `git push`
 
 Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`test: 補齊移動測試`）。
+
+**Backlog 為必做步驟**：任何修正、client／server 行為變更，交付前都要寫入 PHASES，不得只改程式。
 
 ## 管理工具
 
@@ -188,21 +192,39 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 
 ## Backlog
 
-依 [`docs/PHASES.md`](docs/PHASES.md) 與 [`docs/WORLD.md`](docs/WORLD.md)：
+主清單在 [`docs/PHASES.md`](docs/PHASES.md)。近期已完成（2026-06）摘要：
 
-### Phase 0 剩餘
+| 項目 | 模組／驗收 |
+|------|------------|
+| Client 主介面現代化 | `client/tui_styles.py`、`client/ui_format.py` |
+| 登入／版面修正 | 輸入框可見、art 高度、RichLog 不搶焦點 |
+| 側欄修正 | `room_id` 刷新 map、優先 `@ui` JSON |
+| 物品／NPC 英文後綴 | `shared/locale_content.py` → `look`／`scan`／`inventory` |
+| Tab 自動補全 | `shared/completion.py`、`client/completion.py`、`@meta complete_*` |
+| 快捷鍵列 | `#hotkey_bar`（Tab、F2–F6、`/reconnect`） |
+| 輸出動畫前綴 | `client/output_prefix.py`（Braille spinner） |
+| Client 重新連線 | `client/reconnect.py`、斷線退避、`/reconnect`、重送 auth |
+| Server 程式碼熱重載 | `server/code_reload.py`、`server/dev_reload.py`、`./run.sh --dev` |
+| Client spinner 執行中指示 | 僅執行中指令列動畫；完成後停止 |
+| Client 狀態動畫指示 | 戰鬥／任務／低 HP／NETRUN 進行中時狀態列圖示旋轉 |
+| 戰鬥 CD 秒數倒數 | `client/cd_display.py`、`combat_cd` 秒級 meta、hint／log 即時倒數 |
+| NPC 離房結束戰鬥 | `npc_in_player_room`、`resolve_npc_departed`；敵人巡邏離開時結束 encounter |
+| Tab 補全修正 | `MudPrompt` 攔截 Tab、`_apply_prompt_completion` 同步 fallback |
+| 戰鬥節奏加速 | `combat_tick_loop` 每 3s；攻擊 CD 3s、NPC 反擊 6s |
+| 效能優化 | 靜默 CD tick、精簡戰鬥 meta、client spinner 降頻 |
+| 側欄 stack | `sidebar_stack` 同時顯示 PDA＋地圖；F2–F5 切換疊加 |
+| 啟動狀態 | `StartupReport` 載入耗時；server 終端＋client hint |
+| Client 輸入歷史 | ↑↓ 指令歷史、Esc 還原、`command_history.json` 持久化 |
 
-- 登入／註冊、存檔
-- `take`／`drop`／`inventory`
-- Client 側欄（PDA／地圖）、自動完成
+### 待做（節錄）
 
-### 遊戲系統（Phase A–E）
+維護規則見 [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)——**之後所有修正或變動都要更新 backlog**。
 
-- 世界 tick、時間、CP2077 風格屬性
-- 區域天氣、NPC 移動／閒置
-- 即時戰鬥、NETRUN 殼層
-- 批量物品、`equip`、PDA／裝備側欄、prompt 自訂
-- 程序生成世界（`tools/generate_world.py`，可從原 mud 移植）
+- Tab 補全多候選輪替
+- Phase E.4 文件 GitHub 風格 + TOC
+- NPC 任務驅動 AI、玩法數值深度平衡等（見 PHASES Backlog）
+
+世界觀與區域擴充見 [`docs/WORLD.md`](docs/WORLD.md)。
 
 ## 注意事項
 

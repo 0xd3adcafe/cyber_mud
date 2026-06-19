@@ -68,12 +68,12 @@
 
 ## Phase E：維護與體驗
 
-| # | 項目 | 驗收 |
-|---|------|------|
-| E.1 | Client 自動重連 | 斷線後恢復 |
-| E.2 | `./run.sh --dev` 熱重載 | 改 code/data 可重載 |
-| E.3 | 側欄裝備自動刷新 | equip 後 F2/F5 即時更新 |
-| E.4 | 文件 GitHub 風格 + TOC | `docs/` 一致格式 |
+| # | 項目 | 驗收 | 狀態 |
+|---|------|------|------|
+| E.1 | Client 自動重連 | 斷線後恢復、重送 auth | ✅ |
+| E.2 | `./run.sh --dev` 熱重載 | 改 code/data 可重載 | ✅ |
+| E.3 | 側欄裝備自動刷新 | equip 後 F2/F5 即時更新 | ✅ |
+| E.4 | 文件 GitHub 風格 + TOC | `docs/` 一致格式 | 待做 |
 
 **原專案 commit 參考**：`34d5525`（側欄刷新）
 
@@ -92,15 +92,48 @@
 | 被動技能與義體觸發 | `combat/passives.py`（義臂、breach_protocol） |
 | 店鋪開閉、NPC 作息 | `data/shops.yaml`、`data/schedule.yaml`、`world/schedule.py` |
 | Client 登入介面 | 半高隨機 ASCII、登入/註冊表單、密碼遮罩 |
+| Client 主題（Themes） | 7 款致敬風格、`/theme`、`~/.config/cyber_mud/settings.json`、登入下拉選單 |
+| Client 登入 ASCII 程序生成 | 12 種場景（天際線、矩陣雨、Tron 網格等），依主題加權、每次登入隨機 |
+| Client 主介面現代化 | Grok CLI 風格 scrollback + prompt dock、`client/tui_styles.py` |
+| Client 登入／遊戲版面修正 | 輸入框可見、art 高度、`VerticalScroll`、RichLog 不搶焦點 |
+| Client 側欄修正 | `VerticalScroll`、`room_id` 觸發 map 刷新、優先 `@ui` JSON（防 PDA／map 重複） |
+| 物品／NPC 英文後綴 | `look`／`scan`／`inventory` 顯示 `中文名 (EnglishName)`，方便打指令 |
+| Tab 自動補全 | `shared/completion.py`、`MudSuggester`、`@meta complete_*`、Tab 接受建議 |
+| 快捷鍵列 | `#hotkey_bar` 常駐顯示 Tab／F2–F6／`/reconnect`／Ctrl+C |
+| 輸出動畫前綴 | `client/output_prefix.py`、Braille spinner（⠋⠙⠹…）、依 MOTD／SYS／ERR 著色 |
+| Client 重新連線 | 斷線指數退避（最多 5 次）、`/reconnect` 手動重連、恢復後重送 auth、`client/reconnect.py` |
+| Server 程式碼熱重載 | `server/code_reload.py`；`--dev` 監看 `commands/` 等 `.py` + `data/*.yaml`，廣播 SYS 並更新 meta |
+| Client spinner 執行中指示 | 僅待回應的指令列（echo）旋轉；回應後改 `❯`；其餘 log 靜態 `›` |
+| Client 狀態動畫指示 | `client/status_indicators.py`；戰鬥 ⚔、任務 ▸、低 HP ♥、NETRUN ⎈ 進行中旋轉 |
+| 戰鬥 CD 秒數倒數 | `combat_cd` meta 改秒、`client/cd_display.py`；狀態列 `P:45s N:30s` 與 log 冷卻行每秒倒數 |
+| NPC 離房結束戰鬥 | `combat/encounter.py` `npc_in_player_room`、`combat/actions.py` `resolve_npc_departed`；巡邏／作息移走敵人時 tick 或下指令皆結束 encounter |
+| Tab 補全修正 | `client/completion.py` `MudPrompt` 攔截 Tab（避免 Textual `focus_next`）、`client/app.py` `_apply_prompt_completion` 同步 fallback |
+| 戰鬥節奏加速 | `COMBAT_TICK_SECONDS=3` 獨立 `combat_tick_loop`；玩家 CD 3s、NPC CD 6s（不再綁 30s 世界 tick） |
+| 效能優化 | 戰鬥 CD tick 靜默（不推 meta／存檔）；戰鬥事件只送 `combat_meta`；client spinner 0.2s；無 encounter 時戰鬥 loop 休眠 30s |
+| 側欄 stack 多面板 | `sidebar_stack`／`sidebar_panels`；F2–F5 疊加 PDA＋地圖等；再按同鍵關閉該面板 |
+| 啟動狀態／載入耗時 | `shared/startup.py` `StartupReport`；server 終端摘要＋client 登入 hint；連線後 SYS 推送伺服器就緒時間 |
+| Client 輸入歷史 | `client/history.py` `CommandHistory`；`MudPrompt` ↑↓／Ctrl+P/N 瀏覽、Esc 還原草稿、可編輯後送出；`~/.config/cyber_mud/command_history.json` |
+
+## Backlog 維護慣例
+
+**每次修正或功能變更完成後**，在合併／commit 前更新本檔：
+
+1. **已完成** → 加入「已完成（原 Backlog）」表格（項目 + 驗收／模組）
+2. **待做／後續** → 加入下方「Backlog」清單；做完則移入已完成並刪除
+3. **摘要** → 同步更新 [`CLAUDE.md`](../CLAUDE.md) Backlog 一節（近期完成表）
+
+Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**更新 backlog，不得僅改程式不留紀錄。
 
 ## Backlog
 
 尚未實作或僅部分實作，新專案可選做：
 
+- Tab 補全多候選輪替（連按 Tab 切換下一個匹配）
 - Prompt 完整版（更多 token、即時預覽 UI）
 - NPC 任務驅動 AI（進階追蹤、多階段任務編排工具）
 - 天氣／時段對玩法數值的深度平衡
 - 完整被動技能樹與義體連鎖觸發
+- 文件 GitHub 風格 + TOC（Phase E.4）
 - pyenv 原生編譯 Python（環境設定，非遊戲功能）
 
 ---

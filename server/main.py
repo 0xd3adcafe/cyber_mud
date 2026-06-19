@@ -38,25 +38,36 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
 
 
 async def run_server(host: str, port: int, *, dev: bool = False) -> None:
-    game = create_game()
+    from shared.startup import StartupReport
+
+    boot = StartupReport()
+    with boot.measure("載入遊戲"):
+        game, load_report = create_game()
     tick_task = asyncio.create_task(game.tick_loop())
+    combat_task = asyncio.create_task(game.combat_tick_loop())
     dev_task = None
     if dev:
         from server.dev_reload import start_dev_watcher
 
         dev_task = asyncio.create_task(start_dev_watcher(game))
-        print("dev 模式：監看 data/*.yaml 熱重載")
-    server = await asyncio.start_server(lambda r, w: handle_client(r, w, game), host=host, port=port)
+        print("dev 模式：監看 data/*.yaml 與程式碼熱重載")
+    with boot.measure("網路監聽"):
+        server = await asyncio.start_server(lambda r, w: handle_client(r, w, game), host=host, port=port)
     addrs = ", ".join(str(sock.getsockname()) for sock in server.sockets or [])
+    world = game.state.world
+    print(load_report.format_console(title="伺服器載入"))
+    print(f"  內容: {len(world.rooms)} 房 · {len(world.items)} 物 · {len(world.npcs)} NPC")
+    print(boot.format_console(title="啟動程序"))
     print(f"cyber_mud server 監聽 {addrs}")
     try:
         async with server:
             await server.serve_forever()
     finally:
         tick_task.cancel()
+        combat_task.cancel()
         if dev_task is not None:
             dev_task.cancel()
-        for task in (tick_task, dev_task):
+        for task in (tick_task, combat_task, dev_task):
             if task is None:
                 continue
             try:
@@ -69,7 +80,7 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="cyber_mud server")
     parser.add_argument("--host", default=DEFAULT_HOST)
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
-    parser.add_argument("--dev", action="store_true", help="開發模式（data 熱重載）")
+    parser.add_argument("--dev", action="store_true", help="開發模式（data 與程式碼熱重載）")
     args = parser.parse_args(argv)
     try:
         asyncio.run(run_server(args.host, args.port, dev=args.dev))
