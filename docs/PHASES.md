@@ -86,15 +86,21 @@
 | Prompt 擴充 token（`%w` `%g` `%p` `%f` `%m`）與 `prompt template` | `prompt show` 列出 token；`prompt template street` 套用 CP2077 範本 |
 | Client NETRUN 模式 | `net_shell=1` meta 時阻擋一般指令；`/exit` 送 `exit` |
 | NETRUN server 端 | `net`／`netrun` 進入駭入層；`hack`／`probe`／`exit` |
+| `pledge`／`recall`／`talk`／`say`／`learn`／`mod` | 派系、任務、技能、武器模組 |
+| NPC 敵意追擊 flee | `aggro` NPC 逃脫失敗後追擊、同房再開戰 |
+| 天氣影響戰鬥／移動 | `world/modifiers.py` 修正傷害、flee、移動 |
+| 被動技能與義體觸發 | `combat/passives.py`（義臂、breach_protocol） |
+| 店鋪開閉、NPC 作息 | `data/shops.yaml`、`data/schedule.yaml`、`world/schedule.py` |
 
 ## Backlog
 
 尚未實作或僅部分實作，新專案可選做：
-- NPC 依任務／敵意追蹤 flee
-- 天氣影響戰鬥／移動數值
-- 被動技能與義體自動觸發
-- 時間驅動店鋪開閉、NPC 作息表
-- pyenv 原生編譯 Python（非必要）
+
+- Prompt 完整版（更多 token、即時預覽 UI）
+- NPC 任務驅動 AI（進階追蹤、多階段任務編排工具）
+- 天氣／時段對玩法數值的深度平衡
+- 完整被動技能樹與義體連鎖觸發
+- pyenv 原生編譯 Python（環境設定，非遊戲功能）
 
 ---
 
