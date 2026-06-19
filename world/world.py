@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from entities.implant import Implant
 from entities.item import Item
 from entities.npc import NPC
 
@@ -14,6 +15,10 @@ class Room:
     description_zh: str = ""
     description_en: str = ""
     district: str = ""
+    grid_x: int = 0
+    grid_y: int = 0
+    hidden_hint_zh: str = ""
+    hidden_hint_en: str = ""
     exits: dict[str, str] = field(default_factory=dict)
 
 
@@ -23,6 +28,7 @@ class World:
     rooms: dict[str, Room]
     items: dict[str, Item]
     npcs: dict[str, NPC]
+    implants: dict[str, Implant]
     factions: dict[str, str]
 
     def room(self, room_id: str) -> Room | None:
@@ -33,3 +39,6 @@ class World:
 
     def npc(self, npc_id: str) -> NPC | None:
         return self.npcs.get(npc_id)
+
+    def implant(self, implant_id: str) -> Implant | None:
+        return self.implants.get(implant_id)

@@ -45,6 +45,8 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.ram = loaded.ram
     session_player.max_ram = loaded.max_ram
     session_player.implants = list(loaded.implants)
+    session_player.visited_rooms = list(loaded.visited_rooms)
+    session_player.prompt_mud = loaded.prompt_mud
     session_player.skills = list(loaded.skills)
     session_player.password_hash = loaded.password_hash
 

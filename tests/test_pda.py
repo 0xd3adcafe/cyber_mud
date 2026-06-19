@@ -6,6 +6,8 @@ def test_pda_shows_vitals():
     player, state = make_player(), make_state()
     result = dispatch("pda", player, state, [], [])
     text = "\n".join(result.lines)
+    assert result.panel == "pda"
+    assert result.ui_json
     assert "PDA" in text
     assert "100/100" in text
     assert "肉體 3" in text

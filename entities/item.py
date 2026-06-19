@@ -12,3 +12,7 @@ class Item:
     description_en: str = ""
     takeable: bool = True
     slot: str = ""
+    weapon_damage: int = 0
+    defense: int = 0
+    value: int = 0
+    implant_id: str = ""

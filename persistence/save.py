@@ -42,8 +42,12 @@ def player_to_dict(player: Player) -> dict:
         "inventory": list(player.inventory),
         "equipment": dict(player.equipment),
         "implants": list(player.implants),
+        "visited_rooms": list(player.visited_rooms),
+        "prompt_mud": player.prompt_mud,
         "skills": list(player.skills),
         "password_hash": player.password_hash,
+        "in_combat": player.in_combat,
+        "encounter_id": player.encounter_id,
     }
 
 
@@ -68,8 +72,12 @@ def player_from_dict(data: dict) -> Player:
         inventory=list(data.get("inventory", [])),
         equipment=dict(data.get("equipment", {})),
         implants=list(data.get("implants", [])),
+        visited_rooms=list(data.get("visited_rooms", [])),
+        prompt_mud=str(data.get("prompt_mud", "")),
         skills=list(data.get("skills", [])),
         password_hash=str(data.get("password_hash", "")),
+        in_combat=bool(data.get("in_combat", False)),
+        encounter_id=str(data.get("encounter_id", "")),
     )
 
 

@@ -1,0 +1,7 @@
+implants:
+  cyber_arm_v1:
+    name_zh: 漩渦義肢臂 v1
+    name_en: Maelstrom Cyber Arm v1
+    body: 1
+    humanity_cost: 5
+    slot: cyber

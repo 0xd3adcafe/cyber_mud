@@ -8,6 +8,10 @@ import yaml
 DATA_ROOT = Path(__file__).resolve().parent.parent / "data" / "locale"
 
 
+def clear_locale_cache() -> None:
+    _load_locale.cache_clear()
+
+
 @lru_cache(maxsize=4)
 def _load_locale(locale: str) -> dict:
     path = DATA_ROOT / f"{locale}.yaml"
