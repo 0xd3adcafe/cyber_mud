@@ -216,6 +216,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | 啟動狀態 | `StartupReport` 載入耗時；server 終端＋client hint |
 | Client 輸入歷史 | ↑↓ 指令歷史、Esc 還原、`command_history.json` 持久化 |
 | Client 記憶帳密／PIN | `client/credentials.py` 加密儲存、PIN 快速登入、F7 清除記憶 |
+| look 目標察看 | `look <目標>` 察看物品／NPC／裝備狀態與數值 |
 
 ### 待做（節錄）
 

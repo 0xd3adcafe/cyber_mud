@@ -45,6 +45,28 @@ def test_complete_input_verb():
     assert complete_input("t", room_items=(), room_npcs=(), room_exits=(), inventory=()) == "take"
 
 
+def test_complete_input_look_item():
+    result = complete_input(
+        "look kn",
+        room_items=("glowstick", "knife"),
+        room_npcs=("broker",),
+        room_exits=(),
+        inventory=(),
+    )
+    assert result == "look knife"
+
+
+def test_complete_input_look_npc():
+    result = complete_input(
+        "look bro",
+        room_items=(),
+        room_npcs=("broker",),
+        room_exits=(),
+        inventory=(),
+    )
+    assert result == "look broker"
+
+
 def test_complete_input_take_item():
     result = complete_input(
         "take glo",

@@ -17,6 +17,7 @@ def complete_from_view(view: object, value: str) -> str | None:
         room_npcs=tuple(view.complete_npcs),
         room_exits=tuple(view.complete_exits),
         inventory=tuple(view.complete_inventory),
+        equipped=tuple(getattr(view, "complete_equipped", ())),
         net_shell=view.net_shell,
     )
 

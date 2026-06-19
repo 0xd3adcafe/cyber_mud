@@ -49,6 +49,7 @@ class ClientViewState:
     complete_npcs: list[str] = field(default_factory=list)
     complete_exits: list[str] = field(default_factory=list)
     complete_inventory: list[str] = field(default_factory=list)
+    complete_equipped: list[str] = field(default_factory=list)
 
 
 def parse_meta_payload(payload: str) -> tuple[str, str]:
@@ -129,6 +130,8 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         state.complete_exits = parse_csv_meta(value)
     elif key == "complete_inventory":
         state.complete_inventory = parse_csv_meta(value)
+    elif key == "complete_equipped":
+        state.complete_equipped = parse_csv_meta(value)
 
 
 def ordered_sidebar_stack(stack: list[str]) -> list[str]:

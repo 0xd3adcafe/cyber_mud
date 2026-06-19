@@ -16,10 +16,38 @@ game:
 
 look:
   header: "◈ {name}"
+  target_header: "◈ {name}"
   exits: "出口：{exits}"
   items: "地上：{items}"
   npcs: "這裡有：{npcs}"
   empty: "這裡空無一物。"
+  not_found: "你看不到「{target}」。"
+  slot_missing: "{slot} 槽位沒有裝備。"
+  location:
+    ground: "位置：地上"
+    inventory: "位置：背包"
+    equipped: "位置：{slot}"
+  item:
+    slot: "類型：{slot}"
+    damage: "傷害：+{value}"
+    defense: "防禦：+{value}"
+    value: "估價：${value}"
+    takeable: "可撿起"
+    not_takeable: "不可撿起"
+    implant: "義體套件：{implant}"
+    mods: "改裝：{mods}"
+  npc:
+    hp: "生命值：{hp}/{max_hp}"
+    attack: "攻擊：{value}"
+    hostile: "敵意：是"
+    peaceful: "敵意：否"
+    quest: "任務：{quest}"
+    in_combat: "（交戰中）"
+  equipment:
+    header: "◈ 裝備"
+    empty_slot: "  {slot}：（空）"
+    slot_line: "  {slot}：{item}"
+    all_empty: "你沒有裝備任何物品。"
 
 weather:
   line: "天氣：{weather}"
@@ -71,7 +99,7 @@ help:
   line: "  {name} — {desc}"
 
 help_cmds:
-  look: "察看環境"
+  look: "察看環境或目標（look [物品|NPC|裝備]）"
   go: "移動（例：go north）"
   take: "撿起地上物品"
   drop: "丟下背包物品"

@@ -44,7 +44,9 @@ ITEM_TARGET_COMMANDS = frozenset(
     {"take", "drop", "equip", "unequip", "give", "appraise", "install", "mod"}
 )
 NPC_TARGET_COMMANDS = frozenset({"talk", "attack", "give"})
+LOOK_TARGET_COMMANDS = frozenset({"look"})
 DIRECTION_COMMANDS = frozenset({"go"})
+LOOK_SLOT_HINTS = ("equipment", "weapon", "armor", "head", "cyber")
 
 
 def room_item_ids(ctx: CommandContext) -> list[str]:
@@ -59,6 +61,10 @@ def inventory_item_ids(ctx: CommandContext) -> list[str]:
     return list(ctx.player.inventory)
 
 
+def equipped_item_ids(ctx: CommandContext) -> list[str]:
+    return [item_id for item_id in ctx.player.equipment.values() if item_id]
+
+
 def room_exit_names(ctx: CommandContext) -> list[str]:
     room = ctx.state.world.room(ctx.player.room_id)
     if room is None:
@@ -70,6 +76,7 @@ def completion_meta(ctx: CommandContext) -> dict[str, str]:
     return {
         "complete_room_items": ",".join(room_item_ids(ctx)),
         "complete_inventory": ",".join(inventory_item_ids(ctx)),
+        "complete_equipped": ",".join(equipped_item_ids(ctx)),
         "complete_npcs": ",".join(room_npc_ids(ctx)),
         "complete_exits": ",".join(room_exit_names(ctx)),
     }
@@ -88,9 +95,13 @@ def target_pool_for_verb(
     room_npcs: tuple[str, ...],
     room_exits: tuple[str, ...],
     inventory: tuple[str, ...],
+    equipped: tuple[str, ...] = (),
 ) -> tuple[str, ...]:
     if verb in DIRECTION_COMMANDS:
         return room_exits
+    if verb in LOOK_TARGET_COMMANDS:
+        merged_items = tuple(dict.fromkeys((*room_items, *inventory, *equipped)))
+        return tuple(dict.fromkeys((*LOOK_SLOT_HINTS, *merged_items, *room_npcs)))
     if verb in NPC_TARGET_COMMANDS:
         return room_npcs
     if verb in ITEM_TARGET_COMMANDS:
@@ -107,6 +118,7 @@ def complete_input(
     room_npcs: tuple[str, ...],
     room_exits: tuple[str, ...],
     inventory: tuple[str, ...],
+    equipped: tuple[str, ...] = (),
     net_shell: bool = False,
 ) -> str | None:
     text = value.strip()
@@ -138,6 +150,7 @@ def complete_input(
         room_npcs=room_npcs,
         room_exits=room_exits,
         inventory=inventory,
+        equipped=equipped,
     )
     return _suggest_with_pool(prefix, partial, pool)
 

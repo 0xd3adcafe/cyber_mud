@@ -16,10 +16,38 @@ game:
 
 look:
   header: "◈ {name}"
+  target_header: "◈ {name}"
   exits: "Exits: {exits}"
   items: "On the ground: {items}"
   npcs: "Here: {npcs}"
   empty: "Nothing notable here."
+  not_found: "You don't see \"{target}\" here."
+  slot_missing: "Nothing equipped in {slot}."
+  location:
+    ground: "Location: on the ground"
+    inventory: "Location: inventory"
+    equipped: "Location: {slot}"
+  item:
+    slot: "Type: {slot}"
+    damage: "Damage: +{value}"
+    defense: "Defense: +{value}"
+    value: "Value: ${value}"
+    takeable: "Takeable"
+    not_takeable: "Not takeable"
+    implant: "Implant kit: {implant}"
+    mods: "Mods: {mods}"
+  npc:
+    hp: "HP: {hp}/{max_hp}"
+    attack: "Attack: {value}"
+    hostile: "Hostile: yes"
+    peaceful: "Hostile: no"
+    quest: "Quest: {quest}"
+    in_combat: "(in combat)"
+  equipment:
+    header: "◈ Equipment"
+    empty_slot: "  {slot}: (empty)"
+    slot_line: "  {slot}: {item}"
+    all_empty: "You have nothing equipped."
 
 weather:
   line: "Weather: {weather}"
@@ -71,7 +99,7 @@ help:
   line: "  {name} — {desc}"
 
 help_cmds:
-  look: "Look around"
+  look: "Look around or at a target (look [item|NPC|equipment])"
   go: "Move (e.g. go north)"
   take: "Pick up an item"
   drop: "Drop an item"
