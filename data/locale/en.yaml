@@ -6,6 +6,14 @@ motd:
     - "Link established. Register or login first: register <name> <password> or login <name> <password>."
     - "Then type look to explore, go <dir> to move."
 
+direction:
+  north: north
+  south: south
+  east: east
+  west: west
+  up: up
+  down: down
+
 game:
   enter: "{name} jacked into the neural net."
   leave: "{name} disconnected."
@@ -20,6 +28,11 @@ look:
   exits: "Exits: {exits}"
   items: "On the ground: {items}"
   npcs: "Here: {npcs}"
+  net_nodes: "Hackable nodes: {nodes}"
+  net_node:
+    hackable: "Status: breachable"
+    sealed: "Status: sealed"
+    hint: "Hint: use hack <node> to breach."
   empty: "Nothing notable here."
   not_found: "You don't see \"{target}\" here."
   slot_missing: "Nothing equipped in {slot}."
@@ -29,6 +42,9 @@ look:
     equipped: "Location: {slot}"
   item:
     slot: "Type: {slot}"
+    weapon_type: "Weapon: {type}"
+    weapon_class: "Class: {weapon_class}"
+    weapon_mode: "Wield: {mode}"
     damage: "Damage: +{value}"
     defense: "Defense: +{value}"
     value: "Value: ${value}"
@@ -36,6 +52,9 @@ look:
     not_takeable: "Not takeable"
     implant: "Implant kit: {implant}"
     mods: "Mods: {mods}"
+    consumable: "Consumable: {kind}"
+    hp_restore: "Heals: +{value} HP"
+    ram_restore: "Restores: +{value} RAM"
   npc:
     hp: "HP: {hp}/{max_hp}"
     attack: "Attack: {value}"
@@ -43,11 +62,41 @@ look:
     peaceful: "Hostile: no"
     quest: "Quest: {quest}"
     in_combat: "(in combat)"
+    equipment_header: "Wearing:"
   equipment:
     header: "◈ Equipment"
     empty_slot: "  {slot}: (empty)"
     slot_line: "  {slot}: {item}"
     all_empty: "You have nothing equipped."
+
+weapon_type:
+  gun: "Firearm"
+  handgun: "Handgun"
+  revolver: "Revolver"
+  smg: "SMG"
+  assault_rifle: "Assault Rifle"
+  shotgun: "Shotgun"
+  sniper_rifle: "Sniper Rifle"
+  precision_rifle: "Precision Rifle"
+  heavy_machine_gun: "Heavy Machine Gun"
+  blade: "Blade"
+  katana: "Katana"
+  mantis_blades: "Mantis Blades"
+  blunt: "Blunt"
+  gorilla_arms: "Gorilla Arms"
+
+weapon_class:
+  power: "Power"
+  tech: "Tech"
+  smart: "Smart"
+  melee: "Melee"
+
+weapon_mode:
+  primary: "Primary"
+  secondary: "Secondary"
+  two_handed: "Two-Handed"
+  dual_wield: "Dual Wield"
+  unarmed: "Unarmed"
 
 weather:
   line: "Weather: {weather}"
@@ -57,6 +106,23 @@ npc:
   leave: "{name} leaves."
   idle: "{name}: {msg}"
 
+corpse:
+  label: "{name}'s corpse"
+  player_label: "{name}'s corpse"
+  player_desc: "A body still warm enough to loot."
+  created: "{label} lies on the ground."
+  look_items: "On body: {items}"
+  look_empty: "Nothing left to take."
+  look_decay: "Decay: {time}"
+  room_line: "Corpses: {corpses}"
+  decay: "{label} rots away; the contents spill onto the ground."
+  take_ok: "You take {label} from {corpse}."
+  take_missing: "That item is not on the corpse."
+  corpse_missing: "There is no such corpse here."
+  time_minutes: "~{minutes} min"
+  time_hours: "~{hours} h"
+  time_hours_minutes: "~{hours} h {minutes} min"
+
 go:
   ok: "You go {direction}."
 
@@ -64,7 +130,7 @@ net:
   enter: "◈ Jacking into NETRUN interface..."
   exit: "◈ Neural link severed. Back on the streets."
   already: "You are already in NETRUN mode."
-  busy: "NETRUN mode! Only hack, probe, status, exit, and help are available."
+  busy: "NETRUN mode! Only hack, probe, look, scan, talk, status, exit, and help are available."
   prompt: "ghost@netrun-kali>"
   unknown_verb: "Unknown NETRUN command: {verb}"
   hack_usage: "Usage: hack <node>"
@@ -74,11 +140,17 @@ net:
   probe_empty: "Scan complete: no hackable nodes in this sector."
   probe_ok: "Scan complete: {nodes}"
   status: "RAM {ram}  │  visible nodes {nodes}"
+  status_no_nodes: "0"
+  sector_nodes: "Hackable nodes: {nodes}"
+  sector_items: "On the ground: {items}"
   help_header: "◈ NETRUN commands"
   help_line: "  {name} — {desc}"
   help_cmds:
     hack: "Breach a node (hack <node>)"
     probe: "Scan hackable nodes"
+    look: "Look around or at a target"
+    scan: "Scan the room"
+    talk: "Talk to an NPC"
     status: "Show RAM and node count"
     exit: "Exit NETRUN back to Night City"
     help: "Show NETRUN help"
@@ -107,11 +179,25 @@ help_cmds:
   equip: "Equip item (equip <item>)"
   unequip: "Unequip item (unequip <item|slot>)"
   equipment: "Equipment panel (F5)"
-  install: "Install implant (install <kit>)"
+  install: "Install implant (install <kit>, ripper clinic)"
+  cyberware: "View chrome (cyberware / chrome)"
+  uninstall: "Remove implant (uninstall <slot>, ripper clinic)"
+  rent: "Rent apartment (rent <flat>, at square)"
+  home: "Fast travel to your apartment"
+  stash: "Apartment locker (stash put/take <item>)"
+  transit: "Public transit (transit <destination>)"
+  vehicles: "Vehicles (vehicles buy <model>, at docks)"
+  drive: "Drive to destination (drive <dest>)"
+  use: "Use consumable (use <item>)"
+  eat: "Eat food (eat <food>)"
+  drink: "Drink beverage (drink <drink>)"
   scan: "Scan surroundings (scan)"
   map: "Map (F4)"
   give: "Give item (give <item> <player>)"
   appraise: "Appraise item (appraise <item>)"
+  shop: "List shop wares (shop)"
+  buy: "Buy item (buy <item>)"
+  sell: "Sell item (sell <item>)"
   pda: "Personal agent (vitals, F2)"
   time: "Show world time"
   prompt: "Custom prompt (prompt set/show)"
@@ -119,10 +205,21 @@ help_cmds:
   register: "Register (register <name> <password>)"
   help: "Show help (F3)"
   quit: "Quit"
-  attack: "Attack enemy (attack <enemy>)"
+  attack: "Attack enemy (auto style by weapon, or attack slash <enemy>)"
+  shoot: "Shoot (requires firearm)"
+  slash: "Slash (requires blade)"
+  bash: "Bash (requires blunt weapon)"
+  punch: "Punch (requires empty hands)"
+  backstab: "Backstab (requires blade, longer cooldown)"
   defend: "Defend (halve next hit)"
+  defend_armor_head: "Defend (armor + helmet, halve next hit)"
+  defend_armor: "Defend (brace behind armor, halve next hit)"
+  defend_head: "Defend (guard your head, halve next hit)"
+  defend_weapon: "Defend (parry with weapon, halve next hit)"
+  defend_bare: "Defend (weave aside, halve next hit)"
   flee: "Flee combat"
-  quickhack: "Quickhack (costs 2 RAM)"
+  quickhack: "Quickhack (quickhack [overheat|short_circuit|…])"
+  gigs: "View street gigs (Fixer board)"
   net: "Enter NETRUN hacking shell"
   netrun: "Enter NETRUN hacking shell"
   pledge: "Pledge to a faction (pledge <faction>)"
@@ -130,6 +227,9 @@ help_cmds:
   talk: "Talk to an NPC (talk <npc>)"
   say: "Say something in the room (say <message>)"
   learn: "Learn a protocol from the broker (learn <skill>)"
+  stats: "View level, XP, and growth"
+  talents: "View talents (talent <name> to learn)"
+  improve: "Spend attribute points (improve <stat>)"
   mod: "Install a weapon chip (mod <chip>)"
 
 periods:
@@ -144,6 +244,13 @@ time:
   clock: "Day {day} {hour}:{minute}"
   now: "It is {clock} ({period})."
 
+vitals:
+  hp_regen: "HP restored +{amount} ({hp}/{max_hp})"
+
+repeat:
+  done: "(repeated {count} times)"
+  stopped: "(stopped after {done}/{total})"
+
 pda:
   header: "◈ PDA — {name}"
   vitals: "Vitals  HP {hp}  │  ${gold}"
@@ -152,6 +259,7 @@ pda:
   stats_label: "Stats"
   ram: "Net  RAM {ram}"
   social: "Humanity {humanity}  │  Rep {reputation}"
+  street_cred: "Street cred {cred} ({rank})"
   social_label: "Humanity / Rep"
   faction: "Faction  {faction}"
   faction_label: "Faction"
@@ -159,9 +267,12 @@ pda:
   implants_header: "Implants"
   equipment_header: "Equipment"
   no_equip: "  {slot}: (empty)"
+  level: "Level {level}  │  XP {xp}/{next_xp}  │  Perk pts {perks}  │  Attr pts {attrs}"
   skills_header: "Protocols"
+  talents_header: "Talents"
   no_implants: "  (none)"
   no_skills: "  (none)"
+  no_talents: "  (none)"
 
 auth:
   required: "Please log in or register: login <name> <password> or register <name> <password>"
@@ -178,7 +289,7 @@ auth:
   login_ok: "Welcome back, {name}."
 
 take:
-  usage: "Usage: take <item>"
+  usage: "Usage: take <item> [from <corpse>]"
   missing: "That item is not here."
   not_takeable: "You cannot pick that up."
   ok: "You take the {label}."
@@ -197,6 +308,8 @@ equip:
   use_install: "Use install for cyber kits."
   ok: "You equip {label} ({slot})."
   bulk_ok: "(equipped {count} items)"
+  two_handed_blocks: "A two-handed weapon blocks your off-hand slot."
+  cleared_secondary: "Off-hand stowed in inventory: {items}"
 
 unequip:
   usage: "Usage: unequip <item|slot>"
@@ -209,11 +322,45 @@ equipment:
   none: "(empty)"
   slot_line: "  {slot}: {item}"
   empty_slot: "  {slot}: (empty)"
+  wield_state: "Wield mode: {state}"
   slot:
     weapon: "Weapon"
-    armor: "Armor"
+    weapon_primary: "Primary"
+    weapon_secondary: "Secondary"
     head: "Head"
+    inner_torso: "Inner Torso"
+    outer_torso: "Outer Torso"
+    legs: "Legs"
+    feet: "Feet"
     cyber: "Cyber"
+
+consumable:
+  kind:
+    food: food
+    drink: drink
+    medicine: medicine
+  verb:
+    food: ate
+    drink: drank
+    medicine: used
+  effect_hp: "restored {hp} HP"
+  effect_ram: "restored {ram} RAM"
+
+use:
+  usage: "Usage: use <item>"
+  missing: "You do not have that item."
+  not_consumable: "That item is not consumable."
+  wrong_type: "Use eat, drink, or use as appropriate."
+  wrong_type_food: "That is not food—try drink or use."
+  wrong_type_drink: "That is not a drink—try eat or use."
+  no_effect: "You are already topped off—no need for {label}."
+  ok: "You {verb} {label}. {effect}"
+
+eat:
+  usage: "Usage: eat <food>"
+
+drink:
+  usage: "Usage: drink <drink>"
 
 install:
   usage: "Usage: install <cyber kit>"
@@ -221,7 +368,94 @@ install:
   not_implant: "That item is not a cyber kit."
   unknown_implant: "Unknown implant model."
   already: "You already have that implant."
-  ok: "You install {label}. Humanity {humanity}, Body {body}."
+  slot_taken: "{slot} slot is already occupied—uninstall first."
+  need_ripperdoc: "This implant must be installed at the ripper clinic."
+  ok: "You graft {label} into {slot}. Humanity {humanity}, Body {body}."
+
+cyberware:
+  header: "◈ Chrome"
+  installed: "  {slot}: {name} — {desc}"
+  empty: "  {slot}: (empty)"
+  hint: "Install/uninstall at the ripper clinic."
+  slot:
+    cyberdeck: "Cyberdeck"
+    frontal: "Frontal Cortex"
+    ocular: "Ocular System"
+    cardiovascular: "Cardiovascular"
+    nervous: "Nervous System"
+    integumentary: "Integumentary"
+    skeleton: "Skeleton"
+    arms: "Arms"
+    legs: "Legs"
+
+uninstall:
+  usage: "Usage: uninstall <slot> (ripper clinic, ${cost})"
+  need_ripperdoc: "You must be at the ripper clinic to uninstall."
+  empty: "No implant in {slot} slot."
+  no_gold: "Not enough eddies (need ${cost})."
+  ok: "You removed {label} from {slot} (${cost})."
+
+rent:
+  header: "◈ Apartments for rent"
+  line: "  {name} — ${cost}: {desc}"
+  usage: "Usage: rent <apartment>"
+  unknown: "Unknown apartment: {name}"
+  wrong_room: "Arrange rentals at Neon Square."
+  already: "You already have an apartment."
+  no_gold: "Not enough eddies (need ${cost})."
+  ok: "You rented {name} (${cost}). Use home or transit to return."
+
+home:
+  none: "No apartment yet—rent one at the square."
+  missing: "Apartment data missing."
+  ok: "You are home."
+  stash_hint: "Locker holds {count} item(s)—use stash."
+
+stash:
+  header: "◈ Apartment locker"
+  empty: "  (empty)"
+  capacity: "Capacity {count}/{max}"
+  hint: "Usage: stash put <item> / stash take <item> (at home)"
+  no_home: "You do not have an apartment."
+  not_home: "Use the locker inside your apartment."
+  put_usage: "Usage: stash put <item>"
+  take_usage: "Usage: stash take <item>"
+  missing_item: "You do not carry that item."
+  missing_stash: "That item is not in the locker."
+  full: "Locker full (max {max})."
+  put_ok: "You stash {item}."
+  take_ok: "You take {item} from the locker."
+
+transit:
+  header: "◈ NCART Transit"
+  line: "  {line} → {dest} (${fare})"
+  usage: "Usage: transit <destination>"
+  not_here: "No transit stop here."
+  unknown: "Cannot reach {dest}."
+  need_home: "Rent the matching apartment first."
+  no_gold: "Not enough eddies (fare ${fare})."
+  ok: "You ride transit to {dest} (fare ${fare})."
+
+vehicles:
+  header: "◈ Vehicles"
+  owned: "Current ride: {name}"
+  none: "No vehicle owned."
+  dealer_header: "Dock dealer:"
+  dealer_line: "  {name} — ${cost}: {desc}"
+  buy_hint: "Usage: vehicles buy <model>"
+  not_dealer: "Buy vehicles at the container docks."
+  already_owned: "You already own a vehicle."
+  unknown: "Unknown vehicle: {name}"
+  no_gold: "Not enough eddies (need ${cost})."
+  buy_ok: "You bought {name} (${cost}). Use drive on the road network."
+
+drive:
+  header: "◈ Drive to"
+  usage: "Usage: drive <destination>"
+  no_vehicle: "No vehicle—buy one at the docks."
+  not_road: "Cannot summon your ride here."
+  unknown: "Cannot drive to {dest}."
+  ok: "You drive {vehicle} to {dest}."
 
 map:
   header: "◈ Map"
@@ -235,6 +469,7 @@ scan:
   exits: "Exits: {exits}"
   items: "Items: {items}"
   npcs: "People: {npcs}"
+  net_nodes: "Hackable nodes: {nodes}"
   player: "Player: {name}"
   hidden: "◈ Hidden clue: {hint}"
 
@@ -244,6 +479,29 @@ give:
   missing_player: "No player {name} here."
   ok: "You give {label} to {name}."
   broadcast: "{name} gives {label} to {target}."
+
+trade:
+  header: "◈ {shop}"
+  listing: "  {item} — ${price}"
+  empty_stock: "  (nothing for sale)"
+  buys_items: "Buys: appraised items at {rate}% value"
+  hint: "Commands: buy <item>, sell <item>"
+  no_shop: "There is no shop here."
+  closed: "{shop} is closed."
+  no_vendor: "{vendor} is not here to trade."
+
+buy:
+  usage: "Usage: buy <item>"
+  not_sold: "The shop does not sell \"{item}\"."
+  no_gold: "Not enough gold (need ${cost}, you have ${gold})."
+  ok: "You buy {label} from {shop} for ${price}."
+
+sell:
+  usage: "Usage: sell <item>"
+  missing: "You do not have \"{item}\"."
+  not_buying: "This shop does not buy items."
+  refused: "{item} has no value—the shop refuses it."
+  ok: "You sell {label} to {shop} for ${price}."
 
 appraise:
   usage: "Usage: appraise <item>"
@@ -278,23 +536,50 @@ inventory:
   empty: "Your inventory is empty."
 
 combat:
-  busy: "In combat! Only attack, defend, flee, quickhack, look, pda, help, and quit are available."
-  attack_usage: "Usage: attack <enemy>"
+  busy: "In combat! Only attack/shoot/slash/bash/punch/backstab, defend, flee, quickhack, look, pda, help, and quit are available."
+  attack_usage: "Usage: attack [slash|shoot|…] <enemy>"
   no_target: "No such enemy here."
   already_fighting: "You are already fighting {target}."
   not_in_combat: "You are not in combat."
   player_cd: "Action on cooldown ({cd}s)."
   no_ram: "Not enough RAM (need {cost})."
-  start: "You open fire on {target}!"
+  unknown_style: "Unknown attack style."
+  need_ranged: "You need a ranged weapon equipped to shoot."
+  need_blade: "You need a blade equipped to slash or backstab."
+  need_blunt: "You need a blunt weapon equipped to bash."
+  punch_need_unarmed: "Punching requires empty hands (unequip your weapon)."
+  wrong_weapon: "Your weapon is not suited for that attack."
+  start_shoot: "You draw a bead on {target}!"
+  start_slash: "You slash at {target}!"
+  start_bash: "You swing hard at {target}!"
+  start_punch: "You square up and rush {target}!"
+  start_backstab: "You slip behind {target}…"
+  shoot_hit: "You shoot {target} for {damage} damage (enemy HP {hp})."
+  slash_hit: "You slash {target} for {damage} damage (enemy HP {hp})."
+  bash_hit: "You bash {target} for {damage} damage (enemy HP {hp})."
+  punch_hit: "You punch {target} for {damage} damage (enemy HP {hp})."
+  backstab_hit: "Backstab! You gut {target} for {damage} damage (enemy HP {hp})."
+  backstab_fail: "Backstab failed—you only nick {target} for {damage} damage (enemy HP {hp})."
+  start: "You engage {target}!"
   player_hit: "You hit {target} for {damage} damage (enemy HP {hp})."
   npc_hit: "{target} strikes back for {damage} damage (your HP {hp})."
   defend: "You brace for impact—the next hit will be halved."
+  defend_armor_head: "You turtle behind armor and helmet—the next hit will be halved."
+  defend_armor: "You tighten your armor and brace—the next hit will be halved."
+  defend_head: "You guard your head—the next hit will be halved."
+  defend_weapon: "You raise {weapon} to parry—the next hit will be halved."
+  defend_bare: "You weave aside—the next hit will be halved."
   target_left: "{target} left the area—combat is over."
   flee_ok: "You shake off {target} and escape combat."
   flee_fail: "You fail to escape! {target} is still on you."
   quickhack: "Quickhack on {target} for {damage} damage (enemy HP {hp})."
+  quickhack_named: "{hack} → {target} for {damage} damage (enemy HP {hp})."
+  status_applied: "Status applied: {effect}"
+  burn_tick: "{target} burns for {damage} damage (enemy HP {hp})."
+  shock_skip: "{target}'s cyberware shorts out—no counter this round."
   victory: "You drop {target}!"
   player_down: "You go down..."
+  respawn: "You wake up at {room}, barely alive."
   flee_broadcast: "{name} fled from combat with {target}."
   victory_broadcast: "{name} dropped {target}!"
   defeat_broadcast: "{name} was dropped by {target}."
@@ -315,16 +600,106 @@ talk:
   silent: "{name} says nothing."
   broker: "The info broker whispers: \"Want Maelstrom intel? A thug in the alley knows something.\""
   broker_quest: "◈ New quest: Broker's Rumor"
+  thug: "The thug grins: \"Maelstrom's scooping chrome lately. Tell your broker I talked.\""
+  instructor: "The holo instructor flickers: \"North for combat, east for netrun, south for gear. When ready, head west to the square.\""
+  netcoach: "The net coach taps a terminal: \"Type net to enter the sim, then hack or probe the training terminal.\""
+  quartermaster: "The quartermaster gestures at the racks: \"Free practice gear on the floor; use shop, buy, and sell to trade.\""
 
 say:
   usage: "Usage: say <message>"
   ok: "You say: {message}"
   broadcast: "{name} says: {message}"
 
+progression:
+  xp_gain: "You gain {amount} XP."
+  level_up: "◈ Level up! Level {level} (perk points {perks}, attribute points {attrs})"
+
+quest:
+  objective_done: "◈ Objective complete: {quest}"
+  complete: "◈ Gig complete: {quest}"
+  reward_gold: "You receive ${amount}."
+  hint_return: "Return to {npc} for your payout."
+
+gigs:
+  header: "◈ Street Gigs"
+  street_cred: "Street cred {cred} ({rank})"
+  line: "  {name} — {status} │ Reward {reward}"
+  status:
+    available: "available"
+    active: "active"
+    ready: "turn-in"
+    done: "done"
+  reward_gold: "${amount}"
+  reward_xp: "{amount} XP"
+  reward_cred: "+{amount} cred"
+  hint: "Talk to the info broker to pick up gigs."
+
+street_cred:
+  gain: "Street cred +{amount} (now {total})."
+  rank:
+    nobody: "nobody"
+    rising: "rising"
+    veteran: "veteran"
+    legend: "legend"
+
+status:
+  burn: "burn"
+  shock: "shock"
+  blind: "blind"
+
+quickhack:
+  unknown: "Unknown quickhack: {name}"
+
+cyberpsychosis:
+  active: "Chrome pain flares—your output is slightly reduced."
+
+stats:
+  header: "◈ {name} — Growth"
+  level: "Level {level}  │  XP {xp}/{next_xp}"
+  points: "Perk points {perks}  │  Attribute points {attrs}"
+  street_cred: "Street cred {cred} ({rank}) │ Humanity {humanity}"
+  attributes: "Body {body}  │  Reflex {reflex}  │  Tech {tech}  │  Cool {cool}  │  INT {intelligence}"
+  skills_header: "Protocols learned"
+  no_skills: "  (none)"
+  talents_header: "Talents taken"
+  no_talents: "  (none)"
+
+talent:
+  header: "◈ Talents"
+  hint: "Use talent <name> to spend a perk point."
+  list_line: "  {name} — {status}: {desc}"
+  status:
+    learned: "learned"
+    available: "available"
+    locked: "requires level {level}"
+  usage: "Usage: talents or talent <talent>"
+  unknown: "Unknown talent: {talent}"
+  already: "You already have {talent}."
+  no_points: "Not enough perk points."
+  level_req: "Your level is too low for this talent."
+  prereq_talent: "You need the prerequisite talent first."
+  prereq_skill: "You need the prerequisite protocol first."
+  ok: "You unlocked the talent: {talent}."
+
+improve:
+  usage: "Usage: improve <stat> ({stats})"
+  unknown_stat: "Unknown attribute."
+  no_points: "Not enough attribute points."
+  max_stat: "That attribute is already maxed."
+  ok: "{stat} increased to {value} ({remaining} attribute points left)."
+  stat:
+    body: "Body"
+    reflex: "Reflex"
+    tech: "Tech"
+    cool: "Cool"
+    intelligence: "Intelligence"
+
 learn:
   usage: "Usage: learn <protocol>"
   unknown: "Unknown protocol: {skill}"
   already: "You already know {skill}."
+  level_req: "Requires level {level} to learn this protocol."
+  prereq_skill: "Learn {skill} first."
   no_teacher: "{teacher} is not here to teach you."
   no_gold: "Not enough gold (need ${cost})."
   ok: "You learned {skill} from the broker (${cost})."

@@ -1,4 +1,4 @@
-from combat.actions import resolve_player_attack
+from combat.strike import resolve_player_attack
 from combat.encounter import ATTACK_CD, cd_ticks_to_seconds, combat_meta, encounter_for_player
 from tests.conftest import make_player, make_state
 

@@ -9,13 +9,14 @@ from combat.encounter import (
     Encounter,
     end_encounter,
     encounter_for_player,
-    find_hostile_npc_in_room,
     npc_in_player_room,
     npc_label,
-    start_encounter,
 )
+
 from entities.player import Player
 from shared.i18n import t
+from shared.locale_content import room_name
+from world.corpses import corpse_label, spawn_corpse, spawn_player_corpse
 from world.state import WorldState
 
 
@@ -24,8 +25,10 @@ class CombatActionResult:
     lines: list[str]
     world_changed: bool = False
     ended: bool = False
+    moved: bool = False
     broadcast_key: str = ""
     broadcast_kwargs: dict[str, str] | None = None
+    broadcast_room_id: str = ""
 
 
 def _player_by_name(state: WorldState, players: list[Player], name: str) -> Player | None:
@@ -47,69 +50,6 @@ def resolve_npc_departed(state: WorldState, player: Player, encounter: Encounter
     )
 
 
-def resolve_player_attack(state: WorldState, player: Player, *, target: str = "") -> CombatActionResult:
-    locale = player.locale
-    encounter = encounter_for_player(state, player)
-
-    if encounter is None:
-        if not target:
-            from shared.i18n import t
-
-            return CombatActionResult([t(locale, "combat.attack_usage")])
-        npc = find_hostile_npc_in_room(state, player.room_id, target)
-        if npc is None:
-            from shared.i18n import t
-
-            return CombatActionResult([t(locale, "combat.no_target")])
-        encounter = start_encounter(state, player, npc.id)
-        label = npc_label(state, npc.id, locale)
-        line = encounter.append_log(locale, "combat.start", target=label)
-        lines = [line]
-    else:
-        if not npc_in_player_room(state, player, encounter):
-            return resolve_npc_departed(state, player, encounter)
-
-        if target:
-            from shared.i18n import t
-            from shared.names import matches_name
-
-            npc = state.world.npc(encounter.npc_id)
-            current = npc_label(state, encounter.npc_id, locale)
-            if npc is None or not matches_name(target, encounter.npc_id, npc.name_zh, npc.name_en):
-                return CombatActionResult([t(locale, "combat.already_fighting", target=current)])
-
-        if encounter.player_cd > 0:
-            from combat.encounter import cd_ticks_to_seconds
-            from shared.i18n import t
-
-            secs = cd_ticks_to_seconds(state, encounter.player_cd)
-            return CombatActionResult(
-                [t(locale, "combat.player_cd", cd=str(secs))],
-                world_changed=True,
-            )
-
-        lines = []
-
-    damage = encounter.calc_player_damage(player, state.world, state=state)
-    encounter.npc_hp -= damage
-    encounter.player_cd = ATTACK_CD
-    label = npc_label(state, encounter.npc_id, locale)
-    lines.append(
-        encounter.append_log(
-            locale,
-            "combat.player_hit",
-            target=label,
-            damage=str(damage),
-            hp=str(max(0, encounter.npc_hp)),
-        )
-    )
-
-    if encounter.npc_hp <= 0:
-        return _finish_victory(state, player, encounter, lines)
-
-    return CombatActionResult(lines, world_changed=True)
-
-
 def resolve_defend(state: WorldState, player: Player) -> CombatActionResult:
     locale = player.locale
     encounter = encounter_for_player(state, player)
@@ -121,8 +61,14 @@ def resolve_defend(state: WorldState, player: Player) -> CombatActionResult:
     if not npc_in_player_room(state, player, encounter):
         return resolve_npc_departed(state, player, encounter)
 
+    from combat.defend_style import defend_combat_key, defend_combat_kwargs
+
     encounter.defending = True
-    line = encounter.append_log(locale, "combat.defend")
+    line = encounter.append_log(
+        locale,
+        defend_combat_key(player, state.world),
+        **defend_combat_kwargs(player, state.world, locale),
+    )
     return CombatActionResult([line], world_changed=True)
 
 
@@ -160,51 +106,83 @@ def resolve_flee(state: WorldState, player: Player) -> CombatActionResult:
     return CombatActionResult([line], world_changed=True)
 
 
-def resolve_quickhack(state: WorldState, player: Player) -> CombatActionResult:
+def resolve_quickhack(state: WorldState, player: Player, quickhack_id: str = "") -> CombatActionResult:
     locale = player.locale
     encounter = encounter_for_player(state, player)
     if encounter is None:
-        from shared.i18n import t
-
         return CombatActionResult([t(locale, "combat.not_in_combat")])
 
     if not npc_in_player_room(state, player, encounter):
         return resolve_npc_departed(state, player, encounter)
 
-    if player.ram < QUICKHACK_RAM_COST:
-        from shared.i18n import t
+    from combat.encounter import cd_ticks_to_seconds
 
-        return CombatActionResult([t(locale, "combat.no_ram", cost=str(QUICKHACK_RAM_COST))])
+    qh_id = _resolve_quickhack_id(state, player, quickhack_id)
+    if qh_id is None:
+        return CombatActionResult([t(locale, "quickhack.unknown", name=quickhack_id or "")])
+
+    quickhack = state.world.quickhack(qh_id)
+    if quickhack is None:
+        return CombatActionResult([t(locale, "quickhack.unknown", name=quickhack_id)])
+
+    ram_cost = quickhack.ram_cost
+    if player.ram < ram_cost:
+        return CombatActionResult([t(locale, "combat.no_ram", cost=str(ram_cost))])
 
     if encounter.player_cd > 0:
-        from combat.encounter import cd_ticks_to_seconds
-        from shared.i18n import t
-
         secs = cd_ticks_to_seconds(state, encounter.player_cd)
         return CombatActionResult(
             [t(locale, "combat.player_cd", cd=str(secs))],
             world_changed=True,
         )
 
-    player.ram -= QUICKHACK_RAM_COST
-    damage = encounter.calc_quickhack_damage(player, state=state)
+    player.ram -= ram_cost
+    damage = encounter.calc_quickhack_damage(player, state=state, damage_mult=quickhack.damage_mult)
     encounter.npc_hp -= damage
     encounter.player_cd = ATTACK_CD
+    if quickhack.status_effect and quickhack.status_duration > 0:
+        encounter.npc_status.apply(quickhack.status_effect, quickhack.status_duration)
+
     label = npc_label(state, encounter.npc_id, locale)
+    qh_label = quickhack.name_zh if locale == "zh" else (quickhack.name_en or quickhack.name_zh)
     lines = [
         encounter.append_log(
             locale,
-            "combat.quickhack",
+            "combat.quickhack_named",
+            hack=qh_label or qh_id,
             target=label,
             damage=str(damage),
             hp=str(max(0, encounter.npc_hp)),
         )
     ]
+    if quickhack.status_effect:
+        lines.append(
+            t(locale, "combat.status_applied", effect=t(locale, f"status.{quickhack.status_effect}"))
+        )
 
     if encounter.npc_hp <= 0:
         return _finish_victory(state, player, encounter, lines)
 
     return CombatActionResult(lines, world_changed=True)
+
+
+def _resolve_quickhack_id(state: WorldState, player: Player, name: str) -> str | None:
+    from combat.encounter import available_quickhacks
+
+    allowed = available_quickhacks(state.world, player)
+    if not allowed:
+        return None
+    needle = name.strip().lower()
+    if not needle:
+        return allowed[0]
+    for qid in allowed:
+        qh = state.world.quickhack(qid)
+        if qh is None:
+            continue
+        labels = {qid.lower(), qh.name_zh.lower(), qh.name_en.lower()}
+        if needle in labels:
+            return qid
+    return None
 
 
 def resolve_npc_attack(state: WorldState, player: Player, encounter: Encounter) -> CombatActionResult:
@@ -226,16 +204,52 @@ def resolve_npc_attack(state: WorldState, player: Player, encounter: Encounter) 
 
     if player.hp <= 0:
         lines.append(encounter.append_log(locale, "combat.player_down"))
-        end_encounter(state, player, encounter)
-        return CombatActionResult(
+        return _finish_defeat(
+            state,
+            player,
+            encounter,
             lines,
-            world_changed=True,
-            ended=True,
-            broadcast_key="combat.defeat_broadcast",
-            broadcast_kwargs={"name": player.name, "target": label},
+            npc_label=label,
         )
 
     return CombatActionResult(lines, world_changed=True)
+
+
+def _finish_defeat(
+    state: WorldState,
+    player: Player,
+    encounter: Encounter,
+    lines: list[str],
+    *,
+    npc_label: str,
+) -> CombatActionResult:
+    locale = player.locale
+    death_room = player.room_id
+    corpse = spawn_player_corpse(state, player, death_room)
+    if corpse is not None:
+        corpse_name = corpse_label(state, corpse, locale)
+        lines.append(t(locale, "corpse.created", label=corpse_name))
+    end_encounter(state, player, encounter)
+    player.chased_by_npc = ""
+    respawn_id = state.world.respawn_room
+    respawn = state.world.room(respawn_id)
+    moved = False
+    if respawn is not None:
+        player.room_id = respawn_id
+        player.hp = player.max_hp
+        moved = True
+        lines.append(t(locale, "combat.respawn", room=room_name(respawn, locale)))
+    else:
+        player.hp = max(1, player.max_hp // 4)
+    return CombatActionResult(
+        lines,
+        world_changed=True,
+        ended=True,
+        moved=moved,
+        broadcast_key="combat.defeat_broadcast",
+        broadcast_kwargs={"name": player.name, "target": npc_label},
+        broadcast_room_id=death_room,
+    )
 
 
 def _finish_victory(
@@ -247,8 +261,20 @@ def _finish_victory(
     locale = player.locale
     label = npc_label(state, encounter.npc_id, locale)
     lines.append(encounter.append_log(locale, "combat.victory", target=label))
+    room_id = state.npc_room(encounter.npc_id) or player.room_id
+    corpse = spawn_corpse(state, encounter.npc_id, room_id)
+    if corpse is not None:
+        corpse_name = corpse_label(state, corpse, locale)
+        lines.append(t(locale, "corpse.created", label=corpse_name))
     end_encounter(state, player, encounter)
     player.chased_by_npc = ""
+    npc = state.world.npc(encounter.npc_id)
+    from world.progression import award_xp, npc_xp_reward
+
+    lines.extend(award_xp(player, npc_xp_reward(npc), locale))
+    from world.street_cred import STREET_CRED_PER_NPC, award_street_cred
+
+    lines.extend(award_street_cred(player, STREET_CRED_PER_NPC, locale))
     return CombatActionResult(
         lines,
         world_changed=True,
@@ -276,14 +302,52 @@ def tick_encounter(
     if encounter.npc_cd > 0:
         encounter.npc_cd -= 1
 
+    burn_lines = _tick_npc_status(state, player, encounter)
+    if burn_lines:
+        if encounter.npc_hp <= 0:
+            return _finish_victory(state, player, encounter, burn_lines)
+        return CombatActionResult(burn_lines, world_changed=True)
+
     if encounter.npc_cd == 0 and encounter.npc_hp > 0 and player.hp > 0:
+        from world.status_effects import npc_skip_attack
+
+        if npc_skip_attack(encounter.npc_status):
+            label = npc_label(state, encounter.npc_id, player.locale)
+            line = encounter.append_log(player.locale, "combat.shock_skip", target=label)
+            encounter.npc_cd = NPC_ATTACK_CD
+            return CombatActionResult([line], world_changed=True)
         result = resolve_npc_attack(state, player, encounter)
         return CombatActionResult(
             result.lines,
-            world_changed=True,
+            world_changed=result.world_changed,
             ended=result.ended,
+            moved=result.moved,
             broadcast_key=result.broadcast_key,
             broadcast_kwargs=result.broadcast_kwargs,
+            broadcast_room_id=result.broadcast_room_id,
         )
 
     return None
+
+
+def _tick_npc_status(state: WorldState, player: Player, encounter: Encounter) -> list[str]:
+    from world.status_effects import EFFECT_BURN, burn_tick_damage
+
+    lines: list[str] = []
+    locale = player.locale
+    if encounter.npc_status.has(EFFECT_BURN):
+        damage = burn_tick_damage(player.intelligence)
+        encounter.npc_hp -= damage
+        label = npc_label(state, encounter.npc_id, locale)
+        lines.append(
+            encounter.append_log(
+                locale,
+                "combat.burn_tick",
+                target=label,
+                damage=str(damage),
+                hp=str(max(0, encounter.npc_hp)),
+            )
+        )
+    encounter.npc_status.tick()
+    return lines
+

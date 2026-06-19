@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from entities.corpse import Corpse
 from world.clock import TimeConfig, WorldClock, default_clock
 from world.loader import default_room_items
 from world.state import WorldState
@@ -28,6 +29,8 @@ def save_world_state(state: WorldState) -> Path:
         "clock": state.clock.to_dict(),
         "room_items": {rid: list(items) for rid, items in state.room_items.items()},
         "npc_rooms": dict(state.npc_rooms),
+        "corpses": {cid: corpse.to_dict() for cid, corpse in state.corpses.items()},
+        "npc_respawns": {str(k): int(v) for k, v in state.npc_respawns.items()},
         "weather": dict(state.weather),
         "tick_count": state.tick_count,
     }
@@ -51,6 +54,11 @@ def load_world_state(world: World, config: TimeConfig) -> WorldState:
     clock = WorldClock.from_dict(data.get("clock") or {})
     room_items = {str(k): list(v) for k, v in (data.get("room_items") or DEFAULT_ROOM_ITEMS).items()}
     npc_rooms = {str(k): str(v) for k, v in (data.get("npc_rooms") or default_npc_rooms(world)).items()}
+    corpses = {
+        str(cid): Corpse.from_dict(cdata)
+        for cid, cdata in (data.get("corpses") or {}).items()
+    }
+    npc_respawns = {str(k): int(v) for k, v in (data.get("npc_respawns") or {}).items()}
     weather = {str(k): str(v) for k, v in (data.get("weather") or default_weather(weather_config)).items()}
     tick_count = int(data.get("tick_count", 0))
     return WorldState(
@@ -59,6 +67,8 @@ def load_world_state(world: World, config: TimeConfig) -> WorldState:
         time_config=config,
         room_items=room_items,
         npc_rooms=npc_rooms,
+        corpses=corpses,
+        npc_respawns=npc_respawns,
         weather=weather,
         tick_count=tick_count,
     )

@@ -37,6 +37,9 @@ def test_content_data_loaded():
     assert "broker_rumor" in world.quests
     assert "square_market" in world.shops
     assert world.shops["square_market"].open_hour == 8
+    assert "glowstick" in world.shops["square_market"].sells
+    assert world.shops["ripperdoc"].room_id == "ripper_clinic"
+    assert world.shops["tutorial_supply"].npc_id == "quartermaster"
     assert "terminal" in world.net_nodes
     assert world.net_nodes["terminal"].room_id == "square"
 

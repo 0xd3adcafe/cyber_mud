@@ -1,4 +1,5 @@
 start_room: square
+respawn_room: ripper_clinic
 
 factions:
   arasaka: 荒坂公司
@@ -7,7 +8,10 @@ factions:
   tyrell: 泰瑞公司
 
 room_items:
-  square: [glowstick, knife, jacket, cyber_arm_kit, mod_chip]
+  square: [glowstick, knife, jacket, cyber_arm_kit, mod_chip, liberty_pistol, pipe, synth_ramen]
+  tutorial: [glowstick]
+  tutorial_armory: [trainee_blade, training_sidearm, trainee_undersuit, trainee_vest, trainee_pants, trainee_boots, trainee_helmet, trainee_baton, practice_cyber_kit, mod_chip, med_stim]
+  tutorial_range: [training_sidearm, training_carbine, trainee_helmet]
 
 rooms:
   square:
@@ -15,13 +19,12 @@ rooms:
     name_en: Neon Square
     description_zh: |
       全息廣告在酸雨後的積水上閃爍。情報販子與企業特工混雜在人群中。
-      出口：北（小巷）、東（訓練場）、南（碼頭）。
     description_en: |
       Holographic ads flicker on rain-slick pavement. Fixers and corpo agents mingle in the crowd.
-      Exits: north (alley), east (tutorial), south (docks).
     district: watson
     grid_x: 1
     grid_y: 1
+    tags: [transit, metro]
     exits:
       north: alley
       east: tutorial
@@ -42,13 +45,67 @@ rooms:
   tutorial:
     name_zh: 新手訓練場
     name_en: Training Yard
-    description_zh: 教官的全息投影正在等待新進邊緣人。西邊回到霓虹廣場。
-    description_en: An instructor holo waits for new edgerunners. West returns to Neon Square.
+    description_zh: |
+      教官的全息投影正在等待新進邊緣人。這裡是訓練場中樞。
+    description_en: |
+      An instructor holo waits for new edgerunners. This is the training hub.
     district: tutorial
     grid_x: 2
     grid_y: 1
     exits:
       west: square
+      north: tutorial_combat
+      east: tutorial_net
+      south: tutorial_armory
+  tutorial_combat:
+    name_zh: 戰鬥訓練區
+    name_en: Combat Drill Zone
+    description_zh: |
+      軟墊與全息標靶覆蓋地面，陪練機械人發出單調的待機嗡鳴。
+    description_en: |
+      Padded mats and holo targets cover the floor. A sparring drone hums on standby.
+    district: tutorial
+    grid_x: 2
+    grid_y: 0
+    exits:
+      south: tutorial
+      north: tutorial_range
+  tutorial_net:
+    name_zh: 駭客模擬區
+    name_en: Netrun Sim Bay
+    description_zh: |
+      隔離的訓練終端閃爍綠色字元，教練監看著你的 RAM 消耗。
+    description_en: |
+      Isolated training terminals flicker green glyphs while a coach watches your RAM drain.
+    district: tutorial
+    grid_x: 3
+    grid_y: 1
+    exits:
+      west: tutorial
+  tutorial_armory:
+    name_zh: 訓練裝備庫
+    name_en: Training Armory
+    description_zh: |
+      企業贊助的訓練武器與護具整齊掛在架上，供新人試用。
+    description_en: |
+      Corporate-sponsored training weapons and armor hang ready for rookies to try.
+    district: tutorial
+    grid_x: 2
+    grid_y: 2
+    exits:
+      north: tutorial
+  tutorial_range:
+    name_zh: 射擊靶場
+    name_en: Firing Range
+    description_zh: |
+      彈痕累累的軌道靶在霧面護盾後滑動，空氣裡殘留火藥味。
+    description_en: |
+      Scarred rail targets slide behind frosted shields; gunpowder hangs in the air.
+    district: tutorial
+    grid_x: 2
+    grid_y: -1
+    exits:
+      south: tutorial_combat
   docks:
     name_zh: 貨櫃碼頭
     name_en: Container Docks
@@ -57,6 +114,7 @@ rooms:
     district: docks
     grid_x: 1
     grid_y: 2
+    tags: [vehicle_dealer, transit]
     exits:
       north: square
   ripper_clinic:
@@ -67,10 +125,24 @@ rooms:
     district: watson
     grid_x: 0
     grid_y: 1
-    tags: [shop]
+    tags: [shop, ripperdoc]
     shop_id: ripperdoc
     exits:
       east: square
+  watson_flat:
+    name_zh: 沃森公寓
+    name_en: Watson Flat
+    description_zh: |
+      你的公寓——狹小但安全。牆上掛著舊海報，角落有個私人儲物櫃（stash）。
+      可用 transit 或 drive 往返街區。
+    description_en: |
+      Your flat—cramped but safe. A stash locker sits in the corner.
+      Use transit or drive to reach the district.
+    district: watson
+    grid_x: 0
+    grid_y: 2
+    tags: [housing, home]
+    exits: {}
 
 items:
   glowstick:
@@ -87,26 +159,80 @@ items:
     description_en: A common street knife with a keen edge.
     takeable: true
     slot: weapon
+    weapon_type: blade
+    weapon_class: melee
+    weapon_mode: dual_wield
     weapon_damage: 5
     value: 80
+  liberty_pistol:
+    name_zh: 自由型手槍
+    name_en: Liberty Pistol
+    description_zh: 夜城最常見的廉價手槍，膛線磨損但還能開火。
+    description_en: A cheap Night City sidearm—worn rifling, still lethal.
+    takeable: true
+    slot: weapon
+    weapon_type: handgun
+    weapon_class: power
+    weapon_mode: secondary
+    weapon_damage: 9
+    value: 150
+  pipe:
+    name_zh: 強化水管
+    name_en: Reinforced Pipe
+    description_zh: 從工地順來的鋼管，砸人很痛。
+    description_en: A scavenged steel pipe that hits hard.
+    takeable: true
+    slot: weapon
+    weapon_type: blunt
+    weapon_class: melee
+    weapon_mode: dual_wield
+    weapon_damage: 4
+    value: 25
   jacket:
     name_zh: 防彈夾克
     name_en: Armored Jacket
     description_zh: 舊款企業防彈夾克，仍擋得住小口徑子彈。
     description_en: An old corpo armored jacket that still stops small-caliber rounds.
     takeable: true
-    slot: armor
+    slot: outer_torso
     defense: 2
     value: 50
   cyber_arm_kit:
     name_zh: 漩渦義肢套件
     name_en: Maelstrom Cyber Arm Kit
-    description_zh: 未安裝的義肢臂套件，需由 ripperdoc 或自行 install。
-    description_en: An uninstalled cyber-arm kit—use install to graft it in.
+    description_zh: 未安裝的義肢臂套件，在義體診所用 install 安裝。
+    description_en: An uninstalled cyber-arm kit—install at the ripper clinic.
     takeable: true
     slot: cyber
     implant_id: cyber_arm_v1
     value: 200
+  biomon_kit:
+    name_zh: 生物監測器套件
+    name_en: Biomonitor Kit
+    description_zh: 心血管義體套件，install 裝入。
+    description_en: Cardiovascular implant kit—use install.
+    takeable: true
+    slot: cyber
+    implant_id: biomon
+    value: 180
+  kerenzikov_kit:
+    name_zh: 克倫尼科夫套件
+    name_en: Kerenzikov Kit
+    description_zh: 神經加速義體，僅能於義體診所 install。
+    description_en: Neural accelerator kit—install at the ripper clinic.
+    takeable: true
+    slot: cyber
+    implant_id: kerenzikov
+    value: 450
+  neural_link_kit:
+    name_zh: 神經連結套件
+    name_en: Neural Link Kit
+    description_zh: 腦機介面擴容套件，僅能於義體診所 install。
+    description_en: Neural link kit—install at the ripper clinic.
+    takeable: true
+    slot: cyber
+    implant_id: neural_link
+    value: 520
   mod_chip:
     name_zh: 智慧連結晶片
     name_en: Smart Link Chip
@@ -114,6 +240,154 @@ items:
     description_en: A tactical chip that boosts weapon damage when installed.
     takeable: true
     value: 120
+  trainee_blade:
+    name_zh: 訓練用短刀
+    name_en: Training Blade
+    description_zh: 刃口鈍化的練習刀，仍足以熟悉揮砍節奏。
+    description_en: A dulled practice blade—still good for learning slash timing.
+    takeable: true
+    slot: weapon
+    weapon_type: blade
+    weapon_class: melee
+    weapon_mode: dual_wield
+    weapon_damage: 4
+    value: 35
+  training_sidearm:
+    name_zh: 訓練用手槍
+    name_en: Training Sidearm
+    description_zh: 裝填橡膠彈的教學用槍，後座力較輕。
+    description_en: A rubber-round training pistol with mild recoil.
+    takeable: true
+    slot: weapon
+    weapon_type: handgun
+    weapon_class: power
+    weapon_mode: secondary
+    weapon_damage: 7
+    value: 60
+  training_carbine:
+    name_zh: 訓練用卡賓槍
+    name_en: Training Carbine
+    description_zh: 雙手托擊的教學卡賓槍，裝備時無法同時持握副武器。
+    description_en: A two-handed training carbine—you cannot hold an off-hand weapon with it ready.
+    takeable: true
+    slot: weapon
+    weapon_type: assault_rifle
+    weapon_class: power
+    weapon_mode: two_handed
+    weapon_damage: 12
+    value: 90
+  trainee_undersuit:
+    name_zh: 學員貼身戰術服
+    name_en: Trainee Undersuit
+    description_zh: 內層戰術服，貼合義體接口並提供基礎防護。
+    description_en: Inner tactical layer wired for cyberware ports.
+    takeable: true
+    slot: inner_torso
+    defense: 1
+    value: 25
+  trainee_vest:
+    name_zh: 學員護甲背心
+    name_en: Trainee Vest
+    description_zh: 輕量複合纖維背心，能擋住訓練用鈍器。
+    description_en: Light composite weave that stops training-grade impacts.
+    takeable: true
+    slot: outer_torso
+    defense: 1
+    value: 40
+  trainee_pants:
+    name_zh: 學員戰術長褲
+    name_en: Trainee Tac Pants
+    description_zh: 耐磨複合纖維長褲，訓練場標準下身裝備。
+    description_en: Reinforced tac pants—standard lower-body kit for rookies.
+    takeable: true
+    slot: legs
+    defense: 1
+    value: 30
+  trainee_boots:
+    name_zh: 學員戰術靴
+    name_en: Trainee Tac Boots
+    description_zh: 防滑複合底戰術靴，長時間站立仍舒適。
+    description_en: Composite-soled tac boots built for long shifts on the yard.
+    takeable: true
+    slot: feet
+    defense: 1
+    value: 25
+  trainee_helmet:
+    name_zh: 學員戰術頭盔
+    name_en: Trainee Tac Helmet
+    description_zh: 帶 HUD 投影的入門頭盔，保護與教學並重。
+    description_en: An entry-level tac helmet with a basic HUD overlay.
+    takeable: true
+    slot: head
+    defense: 1
+    value: 45
+  trainee_baton:
+    name_zh: 訓練用警棍
+    name_en: Training Baton
+    description_zh: 包膠的練習棍，陪練機械人的預設武器。
+    description_en: A rubber-wrapped practice stick—the sparring drone's default weapon.
+    takeable: true
+    slot: weapon
+    weapon_type: blunt
+    weapon_class: melee
+    weapon_mode: dual_wield
+    weapon_damage: 3
+    value: 20
+  practice_cyber_kit:
+    name_zh: 入門義肢套件
+    name_en: Practice Cyber Kit
+    description_zh: 訓練場提供的義肢臂示範套件，可安全安裝體驗。
+    description_en: A demo cyber-arm kit from the yard—safe to install for practice.
+    takeable: true
+    slot: cyber
+    implant_id: cyber_arm_v1
+    value: 100
+  med_stim:
+    name_zh: 急救興奮劑
+    name_en: Med Stim
+    description_zh: 單劑戰地興奮劑，訓練場常見的補給品。
+    description_en: A single-dose combat stim—common training-yard supply.
+    takeable: true
+    consumable: medicine
+    hp_restore: 30
+    value: 25
+  synth_ramen:
+    name_zh: 合成拉麵
+    name_en: Synth Ramen
+    description_zh: 微波即食的合成麵，熱湯能讓僵硬的身體鬆開。
+    description_en: Instant synth noodles—the hot broth loosens stiff muscles.
+    takeable: true
+    consumable: food
+    hp_restore: 15
+    value: 12
+  energy_drink:
+    name_zh: 神經能量飲
+    name_en: Neural Energy Drink
+    description_zh: 高糖咖啡因與微量神經刺激劑，讓 RAM 暫時回升。
+    description_en: Caffeine and neural boosters—a short RAM spike.
+    takeable: true
+    consumable: drink
+    hp_restore: 5
+    ram_restore: 2
+    value: 18
+  synth_coffee:
+    name_zh: 合成咖啡
+    name_en: Synth Coffee
+    description_zh: 廉價即溶咖啡，夜城夜班族的救命稻草。
+    description_en: Cheap instant coffee—lifeline for Night City night shifts.
+    takeable: true
+    consumable: drink
+    ram_restore: 1
+    value: 8
+  trauma_kit:
+    name_zh: 創傷急救包
+    name_en: Trauma Kit
+    description_zh: ripperdoc 櫃台常備的進階急救包，能大幅穩定生命徵象。
+    description_en: A ripperdoc-grade trauma kit that stabilizes vitals fast.
+    takeable: true
+    consumable: medicine
+    hp_restore: 50
+    value: 60
 
 npcs:
   broker:
@@ -145,3 +419,53 @@ npcs:
     aggro: 8
     patrol: [alley, square]
     quest_id: broker_rumor
+    equipment:
+      weapon_secondary: knife
+    loot: [mod_chip]
+  instructor:
+    name_zh: 訓練教官
+    name_en: Drill Instructor
+    room_id: tutorial
+    description_zh: 全息教官反覆示範移動、察看與撿取物品的標準流程。
+    description_en: A holo instructor demos movement, looking, and looting by the book.
+    hp: 80
+    hostile: false
+    talk_key: instructor
+    idle_msg_zh: 「記住：先 look，再決定下一步。」
+    idle_msg_en: "\"Remember: look first, then decide.\""
+  netcoach:
+    name_zh: 駭客教練
+    name_en: Net Coach
+    room_id: tutorial_net
+    description_zh: 眼窩嵌著資料線的教練，監控訓練終端的入侵模擬。
+    description_en: A coach with data jacks under the eyes, watching the sim terminals.
+    hp: 60
+    hostile: false
+    talk_key: netcoach
+    idle_msg_zh: 低聲念著 RAM 配額與協定清單。
+    idle_msg_en: Mutters RAM quotas and protocol lists.
+  quartermaster:
+    name_zh: 裝備管理員
+    name_en: Quartermaster
+    room_id: tutorial_armory
+    description_zh: 手臂上貼滿庫存條碼的管理員，催促新人領取訓練裝備。
+    description_en: A clerk with inventory barcodes on both arms, pushing rookies to gear up.
+    hp: 50
+    hostile: false
+    talk_key: quartermaster
+    idle_msg_zh: 「槍械、護甲、義體套件——自己挑。」
+    idle_msg_en: "\"Guns, armor, cyber kits—help yourself.\""
+  sparring_bot:
+    name_zh: 陪練機械人
+    name_en: Sparring Drone
+    room_id: tutorial_combat
+    description_zh: 企業贊助的陪練機械人，攻擊模式已調至最低。
+    description_en: A corporate-sponsored sparring drone set to its lowest attack profile.
+    hp: 25
+    attack: 3
+    hostile: true
+    aggro: 5
+    respawn_minutes: 10
+    equipment:
+      weapon_primary: trainee_baton
+    loot: [med_stim, trainee_vest]

@@ -37,11 +37,17 @@ def handle(ctx: CommandContext):
                 if desc:
                     lines.append(desc)
 
+    from world.quests import advance_quest_on_talk
+
+    quest_lines = advance_quest_on_talk(ctx.player, ctx.state, npc_id, ctx.player.locale)
+    lines.extend(quest_lines)
+
     if not lines:
         label = npc.name_zh if ctx.player.locale == "zh" else (npc.name_en or npc.name_zh)
         lines.append(t(ctx.player.locale, "talk.silent", name=label))
 
-    return ok(lines, meta=player_meta(ctx), world_changed=bool(npc.quest_id))
+    world_changed = bool(npc.quest_id) or bool(quest_lines)
+    return ok(lines, meta=player_meta(ctx), world_changed=world_changed)
 
 
 register("talk", handle)

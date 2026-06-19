@@ -32,3 +32,13 @@ def test_world_state_roundtrip(world_state_path):
     assert loaded.npc_rooms == state.npc_rooms
     assert loaded.weather == state.weather
     assert loaded.tick_count == state.tick_count
+
+
+def test_world_state_roundtrip_npc_respawns(world_state_path):
+    world = load_world()
+    config = load_time_config()
+    state = load_world_state(world, config)
+    state.npc_respawns["thug"] = 99
+    save_world_state(state)
+    loaded = load_world_state(world, config)
+    assert loaded.npc_respawns == {"thug": 99}

@@ -3,7 +3,7 @@ from __future__ import annotations
 from commands.helpers import find_npc_id
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
-
+from world.progression import can_learn_skill, resolve_skill_id, skill_label
 
 BROKER_ID = "broker"
 
@@ -13,19 +13,21 @@ def handle(ctx: CommandContext):
     if not skill_name:
         return ok([t(ctx.player.locale, "learn.usage")])
 
-    skill_id = None
-    skill = None
-    for sid, data in ctx.state.world.skills.items():
-        if skill_name.lower() in {sid.lower(), data.name_zh.lower(), data.name_en.lower()}:
-            skill_id = sid
-            skill = data
-            break
-    if skill is None:
-        return ok([t(ctx.player.locale, "learn.unknown", skill=skill_name)])
-
-    if skill_id in ctx.player.skills:
-        label = skill.name_zh if ctx.player.locale == "zh" else (skill.name_en or skill.name_zh)
-        return ok([t(ctx.player.locale, "learn.already", skill=label)])
+    skill_id = resolve_skill_id(ctx.state.world, skill_name)
+    skill = ctx.state.world.skill(skill_id) if skill_id else None
+    error = can_learn_skill(ctx.player, skill)
+    if error:
+        if error == "learn.unknown":
+            return ok([t(ctx.player.locale, error, skill=skill_name)])
+        if error == "learn.already":
+            return ok([t(ctx.player.locale, error, skill=skill_label(skill, ctx.player.locale))])
+        if error == "learn.level_req":
+            return ok([t(ctx.player.locale, error, level=str(skill.level_req))])
+        if error == "learn.prereq_skill":
+            prereq = ctx.state.world.skill(skill.prereq_skill)
+            name = skill_label(prereq, ctx.player.locale) if prereq else skill.prereq_skill
+            return ok([t(ctx.player.locale, error, skill=name)])
+        return ok([t(ctx.player.locale, error)])
 
     broker_here = find_npc_id(ctx.state, BROKER_ID, ctx.player.room_id) == BROKER_ID
     if not broker_here:
@@ -42,7 +44,7 @@ def handle(ctx: CommandContext):
         ctx.player.gold -= skill.gold_cost
 
     ctx.player.skills.append(skill_id)
-    label = skill.name_zh if ctx.player.locale == "zh" else (skill.name_en or skill.name_zh)
+    label = skill_label(skill, ctx.player.locale)
     return ok(
         [t(ctx.player.locale, "learn.ok", skill=label, cost=str(skill.gold_cost))],
         meta=player_meta(ctx),

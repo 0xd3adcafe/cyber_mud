@@ -12,6 +12,11 @@ class Player:
     hp: int = 100
     max_hp: int = 100
     gold: int = 0
+    level: int = 1
+    xp: int = 0
+    attribute_points: int = 0
+    perk_points: int = 0
+    perks: list[str] = field(default_factory=list)
     body: int = 3
     reflex: int = 3
     tech: int = 3
@@ -19,12 +24,17 @@ class Player:
     intelligence: int = 3
     humanity: int = 100
     reputation: int = 0
+    street_cred: int = 0
     faction: str = ""
     ram: int = 4
     max_ram: int = 8
     inventory: list[str] = field(default_factory=list)
     equipment: dict[str, str] = field(default_factory=dict)
     implants: list[str] = field(default_factory=list)
+    cyberware: dict[str, str] = field(default_factory=dict)
+    home_room_id: str = ""
+    home_stash: list[str] = field(default_factory=list)
+    vehicle_id: str = ""
     visited_rooms: list[str] = field(default_factory=list)
     prompt_mud: str = ""
     skills: list[str] = field(default_factory=list)

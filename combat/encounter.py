@@ -8,6 +8,7 @@ from entities.player import Player
 from shared.i18n import t
 from shared.locale_content import item_label
 from world.state import WorldState
+from world.status_effects import StatusEffectState
 from world.world import World
 
 COMBAT_TICK_SECONDS = 3
@@ -16,7 +17,24 @@ NPC_ATTACK_CD = 2
 QUICKHACK_RAM_COST = 2
 
 COMBAT_ALLOWED_COMMANDS = frozenset(
-    {"attack", "defend", "flee", "quickhack", "look", "pda", "help", "quit"}
+    {
+        "attack",
+        "shoot",
+        "slash",
+        "bash",
+        "punch",
+        "backstab",
+        "defend",
+        "flee",
+        "quickhack",
+        "look",
+        "use",
+        "eat",
+        "drink",
+        "pda",
+        "help",
+        "quit",
+    }
 )
 
 
@@ -29,6 +47,7 @@ class Encounter:
     player_cd: int = 0
     npc_cd: int = 0
     defending: bool = False
+    npc_status: StatusEffectState = field(default_factory=StatusEffectState)
     log: list[str] = field(default_factory=list)
 
     def append_log(self, locale: str, key: str, **kwargs: str) -> str:
@@ -39,7 +58,9 @@ class Encounter:
         return line
 
     def player_weapon_damage(self, player: Player, world: World) -> int:
-        weapon_id = player.equipment.get("weapon", "")
+        from shared.equipment import active_weapon_id
+
+        weapon_id = active_weapon_id(player.equipment)
         if not weapon_id:
             return 0
         item = world.item(weapon_id)
@@ -54,24 +75,38 @@ class Encounter:
 
     def calc_player_damage(self, player: Player, world: World, *, state: WorldState | None = None) -> int:
         from combat.passives import bonus_attack_damage
+        from world.cyberpsychosis import player_damage_multiplier
         from world.modifiers import apply_damage_modifier
 
-        raw = player.body + self.player_weapon_damage(player, world) + bonus_attack_damage(player)
+        raw = int((player.body + self.player_weapon_damage(player, world) + bonus_attack_damage(player)) * player_damage_multiplier(player))
         if state is not None and player.room_id:
             return apply_damage_modifier(state, player.room_id, raw)
         return raw
 
     def calc_npc_damage(self, state: WorldState) -> int:
+        from world.status_effects import npc_damage_multiplier
+
         npc = state.world.npc(self.npc_id)
         if npc is None:
-            return 3
-        return npc.attack
+            raw = 3
+        else:
+            raw = npc.attack
+        return max(1, int(raw * npc_damage_multiplier(self.npc_status)))
 
-    def calc_quickhack_damage(self, player: Player, *, state: WorldState | None = None) -> int:
+    def calc_quickhack_damage(
+        self,
+        player: Player,
+        *,
+        state: WorldState | None = None,
+        damage_mult: float = 1.0,
+    ) -> int:
         from combat.passives import quickhack_damage_multiplier
+        from world.cyberpsychosis import player_damage_multiplier
         from world.modifiers import apply_damage_modifier
 
-        raw = int(player.intelligence * 2 * quickhack_damage_multiplier(player))
+        if damage_mult <= 0:
+            return 0
+        raw = int(player.intelligence * 2 * quickhack_damage_multiplier(player) * damage_mult * player_damage_multiplier(player))
         if state is not None and player.room_id:
             return apply_damage_modifier(state, player.room_id, raw)
         return raw
@@ -150,6 +185,7 @@ def end_encounter(state: WorldState, player: Player, encounter: Encounter) -> No
     player.in_combat = False
     player.encounter_id = ""
     encounter.log.clear()
+    encounter.npc_status.clear()
 
 
 def cd_ticks_to_seconds(_state: WorldState, ticks: int) -> int:
@@ -170,3 +206,12 @@ def combat_meta(state: WorldState, player: Player) -> dict[str, str]:
         "combat_target": label,
         "combat_npc_hp": str(encounter.npc_hp),
     }
+
+
+def available_quickhacks(world: World, player: Player) -> list[str]:
+    ids: list[str] = []
+    for qid, qh in world.quickhacks.items():
+        if qh.skill_req and qh.skill_req not in player.skills:
+            continue
+        ids.append(qid)
+    return ids

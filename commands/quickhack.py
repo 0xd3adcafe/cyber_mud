@@ -4,7 +4,7 @@ from commands.registry import CommandContext, ok, player_meta, register
 
 
 def handle(ctx: CommandContext):
-    result = resolve_quickhack(ctx.state, ctx.player)
+    result = resolve_quickhack(ctx.state, ctx.player, ctx.args.strip())
     meta = player_meta(ctx)
     meta.update(combat_meta(ctx.state, ctx.player))
     return ok(

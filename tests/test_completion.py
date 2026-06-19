@@ -1,6 +1,6 @@
 from commands.registry import CommandContext, player_meta
 from shared.completion import complete_input, completion_meta
-from shared.locale_content import item_label_with_id, npc_label_with_id
+from shared.locale_content import item_label_with_id, net_node_label_with_id, npc_label_with_id
 from tests.conftest import make_player, make_state
 
 
@@ -9,6 +9,13 @@ def test_item_label_with_id_zh():
     item = state.world.item("glowstick")
     assert item is not None
     assert item_label_with_id(item, "zh") == "螢光棒 (Glowstick)"
+
+
+def test_net_node_label_with_id_zh():
+    _, state = make_player(), make_state()
+    node = state.world.net_node("terminal")
+    assert node is not None
+    assert net_node_label_with_id(node, "zh") == "核心終端 (Core Terminal)"
 
 
 def test_npc_label_with_id_zh():
@@ -39,10 +46,26 @@ def test_player_meta_has_completion_fields():
     meta = player_meta(CommandContext(player, state, ""))
     assert "complete_room_items" in meta
     assert "complete_npcs" in meta
+    assert "complete_net_nodes" in meta
+
+
+def test_complete_input_hack_node_in_net_shell():
+    result = complete_input(
+        "hack ter",
+        room_items=(),
+        room_npcs=(),
+        room_exits=(),
+        inventory=(),
+        net_nodes=("terminal", "alley_node"),
+        net_shell=True,
+    )
+    assert result == "hack terminal"
 
 
 def test_complete_input_verb():
-    assert complete_input("t", room_items=(), room_npcs=(), room_exits=(), inventory=()) == "take"
+    assert complete_input("t", room_items=(), room_npcs=(), room_exits=(), inventory=()) == "transit"
+    assert complete_input("tal", room_items=(), room_npcs=(), room_exits=(), inventory=()) == "talents"
+    assert complete_input("tak", room_items=(), room_npcs=(), room_exits=(), inventory=()) == "take"
 
 
 def test_complete_input_look_item():

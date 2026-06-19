@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from entities.implant import Implant
 from entities.item import Item
 from entities.npc import NPC
-from world.content import Mod, NetNode, Quest, Shop, Skill
+from world.content import Housing, Mod, NetNode, Quest, Quickhack, Shop, Skill, Talent, TransitRoute, Vehicle
 
 
 @dataclass
@@ -28,14 +28,20 @@ class Room:
 @dataclass
 class World:
     start_room: str
+    respawn_room: str
     rooms: dict[str, Room]
     items: dict[str, Item]
     npcs: dict[str, NPC]
     implants: dict[str, Implant]
     factions: dict[str, str]
     skills: dict[str, Skill] = field(default_factory=dict)
+    talents: dict[str, Talent] = field(default_factory=dict)
     mods: dict[str, Mod] = field(default_factory=dict)
     quests: dict[str, Quest] = field(default_factory=dict)
+    quickhacks: dict[str, Quickhack] = field(default_factory=dict)
+    homes: dict[str, Housing] = field(default_factory=dict)
+    vehicles: dict[str, Vehicle] = field(default_factory=dict)
+    transit_routes: list[TransitRoute] = field(default_factory=list)
     shops: dict[str, Shop] = field(default_factory=dict)
     net_nodes: dict[str, NetNode] = field(default_factory=dict)
 
@@ -54,11 +60,26 @@ class World:
     def skill(self, skill_id: str) -> Skill | None:
         return self.skills.get(skill_id)
 
+    def talent(self, talent_id: str) -> Talent | None:
+        return self.talents.get(talent_id)
+
     def mod(self, mod_id: str) -> Mod | None:
         return self.mods.get(mod_id)
 
     def quest(self, quest_id: str) -> Quest | None:
         return self.quests.get(quest_id)
+
+    def quickhack(self, quickhack_id: str) -> Quickhack | None:
+        return self.quickhacks.get(quickhack_id)
+
+    def home(self, home_id: str) -> Housing | None:
+        return self.homes.get(home_id)
+
+    def vehicle(self, vehicle_id: str) -> Vehicle | None:
+        return self.vehicles.get(vehicle_id)
+
+    def transit_from(self, room_id: str) -> list[TransitRoute]:
+        return [route for route in self.transit_routes if route.from_room == room_id]
 
     def shop(self, shop_id: str) -> Shop | None:
         return self.shops.get(shop_id)

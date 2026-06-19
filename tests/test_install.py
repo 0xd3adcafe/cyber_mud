@@ -14,11 +14,11 @@ def test_install_cyber_arm():
     assert player.body == 3
     assert player.humanity == 100
     result = dispatch("install cyber_arm_kit", player, state, [], [])
-    assert "cyber_arm_v1" in player.implants
+    assert player.cyberware.get("arms") == "cyber_arm_v1"
     assert "cyber_arm_kit" not in player.inventory
     assert player.body == 4
     assert player.humanity == 95
-    assert any("安裝" in line for line in result.lines)
+    assert any("裝入" in line or "安裝" in line for line in result.lines)
     assert result.refresh_sidebar
 
 

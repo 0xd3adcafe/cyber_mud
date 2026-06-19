@@ -2,6 +2,98 @@ implants:
   cyber_arm_v1:
     name_zh: 漩渦義肢臂 v1
     name_en: Maelstrom Cyber Arm v1
+    category: arms
+    slot: arms
     body: 1
     humanity_cost: 5
-    slot: cyber
+    description_zh: 黑市義肢臂，強化近戰出力。
+    description_en: A black-market cyber-arm that boosts melee output.
+  mantis_blades:
+    name_zh: 螳螂刃
+    name_en: Mantis Blades
+    category: arms
+    slot: arms
+    body: 2
+    humanity_cost: 12
+    ripperdoc_only: true
+    description_zh: 前臂藏刃，企業級暗殺義體。
+    description_en: Retractable forearm blades—corpo-grade assassin chrome.
+  reinforced_skeleton:
+    name_zh: 強化骨架
+    name_en: Reinforced Skeleton
+    category: skeleton
+    slot: skeleton
+    body: 1
+    max_hp: 15
+    humanity_cost: 8
+    ripperdoc_only: true
+    description_zh: 鈦合金骨架，承受更多傷害。
+    description_en: Titanium lattice skeleton—more punishment before you fold.
+  kerenzikov:
+    name_zh: 克倫尼科夫
+    name_en: Kerenzikov
+    category: nervous
+    slot: nervous
+    reflex: 2
+    humanity_cost: 10
+    ripperdoc_only: true
+    description_zh: 神經加速系統，反應大幅提升。
+    description_en: Neural accelerator—reflexes spike under pressure.
+  biomon:
+    name_zh: 生物監測器
+    name_en: Biomonitor
+    category: cardiovascular
+    slot: cardiovascular
+    max_hp: 10
+    humanity_cost: 4
+    description_zh: 持續監測生命徵象並自動穩定。
+    description_en: Monitors vitals and auto-stabilizes trauma.
+  ocular_cyberware:
+    name_zh: 義眼強化
+    name_en: Ocular Cyberware
+    category: ocular
+    slot: ocular
+    intelligence: 1
+    humanity_cost: 6
+    description_zh: 光學模組升級，提升感知與駭入精度。
+    description_en: Upgraded optics—sharper perception and net precision.
+  neural_link:
+    name_zh: 神經連結介面
+    name_en: Neural Link
+    category: cyberdeck
+    slot: cyberdeck
+    intelligence: 1
+    ram_bonus: 2
+    humanity_cost: 7
+    ripperdoc_only: true
+    description_zh: 企業級腦機介面，擴充 RAM 配額。
+    description_en: Corpo-grade neural link—more RAM for quickhacks.
+  subdermal_armor:
+    name_zh: 皮下裝甲
+    name_en: Subdermal Armor
+    category: integumentary
+    slot: integumentary
+    body: 1
+    max_hp: 5
+    humanity_cost: 5
+    description_zh: 皮下陶瓷片，輕量防護。
+    description_en: Subdermal ceramic plating—lightweight protection.
+  cool_inductors:
+    name_zh: 冷靜感應器
+    name_en: Cool Inductors
+    category: frontal
+    slot: frontal
+    cool: 2
+    humanity_cost: 6
+    description_zh: 額葉抑制晶片，戰場上更沉著。
+    description_en: Frontal lobe dampeners—stay cool under fire.
+  reinforced_tendons:
+    name_zh: 強化肌腱
+    name_en: Reinforced Tendons
+    category: legs
+    slot: legs
+    reflex: 1
+    body: 1
+    humanity_cost: 5
+    description_zh: 腿部肌腱強化，機動性提升。
+    description_en: Reinforced leg tendons—better mobility.

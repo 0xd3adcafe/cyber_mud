@@ -3,5 +3,56 @@ shops:
     name_zh: 廣場黑市攤
     name_en: Square Market Stall
     room_id: square
+    npc_id: broker
     open_hour: 8
     close_hour: 22
+    sells:
+      glowstick: 12
+      synth_ramen: 15
+      energy_drink: 22
+      synth_coffee: 10
+      med_stim: 35
+      mod_chip: 140
+      pipe: 30
+    buy_items: true
+    buy_rate: 0.5
+  ripperdoc:
+    name_zh: 義體診所櫃台
+    name_en: Ripper Clinic Counter
+    room_id: ripper_clinic
+    open_hour: 8
+    close_hour: 22
+    sells:
+      cyber_arm_kit: 220
+      biomon_kit: 200
+      kerenzikov_kit: 480
+      neural_link_kit: 550
+      practice_cyber_kit: 90
+      jacket: 55
+      knife: 85
+      trainee_helmet: 40
+      trauma_kit: 75
+      med_stim: 40
+    buy_items: true
+    buy_rate: 0.4
+  tutorial_supply:
+    name_zh: 訓練裝備補給站
+    name_en: Training Supply Post
+    room_id: tutorial_armory
+    npc_id: quartermaster
+    open_hour: 0
+    close_hour: 24
+    sells:
+      trainee_blade: 20
+      training_sidearm: 45
+      trainee_vest: 30
+      trainee_helmet: 35
+      trainee_baton: 15
+      practice_cyber_kit: 80
+      mod_chip: 100
+      med_stim: 20
+      synth_ramen: 12
+      energy_drink: 18
+      synth_coffee: 8
+    buy_items: true
+    buy_rate: 0.6

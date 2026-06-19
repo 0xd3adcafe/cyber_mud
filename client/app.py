@@ -47,19 +47,21 @@ from client.meta_handlers import (
     active_prompt,
     apply_meta,
     classify_server_line,
-    handle_panel_line,
     format_sidebar_content,
+    handle_panel_line,
     handle_ui_json,
+    is_local_command,
+    prepare_netrun_outbound,
     panels_to_refresh_on_equip,
     panels_to_refresh_on_move,
-    should_refresh_sidebar_on_room_change,
-    toggle_sidebar_panel,
-    is_local_command,
-    is_netrun_exit_command,
-    netrun_blocks_server_command,
     parse_local_command,
     parse_meta_payload,
+    prepare_sidebar_for_panel,
     reconnect_delay,
+    resolve_panel_command,
+    should_refresh_sidebar_on_room_change,
+    sidebar_should_show,
+    toggle_sidebar_panel,
 )
 from shared.protocol import ERR_PREFIX, META_PREFIX, MOTD_PREFIX, PANEL_PREFIX, SYS_PREFIX, UI_PREFIX
 from shared.startup import StartupReport
@@ -77,7 +79,7 @@ class CyberMudApp(App):
         Binding("f3", "panel_help", "說明", show=True),
         Binding("f4", "panel_map", "地圖", show=True),
         Binding("f5", "panel_equipment", "裝備", show=True),
-        Binding("f6", "toggle_sidebar", "側欄", show=True),
+        Binding("f6", "toggle_sidebar", "收合側欄", show=True),
         Binding("f7", "clear_credentials", "清除記憶", show=False),
     ]
 
@@ -104,6 +106,7 @@ class CyberMudApp(App):
         self._sidebar_refresh_lock = asyncio.Lock()
         self._panel_fetch_event: asyncio.Event | None = None
         self._panel_fetching = False
+        self._panel_fetch_generation = 0
         self._cmd_sent_at = 0.0
         self._last_recv_at = 0.0
         self._last_rtt_ms: float | None = None
@@ -112,7 +115,7 @@ class CyberMudApp(App):
         yield Header(show_clock=True)
 
         with Container(id="login_container"):
-            yield Static("", id="login_art")
+            yield Static("", id="login_art", markup=False)
             with VerticalScroll(id="login_form_scroll"):
                 with Vertical(id="login_form"):
                     yield Static(
@@ -175,9 +178,9 @@ class CyberMudApp(App):
                     yield Static("", id="login_status")
 
         with Container(id="game_container", classes="game-hidden"):
-            yield Static(self._info_bar(), id="info_bar")
-            yield Static(format_hotkey_bar(), id="hotkey_bar")
-            yield Static(self._link_status_bar(), id="link_status_bar")
+            with Vertical(id="top_dock"):
+                yield Static(self._info_bar(), id="info_bar")
+                yield Static(self._chrome_bar(), id="chrome_bar")
             with Horizontal(id="main_row"):
                 with Container(id="scrollback_wrap"):
                     yield RichLog(id="log", highlight=True, markup=True)
@@ -187,15 +190,17 @@ class CyberMudApp(App):
                         Static("", id="sidebar_content"),
                         id="sidebar",
                     )
-            with Horizontal(id="prompt_dock"):
-                yield Static("❙", id="prompt_accent")
-                with Horizontal(id="prompt_row"):
-                    yield Static(self._prompt_prefix(), id="prompt_prefix")
-                    yield MudPrompt(
-                        placeholder="指令 · Tab 補全 · ↑↓ 歷史 · Esc 還原 · Enter 送出",
-                        id="prompt",
-                        suggester=MudSuggester(lambda: self.view),
-                    )
+            with Vertical(id="bottom_dock"):
+                with Horizontal(id="prompt_dock"):
+                    yield Static("❙", id="prompt_accent")
+                    with Horizontal(id="prompt_row"):
+                        yield Static(self._prompt_prefix(), id="prompt_prefix")
+                        yield MudPrompt(
+                            placeholder="指令 · Tab 補全 · ↑↓ 歷史 · Esc 還原 · Enter 送出",
+                            id="prompt",
+                            suggester=MudSuggester(lambda: self.view),
+                        )
+                yield Static(format_hotkey_bar(), id="hotkey_bar")
 
         yield Footer()
 
@@ -224,15 +229,28 @@ class CyberMudApp(App):
                 last_send_at=self._cmd_sent_at,
             ),
             frame=self._log_buffer.frame,
+            host=self.host,
+            port=self.port,
         )
 
-    def _update_link_status_bar(self) -> None:
+    def _chrome_bar(self) -> str:
+        return self._link_status_bar()
+
+    def _update_chrome_bar(self) -> None:
         if not self.view.authenticated:
             return
         try:
-            self.query_one("#link_status_bar", Static).update(self._link_status_bar())
+            self.query_one("#chrome_bar", Static).update(self._chrome_bar())
         except Exception:
             pass
+
+    def _refresh_game_layout(self) -> None:
+        if not self.view.authenticated:
+            return
+        self.query_one("#game_container").refresh(layout=True)
+
+    def _update_link_status_bar(self) -> None:
+        self._update_chrome_bar()
 
     def _note_outbound(self) -> None:
         self._cmd_sent_at = time.monotonic()
@@ -268,7 +286,10 @@ class CyberMudApp(App):
         if not self.view.authenticated:
             return
         accent = spinner_char(self._log_buffer.frame) if self._log_buffer.has_pending() else "❙"
-        self.query_one("#prompt_accent", Static).update(accent)
+        try:
+            self.query_one("#prompt_accent", Static).update(accent)
+        except Exception:
+            pass
 
     def _complete_command_if_pending(self, log: RichLog) -> None:
         if self._log_buffer.complete_pending():
@@ -286,7 +307,10 @@ class CyberMudApp(App):
             self._advance_ui_frame()
         self._update_spinner_accent()
         if status_needs_animation(self.view) and self._log_buffer.frame % 2 == 0:
-            self.query_one("#info_bar", Static).update(self._info_bar())
+            try:
+                self.query_one("#info_bar", Static).update(self._info_bar())
+            except Exception:
+                pass
         self._update_link_status_bar()
 
     def _on_cd_tick(self) -> None:
@@ -328,10 +352,17 @@ class CyberMudApp(App):
         resolved = resolve_theme_id(theme_id) or DEFAULT_THEME_ID
         self._theme_id = resolved
         self.theme = resolved
+        self._log_buffer.set_theme_id(resolved)
         if persist:
             save_theme_id(resolved)
         if not self.view.authenticated:
             self._refresh_login_art()
+        else:
+            try:
+                log = self.query_one("#log", RichLog)
+                self._refresh_log_display(log, preserve_scroll=True)
+            except Exception:
+                pass
 
     def _refresh_login_art(self) -> None:
         art = render_login_art(
@@ -339,7 +370,9 @@ class CyberMudApp(App):
             max_width=self._login_art_width(),
             theme_id=self._theme_id,
         )
-        self.query_one("#login_art", Static).update(art)
+        art_widget = self.query_one("#login_art", Static)
+        art_widget._render_markup = False
+        art_widget.update(art)
 
     def _set_login_status(self, text: str) -> None:
         self.query_one("#login_status", Static).update(text)
@@ -420,6 +453,7 @@ class CyberMudApp(App):
         self._pending_logout = False
         self.view = ClientViewState()
         self._log_buffer = AnimatedLogBuffer()
+        self._log_buffer.set_theme_id(self._theme_id)
         log = self.query_one("#log", RichLog)
         log.clear()
         self._set_auth_ui(False)
@@ -454,8 +488,12 @@ class CyberMudApp(App):
             login.add_class("login-hidden")
             game.remove_class("game-hidden")
             self._set_login_form_active(False)
+            if self.conn.connected and self._last_recv_at <= 0:
+                self._last_recv_at = time.monotonic()
             self._update_status()
             self._update_spinner_accent()
+            self.call_after_refresh(self._update_status)
+            self.call_after_refresh(self._refresh_game_layout)
             self.call_after_refresh(self._focus_game_prompt)
         else:
             login.remove_class("login-hidden")
@@ -469,8 +507,9 @@ class CyberMudApp(App):
         if not self.view.authenticated:
             return
         self.query_one("#info_bar", Static).update(self._info_bar())
+        self.query_one("#hotkey_bar", Static).update(format_hotkey_bar())
         self.query_one("#prompt_prefix", Static).update(self._prompt_prefix())
-        self._update_link_status_bar()
+        self._update_chrome_bar()
 
     def _configure_game_focus_targets(self) -> None:
         log = self.query_one("#log", RichLog)
@@ -487,7 +526,7 @@ class CyberMudApp(App):
         wrap = self.query_one("#sidebar_wrap", Vertical)
         content = self.query_one("#sidebar_content", Static)
         header = self.query_one("#sidebar_header", Static)
-        if not self.view.sidebar_open or not self.view.sidebar_stack:
+        if not sidebar_should_show(self.view):
             content.update("")
             header.update("")
             wrap.remove_class("sidebar-visible")
@@ -499,9 +538,20 @@ class CyberMudApp(App):
         wrap.add_class("sidebar-visible")
         self.call_after_refresh(self._focus_game_prompt)
 
+    def _cancel_panel_fetch(self) -> None:
+        self._panel_fetch_generation += 1
+        if self._panel_fetch_event is not None:
+            self._panel_fetch_event.set()
+        self._panel_fetching = False
+        self._panel_fetch_event = None
+
+    def _schedule_panel_fetch(self, panel_id: str) -> None:
+        asyncio.create_task(self._fetch_panel(panel_id))
+
     async def _fetch_panel(self, panel_id: str) -> None:
+        generation = self._panel_fetch_generation
         async with self._sidebar_refresh_lock:
-            if not self.conn.connected:
+            if generation != self._panel_fetch_generation or not self.conn.connected:
                 return
             event = asyncio.Event()
             self._panel_fetch_event = event
@@ -514,10 +564,45 @@ class CyberMudApp(App):
             except asyncio.TimeoutError:
                 pass
             finally:
+                if generation != self._panel_fetch_generation:
+                    return
                 self._panel_fetching = False
                 if self._panel_fetch_event is event:
                     self._panel_fetch_event = None
                 self._update_link_status_bar()
+
+    def _send_panel_command(self, command: str) -> None:
+        if not self.view.authenticated:
+            return
+        if not self.conn.connected:
+            self._append_log(
+                self.query_one("#log", RichLog),
+                f"{ERR_PREFIX}未連線",
+                kind="err",
+            )
+            return
+        if command in self.view.sidebar_stack:
+            toggle_sidebar_panel(self.view, command)
+            self._render_sidebar()
+            return
+        if (
+            self.view.pending_panel == command
+            and command not in self.view.sidebar_stack
+            and self._panel_fetching
+        ):
+            self._cancel_panel_fetch()
+            self.view.pending_panel = ""
+            if not self.view.sidebar_stack:
+                self.view.sidebar_open = False
+            self._render_sidebar()
+            self._update_link_status_bar()
+            return
+        if not toggle_sidebar_panel(self.view, command):
+            self._render_sidebar()
+            return
+        self.view.pending_panel = command
+        self._render_sidebar()
+        self._schedule_panel_fetch(command)
 
     def _apply_meta(self, payload: str) -> None:
         key, value = parse_meta_payload(payload)
@@ -534,6 +619,7 @@ class CyberMudApp(App):
             self._auth_pending = False
             self._needs_reauth = False
             self._reconnecting = False
+            self._last_recv_at = time.monotonic()
             if not was_auth:
                 self._set_auth_ui(True)
                 self.query_one("#login_password", Input).value = ""
@@ -560,17 +646,6 @@ class CyberMudApp(App):
             if panel_id in self.view.sidebar_stack:
                 await self._fetch_panel(panel_id)
 
-    async def _send_panel_command(self, command: str) -> None:
-        if not self.view.authenticated:
-            return
-        if not self.conn.connected:
-            self._append_log(self.query_one("#log", RichLog), f"{ERR_PREFIX}未連線", kind="err")
-            return
-        if not toggle_sidebar_panel(self.view, command):
-            self._render_sidebar()
-            return
-        await self._fetch_panel(command)
-
     async def action_focus_prompt(self) -> None:
         self._focus_game_prompt()
 
@@ -595,28 +670,32 @@ class CyberMudApp(App):
         self._focus_game_prompt()
 
     async def action_panel_pda(self) -> None:
-        await self._send_panel_command("pda")
+        self._send_panel_command("pda")
 
     async def action_panel_help(self) -> None:
-        await self._send_panel_command("help")
+        self._send_panel_command("help")
 
     async def action_panel_map(self) -> None:
-        await self._send_panel_command("map")
+        self._send_panel_command("map")
 
     async def action_panel_equipment(self) -> None:
-        await self._send_panel_command("equipment")
+        self._send_panel_command("equipment")
 
     async def action_toggle_sidebar(self) -> None:
         if not self.view.authenticated:
             return
-        self.view.sidebar_open = not self.view.sidebar_open
-        if self.view.sidebar_open and self.view.sidebar_stack:
-            await self._refresh_sidebar_panels(list(self.view.sidebar_stack))
+        self._cancel_panel_fetch()
+        self.view.sidebar_open = False
+        self.view.sidebar_stack.clear()
+        self.view.pending_panel = ""
+        self._update_link_status_bar()
         self._render_sidebar()
 
     def on_resize(self, event: Resize) -> None:
         if not self.view.authenticated:
             self._refresh_login_art()
+        else:
+            self._refresh_game_layout()
 
     @on(Click, "#prompt_dock")
     @on(Click, "#prompt_row")
@@ -664,15 +743,14 @@ class CyberMudApp(App):
                 pass
         self._set_auth_ui(False)
         with startup.measure("登入畫面"):
-            self._refresh_login_art()
             self._refresh_credential_ui()
         for widget_id in (
             "#login_title",
             "#login_hint",
             "#login_status",
             "#info_bar",
+            "#chrome_bar",
             "#hotkey_bar",
-            "#link_status_bar",
             "#sidebar_header",
             "#sidebar_content",
         ):
@@ -1010,18 +1088,22 @@ class CyberMudApp(App):
             self._complete_command_if_pending(log)
             return
         if self.view.net_shell:
-            if netrun_blocks_server_command(text):
+            text, blocked = prepare_netrun_outbound(text)
+            if blocked:
                 self._append_log(
                     log,
-                    f"{SYS_PREFIX}NETRUN 模式：請輸入 exit 或 /exit 離開駭入層。",
+                    f"{SYS_PREFIX}NETRUN 模式：可用 hack、probe、look、scan、talk、status、exit、help。",
                     kind="sys",
                 )
                 self._complete_command_if_pending(log)
                 return
-            if text.startswith("/") and is_netrun_exit_command(text):
-                text = text[1:].strip().split()[0]
         if self._is_server_quit_command(text):
             self._pending_logout = True
+        panel_id = resolve_panel_command(text)
+        if panel_id:
+            prepare_sidebar_for_panel(self.view, panel_id)
+            self.view.pending_panel = panel_id
+            self._render_sidebar()
         self._log_buffer.mark_last_pending()
         self._update_spinner_accent()
         self._refresh_log_display(log, preserve_scroll=True)

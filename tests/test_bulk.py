@@ -38,8 +38,8 @@ def test_equip_all():
     dispatch("take knife", player, state, [], [])
     dispatch("take jacket", player, state, [], [])
     result = dispatch("equip *", player, state, [], [])
-    assert player.equipment.get("weapon") == "knife"
-    assert player.equipment.get("armor") == "jacket"
+    assert player.equipment.get("weapon_secondary") == "knife"
+    assert player.equipment.get("outer_torso") == "jacket"
     assert any("裝備" in line for line in result.lines)
 
 

@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import time
 
 from entities.player import Player
 from server.game import ClientSession, Game, create_game
+from server.heartbeat import heartbeat_loop, log_server_event
 from shared.protocol import DEFAULT_HOST, DEFAULT_PORT, ENCODING
 
 
@@ -14,6 +16,7 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         player=Player(room_id=game.state.world.start_room),
     )
     await game.add_session(session)
+    log_server_event(f"+ 連線（{len(game.sessions)}）")
     try:
         while True:
             data = await reader.readline()
@@ -29,7 +32,9 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         pass
     finally:
         await game.notify_disconnect(session)
+        label = session.player.name if session.player.named else "訪客"
         game.remove_session(session)
+        log_server_event(f"- 離線 {label}（{len(game.sessions)}）")
         writer.close()
         try:
             await writer.wait_closed()
@@ -43,8 +48,17 @@ async def run_server(host: str, port: int, *, dev: bool = False) -> None:
     boot = StartupReport()
     with boot.measure("載入遊戲"):
         game, load_report = create_game()
+    started_at = time.monotonic()
     tick_task = asyncio.create_task(game.tick_loop())
     combat_task = asyncio.create_task(game.combat_tick_loop())
+    heartbeat_task = asyncio.create_task(
+        heartbeat_loop(
+            game,
+            interval=game.state.time_config.tick_interval_seconds,
+            started_at=started_at,
+            dev=dev,
+        )
+    )
     dev_task = None
     if dev:
         from server.dev_reload import start_dev_watcher
@@ -65,9 +79,10 @@ async def run_server(host: str, port: int, *, dev: bool = False) -> None:
     finally:
         tick_task.cancel()
         combat_task.cancel()
+        heartbeat_task.cancel()
         if dev_task is not None:
             dev_task.cancel()
-        for task in (tick_task, combat_task, dev_task):
+        for task in (tick_task, combat_task, heartbeat_task, dev_task):
             if task is None:
                 continue
             try:

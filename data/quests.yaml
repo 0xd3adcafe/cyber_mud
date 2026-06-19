@@ -7,4 +7,9 @@ quests:
     description_en: The info broker mentioned Maelstrom activity in the alley—worth checking out.
     hint_zh: 到小巷找街頭暴徒打聽消息。
     hint_en: Head to the alley and question the street thug.
+    objective_type: talk_npc
+    objective_target: thug
+    complete_npc_id: broker
     reward_gold: 50
+    reward_xp: 25
+    reward_street_cred: 10

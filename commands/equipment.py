@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 from commands.registry import CommandContext, ok_panel, player_meta, register
-from shared.equipment import format_equipment_lines
+from shared.equipment import EQUIP_SLOTS, format_equipment_lines, slot_label
 from shared.i18n import t
 from shared.ui_json import panel_json
 
 
 def _equipment_ui(ctx: CommandContext) -> str:
     sections = []
-    for slot in ("weapon", "armor", "head", "cyber"):
+    for slot in EQUIP_SLOTS:
         item_id = ctx.player.equipment.get(slot, "")
         item = ctx.state.world.item(item_id) if item_id else None
         from shared.locale_content import item_label
@@ -17,7 +17,7 @@ def _equipment_ui(ctx: CommandContext) -> str:
         sections.append(
             {
                 "kind": "row",
-                "label": t(ctx.player.locale, f"equipment.slot.{slot}"),
+                "label": slot_label(slot, ctx.player.locale),
                 "value": value,
             }
         )

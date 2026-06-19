@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import random
 
-from combat.actions import resolve_player_attack
+from combat.strike import resolve_player_attack
 from combat.encounter import encounter_for_player
 from commands.registry import dispatch
 from tests.conftest import make_player, make_state

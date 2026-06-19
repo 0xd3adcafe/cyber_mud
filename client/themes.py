@@ -9,6 +9,24 @@ from textual.theme import Theme
 
 DEFAULT_THEME_ID = "night_city"
 
+
+@dataclass(frozen=True)
+class EnvPalette:
+    header: str
+    scan: str
+    hint: str
+    desc: str
+    move_marker: str
+    move_label: str
+    move_dir: str
+    exits: str
+    exit_dest: str
+    items: str
+    npcs: str
+    corpses: str
+    players: str
+    weather: str
+
 _THEME_SPECS: dict[str, dict[str, str | bool]] = {
     "night_city": {
         "label": "夜城（預設）",
@@ -107,6 +125,36 @@ _THEME_SPECS: dict[str, dict[str, str | bool]] = {
         "foreground": "#e5e5e5",
     },
 }
+
+
+def _muted_hex(hex_color: str, factor: float = 0.72) -> str:
+    raw = hex_color.lstrip("#")
+    if len(raw) != 6:
+        return hex_color
+    r, g, b = int(raw[0:2], 16), int(raw[2:4], 16), int(raw[4:6], 16)
+    return f"#{int(r * factor):02x}{int(g * factor):02x}{int(b * factor):02x}"
+
+
+def env_palette_for_theme(theme_id: str) -> EnvPalette:
+    resolved = resolve_theme_id(theme_id) or DEFAULT_THEME_ID
+    spec = _THEME_SPECS[resolved]
+    foreground = str(spec["foreground"])
+    return EnvPalette(
+        header=foreground,
+        scan=str(spec["accent"]),
+        hint=str(spec["warning"]),
+        desc=_muted_hex(foreground),
+        move_marker=str(spec["accent"]),
+        move_label=str(spec["accent"]),
+        move_dir=str(spec["warning"]),
+        exits=str(spec["warning"]),
+        exit_dest=str(spec["success"]),
+        items=str(spec["success"]),
+        npcs=str(spec["primary"]),
+        corpses=str(spec["error"]),
+        players=str(spec.get("info", spec["accent"])),
+        weather=str(spec["accent"]),
+    )
 
 
 def theme_ids() -> tuple[str, ...]:

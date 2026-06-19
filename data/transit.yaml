@@ -1,0 +1,15 @@
+transit:
+  square:
+    docks: {fare: 5, name_zh: 碼頭線, name_en: Docks Line}
+    ripper_clinic: {fare: 3, name_zh: 診所線, name_en: Clinic Line}
+    alley: {fare: 2, name_zh: 巷弄線, name_en: Alley Line}
+    watson_flat: {fare: 8, name_zh: 公寓線, name_en: Flat Line, requires_home: watson_flat}
+  docks:
+    square: {fare: 5, name_zh: 廣場線, name_en: Square Line}
+    ripper_clinic: {fare: 4, name_zh: 診所線, name_en: Clinic Line}
+  ripper_clinic:
+    square: {fare: 3, name_zh: 廣場線, name_en: Square Line}
+  alley:
+    square: {fare: 2, name_zh: 廣場線, name_en: Square Line}
+  watson_flat:
+    square: {fare: 8, name_zh: 廣場線, name_en: Square Line}

@@ -1,0 +1,10 @@
+housing:
+  watson_flat:
+    room_id: watson_flat
+    name_zh: 沃森公寓
+    name_en: Watson Flat
+    cost: 500
+    stash_capacity: 20
+    rent_room: square
+    description_zh: 狹小但安全的公寓，適合存放戰利品與補給。
+    description_en: A cramped but safe flat—stash loot and supplies off the street.

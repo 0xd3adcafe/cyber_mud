@@ -1,10 +1,27 @@
 from __future__ import annotations
 
 from commands.registry import CommandContext
-from shared.equipment import EQUIP_SLOTS, slot_label
+from shared.equipment import (
+    EQUIP_SLOTS,
+    format_npc_equipment_lines,
+    slot_label,
+    effective_weapon_mode,
+    weapon_class_label,
+    weapon_mode_label,
+    weapon_type_label,
+)
 from shared.i18n import t
-from shared.locale_content import item_label, item_label_with_id, npc_label_with_id, room_description, room_name
+from shared.locale_content import (
+    format_room_exits,
+    item_label,
+    item_label_with_id,
+    net_node_label_with_id,
+    npc_label_with_id,
+    room_description,
+    room_name,
+)
 from shared.names import matches_name
+from world.corpses import corpse_label, corpses_in_room, decay_time_label, find_corpse_id
 from world.state import WorldState
 from world.weather import weather_label
 
@@ -29,11 +46,29 @@ def find_item_id(
     return None
 
 
+def find_net_node_id(state: WorldState, node_name: str, room_id: str) -> str | None:
+    for node in state.world.net_nodes_in_room(room_id):
+        if matches_name(node_name, node.id, node.name_zh, node.name_en):
+            return node.id
+    return None
+
+
 def find_npc_id(state: WorldState, npc_name: str, room_id: str) -> str | None:
     for npc_id in state.npcs_in_room(room_id):
         npc = state.world.npc(npc_id)
         if npc and matches_name(npc_name, npc.id, npc.name_zh, npc.name_en):
             return npc_id
+    return None
+
+
+def find_item_in_corpse(state: WorldState, item_name: str, corpse_id: str) -> str | None:
+    corpse = state.corpses.get(corpse_id)
+    if corpse is None:
+        return None
+    for item_id in corpse.loot:
+        item = state.world.item(item_id)
+        if item and matches_name(item_name, item.id, item.name_zh, item.name_en):
+            return item_id
     return None
 
 
@@ -75,13 +110,29 @@ def resolve_equipment_slot_name(ctx: CommandContext, name: str) -> str | None:
         "equipment": "",
         "gear": "",
         "裝備": "",
-        "weapon": "weapon",
-        "armor": "armor",
+        "weapon": "weapon_primary",
+        "weapon_primary": "weapon_primary",
+        "weapon_secondary": "weapon_secondary",
+        "armor": "outer_torso",
         "head": "head",
         "cyber": "cyber",
-        "武器": "weapon",
-        "護甲": "armor",
+        "inner_torso": "inner_torso",
+        "outer_torso": "outer_torso",
+        "legs": "legs",
+        "feet": "feet",
+        "武器": "weapon_primary",
+        "主要武器": "weapon_primary",
+        "次要武器": "weapon_secondary",
+        "護甲": "outer_torso",
         "頭部": "head",
+        "內層": "inner_torso",
+        "內層上身": "inner_torso",
+        "外套": "outer_torso",
+        "外套上身": "outer_torso",
+        "下身": "legs",
+        "腿部": "legs",
+        "足部": "feet",
+        "鞋子": "feet",
         "義體": "cyber",
         "義體槽": "cyber",
     }
@@ -123,12 +174,34 @@ def format_look_item(ctx: CommandContext, item_id: str) -> list[str]:
         lines.append(location)
     if item.slot:
         lines.append(t(locale, "look.item.slot", slot=slot_label(item.slot, locale)))
+    if item.weapon_type:
+        lines.append(t(locale, "look.item.weapon_type", type=weapon_type_label(item.weapon_type, locale)))
+    if item.weapon_class:
+        lines.append(
+            t(locale, "look.item.weapon_class", weapon_class=weapon_class_label(item.weapon_class, locale))
+        )
+    if item.slot == "weapon":
+        mode = effective_weapon_mode(item)
+        if mode:
+            lines.append(t(locale, "look.item.weapon_mode", mode=weapon_mode_label(mode, locale)))
     if item.weapon_damage:
         lines.append(t(locale, "look.item.damage", value=str(item.weapon_damage)))
     if item.defense:
         lines.append(t(locale, "look.item.defense", value=str(item.defense)))
     if item.value:
         lines.append(t(locale, "look.item.value", value=str(item.value)))
+    if item.consumable:
+        lines.append(
+            t(
+                locale,
+                "look.item.consumable",
+                kind=t(locale, f"consumable.kind.{item.consumable}"),
+            )
+        )
+        if item.hp_restore:
+            lines.append(t(locale, "look.item.hp_restore", value=str(item.hp_restore)))
+        if item.ram_restore:
+            lines.append(t(locale, "look.item.ram_restore", value=str(item.ram_restore)))
     take_key = "look.item.takeable" if item.takeable else "look.item.not_takeable"
     lines.append(t(locale, take_key))
     if item.implant_id:
@@ -144,6 +217,53 @@ def format_look_item(ctx: CommandContext, item_id: str) -> list[str]:
             mod_labels.append(item_label(mod, locale))
     if mod_labels:
         lines.append(t(locale, "look.item.mods", mods="、".join(mod_labels)))
+    return lines
+
+
+def format_look_corpse(ctx: CommandContext, corpse_id: str) -> list[str]:
+    corpse = ctx.state.corpses.get(corpse_id)
+    if corpse is None:
+        return [t(ctx.player.locale, "look.not_found", target=corpse_id)]
+
+    locale = ctx.player.locale
+    label = corpse_label(ctx.state, corpse, locale)
+    lines = [t(locale, "look.target_header", name=label), ""]
+    if corpse.player_name:
+        lines.append(t(locale, "corpse.player_desc", name=corpse.player_name))
+        lines.append("")
+    else:
+        npc = ctx.state.world.npc(corpse.npc_id)
+        if npc:
+            lines.append(npc_description(npc, locale))
+            lines.append("")
+    if corpse.loot:
+        item_labels = []
+        for item_id in corpse.loot:
+            item = ctx.state.world.item(item_id)
+            if item:
+                item_labels.append(item_label_with_id(item, locale))
+        if item_labels:
+            lines.append(t(locale, "corpse.look_items", items="、".join(item_labels)))
+    else:
+        lines.append(t(locale, "corpse.look_empty"))
+    decay = decay_time_label(ctx.state, corpse, locale)
+    if decay:
+        lines.append(t(locale, "corpse.look_decay", time=decay))
+    return lines
+
+
+def format_look_net_node(ctx: CommandContext, node_id: str) -> list[str]:
+    node = ctx.state.world.net_node(node_id)
+    if node is None:
+        return [t(ctx.player.locale, "look.not_found", target=node_id)]
+
+    locale = ctx.player.locale
+    label = net_node_label_with_id(node, locale)
+    lines = [t(locale, "look.target_header", name=label), ""]
+    status_key = "look.net_node.hackable" if node.hackable else "look.net_node.sealed"
+    lines.append(t(locale, status_key))
+    if ctx.player.net_shell:
+        lines.append(t(locale, "look.net_node.hint"))
     return lines
 
 
@@ -170,6 +290,10 @@ def format_look_npc(ctx: CommandContext, npc_id: str) -> list[str]:
         lines.append(t(locale, "look.npc.attack", value=str(npc.attack)))
     mood_key = "look.npc.hostile" if npc.hostile else "look.npc.peaceful"
     lines.append(t(locale, mood_key))
+    equip_lines = format_npc_equipment_lines(npc, ctx.state.world, locale)
+    if equip_lines:
+        lines.append(t(locale, "look.npc.equipment_header"))
+        lines.extend(equip_lines)
     if npc.quest_id:
         quest = ctx.state.world.quest(npc.quest_id)
         if quest:
@@ -226,9 +350,17 @@ def format_look_target(ctx: CommandContext, target: str) -> list[str]:
     if slot:
         return format_look_equipment_slot(ctx, slot)
 
+    corpse_id = find_corpse_id(ctx.state, text, ctx.player.room_id)
+    if corpse_id:
+        return format_look_corpse(ctx, corpse_id)
+
     npc_id = find_npc_id(ctx.state, text, ctx.player.room_id)
     if npc_id:
         return format_look_npc(ctx, npc_id)
+
+    node_id = find_net_node_id(ctx.state, text, ctx.player.room_id)
+    if node_id:
+        return format_look_net_node(ctx, node_id)
 
     item_id = find_item_anywhere(ctx, text)
     if item_id:
@@ -264,9 +396,9 @@ def quest_hint_for_player(ctx: CommandContext) -> str:
     if ctx.player.active_quest:
         quest = ctx.state.world.quest(ctx.player.active_quest)
         if quest:
-            if ctx.player.locale == "zh":
-                return quest.hint_zh
-            return quest.hint_en or quest.hint_zh
+            from world.quests import quest_hint_for_quest
+
+            return quest_hint_for_quest(ctx.player, ctx.state, quest, ctx.player.locale)
     return ""
 
 
@@ -312,9 +444,14 @@ def format_look(ctx: CommandContext) -> list[str]:
                 )
             )
     if room.exits:
-        exits = "、".join(f"{d}→{room.exits[d]}" for d in sorted(room.exits))
         lines.append("")
-        lines.append(t(ctx.player.locale, "look.exits", exits=exits))
+        lines.append(
+            t(
+                ctx.player.locale,
+                "look.exits",
+                exits=format_room_exits(room, ctx.state.world, ctx.player.locale),
+            )
+        )
 
     item_ids = ctx.state.items_in_room(ctx.player.room_id)
     if item_ids:
@@ -333,5 +470,17 @@ def format_look(ctx: CommandContext) -> list[str]:
             npc_labels.append(npc_label_with_id(npc, ctx.player.locale))
     if npc_labels:
         lines.append(t(ctx.player.locale, "look.npcs", npcs="、".join(npc_labels)))
+
+    if ctx.player.net_shell:
+        net_labels = [
+            net_node_label_with_id(node, ctx.player.locale)
+            for node in ctx.state.world.net_nodes_in_room(ctx.player.room_id)
+        ]
+        if net_labels:
+            lines.append(t(ctx.player.locale, "look.net_nodes", nodes="、".join(net_labels)))
+
+    corpse_labels = [corpse_label(ctx.state, corpse, ctx.player.locale) for corpse in corpses_in_room(ctx.state, ctx.player.room_id)]
+    if corpse_labels:
+        lines.append(t(ctx.player.locale, "corpse.room_line", corpses="、".join(corpse_labels)))
 
     return lines

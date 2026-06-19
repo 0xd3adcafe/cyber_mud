@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from commands.bulk_helpers import is_bulk, resolve_unequip_targets
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.equipment import slot_label
 from shared.i18n import t
 from shared.locale_content import item_label
 
@@ -17,7 +18,12 @@ def _unequip_one(ctx: CommandContext, item_id: str) -> str | None:
     del ctx.player.equipment[slot]
     ctx.player.inventory.append(item_id)
     item = ctx.state.world.item(item_id)
-    return t(ctx.player.locale, "unequip.ok", label=item_label(item, ctx.player.locale), slot=slot)
+    return t(
+        ctx.player.locale,
+        "unequip.ok",
+        label=item_label(item, ctx.player.locale),
+        slot=slot_label(slot, ctx.player.locale),
+    )
 
 
 def handle(ctx: CommandContext):

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from commands.helpers import find_item_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.equipment import active_weapon_id
 from shared.i18n import t
 from shared.locale_content import item_label
 
@@ -26,7 +27,7 @@ def handle(ctx: CommandContext):
     if mod is None:
         return ok([t(ctx.player.locale, "mod.unknown_chip")])
 
-    weapon_id = ctx.player.equipment.get("weapon", "")
+    weapon_id = active_weapon_id(ctx.player.equipment)
     if not weapon_id:
         return ok([t(ctx.player.locale, "mod.no_weapon")])
 

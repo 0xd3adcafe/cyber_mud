@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from commands.registry import CommandContext, CommandResult, ok, player_meta
 from shared.i18n import t
+from shared.locale_content import item_label_with_id, net_node_label_with_id
 from shared.names import matches_name
 
 NET_SHELL_COMMANDS = frozenset({"hack", "probe", "exit", "help", "status"})
+NET_ALLOWED_MUD_COMMANDS = frozenset({"look", "scan", "search", "talk", "say"})
 
 
 def net_meta(ctx: CommandContext) -> dict[str, str]:
@@ -19,6 +21,28 @@ def net_meta(ctx: CommandContext) -> dict[str, str]:
 
 def _nodes_in_room(ctx: CommandContext):
     return ctx.state.world.net_nodes_in_room(ctx.player.room_id)
+
+
+def _node_labels(ctx: CommandContext) -> list[str]:
+    return [net_node_label_with_id(node, ctx.player.locale) for node in _nodes_in_room(ctx)]
+
+
+def _sector_context_lines(ctx: CommandContext) -> list[str]:
+    lines: list[str] = []
+    nodes = _nodes_in_room(ctx)
+    if nodes:
+        labels = [net_node_label_with_id(node, ctx.player.locale) for node in nodes]
+        lines.append(t(ctx.player.locale, "net.sector_nodes", nodes="、".join(labels)))
+    item_ids = ctx.state.items_in_room(ctx.player.room_id)
+    if item_ids:
+        labels = []
+        for item_id in item_ids:
+            item = ctx.state.world.item(item_id)
+            if item:
+                labels.append(item_label_with_id(item, ctx.player.locale))
+        if labels:
+            lines.append(t(ctx.player.locale, "net.sector_items", items="、".join(labels)))
+    return lines
 
 
 def _find_node(ctx: CommandContext, target: str):
@@ -41,9 +65,16 @@ def _handle_hack(ctx: CommandContext) -> CommandResult:
         return ok([t(ctx.player.locale, "net.no_ram")], meta=net_meta(ctx))
 
     ctx.player.ram -= 1
-    label = node.name_zh if ctx.player.locale == "zh" else (node.name_en or node.name_zh)
+    label = net_node_label_with_id(node, ctx.player.locale)
+    from world.progression import award_xp
+
+    lines = [t(ctx.player.locale, "net.hack_ok", target=label)]
+    lines.extend(award_xp(ctx.player, 15, ctx.player.locale))
+    from world.street_cred import STREET_CRED_PER_HACK, award_street_cred
+
+    lines.extend(award_street_cred(ctx.player, STREET_CRED_PER_HACK, ctx.player.locale))
     return ok(
-        [t(ctx.player.locale, "net.hack_ok", target=label)],
+        lines,
         meta=net_meta(ctx),
         world_changed=True,
     )
@@ -54,9 +85,7 @@ def _handle_probe(ctx: CommandContext) -> CommandResult:
     if not nodes:
         return ok([t(ctx.player.locale, "net.probe_empty")], meta=net_meta(ctx))
 
-    labels = []
-    for node in nodes:
-        labels.append(node.name_zh if ctx.player.locale == "zh" else (node.name_en or node.name_zh))
+    labels = _node_labels(ctx)
     return ok(
         [t(ctx.player.locale, "net.probe_ok", nodes="、".join(labels))],
         meta=net_meta(ctx),
@@ -73,7 +102,7 @@ def _handle_exit(ctx: CommandContext) -> CommandResult:
 
 def _handle_help(ctx: CommandContext) -> CommandResult:
     lines = [t(ctx.player.locale, "net.help_header"), ""]
-    for key in ("hack", "probe", "status", "exit", "help"):
+    for key in ("hack", "probe", "status", "look", "scan", "talk", "exit", "help"):
         lines.append(
             t(
                 ctx.player.locale,
@@ -86,19 +115,20 @@ def _handle_help(ctx: CommandContext) -> CommandResult:
 
 
 def _handle_status(ctx: CommandContext) -> CommandResult:
-    nodes = _nodes_in_room(ctx)
-    count = len(nodes)
-    return ok(
-        [
-            t(
-                ctx.player.locale,
-                "net.status",
-                ram=f"{ctx.player.ram}/{ctx.player.max_ram}",
-                nodes=str(count),
-            )
-        ],
-        meta=net_meta(ctx),
-    )
+    labels = _node_labels(ctx)
+    nodes_display = "、".join(labels) if labels else t(ctx.player.locale, "net.status_no_nodes")
+    lines = [
+        t(
+            ctx.player.locale,
+            "net.status",
+            ram=f"{ctx.player.ram}/{ctx.player.max_ram}",
+            nodes=nodes_display,
+        )
+    ]
+    sector = _sector_context_lines(ctx)
+    if sector:
+        lines.extend(["", *sector])
+    return ok(lines, meta=net_meta(ctx))
 
 
 _NET_HANDLERS = {

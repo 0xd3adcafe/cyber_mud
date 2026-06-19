@@ -3,7 +3,14 @@ from __future__ import annotations
 from commands.helpers import current_room
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
-from shared.locale_content import item_label_with_id, npc_label_with_id, room_name
+from shared.locale_content import (
+    format_room_exits,
+    item_label_with_id,
+    net_node_label_with_id,
+    npc_label_with_id,
+    room_name,
+)
+from world.corpses import corpse_label, corpses_in_room
 
 
 def handle(ctx: CommandContext):
@@ -17,8 +24,13 @@ def handle(ctx: CommandContext):
     ]
 
     if room.exits:
-        exits = "、".join(f"{d}→{room.exits[d]}" for d in sorted(room.exits))
-        lines.append(t(ctx.player.locale, "scan.exits", exits=exits))
+        lines.append(
+            t(
+                ctx.player.locale,
+                "scan.exits",
+                exits=format_room_exits(room, ctx.state.world, ctx.player.locale),
+            )
+        )
 
     item_ids = ctx.state.items_in_room(ctx.player.room_id)
     if item_ids:
@@ -36,6 +48,18 @@ def handle(ctx: CommandContext):
             npc_labels.append(npc_label_with_id(npc, ctx.player.locale))
     if npc_labels:
         lines.append(t(ctx.player.locale, "scan.npcs", npcs="、".join(npc_labels)))
+
+    if ctx.player.net_shell:
+        net_labels = [
+            net_node_label_with_id(node, ctx.player.locale)
+            for node in ctx.state.world.net_nodes_in_room(ctx.player.room_id)
+        ]
+        if net_labels:
+            lines.append(t(ctx.player.locale, "scan.net_nodes", nodes="、".join(net_labels)))
+
+    corpse_labels = [corpse_label(ctx.state, corpse, ctx.player.locale) for corpse in corpses_in_room(ctx.state, ctx.player.room_id)]
+    if corpse_labels:
+        lines.append(t(ctx.player.locale, "corpse.room_line", corpses="、".join(corpse_labels)))
 
     for peer in ctx.peers:
         if peer.named:

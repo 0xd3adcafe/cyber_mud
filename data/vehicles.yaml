@@ -1,0 +1,17 @@
+vehicles:
+  archer_hella:
+    name_zh: 阿奇赫拉
+    name_en: Archer Hella
+    cost: 800
+    dealer_room: docks
+    description_zh: 入門級夜城街車，可靠耐用。
+    description_en: Entry-level Night City wheels—reliable and cheap.
+    routes: [square, alley, docks, ripper_clinic]
+  yaiba_kusanagi:
+    name_zh: 草薙 CT-3X
+    name_en: Yaiba Kusanagi CT-3X
+    cost: 1500
+    dealer_room: docks
+    description_zh: 經典重型機車，碼頭幫派最愛。
+    description_en: Classic heavy bike—dock gangs swear by it.
+    routes: [square, alley, docks, ripper_clinic, watson_flat]

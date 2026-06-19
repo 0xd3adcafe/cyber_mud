@@ -11,6 +11,8 @@ from client.meta_handlers import (
     is_local_command,
     is_netrun_exit_command,
     netrun_blocks_server_command,
+    normalize_netrun_command,
+    prepare_netrun_outbound,
     ordered_sidebar_stack,
     parse_local_command,
     panels_to_refresh_on_move,
@@ -66,17 +68,16 @@ def test_apply_meta_updates_status():
 
 
 def test_panel_stream_lifecycle():
-    state = ClientViewState()
+    state = ClientViewState(sidebar_open=True)
     apply_meta(state, "ui_panel", "pda")
     handle_panel_line(state, "◈ PDA")
     apply_meta(state, "ui_panel_end", "1")
-    assert state.sidebar_open
     assert state.sidebar_stack == ["pda"]
     assert state.sidebar_panels["pda"].lines == ["◈ PDA"]
 
 
 def test_sidebar_stack_pda_and_map():
-    state = ClientViewState()
+    state = ClientViewState(sidebar_open=True)
     apply_meta(state, "ui_panel", "pda")
     handle_ui_json(state, '{"panel":"pda","sections":[{"kind":"row","label":"HP","value":"100/100"}]}')
     apply_meta(state, "ui_panel_end", "1")
@@ -87,6 +88,25 @@ def test_sidebar_stack_pda_and_map():
     text = format_sidebar_content(state)
     assert "100/100" in text
     assert "square" in text or "[@]" in text
+
+
+def test_resolve_panel_command_aliases():
+    from client.meta_handlers import resolve_panel_command
+
+    assert resolve_panel_command("map") == "map"
+    assert resolve_panel_command("h") == "help"
+    assert resolve_panel_command("eq") == "equipment"
+    assert resolve_panel_command("st") == "pda"
+    assert resolve_panel_command("look") is None
+
+
+def test_sidebar_should_show_with_pending_panel():
+    from client.meta_handlers import sidebar_should_show
+
+    state = ClientViewState(sidebar_open=True, pending_panel="map")
+    assert sidebar_should_show(state)
+    state.sidebar_open = False
+    assert not sidebar_should_show(state)
 
 
 def test_toggle_sidebar_panel():
@@ -178,8 +198,24 @@ def test_netrun_prompt_and_blocking():
     apply_meta(state, "net_shell", "1")
     apply_meta(state, "net_prompt", "ghost@net> ")
     assert active_prompt(state) == "ghost@net> "
-    assert netrun_blocks_server_command("look")
+    assert not netrun_blocks_server_command("look")
+    assert not netrun_blocks_server_command("/look")
+    assert not netrun_blocks_server_command("talk")
+    assert not netrun_blocks_server_command("scan")
     assert not netrun_blocks_server_command("exit")
+    assert not netrun_blocks_server_command("hack")
+    assert not netrun_blocks_server_command("probe")
+    assert not netrun_blocks_server_command("/probe")
+    assert not netrun_blocks_server_command("status")
+    assert normalize_netrun_command("/probe") == "probe"
+    outbound, blocked = prepare_netrun_outbound("/probe")
+    assert outbound == "probe"
+    assert not blocked
+    outbound, blocked = prepare_netrun_outbound("/look")
+    assert outbound == "look"
+    assert not blocked
+    apply_meta(state, "net_shell", "0")
+    assert not state.net_shell
     assert is_netrun_exit_command("/exit")
     assert not is_local_command("/exit")
     assert is_local_command("/reconnect")

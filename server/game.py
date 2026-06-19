@@ -82,13 +82,23 @@ class Game:
 
     async def notify_dev_reload(self, kind: str, *, failures: list[tuple[str, str]] | None = None) -> None:
         from commands.registry import player_meta
+        from server.heartbeat import log_server_event
 
         if kind == "data":
             message = "世界資料已重載。"
+            world = self.state.world
+            log_server_event(
+                f"↻ 世界資料重載 · {len(world.rooms)} 房 · {len(world.items)} 物 · {len(world.npcs)} NPC"
+            )
         else:
             message = "程式碼已重載。"
             if failures:
                 message = f"程式碼重載完成（{len(failures)} 個模組失敗）。"
+                log_server_event(f"↻ 程式碼重載 · {len(failures)} 個模組失敗")
+                for name, err in failures:
+                    log_server_event(f"  ✗ {name}: {err}")
+            else:
+                log_server_event("↻ 程式碼已重載")
         for session in self.sessions:
             await session.send(f"{SYS_PREFIX}{message}")
             if session.player.named:
@@ -149,7 +159,7 @@ class Game:
 
         if result.broadcast_key:
             await self.broadcast_localized(
-                session.player.room_id,
+                result.broadcast_room_id or session.player.room_id,
                 result.broadcast_key,
                 **result.broadcast_kwargs,
             )
@@ -241,23 +251,56 @@ class Game:
                     if line:
                         await target.send(line)
                     await target.send_meta(player_meta(CommandContext(target.player, self.state, "")))
+            elif event.kind == "corpse_decay":
+                for target in self.sessions:
+                    if target.player.room_id != event.room_id:
+                        continue
+                    label = (
+                        event.message_kwargs.get("label_zh", "")
+                        if target.player.locale == "zh"
+                        else event.message_kwargs.get("label_en", event.message_kwargs.get("label_zh", ""))
+                    )
+                    await target.send(t(target.player.locale, event.message_key, label=label))
+            elif event.kind == "hp_regen":
+                for target in self.sessions:
+                    if target.player.name != event.player_name:
+                        continue
+                    locale = target.player.locale
+                    await target.send(
+                        t(
+                            locale,
+                            "vitals.hp_regen",
+                            amount=event.message_kwargs.get("amount", "0"),
+                            hp=event.message_kwargs.get("hp", str(target.player.hp)),
+                            max_hp=event.message_kwargs.get("max_hp", str(target.player.max_hp)),
+                        )
+                    )
+                    await target.send_meta(
+                        {
+                            "hp": f"{target.player.hp}/{target.player.max_hp}",
+                        }
+                    )
 
     async def _handle_combat_tick_results(self, combat_results) -> None:
         from combat.encounter import combat_meta
+        from commands.registry import CommandContext, player_meta
 
         for player, combat_result in combat_results:
             session = self.session_for_player(player)
             if session and combat_result.lines:
                 await session.send_lines(combat_result.lines)
             if session:
-                meta = combat_meta(self.state, player)
-                meta["hp"] = f"{player.hp}/{player.max_hp}"
-                if combat_result.ended:
-                    meta["combat"] = "0"
+                if combat_result.moved:
+                    meta = player_meta(CommandContext(player, self.state, ""))
+                else:
+                    meta = combat_meta(self.state, player)
+                    meta["hp"] = f"{player.hp}/{player.max_hp}"
+                    if combat_result.ended:
+                        meta["combat"] = "0"
                 await session.send_meta(meta)
             if combat_result.broadcast_key:
                 await self.broadcast_localized(
-                    player.room_id,
+                    combat_result.broadcast_room_id or player.room_id,
                     combat_result.broadcast_key,
                     **(combat_result.broadcast_kwargs or {}),
                 )
@@ -298,6 +341,15 @@ class Game:
                     await self._handle_combat_tick_results(result.combat_results)
                 if result.time_changed or result.events or result.combat_results:
                     save_world_state(self.state)
+                for event in result.events:
+                    if event.kind != "hp_regen":
+                        continue
+                    player = next(
+                        (p for p in self.all_named_players() if p.name == event.player_name),
+                        None,
+                    )
+                    if player is not None:
+                        save_player(player)
                 if result.time_changed:
                     await self.broadcast_time_meta()
         except asyncio.CancelledError:

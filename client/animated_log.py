@@ -5,7 +5,9 @@ import time
 from dataclasses import dataclass, field
 
 from client.cd_display import format_cooldown_line, parse_cooldown_line
+from client.env_format import format_environment_line, reset_environment_state
 from client.output_prefix import format_output_line
+from client.themes import DEFAULT_THEME_ID, resolve_theme_id
 
 _MAX_LINES = 500
 
@@ -28,8 +30,15 @@ class LogEntry:
 class AnimatedLogBuffer:
     entries: list[LogEntry] = field(default_factory=list)
     frame: int = 0
+    theme_id: str = DEFAULT_THEME_ID
+    _env_state: dict[str, str] = field(default_factory=dict)
+
+    def set_theme_id(self, theme_id: str) -> None:
+        self.theme_id = resolve_theme_id(theme_id) or DEFAULT_THEME_ID
 
     def append(self, text: str, *, kind: str) -> None:
+        if kind == "echo":
+            reset_environment_state(self._env_state)
         plain = _strip_rich(text)
         cd = parse_cooldown_line(plain)
         entry = LogEntry(text=plain, kind=kind)
@@ -78,6 +87,8 @@ class AnimatedLogBuffer:
 
     def _format_entry(self, entry: LogEntry) -> str:
         text = entry.text
+        if entry.kind == "text" and text.strip():
+            text = format_environment_line(text, self._env_state, theme_id=self.theme_id) or text
         if entry.has_cooldown:
             remaining = _cd_remaining(entry)
             if remaining > 0:

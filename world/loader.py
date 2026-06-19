@@ -6,8 +6,20 @@ import yaml
 
 from entities.implant import Implant
 from entities.item import Item
+from shared.equipment import WEAPON_ITEM_SLOT, normalize_equipment, resolve_slot_id
 from entities.npc import NPC
-from world.content import load_mods, load_net_nodes, load_quests, load_shops, load_skills
+from world.content import (
+    load_housing,
+    load_mods,
+    load_net_nodes,
+    load_quests,
+    load_quickhacks,
+    load_shops,
+    load_skills,
+    load_talents,
+    load_transit,
+    load_vehicles,
+)
 from world.world import Room, World
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -32,7 +44,13 @@ def _load_implants(path: Path | None = None) -> dict[str, Implant]:
             cool=int(data.get("cool", 0)),
             intelligence=int(data.get("intelligence", 0)),
             humanity_cost=int(data.get("humanity_cost", 0)),
-            slot=str(data.get("slot", "cyber")),
+            max_hp=int(data.get("max_hp", 0)),
+            ram_bonus=int(data.get("ram_bonus", 0)),
+            slot=str(data.get("slot", "arms")),
+            category=str(data.get("category", "")),
+            ripperdoc_only=bool(data.get("ripperdoc_only", False)),
+            description_zh=str(data.get("description_zh", "")),
+            description_en=str(data.get("description_en", "")),
         )
         for iid, data in (raw.get("implants") or {}).items()
     }
@@ -70,11 +88,21 @@ def load_world(path: Path | None = None) -> World:
             description_zh=str(data.get("description_zh", "")),
             description_en=str(data.get("description_en", "")),
             takeable=bool(data.get("takeable", True)),
-            slot=str(data.get("slot", "")),
+            slot=(
+                WEAPON_ITEM_SLOT
+                if str(data.get("slot", "")) == WEAPON_ITEM_SLOT
+                else resolve_slot_id(str(data.get("slot", "")))
+            ),
+            weapon_type=str(data.get("weapon_type", "")),
+            weapon_class=str(data.get("weapon_class", "")),
+            weapon_mode=str(data.get("weapon_mode", "")),
             weapon_damage=int(data.get("weapon_damage", 0)),
             defense=int(data.get("defense", 0)),
             value=int(data.get("value", 0)),
             implant_id=str(data.get("implant_id", "")),
+            consumable=str(data.get("consumable", "")),
+            hp_restore=int(data.get("hp_restore", 0)),
+            ram_restore=int(data.get("ram_restore", 0)),
         )
         for iid, data in (raw.get("items") or {}).items()
     }
@@ -98,6 +126,17 @@ def load_world(path: Path | None = None) -> World:
             quest_id=str(data.get("quest_id", "")),
             schedule={str(k): str(v) for k, v in (data.get("schedule") or {}).items()},
             talk_key=str(data.get("talk_key", "")),
+            loot=[str(item_id) for item_id in (data.get("loot") or [])],
+            equipment=normalize_equipment(
+                {
+                    str(slot): str(item_id)
+                    for slot, item_id in (data.get("equipment") or {}).items()
+                    if item_id
+                }
+            ),
+            tier=str(data.get("tier", "")),
+            respawn_minutes=int(data["respawn_minutes"]) if "respawn_minutes" in data else None,
+            xp_reward=int(data.get("xp_reward", 0)),
         )
         for nid, data in (raw.get("npcs") or {}).items()
     }
@@ -105,16 +144,23 @@ def load_world(path: Path | None = None) -> World:
     factions = {str(k): str(v) for k, v in (raw.get("factions") or {}).items()}
     implants = _load_implants()
 
+    start_room = str(raw.get("start_room", "square"))
     return World(
-        start_room=str(raw.get("start_room", "square")),
+        start_room=start_room,
+        respawn_room=str(raw.get("respawn_room", start_room)),
         rooms=rooms,
         items=items,
         npcs=npcs,
         implants=implants,
         factions=factions,
         skills=load_skills(),
+        talents=load_talents(),
         mods=load_mods(),
         quests=load_quests(),
+        quickhacks=load_quickhacks(),
+        homes=load_housing(),
+        vehicles=load_vehicles(),
+        transit_routes=load_transit(),
         shops=load_shops(),
         net_nodes=load_net_nodes(),
     )

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from commands.net_shell import net_meta
+from commands.net_shell import _sector_context_lines, net_meta
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
 
@@ -20,6 +20,9 @@ def enter_net_shell(ctx: CommandContext):
         t(ctx.player.locale, "net.help_line", name="hack", desc=t(ctx.player.locale, "net.help_cmds.hack")),
         t(ctx.player.locale, "net.help_line", name="exit", desc=t(ctx.player.locale, "net.help_cmds.exit")),
     ]
+    sector = _sector_context_lines(ctx)
+    if sector:
+        lines.extend(["", *sector])
     return ok(lines, meta=net_meta(ctx))
 
 

@@ -85,21 +85,20 @@ def format_status_markup(
         f"  [dim]│[/]  [yellow]€{state.gold}[/]"
         f"  [dim]│[/]  [dim]{state.time}  {state.period}[/]"
         f"{weather}{net}{quest_chip}{link}"
-        f"  [dim]│[/]  [dim]{host}:{port}[/]"
     )
 
 
 def format_hotkey_bar() -> str:
     return (
-        "[dim]Tab[/] 補全"
-        "  [dim]↑↓[/] 歷史"
-        "  [dim]│[/]  [magenta]F2[/] PDA"
-        "  [cyan]F3[/] 說明"
-        "  [green]F4[/] 地圖"
-        "  [yellow]F5[/] 裝備"
-        "  [dim]F6[/] 側欄"
-        "  [dim]│[/]  [yellow]/reconnect[/] 重連"
-        "  [dim]│[/]  [dim]Ctrl+C[/] 離開"
+        "[bold cyan]快捷鍵[/]"
+        "  Tab"
+        "  [magenta]F2[/]PDA"
+        "  [cyan]F3[/]說明"
+        "  [green]F4[/]地圖"
+        "  [yellow]F5[/]裝備"
+        "  F6收合"
+        "  [dim]│[/]  [yellow]/reconnect[/]"
+        "  [dim]│[/]  ↑↓歷史"
     )
 
 

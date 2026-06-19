@@ -1,0 +1,67 @@
+talents:
+  iron_skin:
+    name_zh: 強化皮层
+    name_en: Iron Skin
+    category: body
+    level_req: 2
+    description_zh: 強化皮下裝甲，最大生命 +10。
+    description_en: Reinforced subdermal plating; max HP +10.
+    stat_bonus:
+      max_hp: 10
+  street_fighter:
+    name_zh: 街頭搏擊
+    name_en: Street Fighter
+    category: body
+    level_req: 2
+    description_zh: 肉搏訓練，肉體 +1。
+    description_en: Brawler training; Body +1.
+    stat_bonus:
+      body: 1
+  sharp_reflex:
+    name_zh: 神經反射
+    name_en: Sharp Reflexes
+    category: reflex
+    level_req: 3
+    description_zh: 義體神經優化，反應 +1。
+    description_en: Cybernetic nerve tuning; Reflex +1.
+    stat_bonus:
+      reflex: 1
+  cool_head:
+    name_zh: 冷靜頭腦
+    name_en: Cool Head
+    category: cool
+    level_req: 4
+    description_zh: 壓力訓練，冷靜 +1。
+    description_en: Stress inoculation; Cool +1.
+    stat_bonus:
+      cool: 1
+  chrome_bones:
+    name_zh: 鉻骨強化
+    name_en: Chrome Bones
+    category: body
+    level_req: 5
+    prereq_talent: iron_skin
+    description_zh: 進階皮下裝甲，最大生命再 +15。
+    description_en: Advanced plating; max HP +15 more.
+    stat_bonus:
+      max_hp: 15
+  net_mind:
+    name_zh: 神經擴容
+    name_en: Net Mind
+    category: netrunner
+    level_req: 4
+    description_zh: 腦機介面擴容，智力 +1、最大 RAM +1。
+    description_en: Neural expansion; Intelligence +1, max RAM +1.
+    stat_bonus:
+      intelligence: 1
+      max_ram: 1
+  overclock:
+    name_zh: 超頻協定
+    name_en: Overclock
+    category: netrunner
+    level_req: 6
+    prereq_skill: breach_protocol
+    description_zh: 超頻神經連結，最大 RAM +2。
+    description_en: Overclocked link; max RAM +2.
+    stat_bonus:
+      max_ram: 2

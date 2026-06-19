@@ -48,7 +48,8 @@ def test_format_link_status_waiting():
         last_send_at=time.monotonic() - 0.5,
     )
     text = format_link_status_bar(snap)
-    assert "等待伺服器" in text
+    assert "等待回應" in text
+    assert "連線" in text
 
 
 def test_format_link_status_reconnecting():

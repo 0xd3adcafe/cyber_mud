@@ -2,17 +2,9 @@ from __future__ import annotations
 
 from commands.helpers import find_item_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.cyberware_slots import slot_label
 from shared.i18n import t
-from shared.locale_content import item_label
-
-
-def apply_implant(player, implant) -> None:
-    player.body += implant.body
-    player.reflex += implant.reflex
-    player.tech += implant.tech
-    player.cool += implant.cool
-    player.intelligence += implant.intelligence
-    player.humanity = max(0, player.humanity - implant.humanity_cost)
+from world.cyberware import can_install, install_implant
 
 
 def implant_label(implant, locale: str) -> str:
@@ -21,6 +13,13 @@ def implant_label(implant, locale: str) -> str:
     if locale == "en" and implant.name_en:
         return implant.name_en
     return implant.name_zh or implant.id
+
+
+def _at_ripperdoc(ctx: CommandContext) -> bool:
+    room = ctx.state.world.room(ctx.player.room_id)
+    if room is None:
+        return False
+    return "ripperdoc" in room.tags
 
 
 def handle(ctx: CommandContext):
@@ -39,19 +38,27 @@ def handle(ctx: CommandContext):
     if implant is None:
         return ok([t(ctx.player.locale, "install.unknown_implant")])
 
-    if item.implant_id in ctx.player.implants:
-        return ok([t(ctx.player.locale, "install.already")])
+    if implant.ripperdoc_only and not _at_ripperdoc(ctx):
+        return ok([t(ctx.player.locale, "install.need_ripperdoc")])
+
+    error = can_install(ctx.player, implant)
+    if error:
+        if error == "install.slot_taken":
+            slot_name = slot_label(implant.slot, ctx.player.locale)
+            return ok([t(ctx.player.locale, error, slot=slot_name)])
+        return ok([t(ctx.player.locale, error)])
 
     ctx.player.inventory.remove(item_id)
-    ctx.player.implants.append(item.implant_id)
-    apply_implant(ctx.player, implant)
+    install_implant(ctx.player, implant)
     label = implant_label(implant, ctx.player.locale)
+    slot_name = slot_label(implant.slot, ctx.player.locale)
     return ok(
         [
             t(
                 ctx.player.locale,
                 "install.ok",
                 label=label,
+                slot=slot_name,
                 humanity=str(ctx.player.humanity),
                 body=str(ctx.player.body),
             )

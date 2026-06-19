@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from entities.corpse import Corpse
 from world.clock import TimeConfig, WorldClock
 from world.world import World
 
@@ -14,6 +15,8 @@ class WorldState:
     room_items: dict[str, list[str]] = field(default_factory=dict)
     encounters: dict[str, "Encounter"] = field(default_factory=dict)
     npc_rooms: dict[str, str] = field(default_factory=dict)
+    corpses: dict[str, Corpse] = field(default_factory=dict)
+    npc_respawns: dict[str, int] = field(default_factory=dict)
     weather: dict[str, str] = field(default_factory=dict)
     tick_count: int = 0
 

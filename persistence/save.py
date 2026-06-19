@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from entities.player import Player
+from shared.equipment import normalize_equipment
 
 SAVE_DIR = Path(__file__).resolve().parent.parent / "data" / "saves"
 
@@ -23,6 +24,8 @@ def list_saves() -> list[str]:
 
 
 def player_to_dict(player: Player) -> dict:
+    from world.cyberware import implanted_ids
+
     return {
         "name": player.name,
         "room_id": player.room_id,
@@ -30,6 +33,11 @@ def player_to_dict(player: Player) -> dict:
         "hp": player.hp,
         "max_hp": player.max_hp,
         "gold": player.gold,
+        "level": player.level,
+        "xp": player.xp,
+        "attribute_points": player.attribute_points,
+        "perk_points": player.perk_points,
+        "perks": list(player.perks),
         "body": player.body,
         "reflex": player.reflex,
         "tech": player.tech,
@@ -37,12 +45,17 @@ def player_to_dict(player: Player) -> dict:
         "intelligence": player.intelligence,
         "humanity": player.humanity,
         "reputation": player.reputation,
+        "street_cred": player.street_cred,
         "faction": player.faction,
         "ram": player.ram,
         "max_ram": player.max_ram,
         "inventory": list(player.inventory),
         "equipment": dict(player.equipment),
-        "implants": list(player.implants),
+        "implants": implanted_ids(player),
+        "cyberware": dict(player.cyberware),
+        "home_room_id": player.home_room_id,
+        "home_stash": list(player.home_stash),
+        "vehicle_id": player.vehicle_id,
         "visited_rooms": list(player.visited_rooms),
         "prompt_mud": player.prompt_mud,
         "skills": list(player.skills),
@@ -58,9 +71,14 @@ def player_to_dict(player: Player) -> dict:
 
 
 def player_from_dict(data: dict) -> Player:
+    from world.cyberware import migrate_legacy_implants
+    from world.loader import load_world
+
     weapon_mods_raw = data.get("weapon_mods") or {}
     weapon_mods = {str(k): list(v) for k, v in weapon_mods_raw.items()}
-    return Player(
+    cyberware_raw = data.get("cyberware") or {}
+    cyberware = {str(k): str(v) for k, v in cyberware_raw.items()}
+    player = Player(
         name=str(data.get("name", "旅人")),
         room_id=str(data.get("room_id", "square")),
         locale=str(data.get("locale", "zh")),
@@ -68,6 +86,11 @@ def player_from_dict(data: dict) -> Player:
         hp=int(data.get("hp", 100)),
         max_hp=int(data.get("max_hp", 100)),
         gold=int(data.get("gold", 0)),
+        level=int(data.get("level", 1)),
+        xp=int(data.get("xp", 0)),
+        attribute_points=int(data.get("attribute_points", 0)),
+        perk_points=int(data.get("perk_points", 0)),
+        perks=list(data.get("perks", [])),
         body=int(data.get("body", 3)),
         reflex=int(data.get("reflex", 3)),
         tech=int(data.get("tech", 3)),
@@ -75,12 +98,17 @@ def player_from_dict(data: dict) -> Player:
         intelligence=int(data.get("intelligence", 3)),
         humanity=int(data.get("humanity", 100)),
         reputation=int(data.get("reputation", 0)),
+        street_cred=int(data.get("street_cred", 0)),
         faction=str(data.get("faction", "")),
         ram=int(data.get("ram", 4)),
         max_ram=int(data.get("max_ram", 8)),
         inventory=list(data.get("inventory", [])),
-        equipment=dict(data.get("equipment", {})),
+        equipment=normalize_equipment(dict(data.get("equipment", {}))),
         implants=list(data.get("implants", [])),
+        cyberware=cyberware,
+        home_room_id=str(data.get("home_room_id", "")),
+        home_stash=list(data.get("home_stash", [])),
+        vehicle_id=str(data.get("vehicle_id", "")),
         visited_rooms=list(data.get("visited_rooms", [])),
         prompt_mud=str(data.get("prompt_mud", "")),
         skills=list(data.get("skills", [])),
@@ -93,6 +121,9 @@ def player_from_dict(data: dict) -> Player:
         weapon_mods=weapon_mods,
         chased_by_npc=str(data.get("chased_by_npc", "")),
     )
+    if not player.cyberware and player.implants:
+        migrate_legacy_implants(player, load_world())
+    return player
 
 
 def save_player(player: Player) -> Path:

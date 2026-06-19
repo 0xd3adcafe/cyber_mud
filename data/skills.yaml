@@ -2,6 +2,8 @@ skills:
   quickhack:
     name_zh: 快速破解
     name_en: Quickhack
+    category: netrunner
+    level_req: 1
     gold_cost: 150
     ram_cost: 2
     description_zh: 戰鬥中對敵人發動即時入侵，消耗 RAM。
@@ -9,7 +11,19 @@ skills:
   breach_protocol:
     name_zh: 入侵協定
     name_en: Breach Protocol
+    category: netrunner
+    level_req: 3
+    prereq_skill: quickhack
     gold_cost: 200
     ram_cost: 3
     description_zh: 突破防火牆的基礎駭客協定，可解鎖終端節點。
     description_en: A basic breach protocol for cracking firewalls and terminals.
+  blade_flow:
+    name_zh: 刃流架勢
+    name_en: Blade Flow
+    category: combat
+    level_req: 2
+    gold_cost: 120
+    ram_cost: 0
+    description_zh: 近戰刃器架勢訓練，提升揮砍效率。
+    description_en: Melee blade stance training for cleaner slashes.

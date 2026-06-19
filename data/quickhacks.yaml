@@ -1,0 +1,41 @@
+quickhacks:
+  overheat:
+    name_zh: 過熱
+    name_en: Overheat
+    ram_cost: 2
+    damage_mult: 1.0
+    status_effect: burn
+    status_duration: 3
+    skill_req: quickhack
+    description_zh: 強制目標散熱系統超載，持續灼燒。
+    description_en: Overload the target's cooling; applies burn.
+  short_circuit:
+    name_zh: 短路
+    name_en: Short Circuit
+    ram_cost: 2
+    damage_mult: 1.2
+    status_effect: shock
+    status_duration: 1
+    skill_req: quickhack
+    description_zh: 脈衝電流癱瘓義體，打斷下一輪反擊。
+    description_en: Pulse the cyberware; shocks the next counter-attack.
+  reboot_optics:
+    name_zh: 光學重啟
+    name_en: Reboot Optics
+    ram_cost: 2
+    damage_mult: 0.0
+    status_effect: blind
+    status_duration: 2
+    skill_req: quickhack
+    description_zh: 干擾光學模組，大幅降低命中率。
+    description_en: Scramble optics; heavily reduces accuracy.
+  synapse_burnout:
+    name_zh: 突觸燒毀
+    name_en: Synapse Burnout
+    ram_cost: 4
+    damage_mult: 2.0
+    status_effect: ""
+    status_duration: 0
+    skill_req: breach_protocol
+    description_zh: 高壓神經衝擊，造成毀滅性傷害。
+    description_en: High-voltage neural strike; devastating damage.

@@ -9,8 +9,11 @@ from combat.tick import process_combat_departures
 from entities.player import Player
 from shared.i18n import t
 from world.clock import TimeConfig
+from world.corpses import process_corpse_decay
+from world.npc_respawn import process_npc_respawns
 from world.schedule import npc_scheduled_room
 from world.state import WorldState
+from world.vitals import apply_hp_regen
 from world.weather import WeatherConfig, load_weather_config, maybe_tick_weather
 
 PATROL_EVERY = 3
@@ -32,6 +35,7 @@ class TickEvent:
     player_name: str = ""
     message_key: str = ""
     message_kwargs: dict[str, str] = field(default_factory=dict)
+    corpse_decay: bool = False
 
 
 @dataclass
@@ -200,6 +204,29 @@ def _process_chase(state: WorldState, players: list[Player]) -> list[TickEvent]:
     return events
 
 
+def _process_hp_regen(state: WorldState, config: TimeConfig, players: list[Player]) -> list[TickEvent]:
+    period = state.clock.period_id(config)
+    events: list[TickEvent] = []
+    for player in players:
+        if not player.named:
+            continue
+        amount = apply_hp_regen(player, period)
+        if amount <= 0:
+            continue
+        events.append(
+            TickEvent(
+                kind="hp_regen",
+                player_name=player.name,
+                message_kwargs={
+                    "amount": str(amount),
+                    "hp": str(player.hp),
+                    "max_hp": str(player.max_hp),
+                },
+            )
+        )
+    return events
+
+
 def process_tick(
     state: WorldState,
     config: TimeConfig,
@@ -226,12 +253,35 @@ def process_tick(
             )
         )
 
+    for room_id, npc_id, name_zh, name_en in process_npc_respawns(state):
+        events.append(
+            TickEvent(
+                kind="npc_enter",
+                room_id=room_id,
+                npc_id=npc_id,
+                npc_name_zh=name_zh,
+                npc_name_en=name_en,
+            )
+        )
+
     events.extend(_apply_npc_schedules(state, config))
     events.extend(_maybe_move_patrolling_npcs(state))
     events.extend(_maybe_npc_idle_messages(state))
 
     if players:
         events.extend(_process_chase(state, players))
+        events.extend(_process_hp_regen(state, config, players))
+
+    for room_id, message_key, message_kwargs in process_corpse_decay(state):
+        events.append(
+            TickEvent(
+                kind="corpse_decay",
+                room_id=room_id,
+                message_key=message_key,
+                message_kwargs=message_kwargs,
+                corpse_decay=True,
+            )
+        )
 
     combat_results: list[tuple[Player, CombatActionResult]] = []
     if players:

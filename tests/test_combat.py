@@ -3,7 +3,8 @@ from __future__ import annotations
 import random
 from unittest.mock import patch
 
-from combat.actions import resolve_defend, resolve_flee, resolve_npc_attack, resolve_player_attack, resolve_quickhack
+from combat.actions import resolve_defend, resolve_flee, resolve_npc_attack, resolve_quickhack
+from combat.strike import resolve_player_attack
 from combat.encounter import encounter_for_player
 from commands.registry import dispatch, player_meta, CommandContext
 from tests.conftest import make_player, make_state
@@ -25,11 +26,11 @@ def test_attack_starts_combat_with_hostile_npc():
     result = dispatch("attack thug", player, state, [], [])
     assert player.in_combat
     assert player.encounter_id
-    assert any("開火" in line or "交戰" in line or "擊中" in line for line in result.lines)
+    assert any("拳" in line or "攻擊" in line or "擊中" in line or "架勢" in line for line in result.lines)
     encounter = encounter_for_player(state, player)
     assert encounter is not None
     assert encounter.npc_id == "thug"
-    assert encounter.npc_hp == 30 - player.body
+    assert encounter.npc_hp == 26
 
 
 def test_attack_without_target_not_in_combat():
@@ -54,7 +55,32 @@ def test_defend_sets_flag():
     assert encounter is not None
     result = resolve_defend(state, player)
     assert encounter.defending
-    assert any("防禦" in line for line in result.lines)
+    assert any("閃避" in line for line in result.lines)
+
+
+def test_defend_message_uses_armor():
+    player, state = _fighter()
+    player.equipment["outer_torso"] = "jacket"
+    dispatch("attack thug", player, state, [], [])
+    result = resolve_defend(state, player)
+    assert any("護甲" in line for line in result.lines)
+
+
+def test_defend_message_uses_weapon():
+    player, state = _fighter()
+    player.equipment["weapon_secondary"] = "knife"
+    dispatch("attack thug", player, state, [], [])
+    result = resolve_defend(state, player)
+    assert any("架開" in line and "戰術折刀" in line for line in result.lines)
+
+
+def test_help_defend_desc_follows_equipment():
+    player, state = _fighter()
+    player.equipment["outer_torso"] = "jacket"
+    player.equipment["head"] = "trainee_helmet"
+    result = dispatch("help", player, state, [], [])
+    defend_line = next(line for line in result.lines if "defend" in line)
+    assert "護甲＋頭盔" in defend_line
 
 
 def test_defend_halves_npc_damage():
@@ -75,6 +101,7 @@ def test_defend_halves_npc_damage():
 
 def test_quickhack_costs_ram_and_deals_damage():
     player, state = _fighter(intelligence=5)
+    player.skills = ["quickhack"]
     dispatch("attack thug", player, state, [], [])
     encounter = encounter_for_player(state, player)
     assert encounter is not None
@@ -84,7 +111,7 @@ def test_quickhack_costs_ram_and_deals_damage():
     result = resolve_quickhack(state, player)
     assert player.ram == before_ram - 2
     assert encounter.npc_hp == before_hp - 10
-    assert any("快速破解" in line for line in result.lines)
+    assert any("過熱" in line or "快速破解" in line for line in result.lines)
 
 
 def test_flee_success_ends_combat(monkeypatch):
@@ -132,7 +159,7 @@ def test_combat_tick_npc_counterattack():
 
 def test_victory_ends_combat():
     player, state = _fighter(body=50)
-    player.equipment["weapon"] = "knife"
+    player.equipment["weapon_secondary"] = "knife"
     result = dispatch("attack thug", player, state, [], [])
     assert not player.in_combat
     assert any("擊倒" in line for line in result.lines)

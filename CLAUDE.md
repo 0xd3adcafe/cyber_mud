@@ -143,6 +143,7 @@
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | 系統架構 |
 | [`docs/BOOTSTRAP.md`](docs/BOOTSTRAP.md) | MVP 啟動步驟 |
 | [`docs/PHASES.md`](docs/PHASES.md) | 分階段實作清單 |
+| [`docs/CLIENT_UI_DEBUG.md`](docs/CLIENT_UI_DEBUG.md) | Client 版面／側欄除錯案例與交付 checklist |
 
 ## 開發慣例
 
@@ -201,7 +202,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | 側欄修正 | `room_id` 刷新 map、優先 `@ui` JSON |
 | 物品／NPC 英文後綴 | `shared/locale_content.py` → `look`／`scan`／`inventory` |
 | Tab 自動補全 | `shared/completion.py`、`client/completion.py`、`@meta complete_*` |
-| 快捷鍵列 | `#hotkey_bar`（Tab、F2–F6、`/reconnect`） |
+| 快捷鍵列 | `#hotkey_bar`（Tab、F2–F6、`/reconnect`）；chrome／hotkey `min-height:1`；輸入 panel 指令自動開側欄；F 鍵非阻塞 fetch |
 | 輸出動畫前綴 | `client/output_prefix.py`（Braille spinner） |
 | Client 重新連線 | `client/reconnect.py`、斷線退避、`/reconnect`、重送 auth |
 | Server 程式碼熱重載 | `server/code_reload.py`、`server/dev_reload.py`、`./run.sh --dev` |
@@ -217,12 +218,38 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | Client 輸入歷史 | ↑↓ 指令歷史、Esc 還原、`command_history.json` 持久化 |
 | Client 記憶帳密／PIN | `client/credentials.py` 加密儲存、PIN 快速登入、F7 清除記憶 |
 | look 目標察看 | `look <目標>` 察看物品／NPC／裝備狀態與數值 |
+| NPC 屍體與搜刮 | `world/corpses.py` 擊倒留屍、loot、腐化掉落 |
+| 屍體英文後綴 | `corpse_label` 顯示 `(English)`／`(corpse)` 方便指令 |
+| 新手區擴充 | 訓練場多房／NPC／裝備庫；`tests/test_tutorial_zone.py` |
+| 商店與交易 | `shop`／`buy`／`sell`；`data/shops.yaml`；註冊送起始金錢 |
+| 環境輸出著色 | `client/env_format.py` look／scan 分色顯示 |
+| 環境色隨主題 | `client/themes.py` `EnvPalette`；`/theme` 切換同步環境色 |
+| 消耗品系統 | `use`／`eat`／`drink`；食物／飲料／藥品；`world/consumables.py` |
+| NETRUN 指令放行 | client 不再攔截 `hack`／`probe`／`status` |
+| NPC 穿戴裝備 | `entities/npc.py` `equipment`；`look` 顯示；擊倒掉落 |
+| 自然回血 | `world/vitals.py` 依 body／cool／時段 tick 回復 |
+| NPC 重生 | `world/npc_respawn.py` 擊倒排程；`respawn_minutes`／`tier: boss` |
+| 指令重複 | `10 punch`／`punch.10` 多次執行 |
+| Server heartbeat | `server/heartbeat.py` 終端定期刷新運行狀態；dev 重載 log |
+| CP2077 裝備槽與武器種類 | `shared/equipment.py` 七槽；CP2077 遠程武器種類＋power／tech／smart／melee；`armor` 存檔遷移 |
+| NETRUN 英文後綴 | `net_node_label_with_id`；NETRUN 節點／地上物品 `(English)`；`hack` Tab 補全 |
+| NETRUN 環境／NPC 互動 | NETRUN 中 `look`／`scan`／`talk`／`say` 放行；環境顯示可駭入節點 |
+| 武器持握模式 | `weapon_primary`／`weapon_secondary`；`weapon_mode` 主要／次要／雙手／雙持 |
+| 等級／技能／天賦 | `world/progression.py`；`stats`／`talents`／`improve`；`data/talents.yaml`；擊倒／駭入 XP |
+| 街頭聲望與委託 | `street_cred`；`gigs`；`world/quests.py`；`broker_rumor` 交件獎勵 |
+| CP2077 快速破解 | `data/quickhacks.yaml`；過熱／短路／光學重啟／突觸燒毀；戰鬥狀態效果 |
+| 義體幻痛 | `world/cyberpsychosis.py` 低人性傷害懲罰 |
+| CP2077 義體槽位 | 九槽 cyberware／install／uninstall；`data/implants.yaml` |
+| 住宅與儲物 | `rent`／`home`／`stash`；`watson_flat` |
+| 交通與載具 | `transit`；`vehicles buy`／`drive` |
 
 ### 待做（節錄）
 
 維護規則見 [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)——**之後所有修正或變動都要更新 backlog**。
 
 - Tab 補全多候選輪替
+- 環境互動系統（`interact`、可互動物件、條件觸發）
+- 上下方向移動（`go up`／`go down`、電梯／樓梯／垂直出口）
 - Phase E.4 文件 GitHub 風格 + TOC
 - NPC 任務驅動 AI、玩法數值深度平衡等（見 PHASES Backlog）
 
@@ -232,4 +259,5 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 
 - 世界觀為致敬風格之原創內容，非官方 Cyberpunk／Blade Runner 劇情。
 - 擴充功能前先看 `docs/PHASES.md` 與 `docs/IMPLEMENTATION.md`，避免與既有協定衝突。
+- 改 `client/` 版面或側欄前先看 [`docs/CLIENT_UI_DEBUG.md`](docs/CLIENT_UI_DEBUG.md)；可搭配專案 skill `.grok/skills/cyber-mud-client-ui/`。
 - 新增可重複流程時，可封裝為 skill（`.grok/skills/` 或 `.claude/skills/`），格式可參考 [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)。

@@ -7,6 +7,7 @@ from shared.completion import parse_csv_meta
 from shared.protocol import META_PREFIX, PANEL_PREFIX, UI_PREFIX
 
 SIDEBAR_PANEL_ORDER: tuple[str, ...] = ("pda", "map", "equipment", "help")
+SIDEBAR_PANEL_IDS: frozenset[str] = frozenset(SIDEBAR_PANEL_ORDER + ("status",))
 _SIDEBAR_AUTO_REFRESH_ON_MOVE = frozenset({"map"})
 _SIDEBAR_REFRESH_ON_EQUIP = frozenset({"pda", "equipment"})
 
@@ -47,14 +48,37 @@ class ClientViewState:
     refresh_sidebar: bool = False
     complete_room_items: list[str] = field(default_factory=list)
     complete_npcs: list[str] = field(default_factory=list)
+    complete_corpses: list[str] = field(default_factory=list)
     complete_exits: list[str] = field(default_factory=list)
     complete_inventory: list[str] = field(default_factory=list)
     complete_equipped: list[str] = field(default_factory=list)
+    complete_shop_items: list[str] = field(default_factory=list)
+    complete_net_nodes: list[str] = field(default_factory=list)
 
 
 def parse_meta_payload(payload: str) -> tuple[str, str]:
     key, _, value = payload.partition("=")
     return key, value
+
+
+def resolve_panel_command(line: str) -> str | None:
+    """Return sidebar panel id if line is a panel command (incl. aliases)."""
+    from commands.aliases import DEFAULT_ALIASES
+
+    text = line.strip()
+    if not text:
+        return None
+    cmd = text.split(maxsplit=1)[0].lower()
+    cmd = DEFAULT_ALIASES.get(cmd, cmd)
+    if cmd == "status":
+        cmd = "pda"
+    if cmd in SIDEBAR_PANEL_IDS:
+        return cmd
+    return None
+
+
+def prepare_sidebar_for_panel(state: ClientViewState, panel_id: str) -> None:
+    state.sidebar_open = True
 
 
 def apply_meta(state: ClientViewState, key: str, value: str) -> None:
@@ -115,10 +139,9 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         panel.lines = []
         panel.ui = None
     elif key == "ui_panel_end":
-        if state.pending_panel:
+        if state.pending_panel and state.sidebar_open:
             if state.pending_panel not in state.sidebar_stack:
                 state.sidebar_stack.append(state.pending_panel)
-            state.sidebar_open = True
         state.pending_panel = ""
     elif key == "refresh_sidebar":
         state.refresh_sidebar = value == "1"
@@ -126,12 +149,18 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         state.complete_room_items = parse_csv_meta(value)
     elif key == "complete_npcs":
         state.complete_npcs = parse_csv_meta(value)
+    elif key == "complete_corpses":
+        state.complete_corpses = parse_csv_meta(value)
     elif key == "complete_exits":
         state.complete_exits = parse_csv_meta(value)
     elif key == "complete_inventory":
         state.complete_inventory = parse_csv_meta(value)
     elif key == "complete_equipped":
         state.complete_equipped = parse_csv_meta(value)
+    elif key == "complete_net_nodes":
+        state.complete_net_nodes = parse_csv_meta(value)
+    elif key == "complete_shop_items":
+        state.complete_shop_items = parse_csv_meta(value)
 
 
 def ordered_sidebar_stack(stack: list[str]) -> list[str]:
@@ -149,6 +178,12 @@ def _ensure_sidebar_panel(state: ClientViewState, panel_id: str) -> SidebarPanel
 
 def sidebar_panel_is_open(state: ClientViewState, panel_id: str) -> bool:
     return panel_id in state.sidebar_stack
+
+
+def sidebar_should_show(state: ClientViewState) -> bool:
+    return bool(
+        state.sidebar_open and (state.sidebar_stack or state.pending_panel)
+    )
 
 
 def toggle_sidebar_panel(state: ClientViewState, panel_id: str) -> bool:
@@ -232,7 +267,10 @@ def hint_text(state: ClientViewState) -> str:
 
 
 LOCAL_COMMANDS = frozenset({"reconnect", "prompt", "quit", "theme"})
-NETRUN_SERVER_COMMANDS = frozenset({"exit", "quit", "help", "disconnect", "logout"})
+NETRUN_ALLOWED_COMMANDS = frozenset(
+    {"hack", "probe", "status", "look", "scan", "search", "talk", "say", "exit", "help", "quit"}
+)
+NETRUN_EXIT_COMMANDS = frozenset({"exit", "quit", "disconnect", "logout"})
 
 
 def active_prompt(state: ClientViewState, *, local_override: str = "") -> str:
@@ -250,14 +288,41 @@ def is_netrun_exit_command(text: str) -> bool:
     if not body:
         return False
     verb = body.split(maxsplit=1)[0].lower()
-    return verb in NETRUN_SERVER_COMMANDS
+    return verb in NETRUN_EXIT_COMMANDS
+
+
+def normalize_netrun_command(text: str) -> str:
+    stripped = text.strip()
+    if not stripped.startswith("/"):
+        return stripped
+    body = stripped[1:].strip()
+    if not body:
+        return stripped
+    verb = body.split(maxsplit=1)[0].lower()
+    if verb in NETRUN_ALLOWED_COMMANDS or verb in NETRUN_EXIT_COMMANDS:
+        return body
+    return stripped
 
 
 def netrun_blocks_server_command(text: str) -> bool:
-    if not text or text.startswith("/"):
+    if not text:
         return False
-    verb = text.split(maxsplit=1)[0].lower()
-    return verb not in NETRUN_SERVER_COMMANDS
+    normalized = normalize_netrun_command(text)
+    if normalized.startswith("/"):
+        return True
+    verb = normalized.split(maxsplit=1)[0].lower()
+    return verb not in NETRUN_ALLOWED_COMMANDS
+
+
+def prepare_netrun_outbound(text: str) -> tuple[str, bool]:
+    if not text:
+        return text, False
+    if netrun_blocks_server_command(text):
+        return normalize_netrun_command(text), True
+    outbound = normalize_netrun_command(text)
+    if outbound.startswith("/") and is_netrun_exit_command(outbound):
+        outbound = outbound[1:].strip().split()[0]
+    return outbound, False
 
 
 def is_local_command(text: str) -> bool:

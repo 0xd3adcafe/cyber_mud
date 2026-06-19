@@ -6,6 +6,9 @@ from typing import Callable
 from commands.aliases import expand_line
 from combat.encounter import COMBAT_ALLOWED_COMMANDS, combat_meta
 from entities.player import Player
+import time
+
+from shared.repeat import REPEAT_BLOCKED, REPEAT_INTERVAL_SECONDS, parse_repeat
 from world.state import WorldState
 
 Handler = Callable[["CommandContext"], "CommandResult"]
@@ -34,6 +37,7 @@ class CommandResult:
     auth_event: bool = False
     broadcast_key: str = ""
     broadcast_kwargs: dict[str, str] = field(default_factory=dict)
+    broadcast_room_id: str = ""
 
 
 _REGISTRY: dict[str, Handler] = {}
@@ -54,6 +58,7 @@ def ok(
     refresh_sidebar: bool = False,
     broadcast_key: str = "",
     broadcast_kwargs: dict[str, str] | None = None,
+    broadcast_room_id: str = "",
 ) -> CommandResult:
     return CommandResult(
         lines=lines,
@@ -65,6 +70,7 @@ def ok(
         refresh_sidebar=refresh_sidebar,
         broadcast_key=broadcast_key,
         broadcast_kwargs=broadcast_kwargs or {},
+        broadcast_room_id=broadcast_room_id,
     )
 
 
@@ -126,6 +132,7 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
         "ram": f"{ctx.player.ram}/{ctx.player.max_ram}",
         "humanity": str(ctx.player.humanity),
         "reputation": str(ctx.player.reputation),
+        "street_cred": str(ctx.player.street_cred),
         "faction": faction_label(ctx.state.world, ctx.player.faction, ctx.player.locale),
         "prompt_mud": expand_prompt(effective_prompt(ctx.player), ctx.player, ctx.state),
     }
@@ -139,8 +146,8 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
     hint = quest_hint_for_player(ctx)
     if hint:
         meta["hint"] = hint
+    meta["net_shell"] = "1" if ctx.player.net_shell else "0"
     if ctx.player.net_shell:
-        meta["net_shell"] = "1"
         meta["net_prompt"] = t(ctx.player.locale, "net.prompt")
     from shared.completion import completion_meta
 
@@ -148,7 +155,64 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
     return meta
 
 
-def dispatch(line: str, player: Player, state: WorldState, peers: list[Player], all_players: list[Player]) -> CommandResult:
+def _should_stop_repeat(result: CommandResult, player: Player, *, verb: str, was_in_combat: bool) -> bool:
+    if result.quit_game or result.auth_event:
+        return True
+    if was_in_combat and not player.in_combat:
+        return True
+    if player.hp <= 0:
+        return True
+    if verb == "go" and not result.moved:
+        return True
+    return False
+
+
+def _merge_repeat_results(
+    results: list[CommandResult],
+    *,
+    locale: str,
+    requested: int,
+) -> CommandResult:
+    if not results:
+        return ok([])
+    if len(results) == 1:
+        return results[0]
+
+    from shared.i18n import t
+
+    lines: list[str] = []
+    for result in results:
+        lines.extend(result.lines)
+    if len(results) < requested:
+        lines.append(t(locale, "repeat.stopped", done=str(len(results)), total=str(requested)))
+    else:
+        lines.append(t(locale, "repeat.done", count=str(len(results))))
+
+    last = results[-1]
+    return CommandResult(
+        lines=lines,
+        meta=last.meta,
+        moved=any(r.moved for r in results),
+        document=last.document,
+        panel=last.panel,
+        ui_json=last.ui_json,
+        refresh_sidebar=any(r.refresh_sidebar for r in results),
+        quit_game=last.quit_game,
+        world_changed=any(r.world_changed for r in results),
+        auth_event=any(r.auth_event for r in results),
+        broadcast_key=last.broadcast_key,
+        broadcast_kwargs=last.broadcast_kwargs,
+        broadcast_room_id=last.broadcast_room_id,
+    )
+
+
+def _dispatch_once(
+    line: str,
+    player: Player,
+    state: WorldState,
+    peers: list[Player],
+    all_players: list[Player],
+) -> CommandResult:
     text = expand_line(line.strip(), player)
     if not text:
         return ok([])
@@ -170,16 +234,22 @@ def dispatch(line: str, player: Player, state: WorldState, peers: list[Player], 
         return ok([t(player.locale, "combat.busy")])
 
     if player.net_shell:
-        from commands.net_shell import NET_SHELL_COMMANDS, dispatch_net, net_meta
+        from commands.net_shell import (
+            NET_ALLOWED_MUD_COMMANDS,
+            NET_SHELL_COMMANDS,
+            dispatch_net,
+            net_meta,
+        )
         from shared.i18n import t
 
-        if verb not in NET_SHELL_COMMANDS:
-            return ok([t(player.locale, "net.busy")], meta=net_meta(CommandContext(player, state, args, peers, all_players)))
         ctx = CommandContext(player=player, state=state, args=args, peers=peers, all_players=all_players)
-        result = dispatch_net(text, ctx)
-        if not result.meta:
-            result.meta = net_meta(ctx)
-        return result
+        if verb in NET_SHELL_COMMANDS:
+            result = dispatch_net(text, ctx)
+            if not result.meta:
+                result.meta = net_meta(ctx)
+            return result
+        if verb not in NET_ALLOWED_MUD_COMMANDS:
+            return ok([t(player.locale, "net.busy")], meta=net_meta(ctx))
 
     handler = _REGISTRY.get(verb)
     if handler is None:
@@ -196,10 +266,45 @@ def dispatch(line: str, player: Player, state: WorldState, peers: list[Player], 
     return result
 
 
+def dispatch(line: str, player: Player, state: WorldState, peers: list[Player], all_players: list[Player]) -> CommandResult:
+    count, remainder = parse_repeat(line.strip())
+    if not remainder:
+        return ok([])
+
+    text = expand_line(remainder, player)
+    if not text:
+        return ok([])
+
+    verb = text.split(maxsplit=1)[0].lower()
+    if count > 1 and verb in REPEAT_BLOCKED:
+        return _dispatch_once(text, player, state, peers, all_players)
+
+    if count == 1:
+        return _dispatch_once(text, player, state, peers, all_players)
+
+    results: list[CommandResult] = []
+    for index in range(count):
+        was_in_combat = player.in_combat
+        result = _dispatch_once(text, player, state, peers, all_players)
+        results.append(result)
+        if _should_stop_repeat(result, player, verb=verb, was_in_combat=was_in_combat):
+            break
+        if index + 1 < count and REPEAT_INTERVAL_SECONDS > 0:
+            time.sleep(REPEAT_INTERVAL_SECONDS)
+
+    return _merge_repeat_results(results, locale=player.locale, requested=count)
+
+
 def register_builtin_commands() -> None:
     from commands import (  # noqa: F401
         appraise,
+        buy,
         attack,
+        shoot,
+        slash,
+        bash,
+        punch,
+        backstab,
         defend,
         drop,
         equip,
@@ -208,11 +313,23 @@ def register_builtin_commands() -> None:
         give,
         go,
         help_cmd,
+        improve,
         install,
+        cyberware_cmd,
+        uninstall,
+        rent,
+        home_cmd,
+        stash_cmd,
+        transit_cmd,
+        vehicles_cmd,
+        drive,
         inventory,
         login,
         look,
         learn,
+        stats,
+        gigs,
+        talents_cmd,
         map,
         mod,
         net,
@@ -226,7 +343,10 @@ def register_builtin_commands() -> None:
         quit_cmd,
         register,
         scan,
+        sell,
+        shop_cmd,
         take,
         time_cmd,
         unequip,
+        use,
     )

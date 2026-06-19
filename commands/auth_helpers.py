@@ -9,6 +9,8 @@ from shared.i18n import t
 
 AUTH_COMMANDS = frozenset({"login", "register", "help", "quit"})
 
+STARTING_GOLD = 100
+
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
@@ -49,6 +51,10 @@ def reset_player_to_guest(player, start_room: str) -> None:
     player.inventory = list(fresh.inventory)
     player.equipment = dict(fresh.equipment)
     player.implants = list(fresh.implants)
+    player.cyberware = dict(fresh.cyberware)
+    player.home_room_id = fresh.home_room_id
+    player.home_stash = list(fresh.home_stash)
+    player.vehicle_id = fresh.vehicle_id
     player.visited_rooms = list(fresh.visited_rooms)
     player.prompt_mud = fresh.prompt_mud
     player.skills = list(fresh.skills)
@@ -80,9 +86,19 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.intelligence = loaded.intelligence
     session_player.humanity = loaded.humanity
     session_player.reputation = loaded.reputation
+    session_player.street_cred = loaded.street_cred
+    session_player.level = loaded.level
+    session_player.xp = loaded.xp
+    session_player.attribute_points = loaded.attribute_points
+    session_player.perk_points = loaded.perk_points
+    session_player.perks = list(loaded.perks)
     session_player.ram = loaded.ram
     session_player.max_ram = loaded.max_ram
     session_player.implants = list(loaded.implants)
+    session_player.cyberware = dict(loaded.cyberware)
+    session_player.home_room_id = loaded.home_room_id
+    session_player.home_stash = list(loaded.home_stash)
+    session_player.vehicle_id = loaded.vehicle_id
     session_player.visited_rooms = list(loaded.visited_rooms)
     session_player.prompt_mud = loaded.prompt_mud
     session_player.skills = list(loaded.skills)
@@ -118,6 +134,7 @@ def handle_register(ctx: CommandContext):
     ctx.player.named = True
     ctx.player.password_hash = hash_password(password)
     ctx.player.room_id = ctx.state.world.start_room
+    ctx.player.gold = STARTING_GOLD
     save_player(ctx.player)
     return ok([t(ctx.player.locale, "auth.register_ok", name=name)], auth_event=True)
 

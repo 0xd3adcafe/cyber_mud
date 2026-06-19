@@ -9,3 +9,8 @@ net_nodes:
     name_zh: 巷弄節點
     name_en: Alley Node
     hackable: true
+  tutorial_terminal:
+    room_id: tutorial_net
+    name_zh: 訓練用終端
+    name_en: Training Terminal
+    hackable: true

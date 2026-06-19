@@ -22,3 +22,8 @@ class NPC:
     quest_id: str = ""
     schedule: dict[str, str] = field(default_factory=dict)
     talk_key: str = ""
+    loot: list[str] = field(default_factory=list)
+    equipment: dict[str, str] = field(default_factory=dict)
+    tier: str = ""
+    respawn_minutes: int | None = None
+    xp_reward: int = 0

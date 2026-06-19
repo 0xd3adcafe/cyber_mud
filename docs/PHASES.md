@@ -118,6 +118,37 @@
 | quit 登出回登入畫面 | `quit` 改為登出（保持連線、不觸發重連）；client `auth=0` 回到登入 UI |
 | 側欄 stack 焦點修正 | 側欄不可搶焦點、點擊回 prompt；panel 刷新序列化避免 PDA+地圖並行卡住 |
 | Client 連線狀態列 | `#link_status_bar` 顯示連線／等待／延遲；log 增量 append、spinner 不再每 0.2s 全量重繪 |
+| NPC 屍體與搜刮 | 擊倒留屍體、`take <物品> from <屍體>`、`look`／`scan` 顯示；tick 腐化掉落地上；`world/corpses.py`、`entities/corpse.py`、`tests/test_corpses.py` |
+| 屍體英文後綴 | `corpse_label` 顯示 `(Street Thug)`／`(corpse)` 方便指令；`tests/test_corpses.py` |
+| 新手區擴充 | `data/world.yaml` 訓練場 5 房、4 NPC、8 裝備物品；`tutorial_terminal`；`tests/test_tutorial_zone.py` |
+| 商店與交易 | `shop`／`buy`／`sell`、`data/shops.yaml`、`world/trade.py`；註冊 ${STARTING_GOLD}；`tests/test_trade.py` |
+| 環境輸出著色 | `client/env_format.py` 房間／出口／物品／NPC 分色；`tests/test_env_format.py` |
+| 環境色隨主題 | `client/themes.py` `EnvPalette`／`env_palette_for_theme`；`/theme` 切換重繪 log |
+| 出口顯示統一 | `format_room_exits` 僅方向中文＋`(英文)`；描述移除重複出口行；`tests/test_room_exits.py` |
+| 消耗品系統 | `use`／`eat`／`drink`；食物／飲料／藥品回復 HP／RAM；`world/consumables.py`；`tests/test_consumables.py` |
+| defend 裝備描述 | `combat/defend_style.py` 依護甲／頭盔／武器切換戰鬥與 help 文案 |
+| NETRUN 指令放行 | `prepare_netrun_outbound` 正規化 `／probe`；`player_meta` 同步 `net_shell=0`；`tests/test_net_meta_sync.py` |
+| 側欄 F6 收合修正 | F6 清空 stack／取消載入；`ui_panel_end` 不再強制重開；`#hotkey_bar` 樣式加強可見 |
+| 玩家死亡屍體與重生 | 戰敗留屍、背包＋裝備掉落可搜刮；自動傳送至 `respawn_room`（義體診所）並回滿 HP；`tests/test_player_death.py` |
+| 槍械與肉搏戰鬥 | `weapon_type`（gun／blade／blunt）；`shoot`／`slash`／`bash`／`punch`／`backstab`；`combat/styles.py`、`tests/test_strike.py` |
+| 連線狀態列可見性 | `#link_status_bar` 加亮、`連線` 前綴、登入後刷新；`tests/test_client_app.py` |
+| 快捷鍵列可見性 | `#top_dock`／`#bottom_dock` dock 堆疊；chrome／hotkey `min-height:1`；F 鍵非阻塞 fetch；輸入 `map`／`pda` 等自動開側欄；載入中 F2 再按取消；案例見 [`CLIENT_UI_DEBUG.md`](CLIENT_UI_DEBUG.md) |
+| NPC 穿戴裝備 | `entities/npc.py` `equipment`；`look` 顯示穿戴；擊倒後與 `loot` 一併進屍體；`tests/test_npc_equipment.py` |
+| 自然回血 | `world/vitals.py` 依 `body`／`cool`／時段 tick 回復；非戰鬥中推送 meta＋訊息；`tests/test_vitals.py` |
+| NPC 重生 | `world/npc_respawn.py` 擊倒排程、tick 復活並廣播進房；`respawn_minutes`／`tier: boss`（預設 10 分、boss 60 分）；`tests/test_npc_respawn.py` |
+| 指令重複 | `shared/repeat.py` `10 punch`／`punch.10`；每次間隔 `REPEAT_INTERVAL_SECONDS`（0.5s）；`tests/test_repeat.py` |
+| Server heartbeat | `server/heartbeat.py` 終端單行定期刷新 tick／連線／戰鬥等狀態；dev 重載輸出 log；`tests/test_heartbeat.py` |
+| CP2077 裝備槽與武器種類 | `shared/equipment.py` 七槽（weapon／head／inner_torso／outer_torso／legs／feet／cyber）；CP2077 遠程武器種類＋power／tech／smart／melee；`armor` 存檔遷移；`tests/test_equip.py` |
+| NETRUN 英文後綴 | `net_node_label_with_id`；`net`／`probe`／`hack`／`status` 節點與地上物品顯示 `(English)`；`hack` Tab 補全節點 id；`tests/test_net.py` |
+| NETRUN 環境／NPC 互動 | `look`／`scan`／`talk`／`say` 於 NETRUN 放行；`look`／`scan` 顯示節點；client 同步放行；`tests/test_net.py` |
+| 武器持握模式 | `weapon_primary`／`weapon_secondary`；`weapon_mode` 主要／次要／雙手／雙持；`training_carbine`；`tests/test_equip.py` |
+| 等級／技能／天賦 | `world/progression.py` XP 升級、屬性點／天賦點；`stats`／`talents`／`improve`／`learn` 等級前置；`data/talents.yaml`；擊倒 NPC／駭入成功給 XP；`tests/test_progression.py` |
+| 街頭聲望與委託 | `street_cred`；`gigs` Fixer 委託板；`world/quests.py` 委託目標／交件／獎勵；`broker_rumor` 完整流程；`tests/test_gigs.py` |
+| CP2077 快速破解 | `data/quickhacks.yaml` 過熱／短路／光學重啟／突觸燒毀；`quickhack <名稱>`；狀態效果灼燒／短路／致盲；`tests/test_quickhacks.py` |
+| 義體幻痛 | `world/cyberpsychosis.py` 人性 ≤25 時輸出 -15% |
+| CP2077 義體槽位 | 九槽 `cyberware`／`chrome`／`uninstall`；`data/implants.yaml` 擴充；ripperdoc 限定；`tests/test_cyberware.py` |
+| 住宅與儲物 | `rent`／`home`／`stash`；`watson_flat`；`data/housing.yaml`；`tests/test_housing_transport.py` |
+| 交通與載具 | `transit` NCART；`vehicles buy`／`drive`；`data/transit.yaml`／`vehicles.yaml` |
 
 ## Backlog 維護慣例
 
@@ -134,10 +165,13 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 尚未實作或僅部分實作，新專案可選做：
 
 - Tab 補全多候選輪替（連按 Tab 切換下一個匹配）
+- **環境互動系統**：可互動物件／機關（終端、門禁、貨櫃、全息看板）；`interact`／`use <環境>`；`data/interactables.yaml`；與 `look`／`scan`／`search` 整合；條件觸發（技能、物品、駭入）
+- **上下方向移動**：`go up`／`go down`（或 `u`／`d`）；電梯、樓梯、下水道、屋頂；`data/world.yaml` 垂直出口；地圖／Tab 補全／locale 方向文案
 - Prompt 完整版（更多 token、即時預覽 UI）
 - NPC 任務驅動 AI（進階追蹤、多階段任務編排工具）
 - 天氣／時段對玩法數值的深度平衡
 - 完整被動技能樹與義體連鎖觸發
+- NCPD 通緝等級、多載具車庫、製作／拆解、腦舞
 - 文件 GitHub 風格 + TOC（Phase E.4）
 - pyenv 原生編譯 Python（環境設定，非遊戲功能）
 

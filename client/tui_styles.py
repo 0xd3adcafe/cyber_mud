@@ -112,33 +112,63 @@ Select {
     display: none;
 }
 
+#top_dock {
+    dock: top;
+    width: 100%;
+    height: auto;
+}
+
 #info_bar {
+    width: 100%;
     height: auto;
     max-height: 2;
     background: $surface;
     color: $foreground;
     padding: 0 2;
     border-bottom: solid $surface;
+    overflow: hidden;
+}
+
+#chrome_bar {
+    width: 100%;
+    height: auto;
+    min-height: 1;
+    background: $panel;
+    color: $foreground;
+    padding: 0 2;
+    border-bottom: solid $accent 40%;
+    text-style: bold;
+}
+
+#bottom_dock {
+    dock: bottom;
+    width: 100%;
+    height: auto;
 }
 
 #hotkey_bar {
-    height: 1;
-    background: $panel;
-    color: $text-muted;
+    width: 100%;
+    height: auto;
+    min-height: 1;
+    background: $surface;
+    color: $foreground;
     padding: 0 2;
-    border-bottom: solid $surface;
+    border-top: solid $surface;
+    text-style: bold;
 }
 
-#link_status_bar {
-    height: 1;
-    background: $background;
-    color: $text-muted;
-    padding: 0 2;
-    border-bottom: solid $surface;
+#prompt_dock {
+    width: 100%;
+    height: 3;
+    layout: horizontal;
+    background: $panel;
+    border-top: solid $surface;
+    padding: 0 1 0 0;
 }
 
 #main_row {
     height: 1fr;
+    width: 100%;
     min-height: 1;
     padding: 0 1;
 }
@@ -200,14 +230,6 @@ Select {
 }
 .sidebar-visible {
     display: block;
-}
-
-#prompt_dock {
-    height: 3;
-    layout: horizontal;
-    background: $panel;
-    border-top: solid $surface;
-    padding: 0 1 0 0;
 }
 
 #prompt_dock.prompt-focused {

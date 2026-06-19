@@ -1,16 +1,76 @@
 from __future__ import annotations
 
 from commands.bulk_helpers import is_bulk, resolve_take_targets
+from commands.helpers import find_item_in_corpse
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
 from shared.locale_content import item_label
+from world.corpses import corpse_label, find_corpse_id, split_take_from
+
+
+def _take_from_corpse(ctx: CommandContext, item_args: str, corpse_name: str):
+    locale = ctx.player.locale
+    corpse_id = find_corpse_id(ctx.state, corpse_name, ctx.player.room_id)
+    if corpse_id is None:
+        return ok([t(locale, "corpse.corpse_missing")])
+
+    corpse = ctx.state.corpses.get(corpse_id)
+    if corpse is None:
+        return ok([t(locale, "corpse.corpse_missing")])
+
+    corpse_name_label = corpse_label(ctx.state, corpse, locale)
+
+    if is_bulk(item_args):
+        targets = []
+        for item_id in list(corpse.loot):
+            item = ctx.state.world.item(item_id)
+            if item and item.takeable:
+                targets.append(item_id)
+    else:
+        item_id = find_item_in_corpse(ctx.state, item_args, corpse_id)
+        targets = [item_id] if item_id else []
+
+    if not targets:
+        return ok([t(locale, "corpse.take_missing")])
+
+    lines: list[str] = []
+    taken = 0
+    for item_id in targets:
+        if item_id not in corpse.loot:
+            continue
+        item = ctx.state.world.item(item_id)
+        if item is None or not item.takeable:
+            continue
+        corpse.loot.remove(item_id)
+        ctx.player.inventory.append(item_id)
+        lines.append(
+            t(
+                locale,
+                "corpse.take_ok",
+                label=item_label(item, locale),
+                corpse=corpse_name_label,
+            )
+        )
+        taken += 1
+
+    if not lines:
+        return ok([t(locale, "corpse.take_missing")])
+
+    if is_bulk(item_args) and taken > 1:
+        lines.insert(0, t(locale, "take.bulk_ok", count=str(taken)))
+
+    return ok(lines, meta=player_meta(ctx), world_changed=True)
 
 
 def handle(ctx: CommandContext):
     if not ctx.args:
         return ok([t(ctx.player.locale, "take.usage")])
 
-    targets = resolve_take_targets(ctx, ctx.args)
+    item_args, corpse_name = split_take_from(ctx.args)
+    if corpse_name:
+        return _take_from_corpse(ctx, item_args, corpse_name)
+
+    targets = resolve_take_targets(ctx, item_args)
     if not targets:
         return ok([t(ctx.player.locale, "take.missing")])
 
@@ -29,7 +89,7 @@ def handle(ctx: CommandContext):
     if not lines:
         return ok([t(ctx.player.locale, "take.missing")])
 
-    if is_bulk(ctx.args) and taken > 1:
+    if is_bulk(item_args) and taken > 1:
         lines.insert(0, t(ctx.player.locale, "take.bulk_ok", count=str(taken)))
 
     return ok(

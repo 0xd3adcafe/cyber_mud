@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from commands.helpers import find_item_id
 from commands.registry import CommandContext
-from shared.equipment import EQUIP_SLOTS
+from shared.equipment import is_equippable_slot
 
 BULK_MARKERS = frozenset({"all", "全部", "*"})
 
@@ -36,7 +36,7 @@ def resolve_equip_targets(ctx: CommandContext, args: str) -> list[str]:
         targets: list[str] = []
         for item_id in ctx.player.inventory:
             item = ctx.state.world.item(item_id)
-            if item and item.slot in EQUIP_SLOTS and not item.implant_id:
+            if item and is_equippable_slot(item.slot) and not item.implant_id:
                 targets.append(item_id)
         return targets
     item_id = find_item_id(ctx.state, args, inventory=ctx.player.inventory)
