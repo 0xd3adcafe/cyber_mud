@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 
 from combat.actions import CombatActionResult
 from combat.encounter import npc_label, start_encounter
-from combat.tick import process_combat_tick
+from combat.tick import process_combat_departures
 from entities.player import Player
 from shared.i18n import t
 from world.clock import TimeConfig
@@ -235,6 +235,6 @@ def process_tick(
 
     combat_results: list[tuple[Player, CombatActionResult]] = []
     if players:
-        combat_results = process_combat_tick(state, players)
+        combat_results = process_combat_departures(state, players)
 
     return TickResult(time_changed=time_changed, events=events, combat_results=combat_results)

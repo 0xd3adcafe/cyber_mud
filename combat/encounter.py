@@ -10,7 +10,8 @@ from shared.locale_content import item_label
 from world.state import WorldState
 from world.world import World
 
-ATTACK_CD = 2
+COMBAT_TICK_SECONDS = 3
+ATTACK_CD = 1
 NPC_ATTACK_CD = 2
 QUICKHACK_RAM_COST = 2
 
@@ -103,6 +104,10 @@ def encounter_for_player(state: WorldState, player: Player) -> Encounter | None:
     return state.encounters.get(player.encounter_id)
 
 
+def npc_in_player_room(state: WorldState, player: Player, encounter: Encounter) -> bool:
+    return state.npc_room(encounter.npc_id) == player.room_id
+
+
 def npc_label(state: WorldState, npc_id: str, locale: str) -> str:
     npc = state.world.npc(npc_id)
     if npc is None:
@@ -147,15 +152,21 @@ def end_encounter(state: WorldState, player: Player, encounter: Encounter) -> No
     encounter.log.clear()
 
 
+def cd_ticks_to_seconds(_state: WorldState, ticks: int) -> int:
+    return max(0, ticks) * COMBAT_TICK_SECONDS
+
+
 def combat_meta(state: WorldState, player: Player) -> dict[str, str]:
     encounter = encounter_for_player(state, player)
     if encounter is None:
         return {}
     label = npc_label(state, encounter.npc_id, player.locale)
+    player_secs = cd_ticks_to_seconds(state, encounter.player_cd)
+    npc_secs = cd_ticks_to_seconds(state, encounter.npc_cd)
     return {
         "combat": "1",
         "combat_log": " | ".join(encounter.log),
-        "combat_cd": f"P:{encounter.player_cd} N:{encounter.npc_cd}",
+        "combat_cd": f"P:{player_secs} N:{npc_secs}",
         "combat_target": label,
         "combat_npc_hp": str(encounter.npc_hp),
     }

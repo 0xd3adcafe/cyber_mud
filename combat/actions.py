@@ -10,6 +10,7 @@ from combat.encounter import (
     end_encounter,
     encounter_for_player,
     find_hostile_npc_in_room,
+    npc_in_player_room,
     npc_label,
     start_encounter,
 )
@@ -34,6 +35,18 @@ def _player_by_name(state: WorldState, players: list[Player], name: str) -> Play
     return None
 
 
+def resolve_npc_departed(state: WorldState, player: Player, encounter: Encounter) -> CombatActionResult:
+    locale = player.locale
+    label = npc_label(state, encounter.npc_id, locale)
+    line = t(locale, "combat.target_left", target=label)
+    end_encounter(state, player, encounter)
+    return CombatActionResult(
+        [line],
+        world_changed=True,
+        ended=True,
+    )
+
+
 def resolve_player_attack(state: WorldState, player: Player, *, target: str = "") -> CombatActionResult:
     locale = player.locale
     encounter = encounter_for_player(state, player)
@@ -53,6 +66,9 @@ def resolve_player_attack(state: WorldState, player: Player, *, target: str = ""
         line = encounter.append_log(locale, "combat.start", target=label)
         lines = [line]
     else:
+        if not npc_in_player_room(state, player, encounter):
+            return resolve_npc_departed(state, player, encounter)
+
         if target:
             from shared.i18n import t
             from shared.names import matches_name
@@ -63,10 +79,12 @@ def resolve_player_attack(state: WorldState, player: Player, *, target: str = ""
                 return CombatActionResult([t(locale, "combat.already_fighting", target=current)])
 
         if encounter.player_cd > 0:
+            from combat.encounter import cd_ticks_to_seconds
             from shared.i18n import t
 
+            secs = cd_ticks_to_seconds(state, encounter.player_cd)
             return CombatActionResult(
-                [t(locale, "combat.player_cd", cd=str(encounter.player_cd))],
+                [t(locale, "combat.player_cd", cd=str(secs))],
                 world_changed=True,
             )
 
@@ -100,6 +118,9 @@ def resolve_defend(state: WorldState, player: Player) -> CombatActionResult:
 
         return CombatActionResult([t(locale, "combat.not_in_combat")])
 
+    if not npc_in_player_room(state, player, encounter):
+        return resolve_npc_departed(state, player, encounter)
+
     encounter.defending = True
     line = encounter.append_log(locale, "combat.defend")
     return CombatActionResult([line], world_changed=True)
@@ -112,6 +133,9 @@ def resolve_flee(state: WorldState, player: Player) -> CombatActionResult:
         from shared.i18n import t
 
         return CombatActionResult([t(locale, "combat.not_in_combat")])
+
+    if not npc_in_player_room(state, player, encounter):
+        return resolve_npc_departed(state, player, encounter)
 
     label = npc_label(state, encounter.npc_id, locale)
     if encounter.try_flee(player, state):
@@ -144,16 +168,21 @@ def resolve_quickhack(state: WorldState, player: Player) -> CombatActionResult:
 
         return CombatActionResult([t(locale, "combat.not_in_combat")])
 
+    if not npc_in_player_room(state, player, encounter):
+        return resolve_npc_departed(state, player, encounter)
+
     if player.ram < QUICKHACK_RAM_COST:
         from shared.i18n import t
 
         return CombatActionResult([t(locale, "combat.no_ram", cost=str(QUICKHACK_RAM_COST))])
 
     if encounter.player_cd > 0:
+        from combat.encounter import cd_ticks_to_seconds
         from shared.i18n import t
 
+        secs = cd_ticks_to_seconds(state, encounter.player_cd)
         return CombatActionResult(
-            [t(locale, "combat.player_cd", cd=str(encounter.player_cd))],
+            [t(locale, "combat.player_cd", cd=str(secs))],
             world_changed=True,
         )
 
@@ -239,27 +268,22 @@ def tick_encounter(
         state.encounters.pop(encounter.id, None)
         return None
 
-    changed = False
-    lines: list[str] = []
+    if not npc_in_player_room(state, player, encounter):
+        return resolve_npc_departed(state, player, encounter)
 
     if encounter.player_cd > 0:
         encounter.player_cd -= 1
-        changed = True
     if encounter.npc_cd > 0:
         encounter.npc_cd -= 1
-        changed = True
 
     if encounter.npc_cd == 0 and encounter.npc_hp > 0 and player.hp > 0:
         result = resolve_npc_attack(state, player, encounter)
-        lines.extend(result.lines)
         return CombatActionResult(
-            lines,
+            result.lines,
             world_changed=True,
             ended=result.ended,
             broadcast_key=result.broadcast_key,
             broadcast_kwargs=result.broadcast_kwargs,
         )
 
-    if changed:
-        return CombatActionResult(lines, world_changed=True)
     return None

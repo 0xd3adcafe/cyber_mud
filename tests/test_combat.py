@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import random
+from unittest.mock import patch
 
 from combat.actions import resolve_defend, resolve_flee, resolve_npc_attack, resolve_player_attack, resolve_quickhack
 from combat.encounter import encounter_for_player
 from commands.registry import dispatch, player_meta, CommandContext
 from tests.conftest import make_player, make_state
-from world.tick import process_tick
+from combat.tick import process_combat_tick
+from world.tick import PATROL_EVERY, process_tick
 
 
 def _fighter(*, room_id: str = "alley", body: int = 3, intelligence: int = 6, reflex: int = 4):
@@ -105,6 +107,16 @@ def test_player_meta_includes_combat_fields():
     assert meta["combat_target"] == "街頭暴徒"
 
 
+def test_combat_tick_cd_only_is_silent():
+    player, state = _fighter()
+    dispatch("attack thug", player, state, [], [])
+    encounter = encounter_for_player(state, player)
+    assert encounter is not None
+    encounter.npc_cd = 2
+    encounter.player_cd = 1
+    assert not process_combat_tick(state, [player])
+
+
 def test_combat_tick_npc_counterattack():
     player, state = _fighter()
     dispatch("attack thug", player, state, [], [])
@@ -113,8 +125,8 @@ def test_combat_tick_npc_counterattack():
     encounter.npc_cd = 0
     encounter.player_cd = 0
     before_hp = player.hp
-    result = process_tick(state, state.time_config, players=[player])
-    assert result.combat_results
+    results = process_combat_tick(state, [player])
+    assert results
     assert player.hp < before_hp
 
 
@@ -125,3 +137,28 @@ def test_victory_ends_combat():
     assert not player.in_combat
     assert any("擊倒" in line for line in result.lines)
     assert result.world_changed
+
+
+def test_npc_leaves_room_ends_combat_on_command():
+    player, state = _fighter(room_id="alley")
+    dispatch("attack thug", player, state, [], [])
+    assert player.in_combat
+    state.npc_rooms["thug"] = "square"
+    result = resolve_defend(state, player)
+    assert not player.in_combat
+    assert result.ended
+    assert any("離開" in line for line in result.lines)
+
+
+def test_npc_patrol_ends_combat_on_tick():
+    player, state = _fighter(room_id="alley")
+    dispatch("attack thug", player, state, [], [])
+    assert player.in_combat
+    state.tick_count = PATROL_EVERY - 1
+    with patch("world.tick.random.random", return_value=0.1):
+        result = process_tick(state, state.time_config, players=[player])
+    assert not player.in_combat
+    assert result.combat_results
+    _, combat_result = result.combat_results[0]
+    assert combat_result.ended
+    assert any("離開" in line for line in combat_result.lines)
