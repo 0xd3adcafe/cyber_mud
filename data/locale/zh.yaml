@@ -3,7 +3,8 @@ motd:
     - "═══════════════════════════════════════"
     - "◈ 夜城神經連結"
     - "═══════════════════════════════════════"
-    - "建立連線中…輸入 look 探索，go <方向> 移動。"
+    - "建立連線中…請先 register <名稱> <密碼> 或 login <名稱> <密碼>。"
+    - "登入後輸入 look 探索，go <方向> 移動。"
 
 game:
   enter: "{name} 連上了神經網路。"
@@ -30,5 +31,39 @@ help:
 help_cmds:
   look: "察看環境"
   go: "移動（例：go north）"
+  take: "撿起地上物品"
+  drop: "丟下背包物品"
+  inventory: "查看背包"
+  login: "登入（login <名稱> <密碼>）"
+  register: "註冊（register <名稱> <密碼>）"
   help: "顯示說明"
   quit: "離開遊戲"
+
+auth:
+  required: "請先登入或註冊：login <名稱> <密碼> 或 register <名稱> <密碼>"
+  help_note: "（未登入時僅可使用 login、register、help、quit）"
+  register_usage: "用法：register <名稱> <密碼>"
+  login_usage: "用法：login <名稱> <密碼>"
+  already_logged_in: "你已經登入了。"
+  name_short: "名稱至少兩個字元。"
+  name_online: "{name} 已在線上。"
+  name_taken: "名稱 {name} 已被使用。"
+  register_ok: "歡迎來到夜城，{name}。"
+  no_such_player: "找不到角色 {name}。"
+  bad_password: "密碼錯誤。"
+  login_ok: "歡迎回來，{name}。"
+
+take:
+  usage: "用法：take <物品>"
+  missing: "這裡沒有那個物品。"
+  not_takeable: "那個東西撿不起來。"
+  ok: "你撿起了 {label}。"
+
+drop:
+  usage: "用法：drop <物品>"
+  missing: "你身上沒有那個物品。"
+  ok: "你丟下了 {label}。"
+
+inventory:
+  header: "◈ 背包"
+  empty: "背包是空的。"

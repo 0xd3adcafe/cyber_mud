@@ -1,5 +1,5 @@
-from commands.helpers import current_room, format_look, player_meta
-from commands.registry import CommandContext, ok, ok_document, register
+from commands.helpers import current_room, format_look
+from commands.registry import CommandContext, ok, ok_document, player_meta, register
 from shared.i18n import t
 
 

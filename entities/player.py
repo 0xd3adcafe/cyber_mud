@@ -14,3 +14,4 @@ class Player:
     gold: int = 0
     inventory: list[str] = field(default_factory=list)
     equipment: dict[str, str] = field(default_factory=dict)
+    password_hash: str = ""

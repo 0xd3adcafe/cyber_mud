@@ -28,6 +28,7 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
     except (ConnectionResetError, asyncio.IncompleteReadError):
         pass
     finally:
+        await game.notify_disconnect(session)
         game.remove_session(session)
         writer.close()
         try:

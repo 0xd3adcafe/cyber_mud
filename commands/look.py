@@ -1,5 +1,5 @@
-from commands.helpers import format_look, player_meta
-from commands.registry import CommandContext, ok_document, register
+from commands.helpers import format_look
+from commands.registry import CommandContext, ok_document, player_meta, register
 
 
 def handle(ctx: CommandContext):

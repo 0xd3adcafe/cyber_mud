@@ -3,7 +3,8 @@ motd:
     - "═══════════════════════════════════════"
     - "◈ Night City Neural Link"
     - "═══════════════════════════════════════"
-    - "Link established. Type look to explore, go <dir> to move."
+    - "Link established. Register or login first: register <name> <password> or login <name> <password>."
+    - "Then type look to explore, go <dir> to move."
 
 game:
   enter: "{name} jacked into the neural net."
@@ -30,5 +31,39 @@ help:
 help_cmds:
   look: "Look around"
   go: "Move (e.g. go north)"
+  take: "Pick up an item"
+  drop: "Drop an item"
+  inventory: "Show inventory"
+  login: "Log in (login <name> <password>)"
+  register: "Register (register <name> <password>)"
   help: "Show help"
   quit: "Quit"
+
+auth:
+  required: "Please log in or register: login <name> <password> or register <name> <password>"
+  help_note: "(Before login, only login, register, help, and quit are available)"
+  register_usage: "Usage: register <name> <password>"
+  login_usage: "Usage: login <name> <password>"
+  already_logged_in: "You are already logged in."
+  name_short: "Name must be at least 2 characters."
+  name_online: "{name} is already online."
+  name_taken: "Name {name} is already taken."
+  register_ok: "Welcome to Night City, {name}."
+  no_such_player: "No character named {name}."
+  bad_password: "Wrong password."
+  login_ok: "Welcome back, {name}."
+
+take:
+  usage: "Usage: take <item>"
+  missing: "That item is not here."
+  not_takeable: "You cannot pick that up."
+  ok: "You take the {label}."
+
+drop:
+  usage: "Usage: drop <item>"
+  missing: "You do not have that item."
+  ok: "You drop the {label}."
+
+inventory:
+  header: "◈ Inventory"
+  empty: "Your inventory is empty."

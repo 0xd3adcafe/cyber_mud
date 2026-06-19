@@ -4,6 +4,9 @@ from entities.player import Player
 
 DEFAULT_ALIASES: dict[str, str] = {
     "l": "look",
+    "i": "inventory",
+    "inv": "inventory",
+    "get": "take",
     "n": "go north",
     "s": "go south",
     "e": "go east",

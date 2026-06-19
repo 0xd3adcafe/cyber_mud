@@ -2,7 +2,29 @@ from __future__ import annotations
 
 from commands.registry import CommandContext
 from shared.i18n import t
-from shared.locale_content import room_description, room_name
+from shared.locale_content import item_label, room_description, room_name
+from shared.names import matches_name
+from world.state import WorldState
+
+
+def find_item_id(
+    state: WorldState,
+    item_name: str,
+    *,
+    room_id: str | None = None,
+    inventory: list[str] | None = None,
+) -> str | None:
+    pools: list[list[str]] = []
+    if room_id is not None:
+        pools.append(state.items_in_room(room_id))
+    if inventory is not None:
+        pools.append(inventory)
+    for pool in pools:
+        for item_id in pool:
+            item = state.world.item(item_id)
+            if item and matches_name(item_name, item.id, item.name_zh, item.name_en):
+                return item_id
+    return None
 
 
 def current_room(ctx: CommandContext):

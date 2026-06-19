@@ -26,6 +26,8 @@ class CommandResult:
     moved: bool = False
     document: bool = False
     quit_game: bool = False
+    world_changed: bool = False
+    auth_event: bool = False
 
 
 _REGISTRY: dict[str, Handler] = {}
@@ -35,12 +37,33 @@ def register(name: str, handler: Handler) -> None:
     _REGISTRY[name] = handler
 
 
-def ok(lines: list[str], *, meta: dict[str, str] | None = None, moved: bool = False, document: bool = False) -> CommandResult:
-    return CommandResult(lines=lines, meta=meta or {}, moved=moved, document=document)
+def ok(
+    lines: list[str],
+    *,
+    meta: dict[str, str] | None = None,
+    moved: bool = False,
+    document: bool = False,
+    world_changed: bool = False,
+    auth_event: bool = False,
+) -> CommandResult:
+    return CommandResult(
+        lines=lines,
+        meta=meta or {},
+        moved=moved,
+        document=document,
+        world_changed=world_changed,
+        auth_event=auth_event,
+    )
 
 
-def ok_document(lines: list[str], *, meta: dict[str, str] | None = None) -> CommandResult:
-    return ok(lines, meta=meta, document=True)
+def ok_document(
+    lines: list[str],
+    *,
+    meta: dict[str, str] | None = None,
+    moved: bool = False,
+    world_changed: bool = False,
+) -> CommandResult:
+    return ok(lines, meta=meta, document=True, moved=moved, world_changed=world_changed)
 
 
 def player_meta(ctx: CommandContext) -> dict[str, str]:
@@ -65,14 +88,29 @@ def dispatch(line: str, player: Player, state: WorldState, peers: list[Player], 
     parts = text.split(maxsplit=1)
     verb = parts[0].lower()
     args = parts[1] if len(parts) > 1 else ""
+
+    if not player.named:
+        from commands.auth_helpers import AUTH_COMMANDS
+        from shared.i18n import t
+
+        if verb not in AUTH_COMMANDS:
+
+            return ok([t(player.locale, "auth.required")])
+
     handler = _REGISTRY.get(verb)
     if handler is None:
         from shared.i18n import t
 
         return ok([t(player.locale, "game.unknown_verb", verb=verb)])
+
     ctx = CommandContext(player=player, state=state, args=args, peers=peers, all_players=all_players)
-    return handler(ctx)
+    result = handler(ctx)
+    if result.meta is None:
+        result.meta = {}
+    if not result.meta and verb not in {"quit"}:
+        result.meta = player_meta(ctx)
+    return result
 
 
 def register_builtin_commands() -> None:
-    from commands import go, help_cmd, look, quit_cmd  # noqa: F401
+    from commands import drop, go, help_cmd, inventory, login, look, quit_cmd, register, take  # noqa: F401
