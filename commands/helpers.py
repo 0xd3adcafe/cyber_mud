@@ -28,6 +28,58 @@ def find_item_id(
     return None
 
 
+def find_npc_id(state: WorldState, npc_name: str, room_id: str) -> str | None:
+    for npc_id in state.npcs_in_room(room_id):
+        npc = state.world.npc(npc_id)
+        if npc and matches_name(npc_name, npc.id, npc.name_zh, npc.name_en):
+            return npc_id
+    return None
+
+
+def faction_label(world, faction_id: str, locale: str) -> str:
+    if not faction_id:
+        return t(locale, "pda.faction_none")
+    return world.factions.get(faction_id, faction_id)
+
+
+def resolve_faction_id(world, name: str) -> str | None:
+    needle = name.strip().lower()
+    if not needle:
+        return None
+    for faction_id, label in world.factions.items():
+        if needle == faction_id.lower():
+            return faction_id
+        if needle in label.lower() or label.lower() in needle:
+            return faction_id
+    return None
+
+
+def quest_hint_for_player(ctx: CommandContext) -> str:
+    if ctx.player.chased_by_npc:
+        from combat.encounter import npc_label
+
+        label = npc_label(ctx.state, ctx.player.chased_by_npc, ctx.player.locale)
+        return t(ctx.player.locale, "chase.hint", target=label)
+    if ctx.player.active_quest:
+        quest = ctx.state.world.quest(ctx.player.active_quest)
+        if quest:
+            if ctx.player.locale == "zh":
+                return quest.hint_zh
+            return quest.hint_en or quest.hint_zh
+    return ""
+
+
+def quest_label_for_player(ctx: CommandContext) -> str:
+    if not ctx.player.active_quest:
+        return ""
+    quest = ctx.state.world.quest(ctx.player.active_quest)
+    if quest is None:
+        return ctx.player.active_quest
+    if ctx.player.locale == "zh":
+        return quest.name_zh or quest.id
+    return quest.name_en or quest.name_zh or quest.id
+
+
 def current_room(ctx: CommandContext):
     return ctx.state.world.room(ctx.player.room_id)
 

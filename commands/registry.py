@@ -96,9 +96,12 @@ def ok_document(
 
 
 def player_meta(ctx: CommandContext) -> dict[str, str]:
-    room = ctx.state.world.room(ctx.player.room_id)
+    from commands.helpers import faction_label, quest_hint_for_player, quest_label_for_player
+    from shared.i18n import t
     from shared.locale_content import room_name
     from world.weather import weather_label
+
+    room = ctx.state.world.room(ctx.player.room_id)
 
     clock = ctx.state.clock
     config = ctx.state.time_config
@@ -123,12 +126,22 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
         "ram": f"{ctx.player.ram}/{ctx.player.max_ram}",
         "humanity": str(ctx.player.humanity),
         "reputation": str(ctx.player.reputation),
+        "faction": faction_label(ctx.state.world, ctx.player.faction, ctx.player.locale),
         "prompt_mud": expand_prompt(effective_prompt(ctx.player), ctx.player, ctx.state),
     }
     if ctx.player.in_combat:
         meta.update(combat_meta(ctx.state, ctx.player))
     else:
         meta["combat"] = "0"
+    quest_label = quest_label_for_player(ctx)
+    if quest_label:
+        meta["quest"] = quest_label
+    hint = quest_hint_for_player(ctx)
+    if hint:
+        meta["hint"] = hint
+    if ctx.player.net_shell:
+        meta["net_shell"] = "1"
+        meta["net_prompt"] = t(ctx.player.locale, "net.prompt")
     return meta
 
 
@@ -152,6 +165,18 @@ def dispatch(line: str, player: Player, state: WorldState, peers: list[Player], 
         from shared.i18n import t
 
         return ok([t(player.locale, "combat.busy")])
+
+    if player.net_shell:
+        from commands.net_shell import NET_SHELL_COMMANDS, dispatch_net, net_meta
+        from shared.i18n import t
+
+        if verb not in NET_SHELL_COMMANDS:
+            return ok([t(player.locale, "net.busy")], meta=net_meta(CommandContext(player, state, args, peers, all_players)))
+        ctx = CommandContext(player=player, state=state, args=args, peers=peers, all_players=all_players)
+        result = dispatch_net(text, ctx)
+        if not result.meta:
+            result.meta = net_meta(ctx)
+        return result
 
     handler = _REGISTRY.get(verb)
     if handler is None:
@@ -184,8 +209,15 @@ def register_builtin_commands() -> None:
         inventory,
         login,
         look,
+        learn,
         map,
+        mod,
+        net,
         pda,
+        pledge,
+        recall,
+        say,
+        talk,
         prompt_cmd,
         quickhack,
         quit_cmd,

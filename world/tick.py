@@ -4,14 +4,18 @@ import random
 from dataclasses import dataclass, field
 
 from combat.actions import CombatActionResult
+from combat.encounter import npc_label, start_encounter
 from combat.tick import process_combat_tick
 from entities.player import Player
+from shared.i18n import t
 from world.clock import TimeConfig
+from world.schedule import npc_scheduled_room
 from world.state import WorldState
 from world.weather import WeatherConfig, load_weather_config, maybe_tick_weather
 
 PATROL_EVERY = 3
 IDLE_EVERY = 6
+CHASE_FOLLOW_CHANCE = 0.30
 
 
 @dataclass
@@ -25,6 +29,9 @@ class TickEvent:
     idle_msg_en: str = ""
     district: str = ""
     weather: str = ""
+    player_name: str = ""
+    message_key: str = ""
+    message_kwargs: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -41,12 +48,48 @@ def _npc_name(npc, locale: str) -> str:
     return npc.name_zh if locale == "zh" else (npc.name_en or npc.name_zh)
 
 
+def _move_npc(state: WorldState, npc_id: str, npc, from_room: str, to_room: str) -> list[TickEvent]:
+    if not to_room or to_room == from_room:
+        return []
+    state.npc_rooms[npc_id] = to_room
+    return [
+        TickEvent(
+            kind="npc_leave",
+            room_id=from_room,
+            npc_id=npc_id,
+            npc_name_zh=npc.name_zh,
+            npc_name_en=npc.name_en,
+        ),
+        TickEvent(
+            kind="npc_enter",
+            room_id=to_room,
+            npc_id=npc_id,
+            npc_name_zh=npc.name_zh,
+            npc_name_en=npc.name_en,
+        ),
+    ]
+
+
+def _apply_npc_schedules(state: WorldState, config: TimeConfig) -> list[TickEvent]:
+    period = state.clock.period_id(config)
+    events: list[TickEvent] = []
+    for npc_id, npc in state.world.npcs.items():
+        if not npc.schedule:
+            continue
+        current = state.npc_room(npc_id)
+        target = npc_scheduled_room(npc, period, current)
+        events.extend(_move_npc(state, npc_id, npc, current, target))
+    return events
+
+
 def _maybe_move_patrolling_npcs(state: WorldState) -> list[TickEvent]:
     if state.tick_count % PATROL_EVERY != 0:
         return []
 
     events: list[TickEvent] = []
     for npc_id, npc in state.world.npcs.items():
+        if npc.schedule:
+            continue
         if len(npc.patrol) < 2:
             continue
         if random.random() > 0.5:
@@ -57,28 +100,7 @@ def _maybe_move_patrolling_npcs(state: WorldState) -> list[TickEvent]:
             current = npc.patrol[0]
         idx = npc.patrol.index(current)
         next_room = npc.patrol[(idx + 1) % len(npc.patrol)]
-        if next_room == current:
-            continue
-
-        state.npc_rooms[npc_id] = next_room
-        events.append(
-            TickEvent(
-                kind="npc_leave",
-                room_id=current,
-                npc_id=npc_id,
-                npc_name_zh=npc.name_zh,
-                npc_name_en=npc.name_en,
-            )
-        )
-        events.append(
-            TickEvent(
-                kind="npc_enter",
-                room_id=next_room,
-                npc_id=npc_id,
-                npc_name_zh=npc.name_zh,
-                npc_name_en=npc.name_en,
-            )
-        )
+        events.extend(_move_npc(state, npc_id, npc, current, next_room))
     return events
 
 
@@ -109,6 +131,75 @@ def _maybe_npc_idle_messages(state: WorldState) -> list[TickEvent]:
     return events
 
 
+def _adjacent_room_toward_player(state: WorldState, npc_room_id: str, player_room_id: str) -> str | None:
+    npc_room = state.world.room(npc_room_id)
+    player_room = state.world.room(player_room_id)
+    if npc_room is None or player_room is None:
+        return None
+    for dest in npc_room.exits.values():
+        if dest == player_room_id:
+            return dest
+    for dest in npc_room.exits.values():
+        dest_room = state.world.room(dest)
+        if dest_room is None:
+            continue
+        for next_dest in dest_room.exits.values():
+            if next_dest == player_room_id:
+                return dest
+    return None
+
+
+def _process_chase(state: WorldState, players: list[Player]) -> list[TickEvent]:
+    events: list[TickEvent] = []
+    for player in players:
+        if not player.chased_by_npc or player.in_combat:
+            continue
+
+        npc_id = player.chased_by_npc
+        npc = state.world.npc(npc_id)
+        if npc is None or not npc.hostile:
+            player.chased_by_npc = ""
+            continue
+
+        npc_room_id = state.npc_room(npc_id)
+        label = npc_label(state, npc_id, player.locale)
+
+        if npc_room_id == player.room_id:
+            encounter = start_encounter(state, player, npc_id)
+            line = encounter.append_log(player.locale, "chase.restart", target=label)
+            events.append(
+                TickEvent(
+                    kind="chase_restart",
+                    room_id=player.room_id,
+                    player_name=player.name,
+                    npc_id=npc_id,
+                    npc_name_zh=npc.name_zh,
+                    npc_name_en=npc.name_en,
+                    message_key="chase.restart",
+                    message_kwargs={"target": label, "line": line},
+                )
+            )
+            continue
+
+        if random.random() < CHASE_FOLLOW_CHANCE:
+            next_room = _adjacent_room_toward_player(state, npc_room_id, player.room_id)
+            if next_room and next_room != npc_room_id:
+                events.extend(_move_npc(state, npc_id, npc, npc_room_id, next_room))
+                events.append(
+                    TickEvent(
+                        kind="chase_follow",
+                        room_id=player.room_id,
+                        player_name=player.name,
+                        npc_id=npc_id,
+                        npc_name_zh=npc.name_zh,
+                        npc_name_en=npc.name_en,
+                        message_key="chase.follow",
+                        message_kwargs={"target": label},
+                    )
+                )
+    return events
+
+
 def process_tick(
     state: WorldState,
     config: TimeConfig,
@@ -135,8 +226,12 @@ def process_tick(
             )
         )
 
+    events.extend(_apply_npc_schedules(state, config))
     events.extend(_maybe_move_patrolling_npcs(state))
     events.extend(_maybe_npc_idle_messages(state))
+
+    if players:
+        events.extend(_process_chase(state, players))
 
     combat_results: list[tuple[Player, CombatActionResult]] = []
     if players:

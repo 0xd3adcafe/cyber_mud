@@ -1,6 +1,12 @@
+from __future__ import annotations
+
+import random
+
 from commands.helpers import current_room, format_look
 from commands.registry import CommandContext, ok, ok_document, player_meta, register
 from shared.i18n import t
+from world.modifiers import movement_blocked_by_weather
+from world.schedule import shop_is_open
 
 
 def handle(ctx: CommandContext):
@@ -12,7 +18,18 @@ def handle(ctx: CommandContext):
     if room is None or direction not in room.exits:
         return ok([t(ctx.player.locale, "game.no_exit")])
 
-    ctx.player.room_id = room.exits[direction]
+    dest_id = room.exits[direction]
+    dest = ctx.state.world.room(dest_id)
+    if dest is not None and dest.shop_id:
+        hour = ctx.state.clock.hour
+        if not shop_is_open(dest.shop_id, hour):
+            return ok([t(ctx.player.locale, "schedule.shop_closed", shop=dest.name_zh if ctx.player.locale == "zh" else (dest.name_en or dest.name_zh))])
+
+    if movement_blocked_by_weather(ctx.state, ctx.player.room_id, roll=random.random()):
+        weather_key = "modifiers.movement_blocked"
+        return ok([t(ctx.player.locale, weather_key)])
+
+    ctx.player.room_id = dest_id
     lines = [t(ctx.player.locale, "go.ok", direction=direction), ""]
     lines.extend(format_look(ctx))
     return ok_document(lines, meta=player_meta(ctx), moved=True)

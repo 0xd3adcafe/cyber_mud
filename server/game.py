@@ -195,6 +195,27 @@ class Game:
 
                     label = weather_label(event.weather, target.player.locale)
                     await target.send_meta({"weather": label})
+            elif event.kind == "chase_follow":
+                for target in self.sessions:
+                    if target.player.name != event.player_name:
+                        continue
+                    await target.send(
+                        t(target.player.locale, event.message_key, **event.message_kwargs)
+                    )
+                    from commands.helpers import quest_hint_for_player
+                    from commands.registry import CommandContext
+
+                    hint = quest_hint_for_player(CommandContext(target.player, self.state, ""))
+                    if hint:
+                        await target.send_meta({"hint": hint})
+            elif event.kind == "chase_restart":
+                for target in self.sessions:
+                    if target.player.name != event.player_name:
+                        continue
+                    line = event.message_kwargs.get("line", "")
+                    if line:
+                        await target.send(line)
+                    await target.send_meta(player_meta(CommandContext(target.player, self.state, "")))
 
     async def _handle_combat_tick_results(self, combat_results) -> None:
         for player, combat_result in combat_results:

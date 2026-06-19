@@ -44,10 +44,21 @@ class Encounter:
         item = world.item(weapon_id)
         if item is None:
             return 0
-        return item.weapon_damage
+        damage = item.weapon_damage
+        for mod_id in player.weapon_mods.get(weapon_id, []):
+            mod = world.mod(mod_id)
+            if mod:
+                damage += mod.weapon_damage
+        return damage
 
-    def calc_player_damage(self, player: Player, world: World) -> int:
-        return player.body + self.player_weapon_damage(player, world)
+    def calc_player_damage(self, player: Player, world: World, *, state: WorldState | None = None) -> int:
+        from combat.passives import bonus_attack_damage
+        from world.modifiers import apply_damage_modifier
+
+        raw = player.body + self.player_weapon_damage(player, world) + bonus_attack_damage(player)
+        if state is not None and player.room_id:
+            return apply_damage_modifier(state, player.room_id, raw)
+        return raw
 
     def calc_npc_damage(self, state: WorldState) -> int:
         npc = state.world.npc(self.npc_id)
@@ -55,8 +66,14 @@ class Encounter:
             return 3
         return npc.attack
 
-    def calc_quickhack_damage(self, player: Player) -> int:
-        return player.intelligence * 2
+    def calc_quickhack_damage(self, player: Player, *, state: WorldState | None = None) -> int:
+        from combat.passives import quickhack_damage_multiplier
+        from world.modifiers import apply_damage_modifier
+
+        raw = int(player.intelligence * 2 * quickhack_damage_multiplier(player))
+        if state is not None and player.room_id:
+            return apply_damage_modifier(state, player.room_id, raw)
+        return raw
 
     def apply_damage(self, raw_damage: int) -> int:
         if self.defending:
@@ -67,8 +84,13 @@ class Encounter:
     def flee_chance(self, player: Player) -> float:
         return min(0.95, 0.50 + player.reflex * 0.05)
 
-    def try_flee(self, player: Player) -> bool:
-        return random.random() < self.flee_chance(player)
+    def try_flee(self, player: Player, state: WorldState | None = None) -> bool:
+        from world.modifiers import modified_flee_chance
+
+        base = self.flee_chance(player)
+        if state is not None and player.room_id:
+            base = modified_flee_chance(base, state, player.room_id)
+        return random.random() < base
 
 
 def new_encounter_id() -> str:

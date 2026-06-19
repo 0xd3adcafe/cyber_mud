@@ -38,6 +38,9 @@ def test_look_uses_npc_rooms_not_static_room_id():
 
 def test_patrol_movement_on_tick():
     state = make_state()
+    broker = state.world.npc("broker")
+    assert broker is not None
+    broker.schedule = {}
     state.tick_count = PATROL_EVERY - 1
     with patch("world.tick.random.random", return_value=0.1):
         result = process_tick(state, state.time_config)

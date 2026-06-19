@@ -14,6 +14,7 @@ from combat.encounter import (
     start_encounter,
 )
 from entities.player import Player
+from shared.i18n import t
 from world.state import WorldState
 
 
@@ -71,7 +72,7 @@ def resolve_player_attack(state: WorldState, player: Player, *, target: str = ""
 
         lines = []
 
-    damage = encounter.calc_player_damage(player, state.world)
+    damage = encounter.calc_player_damage(player, state.world, state=state)
     encounter.npc_hp -= damage
     encounter.player_cd = ATTACK_CD
     label = npc_label(state, encounter.npc_id, locale)
@@ -113,9 +114,10 @@ def resolve_flee(state: WorldState, player: Player) -> CombatActionResult:
         return CombatActionResult([t(locale, "combat.not_in_combat")])
 
     label = npc_label(state, encounter.npc_id, locale)
-    if encounter.try_flee(player):
+    if encounter.try_flee(player, state):
         line = encounter.append_log(locale, "combat.flee_ok", target=label)
         end_encounter(state, player, encounter)
+        player.chased_by_npc = ""
         return CombatActionResult(
             [line],
             world_changed=True,
@@ -125,6 +127,12 @@ def resolve_flee(state: WorldState, player: Player) -> CombatActionResult:
         )
 
     line = encounter.append_log(locale, "combat.flee_fail", target=label)
+    npc = state.world.npc(encounter.npc_id)
+    if npc is not None and npc.aggro > 0 and npc.hostile:
+        player.chased_by_npc = encounter.npc_id
+        end_encounter(state, player, encounter)
+        return CombatActionResult([line], world_changed=True, ended=True)
+
     return CombatActionResult([line], world_changed=True)
 
 
@@ -150,7 +158,7 @@ def resolve_quickhack(state: WorldState, player: Player) -> CombatActionResult:
         )
 
     player.ram -= QUICKHACK_RAM_COST
-    damage = encounter.calc_quickhack_damage(player)
+    damage = encounter.calc_quickhack_damage(player, state=state)
     encounter.npc_hp -= damage
     encounter.player_cd = ATTACK_CD
     label = npc_label(state, encounter.npc_id, locale)
@@ -211,6 +219,7 @@ def _finish_victory(
     label = npc_label(state, encounter.npc_id, locale)
     lines.append(encounter.append_log(locale, "combat.victory", target=label))
     end_encounter(state, player, encounter)
+    player.chased_by_npc = ""
     return CombatActionResult(
         lines,
         world_changed=True,

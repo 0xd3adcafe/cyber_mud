@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from commands.helpers import faction_label
 from commands.registry import CommandContext
 from shared.i18n import t
 from shared.locale_content import item_label
@@ -41,6 +42,7 @@ def format_pda(ctx: CommandContext) -> list[str]:
             humanity=str(ctx.player.humanity),
             reputation=str(ctx.player.reputation),
         ),
+        t(locale, "pda.faction", faction=faction_label(ctx.state.world, ctx.player.faction, locale)),
         "",
         t(locale, "pda.implants_header"),
     ]
@@ -108,6 +110,11 @@ def build_pda_ui(ctx: CommandContext) -> str:
                 humanity=str(ctx.player.humanity),
                 reputation=str(ctx.player.reputation),
             ),
+        },
+        {
+            "kind": "row",
+            "label": t(locale, "pda.faction_label"),
+            "value": faction_label(ctx.state.world, ctx.player.faction, locale),
         },
     ]
     if ctx.player.implants:
