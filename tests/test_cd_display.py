@@ -48,6 +48,14 @@ def test_animated_log_pending_only_on_command_line():
     assert "›" in buf.render()[1]
 
 
+def test_animated_log_render_entry_matches_render_tail():
+    buf = AnimatedLogBuffer()
+    buf.append("第一行", kind="text")
+    buf.append("第二行", kind="sys")
+    assert buf.render_entry() == buf.render()[-1]
+    assert buf.render_entry(0) == buf.render()[0]
+
+
 def test_animated_log_cooldown_tick():
     buf = AnimatedLogBuffer()
     buf.append("行動冷卻中（3s）。", kind="text")

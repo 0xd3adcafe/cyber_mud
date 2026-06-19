@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import time
 
 from textual import on
 from textual.app import App, ComposeResult
@@ -36,6 +37,7 @@ from commands.aliases import DEFAULT_ALIASES
 from client.status_indicators import status_needs_animation
 from client.completion import MudPrompt, MudSuggester, complete_from_view
 from client.history import CommandHistory
+from client.link_status import format_link_status_bar, make_link_snapshot
 from client.reconnect import reconnect_status_message, should_resend_auth
 from client.output_prefix import classify_output_line, spinner_char
 from client.tui_styles import APP_CSS
@@ -101,6 +103,10 @@ class CyberMudApp(App):
         self._pending_logout = False
         self._sidebar_refresh_lock = asyncio.Lock()
         self._panel_fetch_event: asyncio.Event | None = None
+        self._panel_fetching = False
+        self._cmd_sent_at = 0.0
+        self._last_recv_at = 0.0
+        self._last_rtt_ms: float | None = None
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -171,6 +177,7 @@ class CyberMudApp(App):
         with Container(id="game_container", classes="game-hidden"):
             yield Static(self._info_bar(), id="info_bar")
             yield Static(format_hotkey_bar(), id="hotkey_bar")
+            yield Static(self._link_status_bar(), id="link_status_bar")
             with Horizontal(id="main_row"):
                 with Container(id="scrollback_wrap"):
                     yield RichLog(id="log", highlight=True, markup=True)
@@ -204,10 +211,47 @@ class CyberMudApp(App):
     def _needs_ui_animation(self) -> bool:
         return self._log_buffer.has_pending() or status_needs_animation(self.view)
 
+    def _link_status_bar(self) -> str:
+        return format_link_status_bar(
+            make_link_snapshot(
+                connected=self.conn.connected,
+                reconnecting=self._reconnecting,
+                command_pending=self._log_buffer.has_pending(),
+                panel_fetching=self._panel_fetching,
+                auth_pending=self._auth_pending,
+                last_rtt_ms=self._last_rtt_ms,
+                last_recv_at=self._last_recv_at,
+                last_send_at=self._cmd_sent_at,
+            ),
+            frame=self._log_buffer.frame,
+        )
+
+    def _update_link_status_bar(self) -> None:
+        if not self.view.authenticated:
+            return
+        try:
+            self.query_one("#link_status_bar", Static).update(self._link_status_bar())
+        except Exception:
+            pass
+
+    def _note_outbound(self) -> None:
+        self._cmd_sent_at = time.monotonic()
+
+    def _note_inbound(self) -> None:
+        now = time.monotonic()
+        if self._log_buffer.has_pending() and self._cmd_sent_at > 0:
+            self._last_rtt_ms = (now - self._cmd_sent_at) * 1000.0
+        self._last_recv_at = now
+        self._update_link_status_bar()
+
     def _append_log(self, log: RichLog, text: str, *, kind: str | None = None) -> None:
         resolved = kind or classify_output_line(text)
         self._log_buffer.append(text, kind=resolved)
-        self._refresh_log_display(log, scroll_end=True)
+        line = self._log_buffer.render_entry()
+        if line is not None:
+            log.write(line)
+        else:
+            self._refresh_log_display(log, scroll_end=True)
 
     def _refresh_log_display(self, log: RichLog, *, preserve_scroll: bool = False, scroll_end: bool = False) -> None:
         y = log.scroll_y if preserve_scroll else None
@@ -230,20 +274,20 @@ class CyberMudApp(App):
         if self._log_buffer.complete_pending():
             self._refresh_log_display(log, preserve_scroll=True)
             self._update_spinner_accent()
+            self._update_link_status_bar()
 
     def _advance_ui_frame(self) -> None:
         self._log_buffer.frame += 1
 
     def _on_spinner_tick(self) -> None:
-        if not self.view.authenticated or not self._needs_ui_animation():
-            self._update_spinner_accent()
+        if not self.view.authenticated:
             return
-        self._advance_ui_frame()
+        if self._needs_ui_animation():
+            self._advance_ui_frame()
         self._update_spinner_accent()
-        if self._log_buffer.has_pending():
-            self._refresh_log_display(self.query_one("#log", RichLog), preserve_scroll=True)
-        if status_needs_animation(self.view):
+        if status_needs_animation(self.view) and self._log_buffer.frame % 2 == 0:
             self.query_one("#info_bar", Static).update(self._info_bar())
+        self._update_link_status_bar()
 
     def _on_cd_tick(self) -> None:
         if not self.view.authenticated:
@@ -426,6 +470,7 @@ class CyberMudApp(App):
             return
         self.query_one("#info_bar", Static).update(self._info_bar())
         self.query_one("#prompt_prefix", Static).update(self._prompt_prefix())
+        self._update_link_status_bar()
 
     def _configure_game_focus_targets(self) -> None:
         log = self.query_one("#log", RichLog)
@@ -460,14 +505,19 @@ class CyberMudApp(App):
                 return
             event = asyncio.Event()
             self._panel_fetch_event = event
+            self._panel_fetching = True
+            self._update_link_status_bar()
             try:
+                self._note_outbound()
                 await self.conn.send_line(panel_id)
                 await asyncio.wait_for(event.wait(), timeout=15.0)
             except asyncio.TimeoutError:
                 pass
             finally:
+                self._panel_fetching = False
                 if self._panel_fetch_event is event:
                     self._panel_fetch_event = None
+                self._update_link_status_bar()
 
     def _apply_meta(self, payload: str) -> None:
         key, value = parse_meta_payload(payload)
@@ -622,6 +672,7 @@ class CyberMudApp(App):
             "#login_status",
             "#info_bar",
             "#hotkey_bar",
+            "#link_status_bar",
             "#sidebar_header",
             "#sidebar_content",
         ):
@@ -753,6 +804,8 @@ class CyberMudApp(App):
         try:
             while self.conn.connected:
                 line = await self.conn.read_line()
+                if line is not None:
+                    self._note_inbound()
                 if line is None:
                     if self._pending_logout:
                         self._return_to_login_screen()
@@ -843,6 +896,7 @@ class CyberMudApp(App):
         pass_widget.value = ""
         self._set_login_status("驗證中…")
         try:
+            self._note_outbound()
             await self.conn.send_line(command)
         except OSError as exc:
             self._auth_pending = False
@@ -972,6 +1026,7 @@ class CyberMudApp(App):
         self._update_spinner_accent()
         self._refresh_log_display(log, preserve_scroll=True)
         try:
+            self._note_outbound()
             await self.conn.send_line(text)
         except OSError as exc:
             self._append_log(log, f"{ERR_PREFIX}傳送失敗：{exc}", kind="err")

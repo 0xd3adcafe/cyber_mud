@@ -117,6 +117,7 @@
 | look 目標察看 | `look <物品|NPC|裝備槽|equipment>` 顯示描述、位置、數值與戰鬥 HP；Tab 補全 `complete_equipped` |
 | quit 登出回登入畫面 | `quit` 改為登出（保持連線、不觸發重連）；client `auth=0` 回到登入 UI |
 | 側欄 stack 焦點修正 | 側欄不可搶焦點、點擊回 prompt；panel 刷新序列化避免 PDA+地圖並行卡住 |
+| Client 連線狀態列 | `#link_status_bar` 顯示連線／等待／延遲；log 增量 append、spinner 不再每 0.2s 全量重繪 |
 
 ## Backlog 維護慣例
 

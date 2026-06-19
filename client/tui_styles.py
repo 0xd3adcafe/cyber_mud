@@ -129,6 +129,14 @@ Select {
     border-bottom: solid $surface;
 }
 
+#link_status_bar {
+    height: 1;
+    background: $background;
+    color: $text-muted;
+    padding: 0 2;
+    border-bottom: solid $surface;
+}
+
 #main_row {
     height: 1fr;
     min-height: 1;

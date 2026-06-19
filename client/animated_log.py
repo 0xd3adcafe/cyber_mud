@@ -76,25 +76,28 @@ class AnimatedLogBuffer:
             changed = True
         return changed
 
+    def _format_entry(self, entry: LogEntry) -> str:
+        text = entry.text
+        if entry.has_cooldown:
+            remaining = _cd_remaining(entry)
+            if remaining > 0:
+                text = format_cooldown_line(entry.cd_prefix, remaining)
+            else:
+                text = format_cooldown_line(entry.cd_prefix, 0)
+        return format_output_line(
+            text,
+            kind=entry.kind,
+            frame=self.frame,
+            animate=entry.pending,
+        )
+
+    def render_entry(self, index: int = -1) -> str | None:
+        if not self.entries:
+            return None
+        return self._format_entry(self.entries[index])
+
     def render(self) -> list[str]:
-        lines: list[str] = []
-        for entry in self.entries:
-            text = entry.text
-            if entry.has_cooldown:
-                remaining = _cd_remaining(entry)
-                if remaining > 0:
-                    text = format_cooldown_line(entry.cd_prefix, remaining)
-                else:
-                    text = format_cooldown_line(entry.cd_prefix, 0)
-            lines.append(
-                format_output_line(
-                    text,
-                    kind=entry.kind,
-                    frame=self.frame,
-                    animate=entry.pending,
-                )
-            )
-        return lines
+        return [self._format_entry(entry) for entry in self.entries]
 
 
 def _cd_remaining(entry: LogEntry) -> int:
