@@ -2,7 +2,13 @@ from __future__ import annotations
 
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
-from shared.prompt_tokens import DEFAULT_PROMPT, PROMPT_TOKENS, effective_prompt, expand_prompt
+from shared.prompt_tokens import (
+    CP2077_TEMPLATES,
+    DEFAULT_PROMPT,
+    PROMPT_TOKENS,
+    effective_prompt,
+    expand_prompt,
+)
 
 
 def handle(ctx: CommandContext):
@@ -42,6 +48,25 @@ def handle(ctx: CommandContext):
         return ok(
             [
                 t(ctx.player.locale, "prompt.reset_ok"),
+                t(ctx.player.locale, "prompt.expanded", expanded=expanded),
+            ],
+            meta=player_meta(ctx),
+            world_changed=True,
+        )
+
+    if args.startswith("template "):
+        name = args[9:].strip()
+        if not name:
+            return ok([t(ctx.player.locale, "prompt.usage")])
+        template = CP2077_TEMPLATES.get(name)
+        if template is None:
+            names = ", ".join(sorted(CP2077_TEMPLATES))
+            return ok([t(ctx.player.locale, "prompt.template_unknown", name=name, names=names)])
+        ctx.player.prompt_mud = template
+        expanded = expand_prompt(template, ctx.player, ctx.state)
+        return ok(
+            [
+                t(ctx.player.locale, "prompt.template_ok", name=name, template=template),
                 t(ctx.player.locale, "prompt.expanded", expanded=expanded),
             ],
             meta=player_meta(ctx),

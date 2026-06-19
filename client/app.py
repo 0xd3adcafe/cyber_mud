@@ -11,12 +11,15 @@ from textual.widgets import Footer, Header, Input, RichLog, Static
 from client.connection import ServerConnection
 from client.meta_handlers import (
     ClientViewState,
+    active_prompt,
     apply_meta,
     classify_server_line,
     handle_panel_line,
     handle_ui_json,
     hint_text,
     is_local_command,
+    is_netrun_exit_command,
+    netrun_blocks_server_command,
     parse_local_command,
     parse_meta_payload,
     reconnect_delay,
@@ -74,10 +77,7 @@ class CyberMudApp(App):
         return status_text(self.view, host=self.host, port=self.port)
 
     def _prompt_prefix(self) -> str:
-        if self._local_prompt_override:
-            return self._local_prompt_override
-        prompt = self.view.prompt_mud.strip()
-        return prompt if prompt else "> "
+        return active_prompt(self.view, local_override=self._local_prompt_override)
 
     def _hint_line(self) -> str:
         return hint_text(self.view)
@@ -272,6 +272,12 @@ class CyberMudApp(App):
         if not self.conn.connected:
             log.write(f"[red]{ERR_PREFIX}未連線[/]")
             return
+        if self.view.net_shell:
+            if netrun_blocks_server_command(text):
+                log.write(f"[yellow]{SYS_PREFIX}NETRUN 模式：請輸入 exit 或 /exit 離開駭入層。[/]")
+                return
+            if text.startswith("/") and is_netrun_exit_command(text):
+                text = text[1:].strip().split()[0]
         if text.lower().startswith(("login ", "register ")):
             self._last_auth_line = text
         try:

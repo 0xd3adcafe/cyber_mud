@@ -77,11 +77,19 @@
 
 **原專案 commit 參考**：`34d5525`（側欄刷新）
 
+## 已完成（原 Backlog）
+
+| 項目 | 驗收 |
+|------|------|
+| `tools/generate_world.py` | `python -m tools.generate_world <district> <rows> <cols>` 輸出房間 YAML |
+| `admin.sh delete-save <name>` | 刪除 `data/saves/<name>.json` |
+| Prompt 擴充 token（`%w` `%g` `%p` `%f` `%m`）與 `prompt template` | `prompt show` 列出 token；`prompt template street` 套用 CP2077 範本 |
+| Client NETRUN 模式 | `net_shell=1` meta 時阻擋一般指令；`/exit` 送 `exit` |
+| NETRUN server 端 | `net`／`netrun` 進入駭入層；`hack`／`probe`／`exit` |
+
 ## Backlog
 
 尚未實作或僅部分實作，新專案可選做：
-
-- Prompt 完整版（更多 token、即時預覽、CP2077 範本）
 - NPC 依任務／敵意追蹤 flee
 - 天氣影響戰鬥／移動數值
 - 被動技能與義體自動觸發

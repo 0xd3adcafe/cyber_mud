@@ -3,7 +3,7 @@ from __future__ import annotations
 import subprocess
 import sys
 
-from persistence.save import list_saves
+from persistence.save import delete_save, list_saves
 from world.loader import load_world
 
 
@@ -28,12 +28,26 @@ def saves() -> int:
     return 0
 
 
+def delete_save_cmd() -> int:
+    if len(sys.argv) < 3:
+        print("ERR: usage: delete-save <name>")
+        return 1
+    name = sys.argv[2]
+    if not delete_save(name):
+        print(f"ERR: save not found: {name}")
+        return 1
+    print(f"OK: deleted save {name}")
+    return 0
+
+
 def main() -> None:
     cmd = sys.argv[1] if len(sys.argv) > 1 else "validate"
     if cmd == "validate":
         raise SystemExit(validate())
     if cmd == "saves":
         raise SystemExit(saves())
+    if cmd == "delete-save":
+        raise SystemExit(delete_save_cmd())
     print(f"ERR: unknown command: {cmd}")
     raise SystemExit(1)
 

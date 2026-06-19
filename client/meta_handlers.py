@@ -17,6 +17,8 @@ class ClientViewState:
     hint: str = ""
     combat_log: str = ""
     prompt_mud: str = "> "
+    net_shell: bool = False
+    net_prompt: str = "ghost@netrun-kali> "
     sidebar_open: bool = False
     sidebar_panel: str = ""
     sidebar_lines: list[str] = field(default_factory=list)
@@ -50,6 +52,10 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         state.combat_log = value
     elif key == "prompt_mud":
         state.prompt_mud = value
+    elif key == "net_shell":
+        state.net_shell = value == "1"
+    elif key == "net_prompt":
+        state.net_prompt = value
     elif key == "ui_panel":
         state.pending_panel = value
         state.sidebar_lines = []
@@ -101,10 +107,41 @@ def hint_text(state: ClientViewState) -> str:
 
 
 LOCAL_COMMANDS = frozenset({"reconnect", "prompt", "quit"})
+NETRUN_SERVER_COMMANDS = frozenset({"exit", "quit", "help", "disconnect", "logout"})
+
+
+def active_prompt(state: ClientViewState, *, local_override: str = "") -> str:
+    if local_override:
+        return local_override
+    if state.net_shell:
+        prompt = state.net_prompt
+        return prompt if prompt.strip() else "ghost@netrun-kali> "
+    prompt = state.prompt_mud.strip()
+    return prompt if prompt else "> "
+
+
+def is_netrun_exit_command(text: str) -> bool:
+    body = text[1:].strip() if text.startswith("/") else text.strip()
+    if not body:
+        return False
+    verb = body.split(maxsplit=1)[0].lower()
+    return verb in NETRUN_SERVER_COMMANDS
+
+
+def netrun_blocks_server_command(text: str) -> bool:
+    if not text or text.startswith("/"):
+        return False
+    verb = text.split(maxsplit=1)[0].lower()
+    return verb not in NETRUN_SERVER_COMMANDS
 
 
 def is_local_command(text: str) -> bool:
-    return text.startswith("/") and text[1:].split()[0].lower() in LOCAL_COMMANDS
+    if not text.startswith("/"):
+        return False
+    verb = text[1:].split()[0].lower()
+    if verb == "exit":
+        return False
+    return verb in LOCAL_COMMANDS
 
 
 def parse_local_command(text: str) -> tuple[str, str]:

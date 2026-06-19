@@ -1,10 +1,13 @@
 from client.meta_handlers import (
     ClientViewState,
+    active_prompt,
     apply_meta,
     classify_server_line,
     handle_panel_line,
     hint_text,
     is_local_command,
+    is_netrun_exit_command,
+    netrun_blocks_server_command,
     parse_local_command,
     reconnect_delay,
     status_text,
@@ -55,3 +58,15 @@ def test_reconnect_backoff():
     assert reconnect_delay(1) == 1.0
     assert reconnect_delay(2) == 2.0
     assert reconnect_delay(5) == 16.0
+
+
+def test_netrun_prompt_and_blocking():
+    state = ClientViewState()
+    apply_meta(state, "net_shell", "1")
+    apply_meta(state, "net_prompt", "ghost@net> ")
+    assert active_prompt(state) == "ghost@net> "
+    assert netrun_blocks_server_command("look")
+    assert not netrun_blocks_server_command("exit")
+    assert is_netrun_exit_command("/exit")
+    assert not is_local_command("/exit")
+    assert is_local_command("/reconnect")

@@ -128,7 +128,7 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 - [x] 天氣（區域）
 - [x] NPC tick 移動／閒置
 - [x] 即時戰鬥 encounter
-- [x] NETRUN 子 shell
+- [x] NETRUN 子 shell（server `net` + client `net_shell` meta）
 - [x] PDA／地圖／說明／裝備側欄
 - [x] Prompt 自訂（server + client 覆寫）
 - [x] 開發熱重載、client 自動重連
@@ -136,8 +136,9 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 
 ### 工具
 
-- [x] `admin.sh validate`
-- [x] pytest（約 199 項，原專案基準）
+- [x] `admin.sh validate` / `saves` / `delete-save`
+- [x] `tools/generate_world.py`（程序生成房間格點）
+- [x] pytest
 
 ## 規劃中
 
@@ -146,7 +147,7 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 - 天氣／時段對玩法數值修正
 - 完整被動技能與義體觸發
 - NPC 任務驅動 AI
-- Prompt 進階 token 與預覽
+- NPC 任務驅動追擊與 flee 進階行為
 - 店鋪作息、任務編排工具
 
 ---
