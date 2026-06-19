@@ -24,5 +24,9 @@ class Player:
     inventory: list[str] = field(default_factory=list)
     equipment: dict[str, str] = field(default_factory=dict)
     implants: list[str] = field(default_factory=list)
+    visited_rooms: list[str] = field(default_factory=list)
+    prompt_mud: str = ""
     skills: list[str] = field(default_factory=list)
     password_hash: str = ""
+    in_combat: bool = False
+    encounter_id: str = ""
