@@ -116,8 +116,17 @@ class CyberMudApp(App):
                         value=DEFAULT_THEME_ID,
                         allow_blank=False,
                     )
-                    yield Static("[dim]快速登入（PIN）[/]", id="login_pin_label")
-                    yield Input(placeholder="4–6 位 PIN", id="login_pin", password=True)
+                    yield Static(
+                        "[dim]快速登入（PIN）[/]",
+                        id="login_pin_label",
+                        classes="credential-hidden",
+                    )
+                    yield Input(
+                        placeholder="4–6 位 PIN",
+                        id="login_pin",
+                        password=True,
+                        classes="credential-hidden",
+                    )
                     yield Static("[dim]帳號模式[/]", id="auth_mode_label")
                     yield Select(
                         (("登入既有帳號", "login"), ("註冊新帳號", "register")),
@@ -130,10 +139,28 @@ class CyberMudApp(App):
                     yield Static("[dim]密碼[/]", id="login_password_label")
                     yield Input(placeholder="••••••••", id="login_password", password=True)
                     yield Checkbox("記住帳號（PIN 保護）", id="remember_credentials", value=False)
-                    yield Static("[dim]設定 PIN[/]", id="login_pin_setup_label")
-                    yield Input(placeholder="新 PIN", id="login_pin_setup", password=True)
-                    yield Static("[dim]確認 PIN[/]", id="login_pin_confirm_label")
-                    yield Input(placeholder="再輸入一次", id="login_pin_confirm", password=True)
+                    yield Static(
+                        "[dim]設定 PIN[/]",
+                        id="login_pin_setup_label",
+                        classes="credential-hidden",
+                    )
+                    yield Input(
+                        placeholder="新 PIN",
+                        id="login_pin_setup",
+                        password=True,
+                        classes="credential-hidden",
+                    )
+                    yield Static(
+                        "[dim]確認 PIN[/]",
+                        id="login_pin_confirm_label",
+                        classes="credential-hidden",
+                    )
+                    yield Input(
+                        placeholder="再輸入一次",
+                        id="login_pin_confirm",
+                        password=True,
+                        classes="credential-hidden",
+                    )
                     yield Static("[dim]Enter 送出 · Ctrl+C 離開[/]", id="login_hint")
                     yield Static("", id="login_status")
 
@@ -682,7 +709,6 @@ class CyberMudApp(App):
                     else:
                         self._set_login_status(line)
                         self._auth_pending = False
-                        self._pending_credential_save = None
                     continue
                 if kind == "panel":
                     handle_panel_line(self.view, line[len(PANEL_PREFIX):])

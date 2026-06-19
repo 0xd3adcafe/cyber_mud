@@ -113,7 +113,7 @@
 | 側欄 stack 多面板 | `sidebar_stack`／`sidebar_panels`；F2–F5 疊加 PDA＋地圖等；再按同鍵關閉該面板 |
 | 啟動狀態／載入耗時 | `shared/startup.py` `StartupReport`；server 終端摘要＋client 登入 hint；連線後 SYS 推送伺服器就緒時間 |
 | Client 輸入歷史 | `client/history.py` `CommandHistory`；`MudPrompt` ↑↓／Ctrl+P/N 瀏覽、Esc 還原草稿、可編輯後送出；`~/.config/cyber_mud/command_history.json` |
-| Client 記憶帳密／PIN | `client/credentials.py` PBKDF2 + AES-GCM 加密；登入畫面 PIN 快速解鎖、勾選記住＋設定 PIN、F7 清除；`~/.config/cyber_mud/credentials.json`（0600） |
+| Client 記憶帳密／PIN | `client/credentials.py` PBKDF2 + AES-GCM 加密；登入畫面 PIN 快速解鎖、勾選記住＋設定 PIN、F7 清除；`~/.config/cyber_mud/credentials.json`（0600）；修正登入成功文字先於 auth meta 時仍寫入憑證 |
 | look 目標察看 | `look <物品|NPC|裝備槽|equipment>` 顯示描述、位置、數值與戰鬥 HP；Tab 補全 `complete_equipped` |
 
 ## Backlog 維護慣例

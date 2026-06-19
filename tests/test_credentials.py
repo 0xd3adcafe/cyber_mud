@@ -58,3 +58,27 @@ def test_clear_credentials(cred_path: Path):
     creds.clear_credentials()
     assert not creds.has_stored_credentials()
     assert creds.unlock_credentials("9999") is None
+
+
+def test_auth_meta_persists_pending_credentials(cred_path: Path, monkeypatch: pytest.MonkeyPatch):
+    import asyncio
+
+    from textual.widgets import Input
+
+    from client.app import CyberMudApp
+
+    monkeypatch.setattr("client.app.has_stored_credentials", creds.has_stored_credentials)
+    monkeypatch.setattr("client.app.save_credentials", creds.save_credentials)
+
+    async def _run() -> None:
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(80, 40)) as pilot:
+            await pilot.pause()
+            app._pending_credential_save = ("runner", "secret", "login", "2468")
+            app._apply_meta("auth=1")
+            await pilot.pause()
+            assert cred_path.exists()
+            pin = app.query_one("#login_pin", Input)
+            assert "credential-hidden" not in pin.classes
+
+    asyncio.run(_run())
