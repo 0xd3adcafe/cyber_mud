@@ -1,0 +1,11 @@
+net_nodes:
+  terminal:
+    room_id: square
+    name_zh: 核心終端
+    name_en: Core Terminal
+    hackable: true
+  alley_node:
+    room_id: alley
+    name_zh: 巷弄節點
+    name_en: Alley Node
+    hackable: true

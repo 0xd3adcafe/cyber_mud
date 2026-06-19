@@ -1,0 +1,7 @@
+shops:
+  square_market:
+    name_zh: 廣場黑市攤
+    name_en: Square Market Stall
+    room_id: square
+    open_hour: 8
+    close_hour: 22

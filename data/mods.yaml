@@ -1,0 +1,6 @@
+mods:
+  smart_link:
+    name_zh: 智慧連結
+    name_en: Smart Link
+    weapon_damage: 2
+    chip_item: mod_chip

@@ -7,7 +7,7 @@ factions:
   tyrell: 泰瑞公司
 
 room_items:
-  square: [glowstick, knife, jacket, cyber_arm_kit]
+  square: [glowstick, knife, jacket, cyber_arm_kit, mod_chip]
 
 rooms:
   square:
@@ -26,6 +26,7 @@ rooms:
       north: alley
       east: tutorial
       south: docks
+      west: ripper_clinic
   alley:
     name_zh: 陰暗小巷
     name_en: Dark Alley
@@ -58,6 +59,18 @@ rooms:
     grid_y: 2
     exits:
       north: square
+  ripper_clinic:
+    name_zh: 義體診所
+    name_en: Ripper Clinic
+    description_zh: 手術燈在霧化玻璃後閃爍。東邊回到霓虹廣場。
+    description_en: Surgical lamps flicker behind frosted glass. East leads back to Neon Square.
+    district: watson
+    grid_x: 0
+    grid_y: 1
+    tags: [shop]
+    shop_id: ripperdoc
+    exits:
+      east: square
 
 items:
   glowstick:
@@ -94,6 +107,13 @@ items:
     slot: cyber
     implant_id: cyber_arm_v1
     value: 200
+  mod_chip:
+    name_zh: 智慧連結晶片
+    name_en: Smart Link Chip
+    description_zh: 可安裝於武器的戰術晶片，提升火力。
+    description_en: A tactical chip that boosts weapon damage when installed.
+    takeable: true
+    value: 120
 
 npcs:
   broker:
@@ -105,8 +125,14 @@ npcs:
     hp: 50
     hostile: false
     patrol: [square, alley]
+    schedule:
+      morning: square
+      afternoon: alley
+      night: square
     idle_msg_zh: 低聲對著空氣嘀咕著價碼。
     idle_msg_en: Mumbles prices to no one in particular.
+    talk_key: broker
+    quest_id: broker_rumor
   thug:
     name_zh: 街頭暴徒
     name_en: Street Thug
@@ -116,3 +142,6 @@ npcs:
     hp: 30
     attack: 4
     hostile: true
+    aggro: 8
+    patrol: [alley, square]
+    quest_id: broker_rumor

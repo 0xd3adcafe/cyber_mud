@@ -37,6 +37,7 @@ def player_to_dict(player: Player) -> dict:
         "intelligence": player.intelligence,
         "humanity": player.humanity,
         "reputation": player.reputation,
+        "faction": player.faction,
         "ram": player.ram,
         "max_ram": player.max_ram,
         "inventory": list(player.inventory),
@@ -48,10 +49,17 @@ def player_to_dict(player: Player) -> dict:
         "password_hash": player.password_hash,
         "in_combat": player.in_combat,
         "encounter_id": player.encounter_id,
+        "active_quest": player.active_quest,
+        "quest_flags": dict(player.quest_flags),
+        "net_shell": player.net_shell,
+        "weapon_mods": {wid: list(mods) for wid, mods in player.weapon_mods.items()},
+        "chased_by_npc": player.chased_by_npc,
     }
 
 
 def player_from_dict(data: dict) -> Player:
+    weapon_mods_raw = data.get("weapon_mods") or {}
+    weapon_mods = {str(k): list(v) for k, v in weapon_mods_raw.items()}
     return Player(
         name=str(data.get("name", "旅人")),
         room_id=str(data.get("room_id", "square")),
@@ -67,6 +75,7 @@ def player_from_dict(data: dict) -> Player:
         intelligence=int(data.get("intelligence", 3)),
         humanity=int(data.get("humanity", 100)),
         reputation=int(data.get("reputation", 0)),
+        faction=str(data.get("faction", "")),
         ram=int(data.get("ram", 4)),
         max_ram=int(data.get("max_ram", 8)),
         inventory=list(data.get("inventory", [])),
@@ -78,6 +87,11 @@ def player_from_dict(data: dict) -> Player:
         password_hash=str(data.get("password_hash", "")),
         in_combat=bool(data.get("in_combat", False)),
         encounter_id=str(data.get("encounter_id", "")),
+        active_quest=str(data.get("active_quest", "")),
+        quest_flags=dict(data.get("quest_flags", {})),
+        net_shell=bool(data.get("net_shell", False)),
+        weapon_mods=weapon_mods,
+        chased_by_npc=str(data.get("chased_by_npc", "")),
     )
 
 
@@ -96,3 +110,11 @@ def load_player(name: str) -> Player | None:
         return None
     data = json.loads(path.read_text(encoding="utf-8"))
     return player_from_dict(data)
+
+
+def delete_save(name: str) -> bool:
+    path = _save_path(name)
+    if not path.exists():
+        return False
+    path.unlink()
+    return True

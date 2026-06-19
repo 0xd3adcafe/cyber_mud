@@ -19,6 +19,7 @@ class Player:
     intelligence: int = 3
     humanity: int = 100
     reputation: int = 0
+    faction: str = ""
     ram: int = 4
     max_ram: int = 8
     inventory: list[str] = field(default_factory=list)
@@ -30,3 +31,9 @@ class Player:
     password_hash: str = ""
     in_combat: bool = False
     encounter_id: str = ""
+    active_quest: str = ""
+    quest_flags: dict[str, str] = field(default_factory=dict)
+    quest_hint: str = ""
+    net_shell: bool = False
+    weapon_mods: dict[str, list[str]] = field(default_factory=dict)
+    chased_by_npc: str = ""

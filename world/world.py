@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from entities.implant import Implant
 from entities.item import Item
 from entities.npc import NPC
+from world.content import Mod, NetNode, Quest, Shop, Skill
 
 
 @dataclass
@@ -19,6 +20,8 @@ class Room:
     grid_y: int = 0
     hidden_hint_zh: str = ""
     hidden_hint_en: str = ""
+    tags: list[str] = field(default_factory=list)
+    shop_id: str = ""
     exits: dict[str, str] = field(default_factory=dict)
 
 
@@ -30,6 +33,11 @@ class World:
     npcs: dict[str, NPC]
     implants: dict[str, Implant]
     factions: dict[str, str]
+    skills: dict[str, Skill] = field(default_factory=dict)
+    mods: dict[str, Mod] = field(default_factory=dict)
+    quests: dict[str, Quest] = field(default_factory=dict)
+    shops: dict[str, Shop] = field(default_factory=dict)
+    net_nodes: dict[str, NetNode] = field(default_factory=dict)
 
     def room(self, room_id: str) -> Room | None:
         return self.rooms.get(room_id)
@@ -42,3 +50,21 @@ class World:
 
     def implant(self, implant_id: str) -> Implant | None:
         return self.implants.get(implant_id)
+
+    def skill(self, skill_id: str) -> Skill | None:
+        return self.skills.get(skill_id)
+
+    def mod(self, mod_id: str) -> Mod | None:
+        return self.mods.get(mod_id)
+
+    def quest(self, quest_id: str) -> Quest | None:
+        return self.quests.get(quest_id)
+
+    def shop(self, shop_id: str) -> Shop | None:
+        return self.shops.get(shop_id)
+
+    def net_node(self, node_id: str) -> NetNode | None:
+        return self.net_nodes.get(node_id)
+
+    def net_nodes_in_room(self, room_id: str) -> list[NetNode]:
+        return [node for node in self.net_nodes.values() if node.room_id == room_id]

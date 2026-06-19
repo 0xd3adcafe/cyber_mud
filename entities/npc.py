@@ -18,3 +18,7 @@ class NPC:
     patrol: list[str] = field(default_factory=list)
     idle_msg_zh: str = ""
     idle_msg_en: str = ""
+    aggro: int = 0
+    quest_id: str = ""
+    schedule: dict[str, str] = field(default_factory=dict)
+    talk_key: str = ""

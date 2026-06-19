@@ -27,3 +27,27 @@ def test_items_and_implants():
     assert implant is not None
     assert implant.body == 1
     assert implant.humanity_cost == 5
+
+
+def test_content_data_loaded():
+    world = load_world()
+    assert "quickhack" in world.skills
+    assert "smart_link" in world.mods
+    assert world.mods["smart_link"].weapon_damage == 2
+    assert "broker_rumor" in world.quests
+    assert "square_market" in world.shops
+    assert world.shops["square_market"].open_hour == 8
+    assert "terminal" in world.net_nodes
+    assert world.net_nodes["terminal"].room_id == "square"
+
+
+def test_npc_quest_fields():
+    world = load_world()
+    broker = world.npc("broker")
+    assert broker is not None
+    assert broker.talk_key == "broker"
+    assert broker.quest_id == "broker_rumor"
+    thug = world.npc("thug")
+    assert thug is not None
+    assert thug.aggro == 8
+    assert thug.quest_id == "broker_rumor"

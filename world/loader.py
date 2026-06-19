@@ -7,6 +7,7 @@ import yaml
 from entities.implant import Implant
 from entities.item import Item
 from entities.npc import NPC
+from world.content import load_mods, load_net_nodes, load_quests, load_shops, load_skills
 from world.world import Room, World
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -54,6 +55,8 @@ def load_world(path: Path | None = None) -> World:
             grid_y=int(data.get("grid_y", 0)),
             hidden_hint_zh=str(data.get("hidden_hint_zh", "")),
             hidden_hint_en=str(data.get("hidden_hint_en", "")),
+            tags=[str(tag) for tag in (data.get("tags") or [])],
+            shop_id=str(data.get("shop_id", "")),
             exits={str(k): str(v) for k, v in (data.get("exits") or {}).items()},
         )
         for rid, data in (raw.get("rooms") or {}).items()
@@ -91,6 +94,10 @@ def load_world(path: Path | None = None) -> World:
             patrol=[str(r) for r in (data.get("patrol") or [])],
             idle_msg_zh=str(data.get("idle_msg_zh", "")),
             idle_msg_en=str(data.get("idle_msg_en", "")),
+            aggro=int(data.get("aggro", 0)),
+            quest_id=str(data.get("quest_id", "")),
+            schedule={str(k): str(v) for k, v in (data.get("schedule") or {}).items()},
+            talk_key=str(data.get("talk_key", "")),
         )
         for nid, data in (raw.get("npcs") or {}).items()
     }
@@ -105,6 +112,11 @@ def load_world(path: Path | None = None) -> World:
         npcs=npcs,
         implants=implants,
         factions=factions,
+        skills=load_skills(),
+        mods=load_mods(),
+        quests=load_quests(),
+        shops=load_shops(),
+        net_nodes=load_net_nodes(),
     )
 
 

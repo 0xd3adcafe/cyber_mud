@@ -32,6 +32,40 @@ npc:
 go:
   ok: "You go {direction}."
 
+net:
+  enter: "◈ Jacking into NETRUN interface..."
+  exit: "◈ Neural link severed. Back on the streets."
+  already: "You are already in NETRUN mode."
+  busy: "NETRUN mode! Only hack, probe, status, exit, and help are available."
+  prompt: "ghost@netrun-kali>"
+  unknown_verb: "Unknown NETRUN command: {verb}"
+  hack_usage: "Usage: hack <node>"
+  no_node: "No such node here."
+  no_ram: "Not enough RAM to breach."
+  hack_ok: "Breach successful: {target}"
+  probe_empty: "Scan complete: no hackable nodes in this sector."
+  probe_ok: "Scan complete: {nodes}"
+  status: "RAM {ram}  │  visible nodes {nodes}"
+  help_header: "◈ NETRUN commands"
+  help_line: "  {name} — {desc}"
+  help_cmds:
+    hack: "Breach a node (hack <node>)"
+    probe: "Scan hackable nodes"
+    status: "Show RAM and node count"
+    exit: "Exit NETRUN back to Night City"
+    help: "Show NETRUN help"
+
+modifiers:
+  movement_blocked: "Harsh weather blocks your path."
+
+schedule:
+  shop_closed: "{shop} is closed."
+
+chase:
+  hint: "⚠ {target} is still chasing you!"
+  follow: "{target} is closing in!"
+  restart: "You cannot shake {target}—combat resumes!"
+
 help:
   header: "◈ Commands"
   line: "  {name} — {desc}"
@@ -61,6 +95,14 @@ help_cmds:
   defend: "Defend (halve next hit)"
   flee: "Flee combat"
   quickhack: "Quickhack (costs 2 RAM)"
+  net: "Enter NETRUN hacking shell"
+  netrun: "Enter NETRUN hacking shell"
+  pledge: "Pledge to a faction (pledge <faction>)"
+  recall: "Teleport to the training yard"
+  talk: "Talk to an NPC (talk <npc>)"
+  say: "Say something in the room (say <message>)"
+  learn: "Learn a protocol from the broker (learn <skill>)"
+  mod: "Install a weapon chip (mod <chip>)"
 
 periods:
   dawn: "Dawn"
@@ -83,6 +125,9 @@ pda:
   ram: "Net  RAM {ram}"
   social: "Humanity {humanity}  │  Rep {reputation}"
   social_label: "Humanity / Rep"
+  faction: "Faction  {faction}"
+  faction_label: "Faction"
+  faction_none: "Edgerunner"
   implants_header: "Implants"
   equipment_header: "Equipment"
   no_equip: "  {slot}: (empty)"
@@ -178,7 +223,7 @@ appraise:
   ok: "{label} is worth about ${value}."
 
 prompt:
-  usage: "Usage: prompt show | prompt set <template> | prompt reset"
+  usage: "Usage: prompt show | prompt set <template> | prompt template <name> | prompt reset"
   show_header: "◈ Prompt"
   template: "Template: {template}"
   expanded: "Expanded: {expanded}"
@@ -189,8 +234,16 @@ prompt:
     room: "Room name"
     hp: "Hit points"
     time: "World time"
+    weather: "Weather"
+    gold: "Gold"
+    period: "Time period"
+    faction: "Faction"
+    ram: "RAM"
+  faction_none: "Edgerunner"
   set_ok: "Prompt set to: {template}"
   reset_ok: "Prompt reset to default."
+  template_ok: "Applied template {name}: {template}"
+  template_unknown: "Unknown template: {name}. Available: {names}"
 
 inventory:
   header: "◈ Inventory"
@@ -216,3 +269,41 @@ combat:
   flee_broadcast: "{name} fled from combat with {target}."
   victory_broadcast: "{name} dropped {target}!"
   defeat_broadcast: "{name} was dropped by {target}."
+
+pledge:
+  usage: "Usage: pledge <faction>"
+  unknown: "Unknown faction: {faction}"
+  already: "You already pledged to {faction}."
+  ok: "You pledge allegiance to {faction}."
+
+recall:
+  ok: "You neural-link back to the training yard."
+  no_tutorial: "Training yard not found."
+
+talk:
+  usage: "Usage: talk <npc>"
+  missing: "No {name} here."
+  silent: "{name} says nothing."
+  broker: "The info broker whispers: \"Want Maelstrom intel? A thug in the alley knows something.\""
+  broker_quest: "◈ New quest: Broker's Rumor"
+
+say:
+  usage: "Usage: say <message>"
+  ok: "You say: {message}"
+  broadcast: "{name} says: {message}"
+
+learn:
+  usage: "Usage: learn <protocol>"
+  unknown: "Unknown protocol: {skill}"
+  already: "You already know {skill}."
+  no_teacher: "{teacher} is not here to teach you."
+  no_gold: "Not enough gold (need ${cost})."
+  ok: "You learned {skill} from the broker (${cost})."
+
+mod:
+  usage: "Usage: mod <chip>"
+  missing_chip: "You do not have that chip."
+  unknown_chip: "That chip cannot be installed."
+  no_weapon: "Equip a weapon first."
+  already: "{mod} is already installed on your weapon."
+  ok: "You install {mod} on {weapon}."

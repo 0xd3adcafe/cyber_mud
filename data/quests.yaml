@@ -1,0 +1,10 @@
+quests:
+  broker_rumor:
+    name_zh: 經紀人的傳聞
+    name_en: Broker's Rumor
+    npc_id: broker
+    description_zh: 情報經紀人提到小巷裡有漩渦幫的動向，值得親自確認。
+    description_en: The info broker mentioned Maelstrom activity in the alley—worth checking out.
+    hint_zh: 到小巷找街頭暴徒打聽消息。
+    hint_en: Head to the alley and question the street thug.
+    reward_gold: 50
