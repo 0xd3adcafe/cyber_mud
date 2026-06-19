@@ -29,6 +29,34 @@ def test_login_theme_select_mounts():
     asyncio.run(_run())
 
 
+def test_credential_pin_section_hidden_without_store(monkeypatch):
+    async def _run() -> None:
+        from textual.widgets import Input
+
+        monkeypatch.setattr("client.app.has_stored_credentials", lambda: False)
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(80, 40)) as pilot:
+            await pilot.pause()
+            pin = app.query_one("#login_pin", Input)
+            assert "credential-hidden" in pin.classes
+
+    asyncio.run(_run())
+
+
+def test_credential_pin_section_visible_with_store(monkeypatch):
+    async def _run() -> None:
+        from textual.widgets import Input
+
+        monkeypatch.setattr("client.app.has_stored_credentials", lambda: True)
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(80, 40)) as pilot:
+            await pilot.pause()
+            pin = app.query_one("#login_pin", Input)
+            assert "credential-hidden" not in pin.classes
+
+    asyncio.run(_run())
+
+
 def test_login_inputs_visible_on_small_terminal():
     async def _run() -> None:
         from textual.widgets import Input

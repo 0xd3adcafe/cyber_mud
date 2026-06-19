@@ -215,6 +215,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | 側欄 stack | `sidebar_stack` 同時顯示 PDA＋地圖；F2–F5 切換疊加 |
 | 啟動狀態 | `StartupReport` 載入耗時；server 終端＋client hint |
 | Client 輸入歷史 | ↑↓ 指令歷史、Esc 還原、`command_history.json` 持久化 |
+| Client 記憶帳密／PIN | `client/credentials.py` 加密儲存、PIN 快速登入、F7 清除記憶 |
 
 ### 待做（節錄）
 

@@ -65,9 +65,17 @@ Select {
     text-align: center;
     margin-bottom: 1;
 }
-#login_theme_label, #auth_mode_label, #login_name_label, #login_password_label {
+#login_theme_label, #auth_mode_label, #login_name_label, #login_password_label,
+#login_pin_label, #login_pin_setup_label, #login_pin_confirm_label {
     color: $text-muted;
     margin-top: 1;
+}
+.credential-hidden {
+    display: none;
+}
+#remember_credentials {
+    margin-top: 1;
+    margin-bottom: 1;
 }
 #login_form Input {
     width: 1fr;
