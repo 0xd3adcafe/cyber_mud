@@ -119,6 +119,43 @@ def test_tab_complete_fills_target():
     asyncio.run(_run())
 
 
+def test_stacked_sidebar_does_not_capture_focus():
+    async def _run() -> None:
+        from textual.containers import VerticalScroll
+        from textual.widgets import Input
+
+        from client.meta_handlers import apply_meta, handle_ui_json
+
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(100, 40)) as pilot:
+            apply_meta(app.view, "auth", "1")
+            app._set_auth_ui(True)
+            await pilot.pause()
+            app._configure_game_focus_targets()
+            apply_meta(app.view, "ui_panel", "pda")
+            handle_ui_json(
+                app.view,
+                '{"panel":"pda","sections":[{"kind":"row","label":"HP","value":"100/100"}]}',
+            )
+            apply_meta(app.view, "ui_panel_end", "1")
+            apply_meta(app.view, "ui_panel", "map")
+            handle_ui_json(
+                app.view,
+                '{"panel":"map","sections":[{"kind":"text","lines":["[@] square"," ■ "]}]}',
+            )
+            apply_meta(app.view, "ui_panel_end", "1")
+            app._render_sidebar()
+            await pilot.pause()
+            sidebar = app.query_one("#sidebar", VerticalScroll)
+            assert sidebar.can_focus is False
+            prompt = app.query_one("#prompt", Input)
+            app._focus_game_prompt()
+            await pilot.pause()
+            assert prompt.has_focus
+
+    asyncio.run(_run())
+
+
 def test_game_layout_fills_terminal_after_auth():
     async def _run() -> None:
         from textual.widgets import Input, RichLog

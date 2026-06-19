@@ -99,6 +99,8 @@ class CyberMudApp(App):
         self._pending_credential_save: tuple[str, str, str, str] | None = None
         self._startup_hint = ""
         self._pending_logout = False
+        self._sidebar_refresh_lock = asyncio.Lock()
+        self._panel_fetch_event: asyncio.Event | None = None
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -425,6 +427,15 @@ class CyberMudApp(App):
         self.query_one("#info_bar", Static).update(self._info_bar())
         self.query_one("#prompt_prefix", Static).update(self._prompt_prefix())
 
+    def _configure_game_focus_targets(self) -> None:
+        log = self.query_one("#log", RichLog)
+        log.can_focus = False
+        for widget_id in ("#sidebar", "#sidebar_content", "#sidebar_header"):
+            try:
+                self.query_one(widget_id).can_focus = False
+            except Exception:
+                pass
+
     def _render_sidebar(self) -> None:
         if not self.view.authenticated:
             return
@@ -441,6 +452,22 @@ class CyberMudApp(App):
         content.update(format_sidebar_content(self.view))
         wrap.remove_class("sidebar-hidden")
         wrap.add_class("sidebar-visible")
+        self.call_after_refresh(self._focus_game_prompt)
+
+    async def _fetch_panel(self, panel_id: str) -> None:
+        async with self._sidebar_refresh_lock:
+            if not self.conn.connected:
+                return
+            event = asyncio.Event()
+            self._panel_fetch_event = event
+            try:
+                await self.conn.send_line(panel_id)
+                await asyncio.wait_for(event.wait(), timeout=15.0)
+            except asyncio.TimeoutError:
+                pass
+            finally:
+                if self._panel_fetch_event is event:
+                    self._panel_fetch_event = None
 
     def _apply_meta(self, payload: str) -> None:
         key, value = parse_meta_payload(payload)
@@ -471,6 +498,8 @@ class CyberMudApp(App):
         self._update_status()
         if key == "ui_panel_end":
             self._render_sidebar()
+            if self._panel_fetch_event is not None:
+                self._panel_fetch_event.set()
         if key == "refresh_sidebar" and value == "1" and self.view.sidebar_open:
             asyncio.create_task(self._refresh_sidebar_panels(panels_to_refresh_on_equip(self.view)))
 
@@ -478,7 +507,8 @@ class CyberMudApp(App):
         if not panel_ids or not self.conn.connected:
             return
         for panel_id in panel_ids:
-            await self.conn.send_line(panel_id)
+            if panel_id in self.view.sidebar_stack:
+                await self._fetch_panel(panel_id)
 
     async def _send_panel_command(self, command: str) -> None:
         if not self.view.authenticated:
@@ -489,7 +519,7 @@ class CyberMudApp(App):
         if not toggle_sidebar_panel(self.view, command):
             self._render_sidebar()
             return
-        await self.conn.send_line(command)
+        await self._fetch_panel(command)
 
     async def action_focus_prompt(self) -> None:
         self._focus_game_prompt()
@@ -545,13 +575,25 @@ class CyberMudApp(App):
             event.stop()
             self._focus_game_prompt()
 
+    @on(Click, "#sidebar_wrap")
+    @on(Click, "#sidebar")
+    def on_sidebar_click(self, event: Click) -> None:
+        if self.view.authenticated:
+            event.stop()
+            self._focus_game_prompt()
+
     def on_descendant_focus(self, event: DescendantFocus) -> None:
         dock = self.query_one("#prompt_dock", Horizontal)
         if self.view.authenticated and event.widget.id == "prompt":
             dock.add_class("prompt-focused")
         elif event.widget.id != "prompt":
             dock.remove_class("prompt-focused")
-        if self.view.authenticated and event.widget.id == "log":
+        if self.view.authenticated and event.widget.id in (
+            "log",
+            "sidebar",
+            "sidebar_content",
+            "sidebar_header",
+        ):
             self.call_after_refresh(self._focus_game_prompt)
 
     @on(Select.Changed, "#login_theme")
@@ -588,7 +630,7 @@ class CyberMudApp(App):
             except Exception:
                 pass
         log = self.query_one("#log", RichLog)
-        log.can_focus = False
+        self._configure_game_focus_targets()
         self.set_interval(0.2, self._on_spinner_tick)
         self.set_interval(1.0, self._on_cd_tick)
         try:

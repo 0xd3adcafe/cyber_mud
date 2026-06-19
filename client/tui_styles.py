@@ -175,6 +175,10 @@ Select {
     padding: 0 1;
     scrollbar-background: $surface;
     scrollbar-color: $accent;
+    overflow-y: auto;
+}
+#sidebar:focus {
+    border-left: heavy $accent;
 }
 
 #sidebar_content {
