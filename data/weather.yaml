@@ -1,0 +1,26 @@
+tick_every: 6
+
+districts:
+  watson:
+    default: neon_haze
+    types: [acid_rain, fog, clear, neon_haze]
+  tutorial:
+    default: clear
+    types: [clear, neon_haze]
+  docks:
+    default: fog
+    types: [fog, acid_rain, clear]
+
+types:
+  acid_rain:
+    name_zh: 酸雨
+    name_en: Acid Rain
+  fog:
+    name_zh: 濃霧
+    name_en: Fog
+  clear:
+    name_zh: 晴朗
+    name_en: Clear
+  neon_haze:
+    name_zh: 霓虹霧霾
+    name_en: Neon Haze

@@ -21,6 +21,14 @@ look:
   npcs: "Here: {npcs}"
   empty: "Nothing notable here."
 
+weather:
+  line: "Weather: {weather}"
+
+npc:
+  enter: "{name} enters."
+  leave: "{name} leaves."
+  idle: "{name}: {msg}"
+
 go:
   ok: "You go {direction}."
 
@@ -34,12 +42,25 @@ help_cmds:
   take: "Pick up an item"
   drop: "Drop an item"
   inventory: "Show inventory"
-  pda: "Personal agent (vitals)"
+  equip: "Equip item (equip <item>)"
+  unequip: "Unequip item (unequip <item|slot>)"
+  equipment: "Equipment panel (F5)"
+  install: "Install implant (install <kit>)"
+  scan: "Scan surroundings (scan)"
+  map: "Map (F4)"
+  give: "Give item (give <item> <player>)"
+  appraise: "Appraise item (appraise <item>)"
+  pda: "Personal agent (vitals, F2)"
   time: "Show world time"
+  prompt: "Custom prompt (prompt set/show)"
   login: "Log in (login <name> <password>)"
   register: "Register (register <name> <password>)"
-  help: "Show help"
+  help: "Show help (F3)"
   quit: "Quit"
+  attack: "Attack enemy (attack <enemy>)"
+  defend: "Defend (halve next hit)"
+  flee: "Flee combat"
+  quickhack: "Quickhack (costs 2 RAM)"
 
 periods:
   dawn: "Dawn"
@@ -58,9 +79,13 @@ pda:
   vitals: "Vitals  HP {hp}  │  ${gold}"
   time: "Time  {clock}  │  {period}"
   stats: "Stats  Body {body} │ Reflex {reflex} │ Tech {tech} │ Cool {cool} │ Int {intelligence}"
+  stats_label: "Stats"
   ram: "Net  RAM {ram}"
   social: "Humanity {humanity}  │  Rep {reputation}"
+  social_label: "Humanity / Rep"
   implants_header: "Implants"
+  equipment_header: "Equipment"
+  no_equip: "  {slot}: (empty)"
   skills_header: "Protocols"
   no_implants: "  (none)"
   no_skills: "  (none)"
@@ -84,12 +109,110 @@ take:
   missing: "That item is not here."
   not_takeable: "You cannot pick that up."
   ok: "You take the {label}."
+  bulk_ok: "(took {count} items)"
 
 drop:
   usage: "Usage: drop <item>"
   missing: "You do not have that item."
   ok: "You drop the {label}."
+  bulk_ok: "(dropped {count} items)"
+
+equip:
+  usage: "Usage: equip <item>"
+  missing: "You do not have an equippable item like that."
+  no_slot: "That item cannot be equipped."
+  use_install: "Use install for cyber kits."
+  ok: "You equip {label} ({slot})."
+  bulk_ok: "(equipped {count} items)"
+
+unequip:
+  usage: "Usage: unequip <item|slot>"
+  missing: "You are not wearing that."
+  ok: "You unequip {label} ({slot})."
+  bulk_ok: "(unequipped {count} items)"
+
+equipment:
+  header: "◈ Equipment"
+  none: "(empty)"
+  slot_line: "  {slot}: {item}"
+  empty_slot: "  {slot}: (empty)"
+  slot:
+    weapon: "Weapon"
+    armor: "Armor"
+    head: "Head"
+    cyber: "Cyber"
+
+install:
+  usage: "Usage: install <cyber kit>"
+  missing: "You do not have that kit."
+  not_implant: "That item is not a cyber kit."
+  unknown_implant: "Unknown implant model."
+  already: "You already have that implant."
+  ok: "You install {label}. Humanity {humanity}, Body {body}."
+
+map:
+  header: "◈ Map"
+  empty: "No areas explored yet."
+  legend: "Legend: [@] you  ■ known"
+  room_line: "  {marker} {name}"
+
+scan:
+  header: "◈ Scan — {name}"
+  empty: "Scan failed."
+  exits: "Exits: {exits}"
+  items: "Items: {items}"
+  npcs: "People: {npcs}"
+  player: "Player: {name}"
+  hidden: "◈ Hidden clue: {hint}"
+
+give:
+  usage: "Usage: give <item> <player>"
+  missing_item: "You do not have that item."
+  missing_player: "No player {name} here."
+  ok: "You give {label} to {name}."
+  broadcast: "{name} gives {label} to {target}."
+
+appraise:
+  usage: "Usage: appraise <item>"
+  missing: "Cannot find that item."
+  ok: "{label} is worth about ${value}."
+
+prompt:
+  usage: "Usage: prompt show | prompt set <template> | prompt reset"
+  show_header: "◈ Prompt"
+  template: "Template: {template}"
+  expanded: "Expanded: {expanded}"
+  tokens_header: "Tokens:"
+  token_line: "  {token} — {desc}"
+  token:
+    name: "Player name"
+    room: "Room name"
+    hp: "Hit points"
+    time: "World time"
+  set_ok: "Prompt set to: {template}"
+  reset_ok: "Prompt reset to default."
 
 inventory:
   header: "◈ Inventory"
   empty: "Your inventory is empty."
+
+combat:
+  busy: "In combat! Only attack, defend, flee, quickhack, look, pda, help, and quit are available."
+  attack_usage: "Usage: attack <enemy>"
+  no_target: "No such enemy here."
+  already_fighting: "You are already fighting {target}."
+  not_in_combat: "You are not in combat."
+  player_cd: "Action on cooldown ({cd})."
+  no_ram: "Not enough RAM (need {cost})."
+  start: "You open fire on {target}!"
+  player_hit: "You hit {target} for {damage} damage (enemy HP {hp})."
+  npc_hit: "{target} strikes back for {damage} damage (your HP {hp})."
+  defend: "You brace for impact—the next hit will be halved."
+  flee_ok: "You shake off {target} and escape combat."
+  flee_fail: "You fail to escape! {target} is still on you."
+  quickhack: "Quickhack on {target} for {damage} damage (enemy HP {hp})."
+  victory: "You drop {target}!"
+  player_down: "You go down..."
+  flee_broadcast: "{name} fled from combat with {target}."
+  victory_broadcast: "{name} dropped {target}!"
+  defeat_broadcast: "{name} was dropped by {target}."

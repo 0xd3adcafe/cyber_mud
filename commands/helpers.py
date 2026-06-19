@@ -5,6 +5,7 @@ from shared.i18n import t
 from shared.locale_content import item_label, room_description, room_name
 from shared.names import matches_name
 from world.state import WorldState
+from world.weather import weather_label
 
 
 def find_item_id(
@@ -31,7 +32,13 @@ def current_room(ctx: CommandContext):
     return ctx.state.world.room(ctx.player.room_id)
 
 
+def mark_visited(ctx: CommandContext) -> None:
+    if ctx.player.room_id not in ctx.player.visited_rooms:
+        ctx.player.visited_rooms.append(ctx.player.room_id)
+
+
 def format_look(ctx: CommandContext) -> list[str]:
+    mark_visited(ctx)
     room = current_room(ctx)
     if room is None:
         return [t(ctx.player.locale, "look.empty")]
@@ -41,6 +48,16 @@ def format_look(ctx: CommandContext) -> list[str]:
         "",
         room_description(room, ctx.player.locale),
     ]
+    if room.district:
+        weather_type = ctx.state.weather.get(room.district, "")
+        if weather_type:
+            lines.append(
+                t(
+                    ctx.player.locale,
+                    "weather.line",
+                    weather=weather_label(weather_type, ctx.player.locale),
+                )
+            )
     if room.exits:
         exits = "、".join(f"{d}→{room.exits[d]}" for d in sorted(room.exits))
         lines.append("")
@@ -57,8 +74,9 @@ def format_look(ctx: CommandContext) -> list[str]:
             lines.append(t(ctx.player.locale, "look.items", items="、".join(labels)))
 
     npc_labels = []
-    for npc in ctx.state.world.npcs.values():
-        if npc.room_id == ctx.player.room_id:
+    for npc_id in ctx.state.npcs_in_room(ctx.player.room_id):
+        npc = ctx.state.world.npc(npc_id)
+        if npc:
             npc_labels.append(npc.name_zh if ctx.player.locale == "zh" else (npc.name_en or npc.name_zh))
     if npc_labels:
         lines.append(t(ctx.player.locale, "look.npcs", npcs="、".join(npc_labels)))

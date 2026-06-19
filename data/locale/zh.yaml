@@ -21,6 +21,14 @@ look:
   npcs: "這裡有：{npcs}"
   empty: "這裡空無一物。"
 
+weather:
+  line: "天氣：{weather}"
+
+npc:
+  enter: "{name} 走進了這裡。"
+  leave: "{name} 離開了這裡。"
+  idle: "{name}：{msg}"
+
 go:
   ok: "你前往 {direction}。"
 
@@ -34,12 +42,25 @@ help_cmds:
   take: "撿起地上物品"
   drop: "丟下背包物品"
   inventory: "查看背包"
-  pda: "個人終端（vitals）"
+  equip: "裝備物品（equip <物品>）"
+  unequip: "卸下裝備（unequip <物品|槽位>）"
+  equipment: "裝備面板（F5）"
+  install: "安裝義體（install <套件>）"
+  scan: "掃描環境（scan）"
+  map: "地圖（F4）"
+  give: "給予物品（give <物品> <玩家>）"
+  appraise: "估價（appraise <物品>）"
+  pda: "個人終端（vitals，F2）"
   time: "查詢世界時間"
+  prompt: "自訂提示符（prompt set/show）"
   login: "登入（login <名稱> <密碼>）"
   register: "註冊（register <名稱> <密碼>）"
-  help: "顯示說明"
+  help: "顯示說明（F3）"
   quit: "離開遊戲"
+  attack: "攻擊敵人（attack <敵人>）"
+  defend: "防禦（下一次傷害減半）"
+  flee: "逃離戰鬥"
+  quickhack: "快速破解（耗 2 RAM）"
 
 periods:
   dawn: "黎明"
@@ -58,9 +79,13 @@ pda:
   vitals: "生存  HP {hp}  │  ${gold}"
   time: "時間  {clock}  │  {period}"
   stats: "五維  肉體 {body} │ 反應 {reflex} │ 技術 {tech} │ 冷靜 {cool} │ 智力 {intelligence}"
+  stats_label: "五維"
   ram: "駭客  RAM {ram}"
   social: "人性  {humanity}  │  聲望  {reputation}"
+  social_label: "人性／聲望"
   implants_header: "義體"
+  equipment_header: "裝備"
+  no_equip: "  {slot}: （空）"
   skills_header: "協定"
   no_implants: "  （無義體）"
   no_skills: "  （無協定）"
@@ -84,12 +109,110 @@ take:
   missing: "這裡沒有那個物品。"
   not_takeable: "那個東西撿不起來。"
   ok: "你撿起了 {label}。"
+  bulk_ok: "（共撿起 {count} 件）"
 
 drop:
   usage: "用法：drop <物品>"
   missing: "你身上沒有那個物品。"
   ok: "你丟下了 {label}。"
+  bulk_ok: "（共丟下 {count} 件）"
+
+equip:
+  usage: "用法：equip <物品>"
+  missing: "你身上沒有可裝備的那個物品。"
+  no_slot: "那個物品不能裝備。"
+  use_install: "義體套件請用 install 安裝。"
+  ok: "你裝備了 {label}（{slot}）。"
+  bulk_ok: "（共裝備 {count} 件）"
+
+unequip:
+  usage: "用法：unequip <物品|槽位>"
+  missing: "你沒有裝備那個物品。"
+  ok: "你卸下了 {label}（{slot}）。"
+  bulk_ok: "（共卸下 {count} 件）"
+
+equipment:
+  header: "◈ 裝備"
+  none: "（空）"
+  slot_line: "  {slot}：{item}"
+  empty_slot: "  {slot}：（空）"
+  slot:
+    weapon: "武器"
+    armor: "護甲"
+    head: "頭部"
+    cyber: "義體槽"
+
+install:
+  usage: "用法：install <義體套件>"
+  missing: "你身上沒有那個套件。"
+  not_implant: "那個物品不是義體套件。"
+  unknown_implant: "未知的義體型號。"
+  already: "你已經安裝過這個義體。"
+  ok: "你安裝了 {label}。人性降至 {humanity}，肉體提升至 {body}。"
+
+map:
+  header: "◈ 地圖"
+  empty: "尚未探索任何區域。"
+  legend: "圖例：[@] 目前位置  ■ 已知區域"
+  room_line: "  {marker} {name}"
+
+scan:
+  header: "◈ 掃描 — {name}"
+  empty: "掃描失敗。"
+  exits: "出口：{exits}"
+  items: "物品：{items}"
+  npcs: "人物：{npcs}"
+  player: "玩家：{name}"
+  hidden: "◈ 隱藏線索：{hint}"
+
+give:
+  usage: "用法：give <物品> <玩家>"
+  missing_item: "你身上沒有那個物品。"
+  missing_player: "這裡沒有玩家 {name}。"
+  ok: "你把 {label} 交給了 {name}。"
+  broadcast: "{name} 把 {label} 交給了 {target}。"
+
+appraise:
+  usage: "用法：appraise <物品>"
+  missing: "找不到那個物品。"
+  ok: "{label} 估價約 ${value}。"
+
+prompt:
+  usage: "用法：prompt show | prompt set <範本> | prompt reset"
+  show_header: "◈ 提示符"
+  template: "範本：{template}"
+  expanded: "展開：{expanded}"
+  tokens_header: "可用 token："
+  token_line: "  {token} — {desc}"
+  token:
+    name: "玩家名稱"
+    room: "房間名稱"
+    hp: "生命值"
+    time: "世界時間"
+  set_ok: "提示符已設為：{template}"
+  reset_ok: "提示符已重設為預設。"
 
 inventory:
   header: "◈ 背包"
   empty: "背包是空的。"
+
+combat:
+  busy: "戰鬥中！僅能使用 attack、defend、flee、quickhack、look、pda、help、quit。"
+  attack_usage: "用法：attack <敵人>"
+  no_target: "這裡沒有那個敵人。"
+  already_fighting: "你正在與 {target} 交戰。"
+  not_in_combat: "你沒有在戰鬥中。"
+  player_cd: "行動冷卻中（{cd}）。"
+  no_ram: "RAM 不足（需要 {cost}）。"
+  start: "你對 {target} 開火了！"
+  player_hit: "你擊中 {target}，造成 {damage} 傷害（敵 HP {hp}）。"
+  npc_hit: "{target} 反擊，造成 {damage} 傷害（你的 HP {hp}）。"
+  defend: "你舉盾防禦，下一次受到的傷害減半。"
+  flee_ok: "你甩開 {target}，脫離了戰鬥。"
+  flee_fail: "逃脫失敗！{target} 仍緊追不捨。"
+  quickhack: "快速破解 {target}，造成 {damage} 傷害（敵 HP {hp}）。"
+  victory: "你擊倒了 {target}！"
+  player_down: "你倒下了……"
+  flee_broadcast: "{name} 從與 {target} 的戰鬥中逃脫。"
+  victory_broadcast: "{name} 擊倒了 {target}！"
+  defeat_broadcast: "{name} 被 {target} 擊倒了。"

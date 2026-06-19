@@ -6,6 +6,9 @@ factions:
   militech: 軍武科技
   tyrell: 泰瑞公司
 
+room_items:
+  square: [glowstick, knife, jacket, cyber_arm_kit]
+
 rooms:
   square:
     name_zh: 霓虹廣場
@@ -17,6 +20,8 @@ rooms:
       Holographic ads flicker on rain-slick pavement. Fixers and corpo agents mingle in the crowd.
       Exits: north (alley), east (tutorial), south (docks).
     district: watson
+    grid_x: 1
+    grid_y: 1
     exits:
       north: alley
       east: tutorial
@@ -27,6 +32,10 @@ rooms:
     description_zh: 霓虹反光在潮濕牆面上流動。南邊回到廣場。
     description_en: Neon reflections crawl across wet walls. South leads back to the square.
     district: watson
+    grid_x: 1
+    grid_y: 0
+    hidden_hint_zh: 牆縫裡似乎藏著走私貨櫃的密碼。
+    hidden_hint_en: A smuggler cache password seems hidden in the wall seam.
     exits:
       south: square
   tutorial:
@@ -35,6 +44,8 @@ rooms:
     description_zh: 教官的全息投影正在等待新進邊緣人。西邊回到霓虹廣場。
     description_en: An instructor holo waits for new edgerunners. West returns to Neon Square.
     district: tutorial
+    grid_x: 2
+    grid_y: 1
     exits:
       west: square
   docks:
@@ -43,6 +54,8 @@ rooms:
     description_zh: 起重機低鳴，走私貨櫃堆疊至霧中。北邊是霓虹廣場。
     description_en: Cranes groan as smuggler containers vanish into the fog. North leads to the square.
     district: docks
+    grid_x: 1
+    grid_y: 2
     exits:
       north: square
 
@@ -53,6 +66,34 @@ items:
     description_zh: 廉價的化学光源，在酸雨中仍亮得刺眼。
     description_en: A cheap chem-light that burns bright even in acid rain.
     takeable: true
+    value: 10
+  knife:
+    name_zh: 戰術折刀
+    name_en: Tactical Knife
+    description_zh: 街頭常見的折刀，刃口磨得發亮。
+    description_en: A common street knife with a keen edge.
+    takeable: true
+    slot: weapon
+    weapon_damage: 5
+    value: 80
+  jacket:
+    name_zh: 防彈夾克
+    name_en: Armored Jacket
+    description_zh: 舊款企業防彈夾克，仍擋得住小口徑子彈。
+    description_en: An old corpo armored jacket that still stops small-caliber rounds.
+    takeable: true
+    slot: armor
+    defense: 2
+    value: 50
+  cyber_arm_kit:
+    name_zh: 漩渦義肢套件
+    name_en: Maelstrom Cyber Arm Kit
+    description_zh: 未安裝的義肢臂套件，需由 ripperdoc 或自行 install。
+    description_en: An uninstalled cyber-arm kit—use install to graft it in.
+    takeable: true
+    slot: cyber
+    implant_id: cyber_arm_v1
+    value: 200
 
 npcs:
   broker:
@@ -61,3 +102,17 @@ npcs:
     room_id: square
     description_zh: 半張臉藏在全息面具後，低聲兜售傳聞與座標。
     description_en: Half a face hides behind a holo-mask, whispering rumors and coordinates.
+    hp: 50
+    hostile: false
+    patrol: [square, alley]
+    idle_msg_zh: 低聲對著空氣嘀咕著價碼。
+    idle_msg_en: Mumbles prices to no one in particular.
+  thug:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: alley
+    description_zh: 義體手臂上的刀刃在霓虹下反光。
+    description_en: Blades on a cyber-arm catch the neon glare.
+    hp: 30
+    attack: 4
+    hostile: true
