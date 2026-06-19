@@ -4,10 +4,15 @@
 
 已初始化 **MVP 程式骨架**（`look`／`go`／`help`／`quit` + 夜城起點世界），並保留完整實作文件。
 
+## Agent 指引
+
+協作規則與專案慣例見 **[CLAUDE.md](CLAUDE.md)**（行為準則參考上層 `andrej-karpathy-skills.md`）。
+
 ## 文件索引
 
 | 文件 | 用途 |
 |------|------|
+| [CLAUDE.md](CLAUDE.md) | Agent 協作準則與開發慣例 |
 | [docs/WORLD.md](docs/WORLD.md) | **世界觀**：夜城設定、區域、派系、敘事錨點 |
 | [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md) | **主文件**：完整實作藍圖 |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | 系統架構與模組依賴 |
