@@ -8,6 +8,7 @@ from shared.protocol import META_PREFIX, PANEL_PREFIX, UI_PREFIX
 
 @dataclass
 class ClientViewState:
+    authenticated: bool = False
     room: str = "—"
     hp: str = "—"
     gold: str = "—"
@@ -34,7 +35,9 @@ def parse_meta_payload(payload: str) -> tuple[str, str]:
 
 
 def apply_meta(state: ClientViewState, key: str, value: str) -> None:
-    if key == "room":
+    if key == "auth":
+        state.authenticated = value == "1"
+    elif key == "room":
         state.room = value
     elif key == "hp":
         state.hp = value

@@ -91,6 +91,7 @@
 | 天氣影響戰鬥／移動 | `world/modifiers.py` 修正傷害、flee、移動 |
 | 被動技能與義體觸發 | `combat/passives.py`（義臂、breach_protocol） |
 | 店鋪開閉、NPC 作息 | `data/shops.yaml`、`data/schedule.yaml`、`world/schedule.py` |
+| Client 登入介面 | 半高隨機 ASCII、登入/註冊表單、密碼遮罩 |
 
 ## Backlog
 

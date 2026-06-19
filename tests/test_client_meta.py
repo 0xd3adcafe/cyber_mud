@@ -14,6 +14,12 @@ from client.meta_handlers import (
 )
 
 
+def test_apply_meta_auth():
+    state = ClientViewState()
+    apply_meta(state, "auth", "1")
+    assert state.authenticated
+
+
 def test_apply_meta_updates_status():
     state = ClientViewState()
     apply_meta(state, "room", "霓虹廣場")
