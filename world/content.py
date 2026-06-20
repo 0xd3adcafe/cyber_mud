@@ -178,6 +178,8 @@ class Interactable:
     gives_item: str = ""
     once_key: str = ""
     braindance_id: str = ""
+    kind: str = ""
+    life_profile: str = ""
 
 
 @dataclass
@@ -493,6 +495,8 @@ def load_interactables(path: Path | None = None) -> dict[str, Interactable]:
             gives_item=str(data.get("gives_item", "")),
             once_key=str(data.get("once_key", "")),
             braindance_id=str(data.get("braindance_id", "")),
+            kind=str(data.get("kind", "")),
+            life_profile=str(data.get("life_profile", "")),
         )
         for iid, data in (raw.get("interactables") or {}).items()
     }

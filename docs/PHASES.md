@@ -185,6 +185,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Mature / NSFW content M.0–M.7 | `world/mature.py`, `combat/gore.py`, `settings mature`, `flirt`, mature locale/YAML, client 18+ login; `docs/MATURE_CONTENT.md` |
 | Kabuki & district expansion (2026-06) | `kabuki_vip`, `kabuki_bazaar`, Little China, Corpo hubs; `velvet_job`; `tests/test_world_districts.py` |
 | Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions in `test_client_app.py` |
+| Life commands L.1–L.8 (2026-06) | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable rest anchors; vitals/RAM regen; wake on move/say/talk/combat; PDA + `%posture`; help category **Life & vitals**; `tests/test_life_commands.py` |
 
 ## Multi-session development (mandatory)
 
@@ -269,16 +270,16 @@ Not yet implemented or only partially implemented.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
-| L.1 | Posture & fatigue model | `Player.posture` (`standing`/`sitting`/`lying`/`sleeping`); `fatigue` 0–100 (save + meta); `world/life.py`; `persistence/save.py` migration default `standing` |
-| L.2 | Core life commands | `commands/life.py`: `sit`, `stand`, `lie`, `rest`, `sleep`, `wake`; block in combat, NETRUN (`net_shell`), and while `chased_by_npc`; `stand` clears posture; locale `life.*` en/zh |
-| L.3 | Environment rest rules | `data/life.yaml` rest profiles; room `tags` (`rest`, `safe`, `home`, `clinic`) + district `safety` gate `sleep`; `world/modifiers.py` period/weather multipliers (e.g. acid rain outdoor penalty, night bonus indoors) |
-| L.4 | Interactable rest anchors | Interactable kind `rest`/`sleep` in `data/interactables.yaml` + `world/interactables.py`; beds/benches in `watson_flat`, `ripper_clinic`, tutorial canteen, `kabuki_lounge`; `interact <target>` or `sleep` at anchor grants posture + regen bonus |
-| L.5 | Vitals & status integration | `world/vitals.py` rest/sleep tick HP (and optional RAM) regen stacks with period regen; `rest` reduces `fatigue`; bleed/poison (`player_status`) slows or blocks sleep; low `humanity` reduces sleep quality (cyberpsychosis hook) |
-| L.6 | Risk & social presence | Same-room `look` / enter-leave shows player posture; sleeping outdoors in Combat Zone / high `wanted` may interrupt rest (tick or NPC AI hook); `say`/`talk` while `sleeping` auto-wakes or blocked |
-| L.7 | Client & PDA | Meta `posture`/`fatigue`; `pda` row; optional prompt token `%posture`; `look` self shows life state |
-| L.8 | Tests, help, tutorial | `tests/test_life_commands.py`; help category **Life / Vitals**; tutorial interactable or instructor line demoing `sit`/`rest` |
+| ~~L.1~~ | ~~Posture & fatigue model~~ | ✅ `Player.posture`; `fatigue` 0–100; `world/life.py`; `persistence/save.py` |
+| ~~L.2~~ | ~~Core life commands~~ | ✅ `commands/life.py`: `sit`, `stand`, `lie`, `rest`, `sleep`, `wake`; combat/NETRUN/chase blocks; locale `life.*` en/zh |
+| ~~L.3~~ | ~~Environment rest rules~~ | ✅ `data/life.yaml`; room `tags` + district gate `sleep`; period/weather multipliers in `world/life.py` |
+| ~~L.4~~ | ~~Interactable rest anchors~~ | ✅ `canteen_bench`, `flat_bunk`, `clinic_bed`, `lounge_booth`; `world/interactables.py` |
+| ~~L.5~~ | ~~Vitals & status integration~~ | ✅ `world/vitals.py` HP/RAM regen; fatigue tick; bleed blocks sleep; low `humanity` penalty |
+| ~~L.6~~ | ~~Risk & social presence~~ | ✅ peer posture in `look`/`scan`; sleep interrupt tick; wake on `go`/`say`/`talk`/combat |
+| ~~L.7~~ | ~~Client & PDA~~ | ✅ meta `posture`/`fatigue`; PDA row; `%posture` prompt token |
+| ~~L.8~~ | ~~Tests, help, tutorial~~ | ✅ `tests/test_life_commands.py`; help category **Life & vitals**; canteen bench + instructor line |
 
-**Suggested order:** L.1 → L.2 → L.3 → L.4 → L.5 → L.6 → L.7 → L.8.
+**Suggested order:** L.1 → L.2 → L.3 → L.4 → L.5 → L.6 → L.7 → L.8. **All phases shipped (2026-06).**
 
 ---
 

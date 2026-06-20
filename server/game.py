@@ -319,20 +319,37 @@ class Game:
                     if target.player.name != event.player_name:
                         continue
                     locale = target.player.locale
-                    await target.send(
-                        t(
-                            locale,
-                            "vitals.hp_regen",
-                            amount=event.message_kwargs.get("amount", "0"),
-                            hp=event.message_kwargs.get("hp", str(target.player.hp)),
-                            max_hp=event.message_kwargs.get("max_hp", str(target.player.max_hp)),
+                    amount = event.message_kwargs.get("amount", "0")
+                    if int(amount) > 0:
+                        await target.send(
+                            t(
+                                locale,
+                                "vitals.hp_regen",
+                                amount=amount,
+                                hp=event.message_kwargs.get("hp", str(target.player.hp)),
+                                max_hp=event.message_kwargs.get("max_hp", str(target.player.max_hp)),
+                            )
                         )
-                    )
-                    await target.send_meta(
-                        {
-                            "hp": f"{target.player.hp}/{target.player.max_hp}",
-                        }
-                    )
+                    ram_amount = int(event.message_kwargs.get("ram_amount", "0"))
+                    if ram_amount > 0:
+                        await target.send(
+                            t(
+                                locale,
+                                "vitals.ram_regen",
+                                amount=str(ram_amount),
+                                ram=event.message_kwargs.get("ram", str(target.player.ram)),
+                                max_ram=event.message_kwargs.get("max_ram", str(target.player.max_ram)),
+                            )
+                        )
+                    for line in event.message_kwargs.get("life_lines") or []:
+                        await target.send(line)
+                    meta = {
+                        "hp": f"{target.player.hp}/{target.player.max_hp}",
+                        "ram": f"{target.player.ram}/{target.player.max_ram}",
+                        "posture": target.player.posture,
+                        "fatigue": str(target.player.fatigue),
+                    }
+                    await target.send_meta(meta)
 
     async def _handle_combat_tick_results(self, combat_results) -> None:
         from combat.encounter import combat_meta

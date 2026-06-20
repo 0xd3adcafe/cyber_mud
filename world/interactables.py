@@ -75,6 +75,28 @@ def perform_interact(
     if obj.once_key:
         player.interact_flags[obj.once_key] = "done"
 
+    kind = getattr(obj, "kind", "")
+    if kind in {"rest", "sleep"}:
+        from world.life import apply_anchor_from_interactable, posture_label, set_posture, sleep_refusal
+
+        posture, allows_sleep = apply_anchor_from_interactable(player, obj)
+        if kind == "sleep":
+            refusal = sleep_refusal(player, state, locale)
+            if refusal and not allows_sleep:
+                return [refusal]
+            set_posture(player, "sleeping", anchor=player.life_anchor)
+            lines.append(t(locale, "life.interact_sleep", name=interactable_label(obj, locale)))
+        else:
+            set_posture(player, posture, anchor=player.life_anchor)
+            lines.append(
+                t(
+                    locale,
+                    "life.interact_rest",
+                    name=interactable_label(obj, locale),
+                    posture=posture_label(posture, locale),
+                )
+            )
+
     if obj.braindance_id:
         from world.braindance import play_braindance
 

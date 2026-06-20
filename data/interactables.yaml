@@ -52,6 +52,46 @@ interactables:
     description_en: A holo board cycling faction primers and gig types.
     message_zh: 板上浮現：「gigs 列出委託；accept 後用 journal 追蹤；完成可賺街頭聲望。」
     message_en: 'The board reads: "gigs lists work; accept then journal to track—finish for street cred."'
+  canteen_bench:
+    room_id: tutorial_canteen
+    name_zh: 學員長椅
+    name_en: Trainee Bench
+    description_zh: 靠牆的複合長椅，適合練習 sit 與 rest。
+    description_en: A composite bench along the wall—practice sit and rest here.
+    kind: rest
+    life_profile: bench
+    message_zh: 你坐下，販賣機的嗡鳴變成背景白噪音。
+    message_en: You sit—the vending hum fades to background noise.
+  flat_bunk:
+    room_id: watson_flat
+    name_zh: 折疊床
+    name_en: Fold-out Bunk
+    description_zh: 狹小但乾淨的折疊床，公寓裡最安靜的角落。
+    description_en: A cramped but clean fold-out bunk—the quietest corner of your flat.
+    kind: sleep
+    life_profile: bunk
+    message_zh: 床墊收起金屬輕響，夜城的喧囂被擋在門外。
+    message_en: The bunk clicks into place—Night City noise stays beyond the door.
+  clinic_bed:
+    room_id: ripper_clinic
+    name_zh: 恢復病床
+    name_en: Recovery Bed
+    description_zh: 診所角落的監測病床，適合術後靜養。
+    description_en: A monitored recovery bed in the clinic corner.
+    kind: sleep
+    life_profile: bunk
+    message_zh: 生命徵象監測儀低聲運轉，液體滴落有節奏地滴答。
+    message_en: Vitals monitors hum; IV fluid ticks in rhythm.
+  lounge_booth:
+    room_id: kabuki_lounge
+    name_zh: 絨布卡座
+    name_en: Velvet Booth
+    description_zh: 半封閉卡座，霓虹簾幕隔開視線。
+    description_en: A semi-private booth behind a neon curtain.
+    kind: rest
+    life_profile: booth
+    message_zh: 你陷進卡座，合成爵士蓋過了外面的腳步聲。
+    message_en: You sink into the booth—synthetic jazz drowns the footfalls outside.
   tutorial_locker:
     room_id: tutorial_canteen
     name_zh: 學員儲物櫃

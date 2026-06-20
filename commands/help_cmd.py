@@ -10,6 +10,7 @@ _AUTH_KEYS = frozenset({"login", "register", "help", "quit"})
 HELP_CATEGORIES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("auth", ("login", "register", "help", "quit")),
     ("explore", ("look", "go", "scan", "map", "interact", "time", "recall", "lang")),
+    ("life", ("sit", "stand", "lie", "rest", "sleep", "wake")),
     ("items", ("take", "drop", "inventory", "give", "appraise", "craft", "disassemble")),
     ("equipment", ("equip", "unequip", "equipment", "mod", "use", "eat", "drink")),
     ("cyberware", ("install", "cyberware", "uninstall")),

@@ -185,6 +185,7 @@
 | 成人／NSFW 內容 M.0–M.7 | `world/mature.py`、`combat/gore.py`、`settings mature`、`flirt`、mature locale／YAML、client 18+ 登入；`docs/MATURE_CONTENT.md` |
 | Kabuki 與區域擴充（2026-06） | `kabuki_vip`、`kabuki_bazaar`、小中國街、企業區樞紐；`velvet_job`；`tests/test_world_districts.py` |
 | Client 版面測試 helper | `tests/client_ui_helpers.py`；`test_client_app.py` 側欄／help overlay 穩定斷言 |
+| 生活指令 L.1–L.8（2026-06） | `sit`／`stand`／`lie`／`rest`／`sleep`／`wake`；`world/life.py`、`data/life.yaml`；互動休息錨點；生命徵象／RAM 回復；移動／說話／戰鬥喚醒；PDA＋`%posture`；help 分類 **Life & vitals**；`tests/test_life_commands.py` |
 
 ## 多 session 開發（必做）
 
@@ -267,16 +268,16 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
-| L.1 | 姿態與疲勞模型 | `Player.posture`（`standing`／`sitting`／`lying`／`sleeping`）；`fatigue` 0–100（存檔＋meta）；`world/life.py`；`persistence/save.py` 預設 `standing` |
-| L.2 | 核心生活指令 | `commands/life.py`：`sit`、`stand`、`lie`、`rest`、`sleep`、`wake`；戰鬥、NETRUN（`net_shell`）、`chased_by_npc` 時禁止；`stand` 清除姿態；locale `life.*` 中英 |
-| L.3 | 環境休息規則 | `data/life.yaml` 休息配置；房間 `tags`（`rest`、`safe`、`home`、`clinic`）＋區域 `safety` 限制 `sleep`；`world/modifiers.py` 時段／天氣倍率（室外酸雨懲罰、室內夜間加成） |
-| L.4 | 互動物休息錨點 | `data/interactables.yaml` 類型 `rest`／`sleep`＋`world/interactables.py`；`watson_flat`、`ripper_clinic`、訓練場餐廳、`kabuki_lounge` 床位／長椅；`interact <目標>` 或錨點 `sleep` 加成姿態與回復 |
-| L.5 | 生命徵象與狀態整合 | `world/vitals.py` 休息／睡眠 tick HP（可選 RAM）與時段回血疊加；`rest` 降 `fatigue`；流血／中毒（`player_status`）減速或禁止睡眠；低 `humanity` 降低睡眠品質（義體幻痛掛鉤） |
-| L.6 | 風險與社交存在感 | 同房 `look`／進出顯示玩家姿態；戰鬥區／高通緝戶外睡眠可被 tick 或 NPC AI 打斷；`sleeping` 時 `say`／`talk` 自動醒來或禁止 |
-| L.7 | Client 與 PDA | meta `posture`／`fatigue`；`pda` 列；可選 prompt `%posture`；`look` 自己顯示生活狀態 |
-| L.8 | 測試、help、教程 | `tests/test_life_commands.py`；help 分類 **Life／Vitals**；教程互動點或教官示範 `sit`／`rest` |
+| ~~L.1~~ | ~~姿態與疲勞模型~~ | ✅ `Player.posture`；`fatigue` 0–100；`world/life.py`；`persistence/save.py` |
+| ~~L.2~~ | ~~核心生活指令~~ | ✅ `commands/life.py`：`sit`、`stand`、`lie`、`rest`、`sleep`、`wake`；戰鬥／NETRUN／追擊禁止；locale `life.*` 中英 |
+| ~~L.3~~ | ~~環境休息規則~~ | ✅ `data/life.yaml`；房間 `tags`＋區域限制 `sleep`；時段／天氣倍率於 `world/life.py` |
+| ~~L.4~~ | ~~互動物休息錨點~~ | ✅ `canteen_bench`、`flat_bunk`、`clinic_bed`、`lounge_booth`；`world/interactables.py` |
+| ~~L.5~~ | ~~生命徵象與狀態整合~~ | ✅ `world/vitals.py` HP／RAM 回復；疲勞 tick；流血禁止睡眠；低 `humanity` 懲罰 |
+| ~~L.6~~ | ~~風險與社交存在感~~ | ✅ `look`／`scan` 顯示姿態；睡眠打斷 tick；`go`／`say`／`talk`／戰鬥喚醒 |
+| ~~L.7~~ | ~~Client 與 PDA~~ | ✅ meta `posture`／`fatigue`；PDA 列；`%posture` prompt token |
+| ~~L.8~~ | ~~測試、help、教程~~ | ✅ `tests/test_life_commands.py`；help 分類 **Life & vitals**；餐廳長椅＋教官示範 |
 
-**建議順序：** L.1 → L.2 → L.3 → L.4 → L.5 → L.6 → L.7 → L.8。
+**建議順序：** L.1 → L.2 → L.3 → L.4 → L.5 → L.6 → L.7 → L.8。**全階段已交付（2026-06）。**
 
 ---
 

@@ -55,3 +55,6 @@ class Player:
     content_rating: str = "teen"
     romance_flags: dict[str, str] = field(default_factory=dict)
     player_status: dict[str, int] = field(default_factory=dict)
+    posture: str = "standing"
+    fatigue: int = 0
+    life_anchor: str = ""

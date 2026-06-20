@@ -70,9 +70,11 @@ def handle(ctx: CommandContext):
     if interact_labels:
         lines.append(t(ctx.player.locale, "scan.interactables", objects="、".join(interact_labels)))
 
+    from world.life import peer_posture_line
+
     for peer in ctx.peers:
         if peer.named:
-            lines.append(t(ctx.player.locale, "scan.player", name=peer.name))
+            lines.append(t(ctx.player.locale, "scan.player", name=peer_posture_line(peer, ctx.player.locale)))
 
     hint = room.hidden_hint_zh if ctx.player.locale == "zh" else (room.hidden_hint_en or room.hidden_hint_zh)
     if hint:

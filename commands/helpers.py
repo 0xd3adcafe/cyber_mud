@@ -347,6 +347,11 @@ def format_look_target(ctx: CommandContext, target: str) -> list[str]:
     if not text:
         return format_look(ctx)
 
+    if text.lower() in {"me", "self", "自己"}:
+        from world.life import format_self_life
+
+        return format_self_life(ctx.player, ctx.player.locale)
+
     slot = resolve_equipment_slot_name(ctx, text)
     if text.strip().lower() in ("equipment", "gear", "裝備"):
         return format_look_equipment(ctx)
@@ -494,5 +499,11 @@ def format_look(ctx: CommandContext) -> list[str]:
     ]
     if interact_labels:
         lines.append(t(ctx.player.locale, "look.interactables", objects="、".join(interact_labels)))
+
+    from world.life import peer_posture_line
+
+    peer_labels = [peer_posture_line(peer, ctx.player.locale) for peer in ctx.peers if peer.named]
+    if peer_labels:
+        lines.append(t(ctx.player.locale, "look.players", players="、".join(peer_labels)))
 
     return lines

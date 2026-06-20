@@ -243,7 +243,6 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 |------|--------|
 | Environment | pyenv native Python build |
 | **World expansion (WORLD.md)** | W.1–W.14 — procedural grids, eight districts, story anchors (`crypt`, `data_vault`, guard/priest/rat), `help tutorial`, faction depth, weather/schedules, black market, multiplayer presence, NETRUN story nodes, poison/overheat, live world reactions; see PHASES **World expansion** |
-| **Life commands** | L.1–L.8 — `sit`/`stand`/`rest`/`sleep`/`wake`; posture + fatigue; room/weather/interactable modifiers; vitals + trauma integration; see PHASES **Life commands** |
 
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.7 shipped — see PHASES **Mature / NSFW content** table.
 
@@ -335,6 +334,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | Mature / NSFW content M.0–M.7 | `world/mature.py`, `combat/gore.py`, `settings mature`, `flirt`, mature locale/YAML, client 18+ login |
 | Kabuki & district expansion | `kabuki_vip`, `kabuki_bazaar`, Little China, Corpo hubs; `velvet_job`; `tests/test_world_districts.py` |
 | Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions |
+| Life commands L.1–L.8 | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable anchors; vitals/RAM regen; PDA + `%posture`; `tests/test_life_commands.py` |
 
 World setting and district expansion: [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)).
 

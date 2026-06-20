@@ -9,9 +9,18 @@ def handle(ctx: CommandContext):
     if not message:
         return ok([t(ctx.player.locale, "say.usage")])
 
+    lines: list[str] = []
+    if ctx.player.posture == "sleeping":
+        from world.life import wake_player
+
+        if wake_player(ctx.player):
+            lines.append(t(ctx.player.locale, "life.wake_on_say"))
+
+    lines.append(t(ctx.player.locale, "say.ok", message=message))
     return ok(
-        [t(ctx.player.locale, "say.ok", message=message)],
+        lines,
         meta=player_meta(ctx),
+        world_changed=bool(lines) and len(lines) > 1,
         broadcast_key="say.broadcast",
         broadcast_kwargs={"name": ctx.player.name, "message": message},
     )

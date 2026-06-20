@@ -35,6 +35,13 @@ def handle(ctx: CommandContext):
         weather_key = "modifiers.movement_blocked"
         return ok([t(ctx.player.locale, weather_key)])
 
+    life_lines: list[str] = []
+    if ctx.player.posture != "standing":
+        from world.life import wake_player
+
+        if wake_player(ctx.player):
+            life_lines.append(t(ctx.player.locale, "life.wake_on_move"))
+
     ctx.player.room_id = dest_id
     from world.quests import advance_quest_on_visit
     from world.trauma import treat_trauma_at_ripperdoc
@@ -42,6 +49,7 @@ def handle(ctx: CommandContext):
     quest_lines = advance_quest_on_visit(ctx.player, ctx.state, dest_id, ctx.player.locale)
     trauma_lines = treat_trauma_at_ripperdoc(ctx.player, dest, ctx.player.locale)
     lines = [t(ctx.player.locale, "go.ok", direction=direction), ""]
+    lines.extend(life_lines)
     lines.extend(quest_lines)
     lines.extend(trauma_lines)
     lines.extend(format_look(ctx))

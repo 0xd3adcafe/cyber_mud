@@ -1,0 +1,45 @@
+fatigue_max: 100
+
+postures:
+  sitting:
+    fatigue_delta: -3
+    hp_regen_mult: 0.75
+    ram_regen: 0
+  lying:
+    fatigue_delta: -5
+    hp_regen_mult: 1.25
+    ram_regen: 1
+  sleeping:
+    fatigue_delta: -10
+    hp_regen_mult: 2.0
+    ram_regen: 2
+
+sleep_room_tags: [rest, safe, home, clinic, lounge]
+rest_room_tags: [rest, safe, home, clinic, lounge, housing]
+
+indoor_room_tags: [home, clinic, safe, lounge, housing, shop]
+
+weather_outdoor_mult:
+  acid_rain: 0.35
+  fog: 0.85
+
+period_hp_mult:
+  night: 1.2
+  dawn: 1.1
+  dusk: 0.95
+
+districts_no_outdoor_sleep: [combat_zone]
+
+anchors:
+  bunk:
+    posture: lying
+    hp_mult: 1.35
+    allows_sleep: true
+  bench:
+    posture: sitting
+    hp_mult: 1.15
+    allows_sleep: false
+  booth:
+    posture: sitting
+    hp_mult: 1.1
+    allows_sleep: false

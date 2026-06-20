@@ -64,7 +64,7 @@ rooms:
     district: kabuki
     grid_x: 0
     grid_y: 0
-    tags: [mature, club]
+    tags: [mature, club, lounge, rest]
     exits:
       east: alley
       west: kabuki_bazaar
@@ -282,7 +282,7 @@ rooms:
     district: tutorial
     grid_x: 1
     grid_y: 2
-    tags: [tutorial, consumables]
+    tags: [tutorial, consumables, rest, safe]
     exits:
       east: tutorial_armory
   tutorial_range:
@@ -317,7 +317,7 @@ rooms:
     district: watson
     grid_x: 0
     grid_y: 1
-    tags: [shop, ripperdoc]
+    tags: [shop, ripperdoc, clinic, rest, safe]
     shop_id: ripperdoc
     exits:
       east: square
@@ -360,7 +360,7 @@ rooms:
     district: watson
     grid_x: 0
     grid_y: 2
-    tags: [housing, home]
+    tags: [housing, home, rest, safe]
     exits: {}
 
 items:

@@ -5,6 +5,7 @@ from commands.registry import CommandContext
 from shared.equipment import EQUIP_SLOTS, slot_label
 from shared.i18n import t
 from shared.locale_content import item_label
+from world.life import posture_label
 from world.progression import skill_label, talent_label, xp_to_next_level
 from world.street_cred import street_cred_rank
 from shared.ui_json import panel_json
@@ -22,6 +23,12 @@ def format_pda(ctx: CommandContext) -> list[str]:
             "pda.vitals",
             hp=f"{ctx.player.hp}/{ctx.player.max_hp}",
             gold=str(ctx.player.gold),
+        ),
+        t(
+            locale,
+            "pda.life",
+            posture=posture_label(ctx.player.posture, locale),
+            fatigue=str(ctx.player.fatigue),
         ),
         t(
             locale,
@@ -136,6 +143,16 @@ def build_pda_ui(ctx: CommandContext) -> str:
             "kind": "row",
             "label": "RAM",
             "value": f"{ctx.player.ram}/{ctx.player.max_ram}",
+        },
+        {
+            "kind": "row",
+            "label": t(locale, "pda.life_label"),
+            "value": t(
+                locale,
+                "pda.life",
+                posture=posture_label(ctx.player.posture, locale),
+                fatigue=str(ctx.player.fatigue),
+            ),
         },
         {
             "kind": "row",

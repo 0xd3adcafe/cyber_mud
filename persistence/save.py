@@ -75,6 +75,9 @@ def player_to_dict(player: Player) -> dict:
         "content_rating": player.content_rating,
         "romance_flags": dict(player.romance_flags),
         "player_status": dict(player.player_status),
+        "posture": player.posture,
+        "fatigue": player.fatigue,
+        "life_anchor": player.life_anchor,
     }
 
 
@@ -136,6 +139,9 @@ def player_from_dict(data: dict) -> Player:
         content_rating=str(data.get("content_rating", "teen")),
         romance_flags=dict(data.get("romance_flags", {})),
         player_status={str(k): int(v) for k, v in (data.get("player_status") or {}).items()},
+        posture=str(data.get("posture", "standing")),
+        fatigue=int(data.get("fatigue", 0)),
+        life_anchor=str(data.get("life_anchor", "")),
     )
     if not player.cyberware and player.implants:
         migrate_legacy_implants(player, load_world())

@@ -158,6 +158,8 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
     from shared.completion import completion_meta
 
     meta.update(completion_meta(ctx))
+    meta["posture"] = ctx.player.posture
+    meta["fatigue"] = str(ctx.player.fatigue)
     return meta
 
 
@@ -368,4 +370,5 @@ def register_builtin_commands() -> None:
         braindance,
         settings_cmd,
         flirt,
+        life,
     )

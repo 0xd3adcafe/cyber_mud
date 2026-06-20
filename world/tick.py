@@ -15,7 +15,7 @@ from world.npc_respawn import process_npc_respawns
 from world.schedule import npc_scheduled_room
 from world.state import WorldState
 from world.tick_events import TickEvent, move_npc
-from world.vitals import apply_hp_regen
+from world.vitals import apply_hp_regen, apply_ram_regen
 from world.wanted import tick_wanted_decay
 from world.weather import WeatherConfig, load_weather_config, maybe_tick_weather
 
@@ -194,8 +194,12 @@ def _process_hp_regen(state: WorldState, config: TimeConfig, players: list[Playe
     for player in players:
         if not player.named:
             continue
-        amount = apply_hp_regen(player, period)
-        if amount <= 0:
+        amount = apply_hp_regen(player, period, state=state)
+        ram_amount = apply_ram_regen(player, period, state=state)
+        from world.life import apply_life_tick
+
+        life_lines = apply_life_tick(player, state, period)
+        if amount <= 0 and ram_amount <= 0 and not life_lines:
             continue
         events.append(
             TickEvent(
@@ -203,8 +207,12 @@ def _process_hp_regen(state: WorldState, config: TimeConfig, players: list[Playe
                 player_name=player.name,
                 message_kwargs={
                     "amount": str(amount),
+                    "ram_amount": str(ram_amount),
                     "hp": str(player.hp),
                     "max_hp": str(player.max_hp),
+                    "ram": str(player.ram),
+                    "max_ram": str(player.max_ram),
+                    "life_lines": life_lines,
                 },
             )
         )

@@ -190,6 +190,9 @@ def start_encounter(state: WorldState, player: Player, npc_id: str) -> Encounter
         npc_cd=NPC_ATTACK_CD,
     )
     state.encounters[encounter.id] = encounter
+    from world.life import wake_player
+
+    wake_player(player)
     player.in_combat = True
     player.encounter_id = encounter.id
     return encounter

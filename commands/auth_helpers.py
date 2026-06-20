@@ -76,6 +76,9 @@ def reset_player_to_guest(player, start_room: str) -> None:
     player.content_rating = fresh.content_rating
     player.romance_flags = dict(fresh.romance_flags)
     player.player_status = dict(fresh.player_status)
+    player.posture = fresh.posture
+    player.fatigue = fresh.fatigue
+    player.life_anchor = fresh.life_anchor
 
 
 def apply_loaded_player(session_player, loaded) -> None:
@@ -128,6 +131,9 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.content_rating = loaded.content_rating
     session_player.romance_flags = dict(loaded.romance_flags)
     session_player.player_status = dict(loaded.player_status)
+    session_player.posture = loaded.posture
+    session_player.fatigue = loaded.fatigue
+    session_player.life_anchor = loaded.life_anchor
 
 
 def handle_register(ctx: CommandContext):

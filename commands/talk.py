@@ -31,6 +31,13 @@ def handle(ctx: CommandContext):
         return ok(refusal)
 
     lines: list[str] = []
+    woke = False
+    if ctx.player.posture == "sleeping":
+        from world.life import wake_player
+
+        if wake_player(ctx.player):
+            woke = True
+            lines.append(t(ctx.player.locale, "life.wake_on_talk"))
     talk_key = npc.talk_key or npc.id
     if is_mature(ctx.player) and has_mature_talk(npc):
         dialogue = tm(ctx.player.locale, f"talk.{talk_key}")
@@ -58,7 +65,7 @@ def handle(ctx: CommandContext):
         label = npc.name_zh if ctx.player.locale == "zh" else (npc.name_en or npc.name_zh)
         lines.append(t(ctx.player.locale, "talk.silent", name=label))
 
-    world_changed = bool(offer_lines) or bool(quest_lines)
+    world_changed = bool(offer_lines) or bool(quest_lines) or woke
     return ok(lines, meta=player_meta(ctx), world_changed=world_changed)
 
 

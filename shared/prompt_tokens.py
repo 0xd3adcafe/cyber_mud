@@ -23,6 +23,7 @@ PROMPT_TOKENS = {
     "%c": "prompt.token.street_cred",
     "%v": "prompt.token.wanted",
     "%x": "prompt.token.xp",
+    "%posture": "prompt.token.posture",
 }
 
 CP2077_TEMPLATES = {
@@ -53,6 +54,8 @@ def expand_prompt(template: str, player: Player, state: WorldState) -> str:
         if weather_type:
             weather = weather_label(weather_type, player.locale)
 
+    from world.life import posture_label
+
     replacements = {
         "%n": player.name if player.named else "旅人",
         "%r": room_label,
@@ -67,6 +70,7 @@ def expand_prompt(template: str, player: Player, state: WorldState) -> str:
         "%c": str(player.street_cred),
         "%v": str(player.wanted_level),
         "%x": f"{player.xp}/{xp_to_next_level(player.level)}",
+        "%posture": posture_label(player.posture, player.locale),
     }
     result = template
     for token, value in replacements.items():

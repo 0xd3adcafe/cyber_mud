@@ -67,6 +67,8 @@ class ClientViewState:
     wanted: str = "0"
     faction: str = ""
     xp: str = ""
+    posture: str = "standing"
+    fatigue: str = "0"
     net_shell: bool = False
     net_prompt: str = "ghost@netrun-kali> "
     sidebar_open: bool = False
@@ -180,6 +182,10 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         state.faction = value
     elif key == "xp":
         state.xp = value
+    elif key == "posture":
+        state.posture = value or "standing"
+    elif key == "fatigue":
+        state.fatigue = value
     elif key == "net_shell":
         state.net_shell = value == "1"
     elif key == "net_prompt":
