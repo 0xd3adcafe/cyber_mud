@@ -129,20 +129,24 @@ def _stage_matches(
     stage: QuestStage,
     player: Player,
     *,
+    event: str,
     npc_id: str = "",
     room_id: str = "",
     interactable_id: str = "",
+    net_node_id: str = "",
 ) -> bool:
     if stage.objective_type == "talk_npc":
-        return npc_id == stage.objective_target
+        return event == "talk" and npc_id == stage.objective_target
     if stage.objective_type == "visit_room":
-        return room_id == stage.objective_target
+        return event == "visit" and room_id == stage.objective_target
     if stage.objective_type == "interact":
-        return interactable_id == stage.objective_target
+        return event == "interact" and interactable_id == stage.objective_target
     if stage.objective_type == "defeat_npc":
-        return npc_id == stage.objective_target
+        return event == "defeat" and npc_id == stage.objective_target
     if stage.objective_type == "have_item":
-        return stage.objective_target in player.inventory
+        return event == "inventory" and stage.objective_target in player.inventory
+    if stage.objective_type == "hack_net":
+        return event == "hack" and net_node_id == stage.objective_target
     return False
 
 
@@ -167,9 +171,11 @@ def _check_stage_progress(
     quest: Quest,
     locale: str,
     *,
+    event: str,
     npc_id: str = "",
     room_id: str = "",
     interactable_id: str = "",
+    net_node_id: str = "",
 ) -> list[str]:
     if player.active_quest != quest.id:
         return []
@@ -188,9 +194,11 @@ def _check_stage_progress(
     if not _stage_matches(
         stage,
         player,
+        event=event,
         npc_id=npc_id,
         room_id=room_id,
         interactable_id=interactable_id,
+        net_node_id=net_node_id,
     ):
         return []
     return _advance_stage(player, quest, locale)
@@ -212,7 +220,7 @@ def advance_quest_on_talk(
     if status == "done":
         return []
 
-    lines = _check_stage_progress(player, state, quest, locale, npc_id=npc_id)
+    lines = _check_stage_progress(player, state, quest, locale, event="talk", npc_id=npc_id)
     if lines:
         return lines
 
@@ -228,7 +236,7 @@ def advance_quest_on_visit(player: Player, state: WorldState, room_id: str, loca
     quest = state.world.quest(player.active_quest)
     if quest is None:
         return []
-    return _check_stage_progress(player, state, quest, locale, room_id=room_id)
+    return _check_stage_progress(player, state, quest, locale, event="visit", room_id=room_id)
 
 
 def advance_quest_on_interact(
@@ -242,7 +250,7 @@ def advance_quest_on_interact(
     quest = state.world.quest(player.active_quest)
     if quest is None:
         return []
-    return _check_stage_progress(player, state, quest, locale, interactable_id=interactable_id)
+    return _check_stage_progress(player, state, quest, locale, event="interact", interactable_id=interactable_id)
 
 
 def advance_quest_on_defeat(
@@ -256,7 +264,7 @@ def advance_quest_on_defeat(
     quest = state.world.quest(player.active_quest)
     if quest is None:
         return []
-    return _check_stage_progress(player, state, quest, locale, npc_id=npc_id)
+    return _check_stage_progress(player, state, quest, locale, event="defeat", npc_id=npc_id)
 
 
 def advance_quest_on_inventory(player: Player, state: WorldState, locale: str) -> list[str]:
@@ -265,7 +273,21 @@ def advance_quest_on_inventory(player: Player, state: WorldState, locale: str) -
     quest = state.world.quest(player.active_quest)
     if quest is None:
         return []
-    return _check_stage_progress(player, state, quest, locale)
+    return _check_stage_progress(player, state, quest, locale, event="inventory")
+
+
+def advance_quest_on_hack(
+    player: Player,
+    state: WorldState,
+    node_id: str,
+    locale: str,
+) -> list[str]:
+    if not player.active_quest:
+        return []
+    quest = state.world.quest(player.active_quest)
+    if quest is None:
+        return []
+    return _check_stage_progress(player, state, quest, locale, event="hack", net_node_id=node_id)
 
 
 def offer_quest_from_giver(
@@ -355,6 +377,12 @@ def quest_hint_for_quest(player: Player, state: WorldState, quest: Quest, locale
             item = state.world.item(stage.objective_target)
             label = item_label(item, locale) if item else stage.objective_target
             return t(locale, "quest.hint_have_item", target=label)
+        if stage.objective_type == "hack_net":
+            node = state.world.net_nodes.get(stage.objective_target)
+            if node:
+                label = node.name_zh if locale == "zh" else (node.name_en or node.name_zh)
+                return t(locale, "quest.hint_hack_net", target=label or stage.objective_target)
+            return t(locale, "quest.hint_hack_net", target=stage.objective_target)
     if locale == "zh":
         return quest.hint_zh
     return quest.hint_en or quest.hint_zh

@@ -10,6 +10,8 @@ def test_kabuki_little_china_corpo_rooms():
     assert "little_china_gate" in world.rooms
     assert "shrine" in world.rooms
     assert "data_crypt" in world.rooms
+    assert "crypt" in world.rooms
+    assert "data_vault" in world.rooms
     assert "corpo_lobby" in world.rooms
     assert "corpo_plaza" in world.rooms
 
@@ -37,3 +39,6 @@ def test_new_npcs_and_shop():
     assert "kabuki_bazaar" in world.shops
     assert world.item("lantern") is not None
     assert "crypt_core" in world.net_nodes
+    assert world.npc("guard") is not None
+    assert world.npc("priest") is not None
+    assert world.npc("rat") is not None

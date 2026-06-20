@@ -187,6 +187,8 @@
 | Client 版面測試 helper | `tests/client_ui_helpers.py`；`test_client_app.py` 側欄／help overlay 穩定斷言 |
 | 生活指令 L.1–L.8（2026-06） | `sit`／`stand`／`lie`／`rest`／`sleep`／`wake`；`world/life.py`、`data/life.yaml`；互動休息錨點；生命徵象／RAM 回復；移動／說話／戰鬥喚醒；PDA＋`%posture`；help 分類 **生活與生命徵象**；`tests/test_life_commands.py` |
 | 生活指令後續補齊（2026-06） | 活動累積疲勞（`move`／`combat`／`netrun`）；區域 `safety` 戶外睡眠門檻；休息時段／天氣倍率於 `world/modifiers.py`；毒素禁止睡眠；高疲勞降低回血；`tests/test_life_commands.py`、`tests/test_modifiers.py` |
+| 世界擴充 W.4–W.5、W.11（2026-06） | 主線錨點 `crypt`、`data_vault`；NPC `guard`／`priest`／`rat`；`plaza_terminal`／`vault_terminal`；`hack_core` 任務＋`hack_net` 目標；net 節點 `crypt_node`／`vault_core`；`tests/test_story_anchors.py`、`tests/test_net_story.py` |
+| 世界擴充 W.1、W.2、W.14 規模（2026-06） | `tools/merge_world_grid.py`；8 區生成格點→**263 房**；樞紐 `tyrell_plaza`、`combat_zone_gate`；樞紐↔格點連接；`tests/test_world_scale.py`；`admin.sh validate` 統計 |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 
 ## 多 session 開發（必做）
@@ -241,7 +243,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 ### 世界擴充（[WORLD.md](WORLD.md)）
 
-**現況（2026-06）：** 約 25 間手寫房間、約 19 名 NPC，樞紐涵蓋 Watson／Kabuki／小中國街／企業區／碼頭／地下城／訓練場。**目標**（原 mud）：`tools/generate_world.py` 搭配主線錨點，約 200 房、109 NPC、45 物品定義。
+**現況（2026-06）：** **263 房**（27 手寫樞紐＋236 程序格點）、**22 NPC**、**31 物品**；主線錨點 `crypt`／`data_vault` 已接通。**尚待：** ~109 NPC、~45 物品；W.3、W.6–W.10、W.12–W.13 仍開放。
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|

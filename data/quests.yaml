@@ -33,6 +33,26 @@ quests:
         objective_target: dock_crane
       - objective_type: talk_npc
         objective_target: broker
+  hack_core:
+    name_zh: 核心終端入侵
+    name_en: Core Terminal Breach
+    npc_id: broker
+    description_zh: 經紀人要你證明能駭入廣場核心終端——先撿螢光棒、再回報他，最後在 NETRUN 中 hack terminal。
+    description_en: The broker wants proof you can breach the plaza core terminal—grab a glowstick, check in, then hack terminal in NETRUN.
+    hint_zh: 在廣場撿螢光棒，與經紀人交談，輸入 net 後 hack terminal。
+    hint_en: Take a glowstick at the square, talk to the broker, type net, then hack terminal.
+    complete_npc_id: broker
+    requires_quest: broker_rumor
+    reward_gold: 75
+    reward_xp: 35
+    reward_street_cred: 12
+    stages:
+      - objective_type: have_item
+        objective_target: glowstick
+      - objective_type: talk_npc
+        objective_target: broker
+      - objective_type: hack_net
+        objective_target: terminal
   alley_clearance:
     name_zh: 小巷清剿
     name_en: Alley Clearance

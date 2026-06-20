@@ -18,6 +18,7 @@ district_safety:
   corpo: 3
   docks: 1
   undercity: 1
+  tyrell: 3
   combat_zone: 0
 
 postures:

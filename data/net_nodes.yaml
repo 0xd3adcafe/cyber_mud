@@ -19,3 +19,13 @@ net_nodes:
     name_zh: 墓穴核心
     name_en: Crypt Core
     hackable: true
+  crypt_node:
+    room_id: crypt
+    name_zh: 墓穴節點
+    name_en: Crypt Node
+    hackable: true
+  vault_core:
+    room_id: data_vault
+    name_zh: 資料庫核心
+    name_en: Vault Core
+    hackable: true

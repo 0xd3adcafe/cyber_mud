@@ -756,7 +756,7 @@ talk:
   missing: "這裡沒有 {name}。"
   silent: "{name} 沒有回應。"
   broker: "情報經紀人壓低聲音：「想打聽漩渦幫的動向？小巷裡有個暴徒知道內情。」"
-  broker_quest: "◈ 新任務：經紀人的傳聞"
+  broker_quest: "◈ 經紀人招手，有新的街頭委託。"
   thug: "街頭暴徒咧嘴一笑：「漩渦幫最近在收義體，別多問。回去跟你的經紀人說我講過了。」"
   instructor: "教官的全息影像亮起：「往上簡報室練 gigs／stats；北邊戰鬥、東邊駭入、南邊領裝備；裝備庫西邊餐廳可 sit／rest 練生活指令。準備好了就往西回廣場。」"
   netcoach: "駭客教練敲了敲終端：「輸入 net 進入模擬介面，對訓練用終端用 hack 或 probe 試試。北邊模擬診所可練 install。」"
@@ -769,6 +769,10 @@ talk:
   bazaar_fixer: "中介敲了敲晶片：「灰市價在這——shop 看看。東邊夜總會，南邊小中國街。」"
   shrine_keeper: "司祭微微鞠躬：「人性有限。每次義體升級都會帶走一部分。升級前先想清楚。」"
   corp_guard: "保全面罩閃爍：「證件掃描通過。企業區禁止拔槍。」"
+  guard: "守衛的義眼瞇起：「今晚墓穴很安靜。別惹事。」"
+  priest: "司祭低語：「資料比肉體長久。宣誓要謹慎——資料庫會記得。」"
+  rat: "下水道老鼠發出雜訊般的嘶嘶聲——太兇野，無法交談。"
+  broker_hack_core: "◈ 新任務：核心終端入侵"
 
 say:
   usage: "用法：say <訊息>"
@@ -791,6 +795,7 @@ quest:
   hint_talk: "與 {target} 交談。"
   hint_defeat: "擊倒 {target}。"
   hint_have_item: "取得 {target}。"
+  hint_hack_net: "輸入 net 進入駭入介面，hack {target}。"
 
 gigs:
   header: "◈ 街頭委託"

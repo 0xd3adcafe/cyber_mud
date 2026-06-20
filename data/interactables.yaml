@@ -1,4 +1,12 @@
 interactables:
+  plaza_terminal:
+    room_id: square
+    name_zh: 廣場核心終端
+    name_en: Plaza Core Terminal
+    description_zh: 企業維護的公共終端，NETRUN 模式下可 hack 核心節點。
+    description_en: A corpo-maintained public terminal—hack the core node while in NETRUN.
+    message_zh: 終端螢幕閃爍：「輸入 net 進入駭入介面，再 hack terminal。」
+    message_en: 'The screen flashes: "Type net to jack in, then hack terminal."'
   holo_ad:
     room_id: square
     name_zh: 全息廣告看板
@@ -7,6 +15,14 @@ interactables:
     description_en: A holo board cycling corpo recruitment and black-market pharma ads.
     message_zh: 看板閃過一行字：「想升級義體？西邊診所全天候開放。」
     message_en: 'The board flashes: "Chrome upgrades—ripper clinic west, 24/7."'
+  vault_terminal:
+    room_id: data_vault
+    name_zh: 資料庫終端
+    name_en: Vault Terminal
+    description_zh: 冷卻庫內的企業終端，仍連著廣場核心節點的備援通道。
+    description_en: A corporate terminal in the cold vault—backup link to the plaza core node.
+    message_zh: 終端顯示：「vault_core 節點待機中——需 breach_protocol。」
+    message_en: 'Display reads: "vault_core node standby—breach_protocol recommended."'
   smuggler_cache:
     room_id: alley
     name_zh: 走私貨櫃

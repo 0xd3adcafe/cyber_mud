@@ -1,38 +1,85 @@
 start_room: square
 respawn_room: ripper_clinic
-
 factions:
   arasaka: 荒坂公司
   maelstrom: 漩渦幫
   militech: 軍武科技
   tyrell: 泰瑞公司
-
 room_items:
-  square: [glowstick, knife, jacket, cyber_arm_kit, mod_chip, liberty_pistol, pipe, synth_ramen]
-  alley: [rusty_key]
-  kabuki_bazaar: [glowstick, synth_coffee]
-  shrine: [lantern]
-  data_crypt: [rusty_key]
-  tutorial: [glowstick, field_manual]
-  tutorial_briefing: [field_manual]
-  tutorial_armory: [trainee_blade, training_sidearm, trainee_undersuit, trainee_vest, trainee_pants, trainee_boots, trainee_helmet, trainee_baton, practice_cyber_kit, mod_chip, med_stim]
-  tutorial_canteen: [trainee_ration, trainee_flask, synth_ramen, energy_drink, med_stim]
-  tutorial_course: [field_manual, trainee_baton]
-  tutorial_medbay: [practice_cyber_kit, med_stim, trauma_kit]
-  tutorial_range: [training_sidearm, training_carbine, trainee_helmet, training_smartgun]
-
+  square:
+  - glowstick
+  - knife
+  - jacket
+  - cyber_arm_kit
+  - mod_chip
+  - liberty_pistol
+  - pipe
+  - synth_ramen
+  alley:
+  - rusty_key
+  kabuki_bazaar:
+  - glowstick
+  - synth_coffee
+  shrine:
+  - lantern
+  data_crypt:
+  - rusty_key
+  crypt:
+  - glowstick
+  data_vault:
+  - rusty_key
+  tutorial:
+  - glowstick
+  - field_manual
+  tutorial_briefing:
+  - field_manual
+  tutorial_armory:
+  - trainee_blade
+  - training_sidearm
+  - trainee_undersuit
+  - trainee_vest
+  - trainee_pants
+  - trainee_boots
+  - trainee_helmet
+  - trainee_baton
+  - practice_cyber_kit
+  - mod_chip
+  - med_stim
+  tutorial_canteen:
+  - trainee_ration
+  - trainee_flask
+  - synth_ramen
+  - energy_drink
+  - med_stim
+  tutorial_course:
+  - field_manual
+  - trainee_baton
+  tutorial_medbay:
+  - practice_cyber_kit
+  - med_stim
+  - trauma_kit
+  tutorial_range:
+  - training_sidearm
+  - training_carbine
+  - trainee_helmet
+  - training_smartgun
 rooms:
   square:
     name_zh: 霓虹廣場
     name_en: Neon Square
-    description_zh: |
-      全息廣告在酸雨後的積水上閃爍。情報販子與企業特工混雜在人群中。
-    description_en: |
-      Holographic ads flicker on rain-slick pavement. Fixers and corpo agents mingle in the crowd.
+    description_zh: '全息廣告在酸雨後的積水上閃爍。情報販子與企業特工混雜在人群中。
+
+      '
+    description_en: 'Holographic ads flicker on rain-slick pavement. Fixers and corpo
+      agents mingle in the crowd.
+
+      '
     district: watson
     grid_x: 1
     grid_y: 1
-    tags: [transit, metro]
+    tags:
+    - transit
+    - metro
     exits:
       north: alley
       east: tutorial
@@ -43,7 +90,8 @@ rooms:
     name_zh: 陰暗小巷
     name_en: Dark Alley
     description_zh: 霓虹反光在潮濕牆面上流動。南邊回到廣場。
-    description_en: Neon reflections crawl across wet walls. South leads back to the square.
+    description_en: Neon reflections crawl across wet walls. South leads back to the
+      square.
     district: watson
     grid_x: 1
     grid_y: 0
@@ -57,14 +105,21 @@ rooms:
   kabuki_lounge:
     name_zh: 歌舞伎夜總會
     name_en: Kabuki Lounge
-    description_zh: |
-      霓虹簾幕後傳來合成爵士與低語。這裡只接待已確認年齡的客人。
-    description_en: |
-      Synthetic jazz and whispers behind neon curtains. Patrons must confirm they are 18+.
+    description_zh: '霓虹簾幕後傳來合成爵士與低語。這裡只接待已確認年齡的客人。
+
+      '
+    description_en: 'Synthetic jazz and whispers behind neon curtains. Patrons must
+      confirm they are 18+.
+
+      '
     district: kabuki
     grid_x: 0
     grid_y: 0
-    tags: [mature, club, lounge, rest]
+    tags:
+    - mature
+    - club
+    - lounge
+    - rest
     exits:
       east: alley
       west: kabuki_bazaar
@@ -72,38 +127,52 @@ rooms:
   kabuki_vip:
     name_zh: VIP 包廂區
     name_en: VIP Booth Wing
-    description_zh: |
-      隱私場與腦舞預覽艙被絨簾隔開。保鑣的義眼掃過每一位進場者。
-    description_en: |
-      Privacy fields and BD preview pods sit behind velvet curtains. A bouncer's cyber-eye tracks every entrant.
+    description_zh: '隱私場與腦舞預覽艙被絨簾隔開。保鑣的義眼掃過每一位進場者。
+
+      '
+    description_en: 'Privacy fields and BD preview pods sit behind velvet curtains.
+      A bouncer''s cyber-eye tracks every entrant.
+
+      '
     district: kabuki
     grid_x: 0
     grid_y: 1
-    tags: [mature, club]
+    tags:
+    - mature
+    - club
     exits:
       south: kabuki_lounge
   kabuki_bazaar:
     name_zh: 歌舞伎灰市
     name_en: Kabuki Gray Bazaar
-    description_zh: |
-      攤販兜售改裝晶片與來路不明的情報。東邊是夜總會，南邊通往小中國街。
-    description_en: |
-      Stalls hawk mod chips and questionable intel. East to the lounge; south to Little China Gate.
+    description_zh: '攤販兜售改裝晶片與來路不明的情報。東邊是夜總會，南邊通往小中國街。
+
+      '
+    description_en: 'Stalls hawk mod chips and questionable intel. East to the lounge;
+      south to Little China Gate.
+
+      '
     district: kabuki
     grid_x: -1
     grid_y: 0
-    tags: [bazaar, shop]
+    tags:
+    - bazaar
+    - shop
     shop_id: kabuki_bazaar
     exits:
       east: kabuki_lounge
       south: little_china_gate
+      north: kabuki_2_3
   little_china_gate:
     name_zh: 小中國街牌樓
     name_en: Little China Gate
-    description_zh: |
-      紅色牌樓下香火與合成雨味交織。東邊通往廟宇，西邊回到小巷。
-    description_en: |
-      Incense and synthetic rain mix under a red arch. East to the shrine; west to the alley.
+    description_zh: '紅色牌樓下香火與合成雨味交織。東邊通往廟宇，西邊回到小巷。
+
+      '
+    description_en: 'Incense and synthetic rain mix under a red arch. East to the
+      shrine; west to the alley.
+
+      '
     district: little_china
     grid_x: 2
     grid_y: 0
@@ -111,34 +180,84 @@ rooms:
       north: kabuki_bazaar
       east: shrine
       west: alley
+      south: little_china_2_0
   shrine:
     name_zh: 霓虹神社
     name_en: Neon Shrine
-    description_zh: |
-      全息燭火在傳統木柱間飄動。人性與信仰在義體時代顯得格外脆弱。
-    description_en: |
-      Holo candles drift between wooden pillars—faith feels fragile in the chrome age.
+    description_zh: '全息燭火在傳統木柱間飄動。人性與信仰在義體時代顯得格外脆弱。
+
+      '
+    description_en: 'Holo candles drift between wooden pillars—faith feels fragile
+      in the chrome age.
+
+      '
     district: little_china
     grid_x: 3
     grid_y: 0
-    tags: [shrine]
+    tags:
+    - shrine
     exits:
       west: little_china_gate
       down: data_crypt
   data_crypt:
     name_zh: 資料墓穴
     name_en: Data Crypt
-    description_zh: |
-      積水的伺服器機櫃閃著錯誤代碼。北邊可回到地下廢墟。
-    description_en: |
-      Flooded server racks blink error codes. North leads back to the undercity ruins.
+    description_zh: '積水的伺服器機櫃閃著錯誤代碼。東邊通往地下墓穴，北邊可回到地下廢墟。
+
+      '
+    description_en: 'Flooded server racks blink error codes. East leads to the crypt;
+      north to the undercity ruins.
+
+      '
     district: undercity
     grid_x: 3
     grid_y: -1
-    tags: [undercity, net]
+    tags:
+    - undercity
+    - net
     exits:
       up: shrine
       north: undercity
+      east: crypt
+  crypt:
+    name_zh: 地下墓穴
+    name_en: Underground Crypt
+    description_zh: '潮濕石階向下延伸，全息蠟燭在義體殘骸間飄浮。西邊是資料墓穴，北邊通往企業資料庫。
+
+      '
+    description_en: 'Damp stone steps descend—holo candles drift among chrome debris.
+      West to the data crypt; north to the corporate vault.
+
+      '
+    district: undercity
+    grid_x: 4
+    grid_y: -1
+    tags:
+    - undercity
+    - crypt
+    exits:
+      west: data_crypt
+      north: data_vault
+      south: undercity
+  data_vault:
+    name_zh: 企業資料庫
+    name_en: Corporate Data Vault
+    description_zh: '泰瑞封存機密檔案的冷卻庫，終端機仍連著廣場核心節點。南邊回到地下墓穴。
+
+      '
+    description_en: 'A Tyrell cold-storage vault for sealed files—a terminal still
+      peers into the plaza core node. South leads back to the crypt.
+
+      '
+    district: undercity
+    grid_x: 4
+    grid_y: 0
+    tags:
+    - undercity
+    - net
+    - vault
+    exits:
+      south: crypt
   square_rooftop:
     name_zh: 廣場屋頂
     name_en: Square Rooftop
@@ -147,43 +266,56 @@ rooms:
     district: watson
     grid_x: 1
     grid_y: 1
-    tags: [rooftop]
+    tags:
+    - rooftop
     exits:
       down: square
   undercity:
     name_zh: 地下廢墟
     name_en: Undercity Ruins
     description_zh: 積水與電纜交織的地下層，腦舞艙與資料墓穴的入口。
-    description_en: Flooded tunnels and cables—the BD booths and data crypts begin here.
+    description_en: Flooded tunnels and cables—the BD booths and data crypts begin
+      here.
     district: undercity
     grid_x: 1
     grid_y: -1
-    tags: [undercity]
+    tags:
+    - undercity
     exits:
       up: alley
       north: docks
       east: bd_den
       south: data_crypt
+      west: crypt
   bd_den:
     name_zh: 地下腦舞密艙
     name_en: Underground BD Den
-    description_zh: |
-      隔間裡的腦舞艙覆著汗漬與消毒水味。櫃台貼著「18+ 限定」全息標籤。
-    description_en: |
-      Booths reek of sanitizer and sweat. A holo sticker reads "18+ only."
+    description_zh: '隔間裡的腦舞艙覆著汗漬與消毒水味。櫃台貼著「18+ 限定」全息標籤。
+
+      '
+    description_en: 'Booths reek of sanitizer and sweat. A holo sticker reads "18+
+      only."
+
+      '
     district: undercity
     grid_x: 2
     grid_y: -1
-    tags: [mature, braindance]
+    tags:
+    - mature
+    - braindance
     exits:
       west: undercity
+      east: undercity_4_2
   tutorial:
     name_zh: 新手訓練場
     name_en: Training Yard
-    description_zh: |
-      教官的全息投影正在等待新進邊緣人。這裡是訓練場中樞。
-    description_en: |
-      An instructor holo waits for new edgerunners. This is the training hub.
+    description_zh: '教官的全息投影正在等待新進邊緣人。這裡是訓練場中樞。
+
+      '
+    description_en: 'An instructor holo waits for new edgerunners. This is the training
+      hub.
+
+      '
     district: tutorial
     grid_x: 2
     grid_y: 1
@@ -196,23 +328,31 @@ rooms:
   tutorial_briefing:
     name_zh: 任務簡報室
     name_en: Mission Briefing Room
-    description_zh: |
-      全息委託板與派系簡介投影循環播放。新手可在這裡熟悉 gigs、stats 與 recall。
-    description_en: |
-      Holo gig boards and faction primers loop on the walls—learn gigs, stats, and recall here.
+    description_zh: '全息委託板與派系簡介投影循環播放。新手可在這裡熟悉 gigs、stats 與 recall。
+
+      '
+    description_en: 'Holo gig boards and faction primers loop on the walls—learn gigs,
+      stats, and recall here.
+
+      '
     district: tutorial
     grid_x: 2
     grid_y: 2
-    tags: [tutorial, social]
+    tags:
+    - tutorial
+    - social
     exits:
       down: tutorial
   tutorial_combat:
     name_zh: 戰鬥訓練區
     name_en: Combat Drill Zone
-    description_zh: |
-      軟墊與全息標靶覆蓋地面，陪練機械人發出單調的待機嗡鳴。
-    description_en: |
-      Padded mats and holo targets cover the floor. A sparring drone hums on standby.
+    description_zh: '軟墊與全息標靶覆蓋地面，陪練機械人發出單調的待機嗡鳴。
+
+      '
+    description_en: 'Padded mats and holo targets cover the floor. A sparring drone
+      hums on standby.
+
+      '
     district: tutorial
     grid_x: 2
     grid_y: 0
@@ -223,23 +363,31 @@ rooms:
   tutorial_course:
     name_zh: 障礙訓練道
     name_en: Obstacle Course
-    description_zh: |
-      掃描信標與互動閘門排列成基礎課程。東側靶標機供額外戰鬥練習。
-    description_en: |
-      Scan beacons and interact gates line a basic drill lane—with extra combat targets at the end.
+    description_zh: '掃描信標與互動閘門排列成基礎課程。東側靶標機供額外戰鬥練習。
+
+      '
+    description_en: 'Scan beacons and interact gates line a basic drill lane—with
+      extra combat targets at the end.
+
+      '
     district: tutorial
     grid_x: 3
     grid_y: 0
-    tags: [tutorial, interact]
+    tags:
+    - tutorial
+    - interact
     exits:
       west: tutorial_combat
   tutorial_net:
     name_zh: 駭客模擬區
     name_en: Netrun Sim Bay
-    description_zh: |
-      隔離的訓練終端閃爍綠色字元，教練監看著你的 RAM 消耗。
-    description_en: |
-      Isolated training terminals flicker green glyphs while a coach watches your RAM drain.
+    description_zh: '隔離的訓練終端閃爍綠色字元，教練監看著你的 RAM 消耗。
+
+      '
+    description_en: 'Isolated training terminals flicker green glyphs while a coach
+      watches your RAM drain.
+
+      '
     district: tutorial
     grid_x: 3
     grid_y: 1
@@ -249,23 +397,31 @@ rooms:
   tutorial_medbay:
     name_zh: 模擬義體診所
     name_en: Sim Ripper Bay
-    description_zh: |
-      無菌霧面隔間與示範手術燈。可在這裡練習 install、use 與義體槽位概念（安全模擬）。
-    description_en: |
-      Sterile booths and demo surgical lamps—practice install, use, and cyber slots in a safe sim.
+    description_zh: '無菌霧面隔間與示範手術燈。可在這裡練習 install、use 與義體槽位概念（安全模擬）。
+
+      '
+    description_en: 'Sterile booths and demo surgical lamps—practice install, use,
+      and cyber slots in a safe sim.
+
+      '
     district: tutorial
     grid_x: 3
     grid_y: 2
-    tags: [tutorial, ripperdoc]
+    tags:
+    - tutorial
+    - ripperdoc
     exits:
       south: tutorial_net
   tutorial_armory:
     name_zh: 訓練裝備庫
     name_en: Training Armory
-    description_zh: |
-      企業贊助的訓練武器與護具整齊掛在架上，供新人試用。
-    description_en: |
-      Corporate-sponsored training weapons and armor hang ready for rookies to try.
+    description_zh: '企業贊助的訓練武器與護具整齊掛在架上，供新人試用。
+
+      '
+    description_en: 'Corporate-sponsored training weapons and armor hang ready for
+      rookies to try.
+
+      '
     district: tutorial
     grid_x: 2
     grid_y: 2
@@ -275,23 +431,33 @@ rooms:
   tutorial_canteen:
     name_zh: 學員餐廳
     name_en: Trainee Canteen
-    description_zh: |
-      合成餐與能量飲的自動販賣機嗡嗡運轉。適合練習 eat、drink、use 與補給管理。
-    description_en: |
-      Synth-food dispensers hum—practice eat, drink, use, and supply management here.
+    description_zh: '合成餐與能量飲的自動販賣機嗡嗡運轉。適合練習 eat、drink、use 與補給管理。
+
+      '
+    description_en: 'Synth-food dispensers hum—practice eat, drink, use, and supply
+      management here.
+
+      '
     district: tutorial
     grid_x: 1
     grid_y: 2
-    tags: [tutorial, consumables, rest, safe]
+    tags:
+    - tutorial
+    - consumables
+    - rest
+    - safe
     exits:
       east: tutorial_armory
   tutorial_range:
     name_zh: 射擊靶場
     name_en: Firing Range
-    description_zh: |
-      彈痕累累的軌道靶在霧面護盾後滑動，空氣裡殘留火藥味。
-    description_en: |
-      Scarred rail targets slide behind frosted shields; gunpowder hangs in the air.
+    description_zh: '彈痕累累的軌道靶在霧面護盾後滑動，空氣裡殘留火藥味。
+
+      '
+    description_en: 'Scarred rail targets slide behind frosted shields; gunpowder
+      hangs in the air.
+
+      '
     district: tutorial
     grid_x: 2
     grid_y: -1
@@ -301,34 +467,49 @@ rooms:
     name_zh: 貨櫃碼頭
     name_en: Container Docks
     description_zh: 起重機低鳴，走私貨櫃堆疊至霧中。北邊是霓虹廣場。
-    description_en: Cranes groan as smuggler containers vanish into the fog. North leads to the square.
+    description_en: Cranes groan as smuggler containers vanish into the fog. North
+      leads to the square.
     district: docks
     grid_x: 1
     grid_y: 2
-    tags: [vehicle_dealer, transit]
+    tags:
+    - vehicle_dealer
+    - transit
     exits:
       north: square
       down: undercity
+      south: docks_2_1
+      east: combat_zone_gate
   ripper_clinic:
     name_zh: 義體診所
     name_en: Ripper Clinic
     description_zh: 手術燈在霧化玻璃後閃爍。東邊回到霓虹廣場。
-    description_en: Surgical lamps flicker behind frosted glass. East leads back to Neon Square.
+    description_en: Surgical lamps flicker behind frosted glass. East leads back to
+      Neon Square.
     district: watson
     grid_x: 0
     grid_y: 1
-    tags: [shop, ripperdoc, clinic, rest, safe]
+    tags:
+    - shop
+    - ripperdoc
+    - clinic
+    - rest
+    - safe
     shop_id: ripperdoc
     exits:
       east: square
       west: corpo_lobby
+      north: watson_3_2
   corpo_lobby:
     name_zh: 企業大廳
     name_en: Corporate Lobby
-    description_zh: |
-      冷色大理石與武裝保全。東邊是義體診所，西邊通往企業廣場。
-    description_en: |
-      Cold marble and armed security. East to the ripper clinic; west to the corpo plaza.
+    description_zh: '冷色大理石與武裝保全。東邊是義體診所，西邊通往企業廣場。
+
+      '
+    description_en: 'Cold marble and armed security. East to the ripper clinic; west
+      to the corpo plaza.
+
+      '
     district: corpo
     grid_x: -1
     grid_y: 1
@@ -338,31 +519,3182 @@ rooms:
   corpo_plaza:
     name_zh: 企業廣場
     name_en: Corpo Plaza
-    description_zh: |
-      全息企業標誌在酸雨中旋轉。荒坂與軍武的勢力在這裡交錯。
-    description_en: |
-      Holo corporate logos spin in acid rain—Arasaka and Militech influence collides here.
+    description_zh: '全息企業標誌在酸雨中旋轉。荒坂與軍武的勢力在這裡交錯。
+
+      '
+    description_en: 'Holo corporate logos spin in acid rain—Arasaka and Militech influence
+      collides here.
+
+      '
     district: corpo
     grid_x: -2
     grid_y: 1
-    tags: [corpo, transit]
+    tags:
+    - corpo
+    - transit
     exits:
-      east: corpo_lobby
+      east: tyrell_plaza
+      north: corpo_3_1
   watson_flat:
     name_zh: 沃森公寓
     name_en: Watson Flat
-    description_zh: |
-      你的公寓——狹小但安全。牆上掛著舊海報，角落有個私人儲物櫃（stash）。
+    description_zh: '你的公寓——狹小但安全。牆上掛著舊海報，角落有個私人儲物櫃（stash）。
+
       可用 transit 或 drive 往返街區。
-    description_en: |
-      Your flat—cramped but safe. A stash locker sits in the corner.
+
+      '
+    description_en: 'Your flat—cramped but safe. A stash locker sits in the corner.
+
       Use transit or drive to reach the district.
+
+      '
     district: watson
     grid_x: 0
     grid_y: 2
-    tags: [housing, home, rest, safe]
+    tags:
+    - housing
+    - home
+    - rest
+    - safe
     exits: {}
-
+  tyrell_plaza:
+    name_zh: 泰瑞廣場
+    name_en: Tyrell Plaza
+    description_zh: 高聳實驗室大樓與冷色全息廣告，精英與禁忌科技交會之地。
+    description_en: Towering labs and cold holo ads—elites and forbidden tech meet
+      here.
+    district: tyrell
+    grid_x: 0
+    grid_y: 0
+    tags:
+    - transit
+    - corpo
+    exits:
+      west: corpo_plaza
+      south: tyrell_3_5
+  combat_zone_gate:
+    name_zh: 戰鬥區界碑
+    name_en: Combat Zone Gate
+    description_zh: 燒毀的界碑與塗鴉警告：越過此線，規則由槍桿決定。
+    description_en: 'A scorched marker and graffiti warn: past this line, guns set
+      the rules.'
+    district: combat_zone
+    grid_x: 0
+    grid_y: 0
+    tags:
+    - transit
+    exits:
+      west: docks
+      south: combat_zone_3_0
+  watson_0_0:
+    name_zh: watson 街區 (0,0)
+    name_en: Watson Block (0,0)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (0,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (0,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 0
+    grid_y: 0
+    exits:
+      south: watson_0_1
+      east: watson_1_0
+  watson_1_0:
+    name_zh: watson 街區 (1,0)
+    name_en: Watson Block (1,0)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (1,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (1,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 1
+    grid_y: 0
+    exits:
+      south: watson_1_1
+      east: watson_2_0
+      west: watson_0_0
+  watson_2_0:
+    name_zh: watson 街區 (2,0)
+    name_en: Watson Block (2,0)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (2,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (2,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 2
+    grid_y: 0
+    exits:
+      south: watson_2_1
+      east: watson_3_0
+      west: watson_1_0
+  watson_3_0:
+    name_zh: watson 街區 (3,0)
+    name_en: Watson Block (3,0)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (3,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (3,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 3
+    grid_y: 0
+    exits:
+      south: watson_3_1
+      east: watson_4_0
+      west: watson_2_0
+  watson_4_0:
+    name_zh: watson 街區 (4,0)
+    name_en: Watson Block (4,0)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (4,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (4,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 4
+    grid_y: 0
+    exits:
+      south: watson_4_1
+      east: watson_5_0
+      west: watson_3_0
+  watson_5_0:
+    name_zh: watson 街區 (5,0)
+    name_en: Watson Block (5,0)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (5,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (5,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 5
+    grid_y: 0
+    exits:
+      south: watson_5_1
+      east: watson_6_0
+      west: watson_4_0
+  watson_6_0:
+    name_zh: watson 街區 (6,0)
+    name_en: Watson Block (6,0)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (6,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (6,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 6
+    grid_y: 0
+    exits:
+      south: watson_6_1
+      east: watson_7_0
+      west: watson_5_0
+  watson_7_0:
+    name_zh: watson 街區 (7,0)
+    name_en: Watson Block (7,0)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (7,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (7,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 7
+    grid_y: 0
+    exits:
+      south: watson_7_1
+      west: watson_6_0
+  watson_0_1:
+    name_zh: watson 街區 (0,1)
+    name_en: Watson Block (0,1)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (0,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (0,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 0
+    grid_y: 1
+    exits:
+      north: watson_0_0
+      south: watson_0_2
+      east: watson_1_1
+  watson_1_1:
+    name_zh: watson 街區 (1,1)
+    name_en: Watson Block (1,1)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (1,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (1,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 1
+    grid_y: 1
+    exits:
+      north: watson_1_0
+      south: watson_1_2
+      east: watson_2_1
+      west: watson_0_1
+  watson_2_1:
+    name_zh: watson 街區 (2,1)
+    name_en: Watson Block (2,1)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (2,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (2,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 2
+    grid_y: 1
+    exits:
+      north: watson_2_0
+      south: watson_2_2
+      east: watson_3_1
+      west: watson_1_1
+  watson_3_1:
+    name_zh: watson 街區 (3,1)
+    name_en: Watson Block (3,1)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (3,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (3,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 3
+    grid_y: 1
+    exits:
+      north: watson_3_0
+      south: watson_3_2
+      east: watson_4_1
+      west: watson_2_1
+  watson_4_1:
+    name_zh: watson 街區 (4,1)
+    name_en: Watson Block (4,1)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (4,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (4,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 4
+    grid_y: 1
+    exits:
+      north: watson_4_0
+      south: watson_4_2
+      east: watson_5_1
+      west: watson_3_1
+  watson_5_1:
+    name_zh: watson 街區 (5,1)
+    name_en: Watson Block (5,1)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (5,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (5,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 5
+    grid_y: 1
+    exits:
+      north: watson_5_0
+      south: watson_5_2
+      east: watson_6_1
+      west: watson_4_1
+  watson_6_1:
+    name_zh: watson 街區 (6,1)
+    name_en: Watson Block (6,1)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (6,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (6,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 6
+    grid_y: 1
+    exits:
+      north: watson_6_0
+      south: watson_6_2
+      east: watson_7_1
+      west: watson_5_1
+  watson_7_1:
+    name_zh: watson 街區 (7,1)
+    name_en: Watson Block (7,1)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (7,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (7,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 7
+    grid_y: 1
+    exits:
+      north: watson_7_0
+      south: watson_7_2
+      west: watson_6_1
+  watson_0_2:
+    name_zh: watson 街區 (0,2)
+    name_en: Watson Block (0,2)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (0,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (0,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 0
+    grid_y: 2
+    exits:
+      north: watson_0_1
+      south: watson_0_3
+      east: watson_1_2
+  watson_1_2:
+    name_zh: watson 街區 (1,2)
+    name_en: Watson Block (1,2)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (1,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (1,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 1
+    grid_y: 2
+    exits:
+      north: watson_1_1
+      south: watson_1_3
+      east: watson_2_2
+      west: watson_0_2
+  watson_2_2:
+    name_zh: watson 街區 (2,2)
+    name_en: Watson Block (2,2)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (2,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (2,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 2
+    grid_y: 2
+    exits:
+      north: watson_2_1
+      south: watson_2_3
+      east: watson_3_2
+      west: watson_1_2
+  watson_3_2:
+    name_zh: watson 街區 (3,2)
+    name_en: Watson Block (3,2)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (3,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (3,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 3
+    grid_y: 2
+    exits:
+      north: watson_3_1
+      south: ripper_clinic
+      east: watson_4_2
+      west: watson_2_2
+  watson_4_2:
+    name_zh: watson 街區 (4,2)
+    name_en: Watson Block (4,2)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (4,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (4,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 4
+    grid_y: 2
+    exits:
+      north: watson_4_1
+      south: watson_4_3
+      east: watson_5_2
+      west: watson_3_2
+  watson_5_2:
+    name_zh: watson 街區 (5,2)
+    name_en: Watson Block (5,2)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (5,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (5,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 5
+    grid_y: 2
+    exits:
+      north: watson_5_1
+      south: watson_5_3
+      east: watson_6_2
+      west: watson_4_2
+  watson_6_2:
+    name_zh: watson 街區 (6,2)
+    name_en: Watson Block (6,2)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (6,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (6,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 6
+    grid_y: 2
+    exits:
+      north: watson_6_1
+      south: watson_6_3
+      east: watson_7_2
+      west: watson_5_2
+  watson_7_2:
+    name_zh: watson 街區 (7,2)
+    name_en: Watson Block (7,2)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (7,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (7,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 7
+    grid_y: 2
+    exits:
+      north: watson_7_1
+      south: watson_7_3
+      west: watson_6_2
+  watson_0_3:
+    name_zh: watson 街區 (0,3)
+    name_en: Watson Block (0,3)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (0,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (0,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 0
+    grid_y: 3
+    exits:
+      north: watson_0_2
+      south: watson_0_4
+      east: watson_1_3
+  watson_1_3:
+    name_zh: watson 街區 (1,3)
+    name_en: Watson Block (1,3)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (1,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (1,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 1
+    grid_y: 3
+    exits:
+      north: watson_1_2
+      south: watson_1_4
+      east: watson_2_3
+      west: watson_0_3
+  watson_2_3:
+    name_zh: watson 街區 (2,3)
+    name_en: Watson Block (2,3)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (2,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (2,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 2
+    grid_y: 3
+    exits:
+      north: watson_2_2
+      south: watson_2_4
+      east: watson_3_3
+      west: watson_1_3
+  watson_3_3:
+    name_zh: watson 街區 (3,3)
+    name_en: Watson Block (3,3)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (3,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (3,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 3
+    grid_y: 3
+    exits:
+      north: watson_3_2
+      south: watson_3_4
+      east: watson_4_3
+      west: watson_2_3
+  watson_4_3:
+    name_zh: watson 街區 (4,3)
+    name_en: Watson Block (4,3)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (4,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (4,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 4
+    grid_y: 3
+    exits:
+      north: watson_4_2
+      south: watson_4_4
+      east: watson_5_3
+      west: watson_3_3
+  watson_5_3:
+    name_zh: watson 街區 (5,3)
+    name_en: Watson Block (5,3)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (5,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (5,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 5
+    grid_y: 3
+    exits:
+      north: watson_5_2
+      south: watson_5_4
+      east: watson_6_3
+      west: watson_4_3
+  watson_6_3:
+    name_zh: watson 街區 (6,3)
+    name_en: Watson Block (6,3)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (6,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (6,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 6
+    grid_y: 3
+    exits:
+      north: watson_6_2
+      south: watson_6_4
+      east: watson_7_3
+      west: watson_5_3
+  watson_7_3:
+    name_zh: watson 街區 (7,3)
+    name_en: Watson Block (7,3)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (7,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (7,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 7
+    grid_y: 3
+    exits:
+      north: watson_7_2
+      south: watson_7_4
+      west: watson_6_3
+  watson_0_4:
+    name_zh: watson 街區 (0,4)
+    name_en: Watson Block (0,4)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (0,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (0,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 0
+    grid_y: 4
+    exits:
+      north: watson_0_3
+      south: watson_0_5
+      east: watson_1_4
+  watson_1_4:
+    name_zh: watson 街區 (1,4)
+    name_en: Watson Block (1,4)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (1,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (1,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 1
+    grid_y: 4
+    exits:
+      north: watson_1_3
+      south: watson_1_5
+      east: watson_2_4
+      west: watson_0_4
+  watson_2_4:
+    name_zh: watson 街區 (2,4)
+    name_en: Watson Block (2,4)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (2,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (2,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 2
+    grid_y: 4
+    exits:
+      north: watson_2_3
+      south: watson_2_5
+      east: watson_3_4
+      west: watson_1_4
+  watson_3_4:
+    name_zh: watson 街區 (3,4)
+    name_en: Watson Block (3,4)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (3,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (3,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 3
+    grid_y: 4
+    exits:
+      north: watson_3_3
+      south: watson_3_5
+      east: watson_4_4
+      west: watson_2_4
+  watson_4_4:
+    name_zh: watson 街區 (4,4)
+    name_en: Watson Block (4,4)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (4,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (4,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 4
+    grid_y: 4
+    exits:
+      north: watson_4_3
+      south: watson_4_5
+      east: watson_5_4
+      west: watson_3_4
+  watson_5_4:
+    name_zh: watson 街區 (5,4)
+    name_en: Watson Block (5,4)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (5,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (5,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 5
+    grid_y: 4
+    exits:
+      north: watson_5_3
+      south: watson_5_5
+      east: watson_6_4
+      west: watson_4_4
+  watson_6_4:
+    name_zh: watson 街區 (6,4)
+    name_en: Watson Block (6,4)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (6,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (6,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 6
+    grid_y: 4
+    exits:
+      north: watson_6_3
+      south: watson_6_5
+      east: watson_7_4
+      west: watson_5_4
+  watson_7_4:
+    name_zh: watson 街區 (7,4)
+    name_en: Watson Block (7,4)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (7,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (7,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 7
+    grid_y: 4
+    exits:
+      north: watson_7_3
+      south: watson_7_5
+      west: watson_6_4
+  watson_0_5:
+    name_zh: watson 街區 (0,5)
+    name_en: Watson Block (0,5)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (0,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (0,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 0
+    grid_y: 5
+    exits:
+      north: watson_0_4
+      south: watson_0_6
+      east: watson_1_5
+  watson_1_5:
+    name_zh: watson 街區 (1,5)
+    name_en: Watson Block (1,5)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (1,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (1,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 1
+    grid_y: 5
+    exits:
+      north: watson_1_4
+      south: watson_1_6
+      east: watson_2_5
+      west: watson_0_5
+  watson_2_5:
+    name_zh: watson 街區 (2,5)
+    name_en: Watson Block (2,5)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (2,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (2,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 2
+    grid_y: 5
+    exits:
+      north: watson_2_4
+      south: watson_2_6
+      east: watson_3_5
+      west: watson_1_5
+  watson_3_5:
+    name_zh: watson 街區 (3,5)
+    name_en: Watson Block (3,5)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (3,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (3,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 3
+    grid_y: 5
+    exits:
+      north: watson_3_4
+      south: watson_3_6
+      east: watson_4_5
+      west: watson_2_5
+  watson_4_5:
+    name_zh: watson 街區 (4,5)
+    name_en: Watson Block (4,5)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (4,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (4,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 4
+    grid_y: 5
+    exits:
+      north: watson_4_4
+      south: watson_4_6
+      east: watson_5_5
+      west: watson_3_5
+  watson_5_5:
+    name_zh: watson 街區 (5,5)
+    name_en: Watson Block (5,5)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (5,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (5,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 5
+    grid_y: 5
+    exits:
+      north: watson_5_4
+      south: watson_5_6
+      east: watson_6_5
+      west: watson_4_5
+  watson_6_5:
+    name_zh: watson 街區 (6,5)
+    name_en: Watson Block (6,5)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (6,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (6,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 6
+    grid_y: 5
+    exits:
+      north: watson_6_4
+      south: watson_6_6
+      east: watson_7_5
+      west: watson_5_5
+  watson_7_5:
+    name_zh: watson 街區 (7,5)
+    name_en: Watson Block (7,5)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (7,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (7,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 7
+    grid_y: 5
+    exits:
+      north: watson_7_4
+      south: watson_7_6
+      west: watson_6_5
+  watson_0_6:
+    name_zh: watson 街區 (0,6)
+    name_en: Watson Block (0,6)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (0,6)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (0,6). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 0
+    grid_y: 6
+    exits:
+      north: watson_0_5
+      south: watson_0_7
+      east: watson_1_6
+  watson_1_6:
+    name_zh: watson 街區 (1,6)
+    name_en: Watson Block (1,6)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (1,6)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (1,6). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 1
+    grid_y: 6
+    exits:
+      north: watson_1_5
+      south: watson_1_7
+      east: watson_2_6
+      west: watson_0_6
+  watson_2_6:
+    name_zh: watson 街區 (2,6)
+    name_en: Watson Block (2,6)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (2,6)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (2,6). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 2
+    grid_y: 6
+    exits:
+      north: watson_2_5
+      south: watson_2_7
+      east: watson_3_6
+      west: watson_1_6
+  watson_3_6:
+    name_zh: watson 街區 (3,6)
+    name_en: Watson Block (3,6)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (3,6)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (3,6). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 3
+    grid_y: 6
+    exits:
+      north: watson_3_5
+      south: watson_3_7
+      east: watson_4_6
+      west: watson_2_6
+  watson_4_6:
+    name_zh: watson 街區 (4,6)
+    name_en: Watson Block (4,6)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (4,6)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (4,6). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 4
+    grid_y: 6
+    exits:
+      north: watson_4_5
+      south: watson_4_7
+      east: watson_5_6
+      west: watson_3_6
+  watson_5_6:
+    name_zh: watson 街區 (5,6)
+    name_en: Watson Block (5,6)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (5,6)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (5,6). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 5
+    grid_y: 6
+    exits:
+      north: watson_5_5
+      south: watson_5_7
+      east: watson_6_6
+      west: watson_4_6
+  watson_6_6:
+    name_zh: watson 街區 (6,6)
+    name_en: Watson Block (6,6)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (6,6)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (6,6). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 6
+    grid_y: 6
+    exits:
+      north: watson_6_5
+      south: watson_6_7
+      east: watson_7_6
+      west: watson_5_6
+  watson_7_6:
+    name_zh: watson 街區 (7,6)
+    name_en: Watson Block (7,6)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (7,6)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (7,6). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 7
+    grid_y: 6
+    exits:
+      north: watson_7_5
+      south: watson_7_7
+      west: watson_6_6
+  watson_0_7:
+    name_zh: watson 街區 (0,7)
+    name_en: Watson Block (0,7)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (0,7)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (0,7). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 0
+    grid_y: 7
+    exits:
+      north: watson_0_6
+      east: watson_1_7
+  watson_1_7:
+    name_zh: watson 街區 (1,7)
+    name_en: Watson Block (1,7)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (1,7)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (1,7). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 1
+    grid_y: 7
+    exits:
+      north: watson_1_6
+      east: watson_2_7
+      west: watson_0_7
+  watson_2_7:
+    name_zh: watson 街區 (2,7)
+    name_en: Watson Block (2,7)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (2,7)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (2,7). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 2
+    grid_y: 7
+    exits:
+      north: watson_2_6
+      east: watson_3_7
+      west: watson_1_7
+  watson_3_7:
+    name_zh: watson 街區 (3,7)
+    name_en: Watson Block (3,7)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (3,7)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (3,7). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 3
+    grid_y: 7
+    exits:
+      north: watson_3_6
+      east: watson_4_7
+      west: watson_2_7
+  watson_4_7:
+    name_zh: watson 街區 (4,7)
+    name_en: Watson Block (4,7)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (4,7)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (4,7). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 4
+    grid_y: 7
+    exits:
+      north: watson_4_6
+      east: watson_5_7
+      west: watson_3_7
+  watson_5_7:
+    name_zh: watson 街區 (5,7)
+    name_en: Watson Block (5,7)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (5,7)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (5,7). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 5
+    grid_y: 7
+    exits:
+      north: watson_5_6
+      east: watson_6_7
+      west: watson_4_7
+  watson_6_7:
+    name_zh: watson 街區 (6,7)
+    name_en: Watson Block (6,7)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (6,7)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (6,7). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 6
+    grid_y: 7
+    exits:
+      north: watson_6_6
+      east: watson_7_7
+      west: watson_5_7
+  watson_7_7:
+    name_zh: watson 街區 (7,7)
+    name_en: Watson Block (7,7)
+    description_zh: 霓虹與酸雨交織的 watson 街道格點 (7,7)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked watson street grid at (7,7). Holographic ads flicker
+      on rain-slick pavement.
+    district: watson
+    grid_x: 7
+    grid_y: 7
+    exits:
+      north: watson_7_6
+      west: watson_6_7
+  tyrell_0_0:
+    name_zh: tyrell 街區 (0,0)
+    name_en: Tyrell Block (0,0)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (0,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (0,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 0
+    grid_y: 0
+    exits:
+      south: tyrell_0_1
+      east: tyrell_1_0
+  tyrell_1_0:
+    name_zh: tyrell 街區 (1,0)
+    name_en: Tyrell Block (1,0)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (1,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (1,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 1
+    grid_y: 0
+    exits:
+      south: tyrell_1_1
+      east: tyrell_2_0
+      west: tyrell_0_0
+  tyrell_2_0:
+    name_zh: tyrell 街區 (2,0)
+    name_en: Tyrell Block (2,0)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (2,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (2,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 2
+    grid_y: 0
+    exits:
+      south: tyrell_2_1
+      east: tyrell_3_0
+      west: tyrell_1_0
+  tyrell_3_0:
+    name_zh: tyrell 街區 (3,0)
+    name_en: Tyrell Block (3,0)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (3,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (3,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 3
+    grid_y: 0
+    exits:
+      south: tyrell_3_1
+      east: tyrell_4_0
+      west: tyrell_2_0
+  tyrell_4_0:
+    name_zh: tyrell 街區 (4,0)
+    name_en: Tyrell Block (4,0)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (4,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (4,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 4
+    grid_y: 0
+    exits:
+      south: tyrell_4_1
+      east: tyrell_5_0
+      west: tyrell_3_0
+  tyrell_5_0:
+    name_zh: tyrell 街區 (5,0)
+    name_en: Tyrell Block (5,0)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (5,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (5,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 5
+    grid_y: 0
+    exits:
+      south: tyrell_5_1
+      west: tyrell_4_0
+  tyrell_0_1:
+    name_zh: tyrell 街區 (0,1)
+    name_en: Tyrell Block (0,1)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (0,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (0,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 0
+    grid_y: 1
+    exits:
+      north: tyrell_0_0
+      south: tyrell_0_2
+      east: tyrell_1_1
+  tyrell_1_1:
+    name_zh: tyrell 街區 (1,1)
+    name_en: Tyrell Block (1,1)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (1,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (1,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 1
+    grid_y: 1
+    exits:
+      north: tyrell_1_0
+      south: tyrell_1_2
+      east: tyrell_2_1
+      west: tyrell_0_1
+  tyrell_2_1:
+    name_zh: tyrell 街區 (2,1)
+    name_en: Tyrell Block (2,1)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (2,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (2,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 2
+    grid_y: 1
+    exits:
+      north: tyrell_2_0
+      south: tyrell_2_2
+      east: tyrell_3_1
+      west: tyrell_1_1
+  tyrell_3_1:
+    name_zh: tyrell 街區 (3,1)
+    name_en: Tyrell Block (3,1)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (3,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (3,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 3
+    grid_y: 1
+    exits:
+      north: tyrell_3_0
+      south: tyrell_3_2
+      east: tyrell_4_1
+      west: tyrell_2_1
+  tyrell_4_1:
+    name_zh: tyrell 街區 (4,1)
+    name_en: Tyrell Block (4,1)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (4,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (4,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 4
+    grid_y: 1
+    exits:
+      north: tyrell_4_0
+      south: tyrell_4_2
+      east: tyrell_5_1
+      west: tyrell_3_1
+  tyrell_5_1:
+    name_zh: tyrell 街區 (5,1)
+    name_en: Tyrell Block (5,1)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (5,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (5,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 5
+    grid_y: 1
+    exits:
+      north: tyrell_5_0
+      south: tyrell_5_2
+      west: tyrell_4_1
+  tyrell_0_2:
+    name_zh: tyrell 街區 (0,2)
+    name_en: Tyrell Block (0,2)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (0,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (0,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 0
+    grid_y: 2
+    exits:
+      north: tyrell_0_1
+      south: tyrell_0_3
+      east: tyrell_1_2
+  tyrell_1_2:
+    name_zh: tyrell 街區 (1,2)
+    name_en: Tyrell Block (1,2)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (1,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (1,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 1
+    grid_y: 2
+    exits:
+      north: tyrell_1_1
+      south: tyrell_1_3
+      east: tyrell_2_2
+      west: tyrell_0_2
+  tyrell_2_2:
+    name_zh: tyrell 街區 (2,2)
+    name_en: Tyrell Block (2,2)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (2,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (2,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 2
+    grid_y: 2
+    exits:
+      north: tyrell_2_1
+      south: tyrell_2_3
+      east: tyrell_3_2
+      west: tyrell_1_2
+  tyrell_3_2:
+    name_zh: tyrell 街區 (3,2)
+    name_en: Tyrell Block (3,2)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (3,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (3,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 3
+    grid_y: 2
+    exits:
+      north: tyrell_3_1
+      south: tyrell_3_3
+      east: tyrell_4_2
+      west: tyrell_2_2
+  tyrell_4_2:
+    name_zh: tyrell 街區 (4,2)
+    name_en: Tyrell Block (4,2)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (4,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (4,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 4
+    grid_y: 2
+    exits:
+      north: tyrell_4_1
+      south: tyrell_4_3
+      east: tyrell_5_2
+      west: tyrell_3_2
+  tyrell_5_2:
+    name_zh: tyrell 街區 (5,2)
+    name_en: Tyrell Block (5,2)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (5,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (5,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 5
+    grid_y: 2
+    exits:
+      north: tyrell_5_1
+      south: tyrell_5_3
+      west: tyrell_4_2
+  tyrell_0_3:
+    name_zh: tyrell 街區 (0,3)
+    name_en: Tyrell Block (0,3)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (0,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (0,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 0
+    grid_y: 3
+    exits:
+      north: tyrell_0_2
+      south: tyrell_0_4
+      east: tyrell_1_3
+  tyrell_1_3:
+    name_zh: tyrell 街區 (1,3)
+    name_en: Tyrell Block (1,3)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (1,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (1,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 1
+    grid_y: 3
+    exits:
+      north: tyrell_1_2
+      south: tyrell_1_4
+      east: tyrell_2_3
+      west: tyrell_0_3
+  tyrell_2_3:
+    name_zh: tyrell 街區 (2,3)
+    name_en: Tyrell Block (2,3)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (2,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (2,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 2
+    grid_y: 3
+    exits:
+      north: tyrell_2_2
+      south: tyrell_2_4
+      east: tyrell_3_3
+      west: tyrell_1_3
+  tyrell_3_3:
+    name_zh: tyrell 街區 (3,3)
+    name_en: Tyrell Block (3,3)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (3,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (3,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 3
+    grid_y: 3
+    exits:
+      north: tyrell_3_2
+      south: tyrell_3_4
+      east: tyrell_4_3
+      west: tyrell_2_3
+  tyrell_4_3:
+    name_zh: tyrell 街區 (4,3)
+    name_en: Tyrell Block (4,3)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (4,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (4,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 4
+    grid_y: 3
+    exits:
+      north: tyrell_4_2
+      south: tyrell_4_4
+      east: tyrell_5_3
+      west: tyrell_3_3
+  tyrell_5_3:
+    name_zh: tyrell 街區 (5,3)
+    name_en: Tyrell Block (5,3)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (5,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (5,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 5
+    grid_y: 3
+    exits:
+      north: tyrell_5_2
+      south: tyrell_5_4
+      west: tyrell_4_3
+  tyrell_0_4:
+    name_zh: tyrell 街區 (0,4)
+    name_en: Tyrell Block (0,4)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (0,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (0,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 0
+    grid_y: 4
+    exits:
+      north: tyrell_0_3
+      south: tyrell_0_5
+      east: tyrell_1_4
+  tyrell_1_4:
+    name_zh: tyrell 街區 (1,4)
+    name_en: Tyrell Block (1,4)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (1,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (1,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 1
+    grid_y: 4
+    exits:
+      north: tyrell_1_3
+      south: tyrell_1_5
+      east: tyrell_2_4
+      west: tyrell_0_4
+  tyrell_2_4:
+    name_zh: tyrell 街區 (2,4)
+    name_en: Tyrell Block (2,4)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (2,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (2,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 2
+    grid_y: 4
+    exits:
+      north: tyrell_2_3
+      south: tyrell_2_5
+      east: tyrell_3_4
+      west: tyrell_1_4
+  tyrell_3_4:
+    name_zh: tyrell 街區 (3,4)
+    name_en: Tyrell Block (3,4)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (3,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (3,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 3
+    grid_y: 4
+    exits:
+      north: tyrell_3_3
+      south: tyrell_3_5
+      east: tyrell_4_4
+      west: tyrell_2_4
+  tyrell_4_4:
+    name_zh: tyrell 街區 (4,4)
+    name_en: Tyrell Block (4,4)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (4,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (4,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 4
+    grid_y: 4
+    exits:
+      north: tyrell_4_3
+      south: tyrell_4_5
+      east: tyrell_5_4
+      west: tyrell_3_4
+  tyrell_5_4:
+    name_zh: tyrell 街區 (5,4)
+    name_en: Tyrell Block (5,4)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (5,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (5,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 5
+    grid_y: 4
+    exits:
+      north: tyrell_5_3
+      south: tyrell_5_5
+      west: tyrell_4_4
+  tyrell_0_5:
+    name_zh: tyrell 街區 (0,5)
+    name_en: Tyrell Block (0,5)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (0,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (0,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 0
+    grid_y: 5
+    exits:
+      north: tyrell_0_4
+      east: tyrell_1_5
+  tyrell_1_5:
+    name_zh: tyrell 街區 (1,5)
+    name_en: Tyrell Block (1,5)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (1,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (1,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 1
+    grid_y: 5
+    exits:
+      north: tyrell_1_4
+      east: tyrell_2_5
+      west: tyrell_0_5
+  tyrell_2_5:
+    name_zh: tyrell 街區 (2,5)
+    name_en: Tyrell Block (2,5)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (2,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (2,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 2
+    grid_y: 5
+    exits:
+      north: tyrell_2_4
+      east: tyrell_3_5
+      west: tyrell_1_5
+  tyrell_3_5:
+    name_zh: tyrell 街區 (3,5)
+    name_en: Tyrell Block (3,5)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (3,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (3,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 3
+    grid_y: 5
+    exits:
+      north: tyrell_3_4
+      east: tyrell_4_5
+      west: tyrell_2_5
+  tyrell_4_5:
+    name_zh: tyrell 街區 (4,5)
+    name_en: Tyrell Block (4,5)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (4,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (4,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 4
+    grid_y: 5
+    exits:
+      north: tyrell_4_4
+      east: tyrell_5_5
+      west: tyrell_3_5
+  tyrell_5_5:
+    name_zh: tyrell 街區 (5,5)
+    name_en: Tyrell Block (5,5)
+    description_zh: 霓虹與酸雨交織的 tyrell 街道格點 (5,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked tyrell street grid at (5,5). Holographic ads flicker
+      on rain-slick pavement.
+    district: tyrell
+    grid_x: 5
+    grid_y: 5
+    exits:
+      north: tyrell_5_4
+      west: tyrell_4_5
+  combat_zone_0_0:
+    name_zh: combat_zone 街區 (0,0)
+    name_en: Combat_Zone Block (0,0)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (0,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (0,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 0
+    grid_y: 0
+    exits:
+      south: combat_zone_0_1
+      east: combat_zone_1_0
+  combat_zone_1_0:
+    name_zh: combat_zone 街區 (1,0)
+    name_en: Combat_Zone Block (1,0)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (1,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (1,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 1
+    grid_y: 0
+    exits:
+      south: combat_zone_1_1
+      east: combat_zone_2_0
+      west: combat_zone_0_0
+  combat_zone_2_0:
+    name_zh: combat_zone 街區 (2,0)
+    name_en: Combat_Zone Block (2,0)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (2,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (2,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 2
+    grid_y: 0
+    exits:
+      south: combat_zone_2_1
+      east: combat_zone_3_0
+      west: combat_zone_1_0
+  combat_zone_3_0:
+    name_zh: combat_zone 街區 (3,0)
+    name_en: Combat_Zone Block (3,0)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (3,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (3,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 3
+    grid_y: 0
+    exits:
+      south: combat_zone_3_1
+      east: combat_zone_4_0
+      west: combat_zone_2_0
+  combat_zone_4_0:
+    name_zh: combat_zone 街區 (4,0)
+    name_en: Combat_Zone Block (4,0)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (4,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (4,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 4
+    grid_y: 0
+    exits:
+      south: combat_zone_4_1
+      east: combat_zone_5_0
+      west: combat_zone_3_0
+  combat_zone_5_0:
+    name_zh: combat_zone 街區 (5,0)
+    name_en: Combat_Zone Block (5,0)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (5,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (5,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 5
+    grid_y: 0
+    exits:
+      south: combat_zone_5_1
+      west: combat_zone_4_0
+  combat_zone_0_1:
+    name_zh: combat_zone 街區 (0,1)
+    name_en: Combat_Zone Block (0,1)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (0,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (0,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 0
+    grid_y: 1
+    exits:
+      north: combat_zone_0_0
+      south: combat_zone_0_2
+      east: combat_zone_1_1
+  combat_zone_1_1:
+    name_zh: combat_zone 街區 (1,1)
+    name_en: Combat_Zone Block (1,1)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (1,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (1,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 1
+    grid_y: 1
+    exits:
+      north: combat_zone_1_0
+      south: combat_zone_1_2
+      east: combat_zone_2_1
+      west: combat_zone_0_1
+  combat_zone_2_1:
+    name_zh: combat_zone 街區 (2,1)
+    name_en: Combat_Zone Block (2,1)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (2,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (2,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 2
+    grid_y: 1
+    exits:
+      north: combat_zone_2_0
+      south: combat_zone_2_2
+      east: combat_zone_3_1
+      west: combat_zone_1_1
+  combat_zone_3_1:
+    name_zh: combat_zone 街區 (3,1)
+    name_en: Combat_Zone Block (3,1)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (3,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (3,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 3
+    grid_y: 1
+    exits:
+      north: combat_zone_3_0
+      south: combat_zone_3_2
+      east: combat_zone_4_1
+      west: combat_zone_2_1
+  combat_zone_4_1:
+    name_zh: combat_zone 街區 (4,1)
+    name_en: Combat_Zone Block (4,1)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (4,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (4,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 4
+    grid_y: 1
+    exits:
+      north: combat_zone_4_0
+      south: combat_zone_4_2
+      east: combat_zone_5_1
+      west: combat_zone_3_1
+  combat_zone_5_1:
+    name_zh: combat_zone 街區 (5,1)
+    name_en: Combat_Zone Block (5,1)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (5,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (5,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 5
+    grid_y: 1
+    exits:
+      north: combat_zone_5_0
+      south: combat_zone_5_2
+      west: combat_zone_4_1
+  combat_zone_0_2:
+    name_zh: combat_zone 街區 (0,2)
+    name_en: Combat_Zone Block (0,2)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (0,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (0,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 0
+    grid_y: 2
+    exits:
+      north: combat_zone_0_1
+      south: combat_zone_0_3
+      east: combat_zone_1_2
+  combat_zone_1_2:
+    name_zh: combat_zone 街區 (1,2)
+    name_en: Combat_Zone Block (1,2)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (1,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (1,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 1
+    grid_y: 2
+    exits:
+      north: combat_zone_1_1
+      south: combat_zone_1_3
+      east: combat_zone_2_2
+      west: combat_zone_0_2
+  combat_zone_2_2:
+    name_zh: combat_zone 街區 (2,2)
+    name_en: Combat_Zone Block (2,2)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (2,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (2,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 2
+    grid_y: 2
+    exits:
+      north: combat_zone_2_1
+      south: combat_zone_2_3
+      east: combat_zone_3_2
+      west: combat_zone_1_2
+  combat_zone_3_2:
+    name_zh: combat_zone 街區 (3,2)
+    name_en: Combat_Zone Block (3,2)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (3,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (3,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 3
+    grid_y: 2
+    exits:
+      north: combat_zone_3_1
+      south: combat_zone_3_3
+      east: combat_zone_4_2
+      west: combat_zone_2_2
+  combat_zone_4_2:
+    name_zh: combat_zone 街區 (4,2)
+    name_en: Combat_Zone Block (4,2)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (4,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (4,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 4
+    grid_y: 2
+    exits:
+      north: combat_zone_4_1
+      south: combat_zone_4_3
+      east: combat_zone_5_2
+      west: combat_zone_3_2
+  combat_zone_5_2:
+    name_zh: combat_zone 街區 (5,2)
+    name_en: Combat_Zone Block (5,2)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (5,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (5,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 5
+    grid_y: 2
+    exits:
+      north: combat_zone_5_1
+      south: combat_zone_5_3
+      west: combat_zone_4_2
+  combat_zone_0_3:
+    name_zh: combat_zone 街區 (0,3)
+    name_en: Combat_Zone Block (0,3)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (0,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (0,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 0
+    grid_y: 3
+    exits:
+      north: combat_zone_0_2
+      south: combat_zone_0_4
+      east: combat_zone_1_3
+  combat_zone_1_3:
+    name_zh: combat_zone 街區 (1,3)
+    name_en: Combat_Zone Block (1,3)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (1,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (1,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 1
+    grid_y: 3
+    exits:
+      north: combat_zone_1_2
+      south: combat_zone_1_4
+      east: combat_zone_2_3
+      west: combat_zone_0_3
+  combat_zone_2_3:
+    name_zh: combat_zone 街區 (2,3)
+    name_en: Combat_Zone Block (2,3)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (2,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (2,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 2
+    grid_y: 3
+    exits:
+      north: combat_zone_2_2
+      south: combat_zone_2_4
+      east: combat_zone_3_3
+      west: combat_zone_1_3
+  combat_zone_3_3:
+    name_zh: combat_zone 街區 (3,3)
+    name_en: Combat_Zone Block (3,3)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (3,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (3,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 3
+    grid_y: 3
+    exits:
+      north: combat_zone_3_2
+      south: combat_zone_3_4
+      east: combat_zone_4_3
+      west: combat_zone_2_3
+  combat_zone_4_3:
+    name_zh: combat_zone 街區 (4,3)
+    name_en: Combat_Zone Block (4,3)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (4,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (4,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 4
+    grid_y: 3
+    exits:
+      north: combat_zone_4_2
+      south: combat_zone_4_4
+      east: combat_zone_5_3
+      west: combat_zone_3_3
+  combat_zone_5_3:
+    name_zh: combat_zone 街區 (5,3)
+    name_en: Combat_Zone Block (5,3)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (5,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (5,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 5
+    grid_y: 3
+    exits:
+      north: combat_zone_5_2
+      south: combat_zone_5_4
+      west: combat_zone_4_3
+  combat_zone_0_4:
+    name_zh: combat_zone 街區 (0,4)
+    name_en: Combat_Zone Block (0,4)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (0,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (0,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 0
+    grid_y: 4
+    exits:
+      north: combat_zone_0_3
+      south: combat_zone_0_5
+      east: combat_zone_1_4
+  combat_zone_1_4:
+    name_zh: combat_zone 街區 (1,4)
+    name_en: Combat_Zone Block (1,4)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (1,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (1,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 1
+    grid_y: 4
+    exits:
+      north: combat_zone_1_3
+      south: combat_zone_1_5
+      east: combat_zone_2_4
+      west: combat_zone_0_4
+  combat_zone_2_4:
+    name_zh: combat_zone 街區 (2,4)
+    name_en: Combat_Zone Block (2,4)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (2,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (2,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 2
+    grid_y: 4
+    exits:
+      north: combat_zone_2_3
+      south: combat_zone_2_5
+      east: combat_zone_3_4
+      west: combat_zone_1_4
+  combat_zone_3_4:
+    name_zh: combat_zone 街區 (3,4)
+    name_en: Combat_Zone Block (3,4)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (3,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (3,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 3
+    grid_y: 4
+    exits:
+      north: combat_zone_3_3
+      south: combat_zone_3_5
+      east: combat_zone_4_4
+      west: combat_zone_2_4
+  combat_zone_4_4:
+    name_zh: combat_zone 街區 (4,4)
+    name_en: Combat_Zone Block (4,4)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (4,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (4,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 4
+    grid_y: 4
+    exits:
+      north: combat_zone_4_3
+      south: combat_zone_4_5
+      east: combat_zone_5_4
+      west: combat_zone_3_4
+  combat_zone_5_4:
+    name_zh: combat_zone 街區 (5,4)
+    name_en: Combat_Zone Block (5,4)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (5,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (5,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 5
+    grid_y: 4
+    exits:
+      north: combat_zone_5_3
+      south: combat_zone_5_5
+      west: combat_zone_4_4
+  combat_zone_0_5:
+    name_zh: combat_zone 街區 (0,5)
+    name_en: Combat_Zone Block (0,5)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (0,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (0,5). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 0
+    grid_y: 5
+    exits:
+      north: combat_zone_0_4
+      east: combat_zone_1_5
+  combat_zone_1_5:
+    name_zh: combat_zone 街區 (1,5)
+    name_en: Combat_Zone Block (1,5)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (1,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (1,5). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 1
+    grid_y: 5
+    exits:
+      north: combat_zone_1_4
+      east: combat_zone_2_5
+      west: combat_zone_0_5
+  combat_zone_2_5:
+    name_zh: combat_zone 街區 (2,5)
+    name_en: Combat_Zone Block (2,5)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (2,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (2,5). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 2
+    grid_y: 5
+    exits:
+      north: combat_zone_2_4
+      east: combat_zone_3_5
+      west: combat_zone_1_5
+  combat_zone_3_5:
+    name_zh: combat_zone 街區 (3,5)
+    name_en: Combat_Zone Block (3,5)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (3,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (3,5). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 3
+    grid_y: 5
+    exits:
+      north: combat_zone_3_4
+      east: combat_zone_4_5
+      west: combat_zone_2_5
+  combat_zone_4_5:
+    name_zh: combat_zone 街區 (4,5)
+    name_en: Combat_Zone Block (4,5)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (4,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (4,5). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 4
+    grid_y: 5
+    exits:
+      north: combat_zone_4_4
+      east: combat_zone_5_5
+      west: combat_zone_3_5
+  combat_zone_5_5:
+    name_zh: combat_zone 街區 (5,5)
+    name_en: Combat_Zone Block (5,5)
+    description_zh: 霓虹與酸雨交織的 combat_zone 街道格點 (5,5)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked combat_zone street grid at (5,5). Holographic ads
+      flicker on rain-slick pavement.
+    district: combat_zone
+    grid_x: 5
+    grid_y: 5
+    exits:
+      north: combat_zone_5_4
+      west: combat_zone_4_5
+  kabuki_0_0:
+    name_zh: kabuki 街區 (0,0)
+    name_en: Kabuki Block (0,0)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (0,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (0,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 0
+    grid_y: 0
+    exits:
+      south: kabuki_0_1
+      east: kabuki_1_0
+  kabuki_1_0:
+    name_zh: kabuki 街區 (1,0)
+    name_en: Kabuki Block (1,0)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (1,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (1,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 1
+    grid_y: 0
+    exits:
+      south: kabuki_1_1
+      east: kabuki_2_0
+      west: kabuki_0_0
+  kabuki_2_0:
+    name_zh: kabuki 街區 (2,0)
+    name_en: Kabuki Block (2,0)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (2,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (2,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 2
+    grid_y: 0
+    exits:
+      south: kabuki_2_1
+      east: kabuki_3_0
+      west: kabuki_1_0
+  kabuki_3_0:
+    name_zh: kabuki 街區 (3,0)
+    name_en: Kabuki Block (3,0)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (3,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (3,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 3
+    grid_y: 0
+    exits:
+      south: kabuki_3_1
+      east: kabuki_4_0
+      west: kabuki_2_0
+  kabuki_4_0:
+    name_zh: kabuki 街區 (4,0)
+    name_en: Kabuki Block (4,0)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (4,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (4,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 4
+    grid_y: 0
+    exits:
+      south: kabuki_4_1
+      west: kabuki_3_0
+  kabuki_0_1:
+    name_zh: kabuki 街區 (0,1)
+    name_en: Kabuki Block (0,1)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (0,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (0,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 0
+    grid_y: 1
+    exits:
+      north: kabuki_0_0
+      south: kabuki_0_2
+      east: kabuki_1_1
+  kabuki_1_1:
+    name_zh: kabuki 街區 (1,1)
+    name_en: Kabuki Block (1,1)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (1,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (1,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 1
+    grid_y: 1
+    exits:
+      north: kabuki_1_0
+      south: kabuki_1_2
+      east: kabuki_2_1
+      west: kabuki_0_1
+  kabuki_2_1:
+    name_zh: kabuki 街區 (2,1)
+    name_en: Kabuki Block (2,1)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (2,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (2,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 2
+    grid_y: 1
+    exits:
+      north: kabuki_2_0
+      south: kabuki_2_2
+      east: kabuki_3_1
+      west: kabuki_1_1
+  kabuki_3_1:
+    name_zh: kabuki 街區 (3,1)
+    name_en: Kabuki Block (3,1)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (3,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (3,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 3
+    grid_y: 1
+    exits:
+      north: kabuki_3_0
+      south: kabuki_3_2
+      east: kabuki_4_1
+      west: kabuki_2_1
+  kabuki_4_1:
+    name_zh: kabuki 街區 (4,1)
+    name_en: Kabuki Block (4,1)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (4,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (4,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 4
+    grid_y: 1
+    exits:
+      north: kabuki_4_0
+      south: kabuki_4_2
+      west: kabuki_3_1
+  kabuki_0_2:
+    name_zh: kabuki 街區 (0,2)
+    name_en: Kabuki Block (0,2)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (0,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (0,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 0
+    grid_y: 2
+    exits:
+      north: kabuki_0_1
+      south: kabuki_0_3
+      east: kabuki_1_2
+  kabuki_1_2:
+    name_zh: kabuki 街區 (1,2)
+    name_en: Kabuki Block (1,2)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (1,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (1,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 1
+    grid_y: 2
+    exits:
+      north: kabuki_1_1
+      south: kabuki_1_3
+      east: kabuki_2_2
+      west: kabuki_0_2
+  kabuki_2_2:
+    name_zh: kabuki 街區 (2,2)
+    name_en: Kabuki Block (2,2)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (2,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (2,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 2
+    grid_y: 2
+    exits:
+      north: kabuki_2_1
+      south: kabuki_2_3
+      east: kabuki_3_2
+      west: kabuki_1_2
+  kabuki_3_2:
+    name_zh: kabuki 街區 (3,2)
+    name_en: Kabuki Block (3,2)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (3,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (3,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 3
+    grid_y: 2
+    exits:
+      north: kabuki_3_1
+      south: kabuki_3_3
+      east: kabuki_4_2
+      west: kabuki_2_2
+  kabuki_4_2:
+    name_zh: kabuki 街區 (4,2)
+    name_en: Kabuki Block (4,2)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (4,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (4,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 4
+    grid_y: 2
+    exits:
+      north: kabuki_4_1
+      south: kabuki_4_3
+      west: kabuki_3_2
+  kabuki_0_3:
+    name_zh: kabuki 街區 (0,3)
+    name_en: Kabuki Block (0,3)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (0,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (0,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 0
+    grid_y: 3
+    exits:
+      north: kabuki_0_2
+      south: kabuki_0_4
+      east: kabuki_1_3
+  kabuki_1_3:
+    name_zh: kabuki 街區 (1,3)
+    name_en: Kabuki Block (1,3)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (1,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (1,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 1
+    grid_y: 3
+    exits:
+      north: kabuki_1_2
+      south: kabuki_1_4
+      east: kabuki_2_3
+      west: kabuki_0_3
+  kabuki_2_3:
+    name_zh: kabuki 街區 (2,3)
+    name_en: Kabuki Block (2,3)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (2,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (2,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 2
+    grid_y: 3
+    exits:
+      north: kabuki_2_2
+      south: kabuki_bazaar
+      east: kabuki_3_3
+      west: kabuki_1_3
+  kabuki_3_3:
+    name_zh: kabuki 街區 (3,3)
+    name_en: Kabuki Block (3,3)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (3,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (3,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 3
+    grid_y: 3
+    exits:
+      north: kabuki_3_2
+      south: kabuki_3_4
+      east: kabuki_4_3
+      west: kabuki_2_3
+  kabuki_4_3:
+    name_zh: kabuki 街區 (4,3)
+    name_en: Kabuki Block (4,3)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (4,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (4,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 4
+    grid_y: 3
+    exits:
+      north: kabuki_4_2
+      south: kabuki_4_4
+      west: kabuki_3_3
+  kabuki_0_4:
+    name_zh: kabuki 街區 (0,4)
+    name_en: Kabuki Block (0,4)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (0,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (0,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 0
+    grid_y: 4
+    exits:
+      north: kabuki_0_3
+      east: kabuki_1_4
+  kabuki_1_4:
+    name_zh: kabuki 街區 (1,4)
+    name_en: Kabuki Block (1,4)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (1,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (1,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 1
+    grid_y: 4
+    exits:
+      north: kabuki_1_3
+      east: kabuki_2_4
+      west: kabuki_0_4
+  kabuki_2_4:
+    name_zh: kabuki 街區 (2,4)
+    name_en: Kabuki Block (2,4)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (2,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (2,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 2
+    grid_y: 4
+    exits:
+      north: kabuki_2_3
+      east: kabuki_3_4
+      west: kabuki_1_4
+  kabuki_3_4:
+    name_zh: kabuki 街區 (3,4)
+    name_en: Kabuki Block (3,4)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (3,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (3,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 3
+    grid_y: 4
+    exits:
+      north: kabuki_3_3
+      east: kabuki_4_4
+      west: kabuki_2_4
+  kabuki_4_4:
+    name_zh: kabuki 街區 (4,4)
+    name_en: Kabuki Block (4,4)
+    description_zh: 霓虹與酸雨交織的 kabuki 街道格點 (4,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked kabuki street grid at (4,4). Holographic ads flicker
+      on rain-slick pavement.
+    district: kabuki
+    grid_x: 4
+    grid_y: 4
+    exits:
+      north: kabuki_4_3
+      west: kabuki_3_4
+  little_china_0_0:
+    name_zh: little_china 街區 (0,0)
+    name_en: Little_China Block (0,0)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (0,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (0,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 0
+    grid_y: 0
+    exits:
+      south: little_china_0_1
+      east: little_china_1_0
+  little_china_1_0:
+    name_zh: little_china 街區 (1,0)
+    name_en: Little_China Block (1,0)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (1,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (1,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 1
+    grid_y: 0
+    exits:
+      south: little_china_1_1
+      east: little_china_2_0
+      west: little_china_0_0
+  little_china_2_0:
+    name_zh: little_china 街區 (2,0)
+    name_en: Little_China Block (2,0)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (2,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (2,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 2
+    grid_y: 0
+    exits:
+      south: little_china_2_1
+      east: little_china_3_0
+      west: little_china_1_0
+      north: little_china_gate
+  little_china_3_0:
+    name_zh: little_china 街區 (3,0)
+    name_en: Little_China Block (3,0)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (3,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (3,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 3
+    grid_y: 0
+    exits:
+      south: little_china_3_1
+      west: little_china_2_0
+  little_china_0_1:
+    name_zh: little_china 街區 (0,1)
+    name_en: Little_China Block (0,1)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (0,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (0,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 0
+    grid_y: 1
+    exits:
+      north: little_china_0_0
+      south: little_china_0_2
+      east: little_china_1_1
+  little_china_1_1:
+    name_zh: little_china 街區 (1,1)
+    name_en: Little_China Block (1,1)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (1,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (1,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 1
+    grid_y: 1
+    exits:
+      north: little_china_1_0
+      south: little_china_1_2
+      east: little_china_2_1
+      west: little_china_0_1
+  little_china_2_1:
+    name_zh: little_china 街區 (2,1)
+    name_en: Little_China Block (2,1)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (2,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (2,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 2
+    grid_y: 1
+    exits:
+      north: little_china_2_0
+      south: little_china_2_2
+      east: little_china_3_1
+      west: little_china_1_1
+  little_china_3_1:
+    name_zh: little_china 街區 (3,1)
+    name_en: Little_China Block (3,1)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (3,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (3,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 3
+    grid_y: 1
+    exits:
+      north: little_china_3_0
+      south: little_china_3_2
+      west: little_china_2_1
+  little_china_0_2:
+    name_zh: little_china 街區 (0,2)
+    name_en: Little_China Block (0,2)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (0,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (0,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 0
+    grid_y: 2
+    exits:
+      north: little_china_0_1
+      south: little_china_0_3
+      east: little_china_1_2
+  little_china_1_2:
+    name_zh: little_china 街區 (1,2)
+    name_en: Little_China Block (1,2)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (1,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (1,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 1
+    grid_y: 2
+    exits:
+      north: little_china_1_1
+      south: little_china_1_3
+      east: little_china_2_2
+      west: little_china_0_2
+  little_china_2_2:
+    name_zh: little_china 街區 (2,2)
+    name_en: Little_China Block (2,2)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (2,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (2,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 2
+    grid_y: 2
+    exits:
+      north: little_china_2_1
+      south: little_china_2_3
+      east: little_china_3_2
+      west: little_china_1_2
+  little_china_3_2:
+    name_zh: little_china 街區 (3,2)
+    name_en: Little_China Block (3,2)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (3,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (3,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 3
+    grid_y: 2
+    exits:
+      north: little_china_3_1
+      south: little_china_3_3
+      west: little_china_2_2
+  little_china_0_3:
+    name_zh: little_china 街區 (0,3)
+    name_en: Little_China Block (0,3)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (0,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (0,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 0
+    grid_y: 3
+    exits:
+      north: little_china_0_2
+      east: little_china_1_3
+  little_china_1_3:
+    name_zh: little_china 街區 (1,3)
+    name_en: Little_China Block (1,3)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (1,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (1,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 1
+    grid_y: 3
+    exits:
+      north: little_china_1_2
+      east: little_china_2_3
+      west: little_china_0_3
+  little_china_2_3:
+    name_zh: little_china 街區 (2,3)
+    name_en: Little_China Block (2,3)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (2,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (2,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 2
+    grid_y: 3
+    exits:
+      north: little_china_2_2
+      east: little_china_3_3
+      west: little_china_1_3
+  little_china_3_3:
+    name_zh: little_china 街區 (3,3)
+    name_en: Little_China Block (3,3)
+    description_zh: 霓虹與酸雨交織的 little_china 街道格點 (3,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked little_china street grid at (3,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: little_china
+    grid_x: 3
+    grid_y: 3
+    exits:
+      north: little_china_3_2
+      west: little_china_2_3
+  corpo_0_0:
+    name_zh: corpo 街區 (0,0)
+    name_en: Corpo Block (0,0)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (0,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (0,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 0
+    grid_y: 0
+    exits:
+      south: corpo_0_1
+      east: corpo_1_0
+  corpo_1_0:
+    name_zh: corpo 街區 (1,0)
+    name_en: Corpo Block (1,0)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (1,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (1,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 1
+    grid_y: 0
+    exits:
+      south: corpo_1_1
+      east: corpo_2_0
+      west: corpo_0_0
+  corpo_2_0:
+    name_zh: corpo 街區 (2,0)
+    name_en: Corpo Block (2,0)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (2,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (2,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 2
+    grid_y: 0
+    exits:
+      south: corpo_2_1
+      east: corpo_3_0
+      west: corpo_1_0
+  corpo_3_0:
+    name_zh: corpo 街區 (3,0)
+    name_en: Corpo Block (3,0)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (3,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (3,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 3
+    grid_y: 0
+    exits:
+      south: corpo_3_1
+      west: corpo_2_0
+  corpo_0_1:
+    name_zh: corpo 街區 (0,1)
+    name_en: Corpo Block (0,1)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (0,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (0,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 0
+    grid_y: 1
+    exits:
+      north: corpo_0_0
+      south: corpo_0_2
+      east: corpo_1_1
+  corpo_1_1:
+    name_zh: corpo 街區 (1,1)
+    name_en: Corpo Block (1,1)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (1,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (1,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 1
+    grid_y: 1
+    exits:
+      north: corpo_1_0
+      south: corpo_1_2
+      east: corpo_2_1
+      west: corpo_0_1
+  corpo_2_1:
+    name_zh: corpo 街區 (2,1)
+    name_en: Corpo Block (2,1)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (2,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (2,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 2
+    grid_y: 1
+    exits:
+      north: corpo_2_0
+      south: corpo_2_2
+      east: corpo_3_1
+      west: corpo_1_1
+  corpo_3_1:
+    name_zh: corpo 街區 (3,1)
+    name_en: Corpo Block (3,1)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (3,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (3,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 3
+    grid_y: 1
+    exits:
+      north: corpo_3_0
+      south: corpo_plaza
+      west: corpo_2_1
+  corpo_0_2:
+    name_zh: corpo 街區 (0,2)
+    name_en: Corpo Block (0,2)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (0,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (0,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 0
+    grid_y: 2
+    exits:
+      north: corpo_0_1
+      south: corpo_0_3
+      east: corpo_1_2
+  corpo_1_2:
+    name_zh: corpo 街區 (1,2)
+    name_en: Corpo Block (1,2)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (1,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (1,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 1
+    grid_y: 2
+    exits:
+      north: corpo_1_1
+      south: corpo_1_3
+      east: corpo_2_2
+      west: corpo_0_2
+  corpo_2_2:
+    name_zh: corpo 街區 (2,2)
+    name_en: Corpo Block (2,2)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (2,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (2,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 2
+    grid_y: 2
+    exits:
+      north: corpo_2_1
+      south: corpo_2_3
+      east: corpo_3_2
+      west: corpo_1_2
+  corpo_3_2:
+    name_zh: corpo 街區 (3,2)
+    name_en: Corpo Block (3,2)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (3,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (3,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 3
+    grid_y: 2
+    exits:
+      north: corpo_3_1
+      south: corpo_3_3
+      west: corpo_2_2
+  corpo_0_3:
+    name_zh: corpo 街區 (0,3)
+    name_en: Corpo Block (0,3)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (0,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (0,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 0
+    grid_y: 3
+    exits:
+      north: corpo_0_2
+      east: corpo_1_3
+  corpo_1_3:
+    name_zh: corpo 街區 (1,3)
+    name_en: Corpo Block (1,3)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (1,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (1,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 1
+    grid_y: 3
+    exits:
+      north: corpo_1_2
+      east: corpo_2_3
+      west: corpo_0_3
+  corpo_2_3:
+    name_zh: corpo 街區 (2,3)
+    name_en: Corpo Block (2,3)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (2,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (2,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 2
+    grid_y: 3
+    exits:
+      north: corpo_2_2
+      east: corpo_3_3
+      west: corpo_1_3
+  corpo_3_3:
+    name_zh: corpo 街區 (3,3)
+    name_en: Corpo Block (3,3)
+    description_zh: 霓虹與酸雨交織的 corpo 街道格點 (3,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked corpo street grid at (3,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: corpo
+    grid_x: 3
+    grid_y: 3
+    exits:
+      north: corpo_3_2
+      west: corpo_2_3
+  docks_0_0:
+    name_zh: docks 街區 (0,0)
+    name_en: Docks Block (0,0)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (0,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (0,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 0
+    grid_y: 0
+    exits:
+      south: docks_0_1
+      east: docks_1_0
+  docks_1_0:
+    name_zh: docks 街區 (1,0)
+    name_en: Docks Block (1,0)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (1,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (1,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 1
+    grid_y: 0
+    exits:
+      south: docks_1_1
+      east: docks_2_0
+      west: docks_0_0
+  docks_2_0:
+    name_zh: docks 街區 (2,0)
+    name_en: Docks Block (2,0)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (2,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (2,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 2
+    grid_y: 0
+    exits:
+      south: docks_2_1
+      east: docks_3_0
+      west: docks_1_0
+  docks_3_0:
+    name_zh: docks 街區 (3,0)
+    name_en: Docks Block (3,0)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (3,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (3,0). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 3
+    grid_y: 0
+    exits:
+      south: docks_3_1
+      west: docks_2_0
+  docks_0_1:
+    name_zh: docks 街區 (0,1)
+    name_en: Docks Block (0,1)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (0,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (0,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 0
+    grid_y: 1
+    exits:
+      north: docks_0_0
+      south: docks_0_2
+      east: docks_1_1
+  docks_1_1:
+    name_zh: docks 街區 (1,1)
+    name_en: Docks Block (1,1)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (1,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (1,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 1
+    grid_y: 1
+    exits:
+      north: docks_1_0
+      south: docks_1_2
+      east: docks_2_1
+      west: docks_0_1
+  docks_2_1:
+    name_zh: docks 街區 (2,1)
+    name_en: Docks Block (2,1)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (2,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (2,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 2
+    grid_y: 1
+    exits:
+      north: docks
+      south: docks_2_2
+      east: docks_3_1
+      west: docks_1_1
+  docks_3_1:
+    name_zh: docks 街區 (3,1)
+    name_en: Docks Block (3,1)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (3,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (3,1). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 3
+    grid_y: 1
+    exits:
+      north: docks_3_0
+      south: docks_3_2
+      west: docks_2_1
+  docks_0_2:
+    name_zh: docks 街區 (0,2)
+    name_en: Docks Block (0,2)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (0,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (0,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 0
+    grid_y: 2
+    exits:
+      north: docks_0_1
+      south: docks_0_3
+      east: docks_1_2
+  docks_1_2:
+    name_zh: docks 街區 (1,2)
+    name_en: Docks Block (1,2)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (1,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (1,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 1
+    grid_y: 2
+    exits:
+      north: docks_1_1
+      south: docks_1_3
+      east: docks_2_2
+      west: docks_0_2
+  docks_2_2:
+    name_zh: docks 街區 (2,2)
+    name_en: Docks Block (2,2)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (2,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (2,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 2
+    grid_y: 2
+    exits:
+      north: docks_2_1
+      south: docks_2_3
+      east: docks_3_2
+      west: docks_1_2
+  docks_3_2:
+    name_zh: docks 街區 (3,2)
+    name_en: Docks Block (3,2)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (3,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (3,2). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 3
+    grid_y: 2
+    exits:
+      north: docks_3_1
+      south: docks_3_3
+      west: docks_2_2
+  docks_0_3:
+    name_zh: docks 街區 (0,3)
+    name_en: Docks Block (0,3)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (0,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (0,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 0
+    grid_y: 3
+    exits:
+      north: docks_0_2
+      east: docks_1_3
+  docks_1_3:
+    name_zh: docks 街區 (1,3)
+    name_en: Docks Block (1,3)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (1,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (1,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 1
+    grid_y: 3
+    exits:
+      north: docks_1_2
+      east: docks_2_3
+      west: docks_0_3
+  docks_2_3:
+    name_zh: docks 街區 (2,3)
+    name_en: Docks Block (2,3)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (2,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (2,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 2
+    grid_y: 3
+    exits:
+      north: docks_2_2
+      east: docks_3_3
+      west: docks_1_3
+  docks_3_3:
+    name_zh: docks 街區 (3,3)
+    name_en: Docks Block (3,3)
+    description_zh: 霓虹與酸雨交織的 docks 街道格點 (3,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked docks street grid at (3,3). Holographic ads flicker
+      on rain-slick pavement.
+    district: docks
+    grid_x: 3
+    grid_y: 3
+    exits:
+      north: docks_3_2
+      west: docks_2_3
+  undercity_0_0:
+    name_zh: undercity 街區 (0,0)
+    name_en: Undercity Block (0,0)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (0,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (0,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 0
+    grid_y: 0
+    exits:
+      south: undercity_0_1
+      east: undercity_1_0
+  undercity_1_0:
+    name_zh: undercity 街區 (1,0)
+    name_en: Undercity Block (1,0)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (1,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (1,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 1
+    grid_y: 0
+    exits:
+      south: undercity_1_1
+      east: undercity_2_0
+      west: undercity_0_0
+  undercity_2_0:
+    name_zh: undercity 街區 (2,0)
+    name_en: Undercity Block (2,0)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (2,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (2,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 2
+    grid_y: 0
+    exits:
+      south: undercity_2_1
+      east: undercity_3_0
+      west: undercity_1_0
+  undercity_3_0:
+    name_zh: undercity 街區 (3,0)
+    name_en: Undercity Block (3,0)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (3,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (3,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 3
+    grid_y: 0
+    exits:
+      south: undercity_3_1
+      east: undercity_4_0
+      west: undercity_2_0
+  undercity_4_0:
+    name_zh: undercity 街區 (4,0)
+    name_en: Undercity Block (4,0)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (4,0)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (4,0). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 4
+    grid_y: 0
+    exits:
+      south: undercity_4_1
+      west: undercity_3_0
+  undercity_0_1:
+    name_zh: undercity 街區 (0,1)
+    name_en: Undercity Block (0,1)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (0,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (0,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 0
+    grid_y: 1
+    exits:
+      north: undercity_0_0
+      south: undercity_0_2
+      east: undercity_1_1
+  undercity_1_1:
+    name_zh: undercity 街區 (1,1)
+    name_en: Undercity Block (1,1)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (1,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (1,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 1
+    grid_y: 1
+    exits:
+      north: undercity_1_0
+      south: undercity_1_2
+      east: undercity_2_1
+      west: undercity_0_1
+  undercity_2_1:
+    name_zh: undercity 街區 (2,1)
+    name_en: Undercity Block (2,1)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (2,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (2,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 2
+    grid_y: 1
+    exits:
+      north: undercity_2_0
+      south: undercity_2_2
+      east: undercity_3_1
+      west: undercity_1_1
+  undercity_3_1:
+    name_zh: undercity 街區 (3,1)
+    name_en: Undercity Block (3,1)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (3,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (3,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 3
+    grid_y: 1
+    exits:
+      north: undercity_3_0
+      south: undercity_3_2
+      east: undercity_4_1
+      west: undercity_2_1
+  undercity_4_1:
+    name_zh: undercity 街區 (4,1)
+    name_en: Undercity Block (4,1)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (4,1)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (4,1). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 4
+    grid_y: 1
+    exits:
+      north: undercity_4_0
+      south: undercity_4_2
+      west: undercity_3_1
+  undercity_0_2:
+    name_zh: undercity 街區 (0,2)
+    name_en: Undercity Block (0,2)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (0,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (0,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 0
+    grid_y: 2
+    exits:
+      north: undercity_0_1
+      south: undercity_0_3
+      east: undercity_1_2
+  undercity_1_2:
+    name_zh: undercity 街區 (1,2)
+    name_en: Undercity Block (1,2)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (1,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (1,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 1
+    grid_y: 2
+    exits:
+      north: undercity_1_1
+      south: undercity_1_3
+      east: undercity_2_2
+      west: undercity_0_2
+  undercity_2_2:
+    name_zh: undercity 街區 (2,2)
+    name_en: Undercity Block (2,2)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (2,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (2,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 2
+    grid_y: 2
+    exits:
+      north: undercity_2_1
+      south: undercity_2_3
+      east: undercity_3_2
+      west: undercity_1_2
+  undercity_3_2:
+    name_zh: undercity 街區 (3,2)
+    name_en: Undercity Block (3,2)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (3,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (3,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 3
+    grid_y: 2
+    exits:
+      north: undercity_3_1
+      south: undercity_3_3
+      east: undercity_4_2
+      west: undercity_2_2
+  undercity_4_2:
+    name_zh: undercity 街區 (4,2)
+    name_en: Undercity Block (4,2)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (4,2)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (4,2). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 4
+    grid_y: 2
+    exits:
+      north: undercity_4_1
+      south: undercity_4_3
+      west: bd_den
+  undercity_0_3:
+    name_zh: undercity 街區 (0,3)
+    name_en: Undercity Block (0,3)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (0,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (0,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 0
+    grid_y: 3
+    exits:
+      north: undercity_0_2
+      south: undercity_0_4
+      east: undercity_1_3
+  undercity_1_3:
+    name_zh: undercity 街區 (1,3)
+    name_en: Undercity Block (1,3)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (1,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (1,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 1
+    grid_y: 3
+    exits:
+      north: undercity_1_2
+      south: undercity_1_4
+      east: undercity_2_3
+      west: undercity_0_3
+  undercity_2_3:
+    name_zh: undercity 街區 (2,3)
+    name_en: Undercity Block (2,3)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (2,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (2,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 2
+    grid_y: 3
+    exits:
+      north: undercity_2_2
+      south: undercity_2_4
+      east: undercity_3_3
+      west: undercity_1_3
+  undercity_3_3:
+    name_zh: undercity 街區 (3,3)
+    name_en: Undercity Block (3,3)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (3,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (3,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 3
+    grid_y: 3
+    exits:
+      north: undercity_3_2
+      south: undercity_3_4
+      east: undercity_4_3
+      west: undercity_2_3
+  undercity_4_3:
+    name_zh: undercity 街區 (4,3)
+    name_en: Undercity Block (4,3)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (4,3)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (4,3). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 4
+    grid_y: 3
+    exits:
+      north: undercity_4_2
+      south: undercity_4_4
+      west: undercity_3_3
+  undercity_0_4:
+    name_zh: undercity 街區 (0,4)
+    name_en: Undercity Block (0,4)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (0,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (0,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 0
+    grid_y: 4
+    exits:
+      north: undercity_0_3
+      east: undercity_1_4
+  undercity_1_4:
+    name_zh: undercity 街區 (1,4)
+    name_en: Undercity Block (1,4)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (1,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (1,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 1
+    grid_y: 4
+    exits:
+      north: undercity_1_3
+      east: undercity_2_4
+      west: undercity_0_4
+  undercity_2_4:
+    name_zh: undercity 街區 (2,4)
+    name_en: Undercity Block (2,4)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (2,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (2,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 2
+    grid_y: 4
+    exits:
+      north: undercity_2_3
+      east: undercity_3_4
+      west: undercity_1_4
+  undercity_3_4:
+    name_zh: undercity 街區 (3,4)
+    name_en: Undercity Block (3,4)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (3,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (3,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 3
+    grid_y: 4
+    exits:
+      north: undercity_3_3
+      east: undercity_4_4
+      west: undercity_2_4
+  undercity_4_4:
+    name_zh: undercity 街區 (4,4)
+    name_en: Undercity Block (4,4)
+    description_zh: 霓虹與酸雨交織的 undercity 街道格點 (4,4)。全息廣告在積水上閃爍。
+    description_en: A neon-soaked undercity street grid at (4,4). Holographic ads
+      flicker on rain-slick pavement.
+    district: undercity
+    grid_x: 4
+    grid_y: 4
+    exits:
+      north: undercity_4_3
+      west: undercity_3_4
 items:
   lantern:
     name_zh: 紙燈籠
@@ -494,7 +3826,8 @@ items:
     name_zh: 訓練用卡賓槍
     name_en: Training Carbine
     description_zh: 雙手托擊的教學卡賓槍，裝備時無法同時持握副武器。
-    description_en: A two-handed training carbine—you cannot hold an off-hand weapon with it ready.
+    description_en: A two-handed training carbine—you cannot hold an off-hand weapon
+      with it ready.
     takeable: true
     slot: weapon
     weapon_type: assault_rifle
@@ -619,7 +3952,8 @@ items:
     name_zh: 生鏽鑰匙
     name_en: Rusty Key
     description_zh: 走私貨櫃的舊鑰匙，齒痕磨損但仍能轉動。
-    description_en: A worn smuggler-cache key—the teeth are ground down but it still turns.
+    description_en: A worn smuggler-cache key—the teeth are ground down but it still
+      turns.
     takeable: true
     value: 5
   synth_ramen:
@@ -659,7 +3993,6 @@ items:
     consumable: medicine
     hp_restore: 50
     value: 60
-
 npcs:
   broker:
     name_zh: 情報經紀人
@@ -670,7 +4003,9 @@ npcs:
     description_en: Half a face hides behind a holo-mask, whispering rumors and coordinates.
     hp: 50
     hostile: false
-    patrol: [square, alley]
+    patrol:
+    - square
+    - alley
     schedule:
       morning: square
       afternoon: alley
@@ -691,11 +4026,14 @@ npcs:
     attack: 4
     hostile: true
     aggro: 8
-    patrol: [alley, square]
+    patrol:
+    - alley
+    - square
     quest_id: broker_rumor
     equipment:
       weapon_secondary: knife
-    loot: [mod_chip]
+    loot:
+    - mod_chip
   corp_scout:
     name_zh: 企業偵察員
     name_en: Corpo Scout
@@ -708,7 +4046,9 @@ npcs:
     max_hp: 35
     attack: 5
     hostile: false
-    patrol: [square, alley]
+    patrol:
+    - square
+    - alley
     idle_msg_zh: 低聲回報巡邏座標給中控。
     idle_msg_en: Murmurs patrol coordinates to central dispatch.
   instructor:
@@ -716,12 +4056,13 @@ npcs:
     name_en: Drill Instructor
     room_id: tutorial
     description_zh: 全息教官反覆示範移動、察看與撿取物品的標準流程。
-    description_en: A holo instructor demos movement, looking, and looting by the book.
+    description_en: A holo instructor demos movement, looking, and looting by the
+      book.
     hp: 80
     hostile: false
     talk_key: instructor
     idle_msg_zh: 「記住：先 look，再決定下一步。」
-    idle_msg_en: "\"Remember: look first, then decide.\""
+    idle_msg_en: '"Remember: look first, then decide."'
   netcoach:
     name_zh: 駭客教練
     name_en: Net Coach
@@ -738,18 +4079,20 @@ npcs:
     name_en: Quartermaster
     room_id: tutorial_armory
     description_zh: 手臂上貼滿庫存條碼的管理員，催促新人領取訓練裝備。
-    description_en: A clerk with inventory barcodes on both arms, pushing rookies to gear up.
+    description_en: A clerk with inventory barcodes on both arms, pushing rookies
+      to gear up.
     hp: 50
     hostile: false
     talk_key: quartermaster
     idle_msg_zh: 「槍械、護甲、義體套件——自己挑。」
-    idle_msg_en: "\"Guns, armor, cyber kits—help yourself.\""
+    idle_msg_en: '"Guns, armor, cyber kits—help yourself."'
   sparring_bot:
     name_zh: 陪練機械人
     name_en: Sparring Drone
     room_id: tutorial_combat
     description_zh: 企業贊助的陪練機械人，攻擊模式已調至最低。
-    description_en: A corporate-sponsored sparring drone set to its lowest attack profile.
+    description_en: A corporate-sponsored sparring drone set to its lowest attack
+      profile.
     hp: 25
     attack: 3
     hostile: true
@@ -757,22 +4100,27 @@ npcs:
     respawn_minutes: 10
     equipment:
       weapon_primary: trainee_baton
-    loot: [med_stim, trainee_vest]
+    loot:
+    - med_stim
+    - trainee_vest
   patrol_dummy:
     name_zh: 移動靶標機
     name_en: Patrol Dummy
     room_id: tutorial_course
     description_zh: 沿障礙道巡邏的輕甲靶標，供進階攻擊與 flee 練習。
-    description_en: A light-armor dummy patrolling the course—for attack and flee drills.
+    description_en: A light-armor dummy patrolling the course—for attack and flee
+      drills.
     hp: 18
     attack: 2
     hostile: true
     aggro: 4
     respawn_minutes: 5
-    patrol: [tutorial_course]
+    patrol:
+    - tutorial_course
     equipment:
       weapon_primary: trainee_baton
-    loot: [trainee_ration]
+    loot:
+    - trainee_ration
   rookie_fixer:
     name_zh: 實習中介
     name_en: Rookie Fixer
@@ -800,7 +4148,8 @@ npcs:
     name_en: Range Officer
     room_id: tutorial_range
     description_zh: 戴護耳的靶場教官，講解 weapon_mode 與遠程武器種類。
-    description_en: A range officer with ear guards—covers weapon modes and ranged types.
+    description_en: A range officer with ear guards—covers weapon modes and ranged
+      types.
     hp: 55
     hostile: false
     talk_key: range_officer
@@ -837,7 +4186,8 @@ npcs:
     hp: 40
     hostile: false
     talk_key: kabuki_host
-    tags: [mature]
+    tags:
+    - mature
     idle_msg_zh: 「想進 VIP 區？先確認你已開啟 mature 內容。」
     idle_msg_en: '"VIP lounge? Enable mature content first."'
   kabuki_bouncer:
@@ -850,7 +4200,8 @@ npcs:
     attack: 8
     hostile: false
     talk_key: kabuki_bouncer
-    tags: [mature]
+    tags:
+    - mature
     idle_msg_zh: 「北邊包廂區——別惹事。」
     idle_msg_en: '"Booth wing—do not start trouble."'
   kabuki_dancer:
@@ -858,11 +4209,13 @@ npcs:
     name_en: Holo Dancer
     room_id: kabuki_vip
     description_zh: 半透明的舞者殘影在隱私場邊緣徘徊，等待私人邀請。
-    description_en: A translucent dancer ghost lingers by the privacy fields, waiting for an invite.
+    description_en: A translucent dancer ghost lingers by the privacy fields, waiting
+      for an invite.
     hp: 35
     hostile: false
     talk_key: kabuki_dancer
-    tags: [mature]
+    tags:
+    - mature
     idle_msg_zh: 「想聊聊？flirt 或 spend_time。」
     idle_msg_en: '"Want company? flirt or spend_time."'
   bazaar_fixer:
@@ -900,3 +4253,51 @@ npcs:
     talk_key: corp_guard
     idle_msg_zh: 「識別證。企業區禁止攝影。」
     idle_msg_en: '"ID badge. No recording in the corpo zone."'
+  guard:
+    name_zh: 區域守衛
+    name_en: Block Guard
+    room_id: crypt
+    description_zh: 穿著破舊戰術背心的守衛，義眼掃描每一位進入墓穴的人。
+    description_en: A guard in a battered tac-vest—cyber eyes track every entrant
+      to the crypt.
+    hp: 55
+    attack: 5
+    hostile: false
+    motivation: guard
+    talk_key: guard
+    patrol:
+    - crypt
+    - data_crypt
+    idle_msg_zh: 「這片區域我盯著，別惹事。」
+    idle_msg_en: I'm watching this block—don't start trouble.
+  priest:
+    name_zh: 墓穴司祭
+    name_en: Crypt Priest
+    room_id: crypt
+    description_zh: 在義體殘骸間低語的司祭，談論人性與資料的代價。
+    description_en: A priest murmuring among chrome debris—humanity versus stolen
+      data.
+    hp: 42
+    hostile: false
+    talk_key: priest
+    idle_msg_zh: 「資料會腐蝕靈魂，就像酸雨腐蝕街道。」
+    idle_msg_en: '"Data rots the soul like acid rain rots the street."'
+  rat:
+    name_zh: 下水道老鼠
+    name_en: Sewer Rat
+    room_id: undercity
+    description_zh: 義體改裝的巨型老鼠，在積水裡窸窣覓食。
+    description_en: A chrome-jawed sewer rat skittering through the floodwater for
+      scraps.
+    hp: 12
+    attack: 2
+    hostile: true
+    aggro: 3
+    talk_key: rat
+    patrol:
+    - undercity
+    - crypt
+    loot:
+    - rusty_key
+    idle_msg_zh: 發出刺耳的電子吱吱聲。
+    idle_msg_en: Emits a grating electronic squeal.

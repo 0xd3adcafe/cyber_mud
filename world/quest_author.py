@@ -8,7 +8,9 @@ from world.content import Quest, QuestStage
 from world.quests import quest_stages
 from world.world import World
 
-VALID_OBJECTIVE_TYPES = frozenset({"talk_npc", "visit_room", "interact", "defeat_npc", "have_item"})
+VALID_OBJECTIVE_TYPES = frozenset(
+    {"talk_npc", "visit_room", "interact", "defeat_npc", "have_item", "hack_net"}
+)
 
 
 @dataclass(frozen=True)
@@ -45,6 +47,10 @@ def resolve_target_label(world: World, objective_type: str, target: str) -> str:
         item = world.item(target)
         if item:
             return f"{target} ({item.name_zh or item.name_en})"
+    elif objective_type == "hack_net":
+        node = world.net_nodes.get(target)
+        if node:
+            return f"{target} ({node.name_zh or node.name_en})"
     return target
 
 
@@ -61,6 +67,8 @@ def _target_exists(world: World, objective_type: str, target: str) -> bool:
         return world.npc(target) is not None
     if objective_type == "have_item":
         return world.item(target) is not None
+    if objective_type == "hack_net":
+        return target in world.net_nodes
     return False
 
 
