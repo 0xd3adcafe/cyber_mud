@@ -168,6 +168,26 @@ def _process_chase(state: WorldState, players: list[Player]) -> list[TickEvent]:
     return events
 
 
+def _process_player_trauma(state: WorldState, players: list[Player]) -> list[TickEvent]:
+    from world.trauma import tick_player_status
+
+    events: list[TickEvent] = []
+    for player in players:
+        if not player.named:
+            continue
+        lines = tick_player_status(player, player.locale)
+        for line in lines:
+            events.append(
+                TickEvent(
+                    kind="trauma_tick",
+                    player_name=player.name,
+                    message_key="",
+                    message_kwargs={"text": line, "hp": str(player.hp)},
+                )
+            )
+    return events
+
+
 def _process_hp_regen(state: WorldState, config: TimeConfig, players: list[Player]) -> list[TickEvent]:
     period = state.clock.period_id(config)
     events: list[TickEvent] = []
@@ -255,6 +275,7 @@ def process_tick(
     if players:
         events.extend(_process_chase(state, players))
         events.extend(_process_hp_regen(state, config, players))
+        events.extend(_process_player_trauma(state, players))
         events.extend(_process_wanted_decay(players))
 
     for room_id, message_key, message_kwargs in process_corpse_decay(state):

@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 EFFECT_BURN = "burn"
 EFFECT_SHOCK = "shock"
 EFFECT_BLIND = "blind"
+EFFECT_BLEED = "bleed"
 
 
 @dataclass

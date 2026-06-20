@@ -29,3 +29,4 @@ class NPC:
     xp_reward: int = 0
     faction: str = ""
     motivation: str = ""
+    tags: list[str] = field(default_factory=list)

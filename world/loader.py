@@ -9,7 +9,8 @@ from entities.item import Item
 from shared.equipment import WEAPON_ITEM_SLOT, normalize_equipment, resolve_slot_id
 from entities.npc import NPC
 from world.content import (
-    load_braindances,
+    load_all_braindances,
+    load_all_quests,
     load_housing,
     load_interactables,
     load_mods,
@@ -143,6 +144,7 @@ def load_world(path: Path | None = None) -> World:
             xp_reward=int(data.get("xp_reward", 0)),
             faction=str(data.get("faction", "")),
             motivation=str(data.get("motivation", "")),
+            tags=[str(tag) for tag in (data.get("tags") or [])],
         )
         for nid, data in (raw.get("npcs") or {}).items()
     }
@@ -163,7 +165,7 @@ def load_world(path: Path | None = None) -> World:
         skills=load_skills(),
         talents=load_talents(),
         mods=load_mods(),
-        quests=load_quests(),
+        quests=load_all_quests(),
         quickhacks=load_quickhacks(),
         homes=load_housing(),
         vehicles=load_vehicles(),
@@ -173,7 +175,7 @@ def load_world(path: Path | None = None) -> World:
         interactables=load_interactables(),
         recipes=recipes,
         disassemble=disassemble,
-        braindances=load_braindances(),
+        braindances=load_all_braindances(),
         passive_chains=load_passive_chains(),
     )
 

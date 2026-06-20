@@ -52,3 +52,6 @@ class Player:
     net_shell: bool = False
     weapon_mods: dict[str, list[str]] = field(default_factory=dict)
     chased_by_npc: str = ""
+    content_rating: str = "teen"
+    romance_flags: dict[str, str] = field(default_factory=dict)
+    player_status: dict[str, int] = field(default_factory=dict)

@@ -135,6 +135,18 @@ def resolve_player_strike(
                 hp=str(max(0, encounter.npc_hp)),
             )
         )
+        npc = state.world.npc(encounter.npc_id)
+        from combat.gore import maybe_gore_crit
+
+        gore_line = maybe_gore_crit(
+            player,
+            locale,
+            target=label,
+            damage=damage,
+            npc_max_hp=npc.max_hp if npc else 30,
+        )
+        if gore_line:
+            lines.append(gore_line)
 
     if encounter.npc_hp <= 0:
         return _finish_victory(state, player, encounter, lines)

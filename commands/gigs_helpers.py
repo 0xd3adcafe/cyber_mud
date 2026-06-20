@@ -65,7 +65,11 @@ def format_gigs_panel(ctx: CommandContext) -> list[str]:
             if hint:
                 lines.append(t(locale, "gigs.journal_hint", hint=hint))
             lines.append("")
+    from world.mature import is_mature
+
     for quest in ctx.state.world.quests.values():
+        if quest.rating == "mature" and not is_mature(ctx.player):
+            continue
         lines.append(
             t(
                 locale,
@@ -113,6 +117,8 @@ def build_gigs_ui(ctx: CommandContext) -> str:
             if hint:
                 active_lines.append(t(locale, "gigs.journal_hint", hint=hint))
             sections.append({"kind": "text", "lines": active_lines})
+    from world.mature import is_mature
+
     quest_items = [
         t(
             locale,
@@ -121,6 +127,7 @@ def build_gigs_ui(ctx: CommandContext) -> str:
             status=status_label(ctx, quest.id),
         )
         for quest in ctx.state.world.quests.values()
+        if not (quest.rating == "mature" and not is_mature(ctx.player))
     ]
     sections.append({"kind": "list", "title": t(locale, "gigs.panel_quests_title"), "items": quest_items})
     done = [qid for qid in ctx.state.world.quests if quest_is_done(ctx.player, qid)]

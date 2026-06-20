@@ -126,6 +126,7 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
         "hp": f"{ctx.player.hp}/{ctx.player.max_hp}",
         "gold": str(ctx.player.gold),
         "locale": ctx.player.locale,
+        "content_rating": ctx.player.content_rating,
         "auth": "1" if ctx.player.named else "0",
         "time": clock.format_clock(ctx.player.locale),
         "period": clock.format_period(ctx.player.locale, config),
@@ -237,6 +238,12 @@ def _dispatch_once(
         from shared.i18n import t
 
         return ok([t(player.locale, "combat.busy")])
+
+    from world.mature import gate_command
+
+    mature_refusal = gate_command(player, player.locale, verb)
+    if mature_refusal is not None:
+        return ok(mature_refusal)
 
     if player.net_shell:
         from commands.net_shell import (
@@ -359,4 +366,6 @@ def register_builtin_commands() -> None:
         craft,
         disassemble_cmd,
         braindance,
+        settings_cmd,
+        flirt,
     )

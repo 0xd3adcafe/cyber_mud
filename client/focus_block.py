@@ -55,6 +55,7 @@ def resolve_focus(
     locale: str = "zh",
 ) -> FocusSnapshot | None:
     if combat_active(state):
+        kind = "gore" if state.content_rating == "mature" else "combat"
         body = state.combat_log or t(locale, "focus.combat_default")
         if state.combat_target:
             hp_bit = f" HP {state.combat_npc_hp}" if state.combat_npc_hp else ""
@@ -66,7 +67,8 @@ def resolve_focus(
         )
         if cd_label:
             body = f"{body}  {cd_label}"
-        return FocusSnapshot(kind="combat", body=body, status_key="combat_status", icon="⚔")
+        icon = "🩸" if kind == "gore" else "⚔"
+        return FocusSnapshot(kind=kind, body=body, status_key="combat_status", icon=icon)
     if has_pending:
         body = pending_text or "…"
         return FocusSnapshot(kind="command", body=body, status_key="command_status", icon="")
@@ -104,9 +106,9 @@ def _icon_markup(snapshot: FocusSnapshot, *, theme_id: str, frame: int) -> str:
     if snapshot.kind == "quest":
         color = palette.quest_color
         icon = palette.quest_icon
-    elif snapshot.kind == "combat":
-        color = palette.combat_color
-        icon = palette.combat_icon
+    elif snapshot.kind in {"combat", "gore"}:
+        color = "dark_red" if snapshot.kind == "gore" else palette.combat_color
+        icon = snapshot.icon or palette.combat_icon
     else:
         color = palette.command_color
         icon = spinner_char(frame)
@@ -116,7 +118,9 @@ def _icon_markup(snapshot: FocusSnapshot, *, theme_id: str, frame: int) -> str:
 def format_focus_content(snapshot: FocusSnapshot, *, theme_id: str, frame: int) -> str:
     palette = focus_palette_for_theme(theme_id)
     icon = _icon_markup(snapshot, theme_id=theme_id, frame=frame)
-    if snapshot.kind == "combat":
+    if snapshot.kind == "gore":
+        body_style = "dark_red"
+    elif snapshot.kind == "combat":
         body_style = palette.combat_color
     elif snapshot.kind == "quest":
         body_style = palette.quest_color

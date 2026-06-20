@@ -173,6 +173,9 @@ class CyberMudApp(App):
                     yield Static("[dim]Password[/]", id="login_password_label")
                     yield Input(placeholder="••••••••", id="login_password", password=True)
                     yield Checkbox("Remember account (PIN protected)", id="remember_credentials", value=False)
+                    yield Static("[dim]18+ mature content (opt-in)[/]", id="login_mature_label", classes="credential-hidden")
+                    yield Checkbox("Enable 18+ mature content", id="login_mature", value=False, classes="credential-hidden")
+                    yield Static("", id="login_mature_hint", classes="credential-hidden")
                     yield Static(
                         "[dim]Set PIN[/]",
                         id="login_pin_setup_label",
@@ -475,6 +478,9 @@ class CyberMudApp(App):
             f"[dim]{t(loc, 'client.login.pin_confirm_label')}[/]"
         )
         self.query_one("#login_pin_confirm", Input).placeholder = t(loc, "client.login.pin_confirm_placeholder")
+        self.query_one("#login_mature_label", Static).update(f"[dim]{t(loc, 'client.login.mature_label')}[/]")
+        self.query_one("#login_mature", Checkbox).label = t(loc, "client.login.mature_label")
+        self.query_one("#login_mature_hint", Static).update(f"[dim]{t(loc, 'client.login.mature_hint')}[/]")
 
     def _set_login_status(self, text: str) -> None:
         self.query_one("#login_status", Static).update(text)
@@ -523,6 +529,7 @@ class CyberMudApp(App):
         self.query_one("#remember_credentials", Checkbox).disabled = not active
         self.query_one("#login_pin_setup", Input).disabled = not active
         self.query_one("#login_pin_confirm", Input).disabled = not active
+        self.query_one("#login_mature", Checkbox).disabled = not active
 
     def _credential_widget_ids(self) -> tuple[str, ...]:
         return (
@@ -551,6 +558,11 @@ class CyberMudApp(App):
         self._set_credential_section_visible("#login_pin_setup", show_setup)
         self._set_credential_section_visible("#login_pin_confirm_label", show_setup)
         self._set_credential_section_visible("#login_pin_confirm", show_setup)
+        mode = str(self.query_one("#auth_mode", Select).value or "login")
+        show_mature = mode == "register"
+        self._set_credential_section_visible("#login_mature_label", show_mature)
+        self._set_credential_section_visible("#login_mature", show_mature)
+        self._set_credential_section_visible("#login_mature_hint", show_mature)
         loc = self._login_locale
         base = self._startup_hint or t(loc, "client.login.hint")
         if stored:
@@ -998,6 +1010,11 @@ class CyberMudApp(App):
         if event.value:
             self._apply_theme(str(event.value))
 
+    @on(Select.Changed, "#auth_mode")
+    def on_auth_mode_changed(self, _event: Select.Changed) -> None:
+        if not self.view.authenticated:
+            self._refresh_credential_ui()
+
     async def on_mount(self) -> None:
         startup = StartupReport()
         self.stylesheet_path = None
@@ -1241,7 +1258,8 @@ class CyberMudApp(App):
             self._pending_credential_save = (name, password, mode, pin_setup)
         else:
             self._pending_credential_save = None
-        command = build_auth_command(mode, name, password)
+        mature_opt_in = bool(self.query_one("#login_mature", Checkbox).value)
+        command = build_auth_command(mode, name, password, mature=mature_opt_in)
         if command is None:
             self._pending_credential_save = None
             self._set_login_status(self._ui("client.login.need_credentials"))

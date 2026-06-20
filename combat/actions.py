@@ -201,6 +201,9 @@ def resolve_npc_attack(state: WorldState, player: Player, encounter: Encounter) 
         )
     ]
     encounter.npc_cd = NPC_ATTACK_CD
+    from world.trauma import maybe_bleed_on_hit
+
+    maybe_bleed_on_hit(player, damage)
 
     if player.hp <= 0:
         lines.append(encounter.append_log(locale, "combat.player_down"))
@@ -261,6 +264,11 @@ def _finish_victory(
     locale = player.locale
     label = npc_label(state, encounter.npc_id, locale)
     lines.append(encounter.append_log(locale, "combat.victory", target=label))
+    from combat.gore import maybe_gore_kill
+
+    gore_line = maybe_gore_kill(player, locale, target=label)
+    if gore_line:
+        lines.append(gore_line)
     room_id = state.npc_room(encounter.npc_id) or player.room_id
     corpse = spawn_corpse(state, encounter.npc_id, room_id)
     if corpse is not None:

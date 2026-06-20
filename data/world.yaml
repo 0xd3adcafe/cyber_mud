@@ -49,6 +49,20 @@ rooms:
     exits:
       south: square
       down: undercity
+      west: kabuki_lounge
+  kabuki_lounge:
+    name_zh: 歌舞伎夜總會
+    name_en: Kabuki Lounge
+    description_zh: |
+      霓虹簾幕後傳來合成爵士與低語。這裡只接待已確認年齡的客人。
+    description_en: |
+      Synthetic jazz and whispers behind neon curtains. Patrons must confirm they are 18+.
+    district: kabuki
+    grid_x: 0
+    grid_y: 0
+    tags: [mature, club]
+    exits:
+      east: alley
   square_rooftop:
     name_zh: 廣場屋頂
     name_en: Square Rooftop
@@ -72,6 +86,20 @@ rooms:
     exits:
       up: alley
       north: docks
+      east: bd_den
+  bd_den:
+    name_zh: 地下腦舞密艙
+    name_en: Underground BD Den
+    description_zh: |
+      隔間裡的腦舞艙覆著汗漬與消毒水味。櫃台貼著「18+ 限定」全息標籤。
+    description_en: |
+      Booths reek of sanitizer and sweat. A holo sticker reads "18+ only."
+    district: undercity
+    grid_x: 2
+    grid_y: -1
+    tags: [mature, braindance]
+    exits:
+      west: undercity
   tutorial:
     name_zh: 新手訓練場
     name_en: Training Yard
@@ -689,3 +717,15 @@ npcs:
     talk_key: course_guide
     idle_msg_zh: 「先 scan 看環境，再 interact 閘門。」
     idle_msg_en: '"scan first, then interact the gate."'
+  kabuki_host:
+    name_zh: 夜總會接待
+    name_en: Lounge Host
+    room_id: kabuki_lounge
+    description_zh: 穿著全息絲綢的接待員，笑眼後藏著評估客人的掃描儀。
+    description_en: A host in holo-silk—scanner glints behind a practiced smile.
+    hp: 40
+    hostile: false
+    talk_key: kabuki_host
+    tags: [mature]
+    idle_msg_zh: 「想進 VIP 區？先確認你已開啟 mature 內容。」
+    idle_msg_en: '"VIP lounge? Enable mature content first."'

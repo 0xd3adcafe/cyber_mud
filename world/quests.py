@@ -65,6 +65,12 @@ def accept_quest(player: Player, state: WorldState, quest_id: str, locale: str) 
     if quest is None:
         return [t(locale, "gigs.missing", quest=quest_id)]
 
+    from world.mature import gate_content_rating
+
+    refusal = gate_content_rating(player, quest.rating, locale)
+    if refusal is not None:
+        return refusal
+
     if quest_is_done(player, quest_id):
         return [t(locale, "gigs.already_done", quest=_quest_name(quest, locale))]
 

@@ -20,6 +20,12 @@ def handle(ctx: CommandContext):
 
     dest_id = room.exits[direction]
     dest = ctx.state.world.room(dest_id)
+    from world.mature import gate_room_entry
+
+    refusal = gate_room_entry(ctx.player, dest, ctx.player.locale)
+    if refusal is not None:
+        return ok(refusal)
+
     if dest is not None and dest.shop_id:
         hour = ctx.state.clock.hour
         if not shop_is_open(dest.shop_id, hour):
@@ -31,16 +37,19 @@ def handle(ctx: CommandContext):
 
     ctx.player.room_id = dest_id
     from world.quests import advance_quest_on_visit
+    from world.trauma import treat_trauma_at_ripperdoc
 
     quest_lines = advance_quest_on_visit(ctx.player, ctx.state, dest_id, ctx.player.locale)
+    trauma_lines = treat_trauma_at_ripperdoc(ctx.player, dest, ctx.player.locale)
     lines = [t(ctx.player.locale, "go.ok", direction=direction), ""]
     lines.extend(quest_lines)
+    lines.extend(trauma_lines)
     lines.extend(format_look(ctx))
     return ok_document(
         lines,
         meta=player_meta(ctx),
         moved=True,
-        world_changed=bool(quest_lines),
+        world_changed=bool(quest_lines) or bool(trauma_lines),
     )
 
 

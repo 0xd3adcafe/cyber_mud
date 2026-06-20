@@ -222,16 +222,16 @@ Not yet implemented or only partially implemented.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
-| M.0 | Content rating & opt-in | `Player.content_rating` (`teen` / `mature`); register/login prompt; `lang`/`settings mature on\|off`; refuse mature commands when disabled; `tests/test_content_rating.py` |
-| M.1 | Gore & bloody combat | Critical-hit / kill / corpse `look` variants; `combat/gore.py`; locale `mature.combat.*`; optional client Focus block `gore` tint; `tests/test_gore.py` |
-| M.2 | Injury & trauma flavor | Bleed status, cripple lines, ripperdoc aftermath; tie to `world/vitals.py` / combat status; data-driven severity tiers |
-| M.3 | Adult venues & NPCs (non-graphic scaffold) | District rooms (e.g. Kabuki club, BD booth); NPC schedules; `talk` branches rated `mature`; YAML `tags: [mature]` on rooms/NPCs |
-| M.4 | Romance & intimacy mechanics | Affinity flags, consent-gated `flirt` / `spend_time`; fade-to-black vs explicit text per rating; `data/romance.yaml` |
-| M.5 | Mature braindance & gigs | Rating-gated `bd` clips and fixer gigs; separate `data/braindances_mature.yaml`; journal does not spoil teen-rated players |
-| M.6 | Client warnings & UI | Login 18+ acknowledgement; `/theme` unaffected; mature strings never in `#help_dropdown` unless opted in; Focus block icon override |
-| M.7 | Authoring & admin | `./admin.sh validate` scans mature YAML; `docs/MATURE_CONTENT.md` author guide; CONTRIBUTING age-rating note |
+| ~~M.0~~ | ~~Content rating & opt-in~~ | ✅ `Player.content_rating`; `settings mature on\|off`; register `mature`; `world/mature.py`; `tests/test_content_rating.py` |
+| ~~M.1~~ | ~~Gore & bloody combat~~ | ✅ `combat/gore.py`; kill/crit/corpse lines; Focus `gore` tint; `tests/test_gore.py` |
+| ~~M.2~~ | ~~Injury & trauma flavor~~ | ✅ `world/trauma.py`; bleed status; ripperdoc treat on clinic entry; tick damage |
+| ~~M.3~~ | ~~Adult venues & NPCs~~ | ✅ `kabuki_lounge`, `bd_den`, `kabuki_host`; `tags: [mature]`; mature `talk` |
+| ~~M.4~~ | ~~Romance & intimacy~~ | ✅ `data/romance.yaml`; `flirt` / `spend_time`; `romance_flags` on save |
+| ~~M.5~~ | ~~Mature braindance & gigs~~ | ✅ `braindances_mature.yaml`, `quests_mature.yaml`; teen `gigs`/`bd` filter |
+| ~~M.6~~ | ~~Client warnings & UI~~ | ✅ Login 18+ checkbox; help hides mature category; Focus gore style |
+| ~~M.7~~ | ~~Authoring & admin~~ | ✅ `mature_validate.py`; `docs/MATURE_CONTENT.md`; CONTRIBUTING note |
 
-**Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7.
+**Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7. **All phases shipped (2026-06).**
 
 ---
 

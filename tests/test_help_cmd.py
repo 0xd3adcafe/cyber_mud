@@ -27,7 +27,8 @@ def test_help_ui_json_has_category_sections():
     titles = [section["title"] for section in ui["sections"]]
     assert "探索移動" in titles
     assert "戰鬥" in titles
-    assert len(titles) == len(HELP_CATEGORIES)
+    assert len(titles) == len(HELP_CATEGORIES) - 1
+    assert "18+" not in " ".join(titles)
 
 
 def test_help_unnamed_shows_auth_only():

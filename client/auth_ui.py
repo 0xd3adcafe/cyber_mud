@@ -3,13 +3,15 @@ from __future__ import annotations
 AUTH_MODES = ("login", "register")
 
 
-def build_auth_command(mode: str, name: str, password: str) -> str | None:
+def build_auth_command(mode: str, name: str, password: str, *, mature: bool = False) -> str | None:
     name = name.strip()
     password = password  # preserve spaces in password if any
     if not name or not password:
         return None
     if mode not in AUTH_MODES:
         return None
+    if mode == "register" and mature:
+        return f"register {name} {password} mature"
     return f"{mode} {name} {password}"
 
 

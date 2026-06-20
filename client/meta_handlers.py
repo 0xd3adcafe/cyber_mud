@@ -43,6 +43,7 @@ class ClientViewState:
     prompt_template: str = ""
     player_name: str = ""
     locale: str = "en"
+    content_rating: str = "teen"
     level: str = "1"
     street_cred: str = "0"
     wanted: str = "0"
@@ -149,6 +150,8 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         state.player_name = value
     elif key == "locale":
         state.locale = value or "en"
+    elif key == "content_rating":
+        state.content_rating = value or "teen"
     elif key == "level":
         state.level = value
     elif key == "street_cred":

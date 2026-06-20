@@ -213,6 +213,7 @@ help:
     growth: "Progression"
     panels: "UI panels"
     media: "Braindance"
+    mature: "18+ content (opt-in)"
 
 help_cmds:
   look: "Look around or at a target (look [item|NPC|equipment])"
@@ -221,6 +222,9 @@ help_cmds:
   craft: "Craft item (craft <recipe>, shop/ripperdoc)"
   disassemble: "Disassemble item (disassemble <item>)"
   braindance: "Experience BD (braindance <clip> or bd)"
+  settings: "Player settings (settings mature on|off)"
+  flirt: "Flirt with an NPC (18+, flirt <npc>)"
+  spend_time: "Spend private time (18+, spend_time <npc>)"
   take: "Pick up an item"
   drop: "Drop an item"
   inventory: "Show inventory"
@@ -326,7 +330,8 @@ pda:
 auth:
   required: "Please log in or register: login <name> <password> or register <name> <password>"
   help_note: "(Before login, only login, register, help, and quit are available)"
-  register_usage: "Usage: register <name> <password>"
+  register_usage: "Usage: register <name> <password> [mature]"
+  register_mature_on: "18+ mature content enabled. Toggle anytime with: settings mature off"
   login_usage: "Usage: login <name> <password>"
   already_logged_in: "You are already logged in."
   name_short: "Name must be at least 2 characters."
@@ -784,6 +789,29 @@ status:
   burn: "burn"
   shock: "shock"
   blind: "blind"
+  bleed: "bleeding"
+
+mature:
+  refused: "That content requires 18+ opt-in: settings mature on"
+
+settings:
+  usage: "Usage: settings mature on|off"
+  current: "Content rating: {rating}"
+  rating:
+    teen: "teen (default)"
+    mature: "mature (18+)"
+  mature_on: "18+ mature content enabled."
+  mature_off: "Mature content disabled. Rating set to teen."
+
+flirt:
+  usage: "Usage: flirt <npc>  ·  spend_time <npc>"
+
+romance:
+  no_profile: "Nothing romantic to pursue here."
+  need_flirt: "Build rapport first (flirt)."
+
+trauma:
+  ripperdoc_ok: "The ripperdoc patches you up."
 
 quickhack:
   unknown: "Unknown quickhack: {name}"
@@ -925,6 +953,8 @@ client:
     pin_setup_placeholder: "New PIN"
     pin_confirm_label: "Confirm PIN"
     pin_confirm_placeholder: "Re-enter PIN"
+    mature_label: "18+ mature content (opt-in)"
+    mature_hint: "Enables gore, adult venues, and restricted gigs/BD. Toggle later with settings."
     hint: "Enter to submit · Ctrl+C to quit"
     hint_pin: "{base} · PIN quick login · F7 clear memory"
     save_failed: "Signed in, but save failed: {err}"

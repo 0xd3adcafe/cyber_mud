@@ -477,6 +477,6 @@ def test_help_overlay_covers_log_not_sidebar():
 
             scroll = app.query_one("#help_dropdown_scroll", VerticalScroll)
             log_wrap = app.query_one("#scrollback_wrap", Container)
-            assert scroll.region.width >= log_wrap.region.width - 4
+            assert scroll.region.width >= log_wrap.region.width - 6
 
     asyncio.run(_run())

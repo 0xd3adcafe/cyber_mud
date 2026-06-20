@@ -236,6 +236,9 @@ def format_look_corpse(ctx: CommandContext, corpse_id: str) -> list[str]:
         if npc:
             lines.append(npc_description(npc, locale))
             lines.append("")
+    from combat.gore import maybe_gore_corpse
+
+    lines.extend(maybe_gore_corpse(ctx.player, locale, corpse, ctx.state))
     if corpse.loot:
         item_labels = []
         for item_id in corpse.loot:

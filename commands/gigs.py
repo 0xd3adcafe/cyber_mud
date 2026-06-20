@@ -36,7 +36,11 @@ def _list_gigs(ctx: CommandContext):
         t(locale, "gigs.street_cred", cred=str(ctx.player.street_cred), rank=street_cred_rank(ctx.player, locale)),
         "",
     ]
+    from world.mature import is_mature
+
     for quest in ctx.state.world.quests.values():
+        if quest.rating == "mature" and not is_mature(ctx.player):
+            continue
         desc = quest.description_zh if locale == "zh" else (quest.description_en or quest.description_zh)
         reward_parts = []
         if quest.reward_gold:

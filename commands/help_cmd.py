@@ -23,7 +23,10 @@ HELP_CATEGORIES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("growth", ("stats", "talents", "improve")),
     ("panels", ("pda", "prompt")),
     ("media", ("braindance",)),
+    ("mature", ("settings", "flirt", "spend_time")),
 )
+
+_MATURE_CATEGORY = "mature"
 
 
 def _help_command_desc(ctx: CommandContext, key: str) -> str:
@@ -32,7 +35,11 @@ def _help_command_desc(ctx: CommandContext, key: str) -> str:
     return t(ctx.player.locale, f"help_cmds.{key}")
 
 
-def _category_entries(ctx: CommandContext, keys: tuple[str, ...]) -> list[tuple[str, str]]:
+def _category_entries(ctx: CommandContext, keys: tuple[str, ...], *, category_id: str = "") -> list[tuple[str, str]]:
+    from world.mature import is_mature
+
+    if category_id == _MATURE_CATEGORY and not is_mature(ctx.player):
+        return []
     entries: list[tuple[str, str]] = []
     for key in keys:
         if not ctx.player.named and key not in _AUTH_KEYS:
@@ -52,7 +59,7 @@ def format_help(ctx: CommandContext) -> list[str]:
         lines.append(t(locale, "auth.help_note"))
         lines.append("")
     for category_id, keys in HELP_CATEGORIES:
-        entries = _category_entries(ctx, keys)
+        entries = _category_entries(ctx, keys, category_id=category_id)
         if not entries:
             continue
         lines.append(t(locale, "help.category_line", name=_category_title(ctx, category_id)))
@@ -69,7 +76,7 @@ def _help_ui(ctx: CommandContext) -> str:
     for category_id, keys in HELP_CATEGORIES:
         items = [
             f"{name} — {_help_command_desc(ctx, key)}"
-            for name, key in _category_entries(ctx, keys)
+            for name, key in _category_entries(ctx, keys, category_id=category_id)
         ]
         if items:
             sections.append(

@@ -19,7 +19,11 @@ def handle(ctx: CommandContext):
     target = ctx.args.strip()
     if not target:
         lines = [t(locale, "braindance.header"), ""]
+        from world.mature import is_mature
+
         for bid, bd in ctx.state.world.braindances.items():
+            if bd.rating == "mature" and not is_mature(ctx.player):
+                continue
             label = braindance_label(bd, locale)
             lines.append(t(locale, "braindance.line", name=label, cost=str(bd.cost)))
         lines.append("")

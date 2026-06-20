@@ -72,6 +72,9 @@ def player_to_dict(player: Player) -> dict:
         "net_shell": player.net_shell,
         "weapon_mods": {wid: list(mods) for wid, mods in player.weapon_mods.items()},
         "chased_by_npc": player.chased_by_npc,
+        "content_rating": player.content_rating,
+        "romance_flags": dict(player.romance_flags),
+        "player_status": dict(player.player_status),
     }
 
 
@@ -130,6 +133,9 @@ def player_from_dict(data: dict) -> Player:
         net_shell=bool(data.get("net_shell", False)),
         weapon_mods=weapon_mods,
         chased_by_npc=str(data.get("chased_by_npc", "")),
+        content_rating=str(data.get("content_rating", "teen")),
+        romance_flags=dict(data.get("romance_flags", {})),
+        player_status={str(k): int(v) for k, v in (data.get("player_status") or {}).items()},
     )
     if not player.cyberware and player.implants:
         migrate_legacy_implants(player, load_world())

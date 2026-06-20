@@ -20,6 +20,8 @@ NET_NODES_PATH = DATA_DIR / "net_nodes.yaml"
 INTERACTABLES_PATH = DATA_DIR / "interactables.yaml"
 RECIPES_PATH = DATA_DIR / "recipes.yaml"
 BRAINDANCES_PATH = DATA_DIR / "braindances.yaml"
+BRAINDANCES_MATURE_PATH = DATA_DIR / "braindances_mature.yaml"
+QUESTS_MATURE_PATH = DATA_DIR / "quests_mature.yaml"
 PASSIVE_CHAINS_PATH = DATA_DIR / "passive_chains.yaml"
 
 
@@ -86,6 +88,7 @@ class Quest:
     requires_quest: str = ""
     reward_items: list[str] = field(default_factory=list)
     stages: list[QuestStage] = field(default_factory=list)
+    rating: str = "teen"
 
 
 @dataclass
@@ -206,6 +209,7 @@ class Braindance:
     lines_en: list[str] = field(default_factory=list)
     sets_flag: str = ""
     street_cred: int = 0
+    rating: str = "teen"
 
 
 @dataclass
@@ -326,9 +330,45 @@ def load_quests(path: Path | None = None) -> dict[str, Quest]:
             objective_target=str(data.get("objective_target", "")),
             complete_npc_id=str(data.get("complete_npc_id", "")),
             stages=_parse_quest_stages(data),
+            rating=str(data.get("rating", "teen")),
         )
         for qid, data in (raw.get("quests") or {}).items()
     }
+
+
+def load_quests_mature(path: Path | None = None) -> dict[str, Quest]:
+    raw = _load_yaml(path or QUESTS_MATURE_PATH)
+    return {
+        qid: Quest(
+            id=qid,
+            name_zh=str(data.get("name_zh", "")),
+            name_en=str(data.get("name_en", "")),
+            npc_id=str(data.get("npc_id", "")),
+            description_zh=str(data.get("description_zh", "")),
+            description_en=str(data.get("description_en", "")),
+            hint_zh=str(data.get("hint_zh", "")),
+            hint_en=str(data.get("hint_en", "")),
+            reward_gold=int(data.get("reward_gold", 0)),
+            reward_xp=int(data.get("reward_xp", 0)),
+            reward_street_cred=int(data.get("reward_street_cred", 0)),
+            street_cred_req=int(data.get("street_cred_req", 0)),
+            requires_quest=str(data.get("requires_quest", "")),
+            reward_items=[str(item_id) for item_id in (data.get("reward_items") or [])],
+            objective_type=str(data.get("objective_type", "")),
+            objective_target=str(data.get("objective_target", "")),
+            complete_npc_id=str(data.get("complete_npc_id", "")),
+            stages=_parse_quest_stages(data),
+            rating=str(data.get("rating", "mature")),
+        )
+        for qid, data in (raw.get("quests") or {}).items()
+    }
+
+
+def load_all_quests() -> dict[str, Quest]:
+    quests = load_quests()
+    for qid, quest in load_quests_mature().items():
+        quests[qid] = quest
+    return quests
 
 
 def load_quickhacks(path: Path | None = None) -> dict[str, Quickhack]:
@@ -496,9 +536,35 @@ def load_braindances(path: Path | None = None) -> dict[str, Braindance]:
             lines_en=[str(line) for line in (data.get("lines_en") or [])],
             sets_flag=str(data.get("sets_flag", "")),
             street_cred=int(data.get("street_cred", 0)),
+            rating=str(data.get("rating", "teen")),
         )
         for bid, data in (raw.get("braindances") or {}).items()
     }
+
+
+def load_braindances_mature(path: Path | None = None) -> dict[str, Braindance]:
+    raw = _load_yaml(path or BRAINDANCES_MATURE_PATH)
+    return {
+        bid: Braindance(
+            id=bid,
+            name_zh=str(data.get("name_zh", "")),
+            name_en=str(data.get("name_en", "")),
+            cost=int(data.get("cost", 0)),
+            lines_zh=[str(line) for line in (data.get("lines_zh") or [])],
+            lines_en=[str(line) for line in (data.get("lines_en") or [])],
+            sets_flag=str(data.get("sets_flag", "")),
+            street_cred=int(data.get("street_cred", 0)),
+            rating=str(data.get("rating", "mature")),
+        )
+        for bid, data in (raw.get("braindances") or {}).items()
+    }
+
+
+def load_all_braindances() -> dict[str, Braindance]:
+    braindances = load_braindances()
+    for bid, bd in load_braindances_mature().items():
+        braindances[bid] = bd
+    return braindances
 
 
 def load_passive_chains(path: Path | None = None) -> dict[str, PassiveChain]:

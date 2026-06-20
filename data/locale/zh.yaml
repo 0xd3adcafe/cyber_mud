@@ -213,6 +213,7 @@ help:
     growth: "成長技能"
     panels: "介面面板"
     media: "腦舞"
+    mature: "18+ 內容（自願啟用）"
 
 help_cmds:
   look: "察看環境或目標（look [物品|NPC|裝備]）"
@@ -221,6 +222,9 @@ help_cmds:
   craft: "製作物品（craft <配方>，商店／診所）"
   disassemble: "拆解物品（disassemble <物品>）"
   braindance: "體驗腦舞（braindance <片段> 或 bd）"
+  settings: "玩家設定（settings mature on|off）"
+  flirt: "調情（18+，flirt <NPC>）"
+  spend_time: "私密相處（18+，spend_time <NPC>）"
   take: "撿起地上物品"
   drop: "丟下背包物品"
   inventory: "查看背包"
@@ -326,7 +330,8 @@ pda:
 auth:
   required: "請先登入或註冊：login <名稱> <密碼> 或 register <名稱> <密碼>"
   help_note: "（未登入時僅可使用 login、register、help、quit）"
-  register_usage: "用法：register <名稱> <密碼>"
+  register_usage: "用法：register <名稱> <密碼> [mature]"
+  register_mature_on: "已啟用 18+ 限制級內容。隨時可用 settings mature off 關閉"
   login_usage: "用法：login <名稱> <密碼>"
   already_logged_in: "你已經登入了。"
   name_short: "名稱至少兩個字元。"
@@ -784,6 +789,29 @@ status:
   burn: "灼燒"
   shock: "短路"
   blind: "致盲"
+  bleed: "流血"
+
+mature:
+  refused: "此內容需啟用 18+ 選項：settings mature on"
+
+settings:
+  usage: "用法：settings mature on|off"
+  current: "內容分級：{rating}"
+  rating:
+    teen: "teen（預設）"
+    mature: "mature（18+）"
+  mature_on: "已啟用 18+ 限制級內容。"
+  mature_off: "已關閉限制級內容，分級設為 teen。"
+
+flirt:
+  usage: "用法：flirt <NPC>  ·  spend_time <NPC>"
+
+romance:
+  no_profile: "這裡沒有可發展的對象。"
+  need_flirt: "先建立好感（flirt）。"
+
+trauma:
+  ripperdoc_ok: "Ripperdoc 幫你處理了傷勢。"
 
 quickhack:
   unknown: "未知快速破解：{name}"
@@ -925,6 +953,8 @@ client:
     pin_setup_placeholder: 新 PIN
     pin_confirm_label: 確認 PIN
     pin_confirm_placeholder: 再輸入一次
+    mature_label: "18+ 限制級內容（自願啟用）"
+    mature_hint: "啟用血腥、成人場景與限制級委託／腦舞。之後可用 settings 關閉。"
     hint: "Enter 送出 · Ctrl+C 離開"
     hint_pin: "{base} · PIN 快速登入 · F7 清除記憶"
     save_failed: "帳號已登入，但儲存失敗：{err}"

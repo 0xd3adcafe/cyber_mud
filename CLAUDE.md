@@ -242,7 +242,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | Area | Items |
 |------|--------|
 | Environment | pyenv native Python build |
-| **Mature / NSFW (18+, opt-in)** | M.0 rating gate → M.1 gore combat → M.3 adult venues → M.4 romance → M.5 mature BD/gigs → M.6 client warnings → M.2 trauma → M.7 admin docs |
+| **Mature / NSFW (18+, opt-in)** | ✅ Shipped M.0–M.7 — see PHASES **Mature / NSFW content** |
 
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; see PHASES **Mature / NSFW content** table.
 
@@ -331,6 +331,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | English default locale in project rules | `CLAUDE.md` § Project rules (mandatory); `LOCALIZATION.md`; README core principle #1 |
 | Project licenses | `LICENSE` Apache 2.0; `LICENSE-CONTENT.md` CC BY 4.0; `CONTRIBUTING.md` |
 | Player guides (GitHub) | `docs/player/` — getting started, tutorial, commands, client (ASCII art) |
+| Mature / NSFW content M.0–M.7 | `world/mature.py`, `combat/gore.py`, `settings mature`, `flirt`, mature locale/YAML, client 18+ login |
 
 World setting and district expansion: [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)).
 

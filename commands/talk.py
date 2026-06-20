@@ -3,6 +3,11 @@ from __future__ import annotations
 from commands.helpers import find_npc_id
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
+from world.mature import has_mature_tag
+
+
+def has_mature_talk(npc) -> bool:
+    return has_mature_tag(npc.tags) or (npc.talk_key or "").startswith("mature_")
 
 
 def handle(ctx: CommandContext):
@@ -18,9 +23,21 @@ def handle(ctx: CommandContext):
     if npc is None:
         return ok([t(ctx.player.locale, "talk.missing", name=target)])
 
+    from world.mature import gate_mature_entity, is_mature
+    from shared.mature_i18n import tm
+
+    refusal = gate_mature_entity(ctx.player, npc.tags, ctx.player.locale)
+    if refusal is not None:
+        return ok(refusal)
+
     lines: list[str] = []
     talk_key = npc.talk_key or npc.id
-    dialogue = t(ctx.player.locale, f"talk.{talk_key}")
+    if is_mature(ctx.player) and has_mature_talk(npc):
+        dialogue = tm(ctx.player.locale, f"talk.{talk_key}")
+        if dialogue == f"talk.{talk_key}":
+            dialogue = t(ctx.player.locale, f"talk.{talk_key}")
+    else:
+        dialogue = t(ctx.player.locale, f"talk.{talk_key}")
     if dialogue != f"talk.{talk_key}":
         lines.append(dialogue)
 

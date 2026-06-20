@@ -24,6 +24,17 @@ def validate() -> int:
             print(f"ERR  [quest:{issue.quest_id}] {issue.message}")
         return 1
     print(f"OK: quests valid ({len(world.quests)} quests, {len(quest_warnings)} warnings)")
+    from world.mature_validate import validate_mature_content
+
+    mature_errors = [issue for issue in validate_mature_content(world) if issue.severity == "error"]
+    mature_warnings = [issue for issue in validate_mature_content(world) if issue.severity == "warn"]
+    for issue in mature_warnings:
+        print(f"WARN [mature] {issue.message}")
+    if mature_errors:
+        for issue in mature_errors:
+            print(f"ERR  [mature] {issue.message}")
+        return 1
+    print(f"OK: mature content valid ({len(mature_warnings)} warnings)")
     result = subprocess.run([sys.executable, "-m", "pytest", "tests/", "-q"], check=False)
     return result.returncode
 

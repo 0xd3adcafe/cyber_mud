@@ -23,6 +23,12 @@ def play_braindance(
     if bd is None:
         return [t(locale, "braindance.unknown", name=bd_id)]
 
+    from world.mature import gate_content_rating
+
+    refusal = gate_content_rating(player, bd.rating, locale)
+    if refusal is not None:
+        return refusal
+
     if bd.sets_flag and player.braindance_flags.get(bd.sets_flag) == "done":
         return [t(locale, "braindance.already", name=braindance_label(bd, locale))]
 
@@ -32,7 +38,17 @@ def play_braindance(
     if not free:
         player.gold -= bd.cost
 
-    lines = list(bd.lines_zh if locale == "zh" else (bd.lines_en or bd.lines_zh))
+    from world.mature import is_mature
+
+    if bd.rating == "mature" and is_mature(player):
+        from shared.mature_i18n import tm
+
+        mature_lines = [tm(locale, f"braindance.{bd_id}.line_{index + 1}") for index in range(8)]
+        lines = [line for line in mature_lines if not line.startswith("braindance.")]
+        if not lines:
+            lines = list(bd.lines_zh if locale == "zh" else (bd.lines_en or bd.lines_zh))
+    else:
+        lines = list(bd.lines_zh if locale == "zh" else (bd.lines_en or bd.lines_zh))
     if bd.sets_flag:
         player.braindance_flags[bd.sets_flag] = "done"
     if bd.street_cred > 0:

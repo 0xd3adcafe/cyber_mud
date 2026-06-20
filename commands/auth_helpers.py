@@ -6,6 +6,7 @@ from commands.registry import CommandContext, ok
 from entities.player import Player
 from persistence.save import load_player, player_exists, save_player
 from shared.i18n import t
+from world.mature import set_content_rating
 
 AUTH_COMMANDS = frozenset({"login", "register", "help", "quit"})
 
@@ -72,6 +73,9 @@ def reset_player_to_guest(player, start_room: str) -> None:
     player.net_shell = False
     player.weapon_mods = dict(fresh.weapon_mods)
     player.chased_by_npc = fresh.chased_by_npc
+    player.content_rating = fresh.content_rating
+    player.romance_flags = dict(fresh.romance_flags)
+    player.player_status = dict(fresh.player_status)
 
 
 def apply_loaded_player(session_player, loaded) -> None:
@@ -121,6 +125,9 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.chased_by_npc = loaded.chased_by_npc
     session_player.in_combat = loaded.in_combat
     session_player.encounter_id = loaded.encounter_id
+    session_player.content_rating = loaded.content_rating
+    session_player.romance_flags = dict(loaded.romance_flags)
+    session_player.player_status = dict(loaded.player_status)
 
 
 def handle_register(ctx: CommandContext):
@@ -132,6 +139,7 @@ def handle_register(ctx: CommandContext):
         return ok([t(ctx.player.locale, "auth.register_usage")])
 
     name, password = parts[0], parts[1]
+    mature_opt_in = len(parts) >= 3 and parts[2].lower() == "mature"
     if len(name) < 2:
         return ok([t(ctx.player.locale, "auth.name_short")])
     if find_online_player(ctx, name):
@@ -145,8 +153,13 @@ def handle_register(ctx: CommandContext):
     ctx.player.password_hash = hash_password(password)
     ctx.player.room_id = ctx.state.world.start_room
     ctx.player.gold = STARTING_GOLD
+    if mature_opt_in:
+        set_content_rating(ctx.player, True)
     save_player(ctx.player)
-    return ok([t(ctx.player.locale, "auth.register_ok", name=name)], auth_event=True)
+    lines = [t(ctx.player.locale, "auth.register_ok", name=name)]
+    if mature_opt_in:
+        lines.append(t(ctx.player.locale, "auth.register_mature_on"))
+    return ok(lines, auth_event=True)
 
 
 def handle_login(ctx: CommandContext):
