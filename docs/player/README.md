@@ -3,10 +3,10 @@
 > **中文：** [README.zh.md](README.zh.md)
 
 ```text
-╔══════════════════════════════════════════════════════════════╗
-║  ▓▓  N E U R A L   L I N K   —   P L A Y E R   G U I D E S  ▓▓  ║
-║       read before you jack in · no external MUD client needed   ║
-╚══════════════════════════════════════════════════════════════╝
++-------------------------------------------------------+
+|  NEURAL LINK  ·  PLAYER GUIDES                        |
+|  read before you jack in · built-in client only       |
++-------------------------------------------------------+
 ```
 
 Welcome to **cyber_mud**. These guides mirror what you will see in-game, but you can read them on GitHub before connecting.
@@ -16,7 +16,7 @@ Welcome to **cyber_mud**. These guides mirror what you will see in-game, but you
 | Step | Guide | Time |
 |------|-------|------|
 | 1 | [Getting Started](GETTING_STARTED.md) | 5 min — install, login, first `look` |
-| 2 | [Tutorial Walkthrough](TUTORIAL.md) | 15 min — training yard → square |
+| 2 | [Tutorial Walkthrough](TUTORIAL.md) | 15 min — training yard, canteen sit/rest → square |
 | 3 | [Command Reference](COMMANDS.md) | bookmark — full verb list |
 | 4 | [Client & Hotkeys](CLIENT.md) | 5 min — F-keys, `/theme`, `/clear` |
 

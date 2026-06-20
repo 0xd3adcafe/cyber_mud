@@ -3,12 +3,11 @@
 > **中文：** [GETTING_STARTED.zh.md](GETTING_STARTED.zh.md) · Hub: [README.md](README.md)
 
 ```text
-    ┌─────────────────────────────────────────┐
-    │  ◈ NIGHT CITY NEURAL LINK               │
-    │  ─────────────────────────────────────  │
-    │  > link pending...                      │
-    │  > awaiting credentials                 │
-    └─────────────────────────────────────────┘
++-------------------------------------------------------+
+|  NIGHT CITY NEURAL LINK                               |
+|  > link pending...                                    |
+|  > awaiting credentials                               |
++-------------------------------------------------------+
 ```
 
 ## 1. Requirements
@@ -38,10 +37,10 @@ cd cyber_mud
 ```
 
 ```text
-  ╔═══════════════════════════════════════╗
-  ║  CLIENT ◄────TCP────► SERVER          ║
-  ║  Textual TUI          asyncio game    ║
-  ╚═══════════════════════════════════════╝
++-------------------------------------------------------+
+|  CLIENT <----TCP----> SERVER                          |
+|  Textual TUI          asyncio game                    |
++-------------------------------------------------------+
 ```
 
 Do **not** need MUDlet, TinTin++, or `nc` for normal play.
@@ -89,10 +88,9 @@ pda
 | `pda` / `st` | Personal agent panel (**F2**) — includes posture and fatigue |
 
 ```text
-      [ YOU ]
-         │
-    look ├─► room text + exits
-    go   └─► new room
+[ YOU ]
+  |-- look --> room text + exits
+  +-- go   --> new room
 ```
 
 ## 5. Training yard

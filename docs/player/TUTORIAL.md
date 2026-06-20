@@ -3,24 +3,37 @@
 > **中文：** [TUTORIAL.zh.md](TUTORIAL.zh.md) · Hub: [README.md](README.md)
 
 ```text
-  ╔═══════════════════════════════════════════════════╗
-  ║   T R A I N I N G   Y A R D   ·   S E C U R E    ║
-  ║   ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄   ║
-  ║   instructors · holo targets · isolated net       ║
-  ╚═══════════════════════════════════════════════════╝
++-------------------------------------------------------+
+|  TRAINING YARD  ·  SECURE                             |
+|  instructors · holo targets · isolated net            |
++-------------------------------------------------------+
 ```
 
 Use `recall` anytime to return to the hub. Tutorial is isolated from open PvP in the city.
 
+## Recommended route
+
+| Step | Room | Practice |
+|------|------|----------|
+| 1 | Training Yard | `look`, `talk` instructor |
+| 2 | Armory → Canteen | `equip`, `interact canteen_bench`, `sit`, `rest`, `look me` |
+| 3 | Combat Drill | `attack`, `defend`, `flee` |
+| 4 | Netrun Sim | `net`, `hack`, `exit` |
+| 5 | Neon Square | `map`, `gigs`, explore |
+
+Life commands (`sit`, `rest`, `sleep`, `wake`) are taught in the **Trainee Canteen**—see §2b. Full reference: [COMMANDS.md](COMMANDS.md) § Life & vitals.
+
 ## Hub — Training Yard (`tutorial`)
 
 ```text
-              [ Briefing ]
-                   │ up
-    [Combat]───[ HUB ]───[ Net Sim ]
-       │ north      │ east
-   [Range]      [Armory]
-                 south
++-------------------------------------------------------+
+|                  [ Briefing ]                         |
+|                       | up                            |
+|   [Combat]<--+[ HUB ]+-->[ Net Sim ]                  |
+|      | north      | east                              |
+|   [Range]     [Armory]--west-->[Canteen]              |
+|                 south                                 |
++-------------------------------------------------------+
 ```
 
 | Exit | Room | Learn |
@@ -40,12 +53,15 @@ scan
 talk <instructor>
 ```
 
+The instructor holo mentions the canteen west of the armory for `sit` / `rest` practice.
+
 ## 1. Mission Briefing (`tutorial_briefing`)
 
 ```text
-  ┌─ HOLO BOARD ─────────────────┐
-  │  ◆ gigs · stats · recall      │
-  └───────────────────────────────┘
++-------------------------------------------------------+
+|  HOLO BOARD                                           |
+|  * gigs   * stats   * recall                          |
++-------------------------------------------------------+
 ```
 
 Try:
@@ -65,7 +81,9 @@ journal
 ## 2. Armory (`tutorial_armory`)
 
 ```text
-  ║ weapon rack │ armor │ cyber kit ║
++-------------------------------------------------------+
+|  weapon rack  |  armor  |  cyber kit                  |
++-------------------------------------------------------+
 ```
 
 Practice gear loop:
@@ -84,9 +102,10 @@ Use **F5** for equipment sidebar. Try `look trainee_blade` for item details.
 ## 2b. Trainee Canteen (`tutorial_canteen`)
 
 ```text
-  ┌─ VENDING ──┐   ┌─ BENCH ──┐
-  │ eat drink  │   │ sit rest │
-  └────────────┘   └──────────┘
++-------------------------------------------------------+
+|  [ VENDING ]              [ BENCH ]                   |
+|   eat / drink              sit / rest                 |
++-------------------------------------------------------+
 ```
 
 Practice life commands and consumables:
@@ -101,7 +120,7 @@ wake
 
 - **interact canteen_bench** — sit on the bench (rest anchor)  
 - **sit** / **rest** — posture and fatigue recovery over world ticks  
-- **look me** — HP, fatigue, and posture  
+- **look me** — HP, fatigue, and posture (also on **F2** PDA)  
 - **wake** / **stand** — clear rest before moving (`go` also wakes you)  
 
 Also try `eat`, `drink`, and `use med_stim` with the canteen tech NPC. `east` returns to armory.
@@ -109,8 +128,10 @@ Also try `eat`, `drink`, and `use med_stim` with the canteen tech NPC. `east` re
 ## 3. Combat Drill (`tutorial_combat`)
 
 ```text
-   ( o )  sparring drone
-   / | \  padded floor
++-------------------------------------------------------+
+|      ( o )  sparring drone                            |
+|      / | \  padded floor                              |
++-------------------------------------------------------+
 ```
 
 | Step | Command |
@@ -130,7 +151,9 @@ Branches:
 ## 4. Firing Range (`tutorial_range`)
 
 ```text
-  ▄▄▄▄▄  holo lanes  ▄▄▄▄▄
++-------------------------------------------------------+
+|  #####  holo lanes  #####                             |
++-------------------------------------------------------+
 ```
 
 Equip from armory first, then:
@@ -145,7 +168,9 @@ attack patrol_dummy
 ## 5. Obstacle Course (`tutorial_course`)
 
 ```text
-  ► scan beacon ──► interact gate ──► target dummy
++-------------------------------------------------------+
+|  scan beacon --> interact gate --> target dummy       |
++-------------------------------------------------------+
 ```
 
 ```text
@@ -158,9 +183,10 @@ interact <object>
 ## 6. Netrun Sim Bay (`tutorial_net`)
 
 ```text
-  ┌───┐ green glyphs │ RAM meter
-  │ > │ coach watching
-  └───┘
++-------------------------------------------------------+
+|  [ > ]  green glyphs  |  RAM meter                    |
+|         coach watching                                |
++-------------------------------------------------------+
 ```
 
 Enter NETRUN shell:
@@ -207,10 +233,21 @@ go west
 You arrive at **Neon Square**—explore, take gigs, and survive.
 
 ```text
-  ╔════════════════════════════════════╗
-  ║  JACK-OUT COMPLETE · WELCOME TO    ║
-  ║  N I G H T   C I T Y               ║
-  ╚════════════════════════════════════╝
++-------------------------------------------------------+
+|  JACK-OUT COMPLETE  ·  WELCOME TO NIGHT CITY          |
++-------------------------------------------------------+
 ```
 
 Recommended next commands: `map`, `scan`, `talk` info broker, `shop` (where available).
+
+## 9. Rest outside the tutorial
+
+After you rent a flat or find safe rooms:
+
+| Location | How | Commands |
+|----------|-----|----------|
+| `watson_flat` | `rent` at square, `home` | `sleep`, `interact flat_bunk` |
+| `ripper_clinic` | `go west` from square | `rest`, `interact clinic_bed` |
+| `kabuki_lounge` | via alley | `rest`, lounge booth |
+
+Moving, `say`, `talk`, or combat wakes you from rest or sleep. See [COMMANDS.md](COMMANDS.md) § Life & vitals.

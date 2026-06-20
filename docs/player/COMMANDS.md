@@ -3,10 +3,10 @@
 > **中文：** [COMMANDS.zh.md](COMMANDS.zh.md) · Hub: [README.md](README.md)
 
 ```text
-╔══════════════════════════════════════════════════════════════╗
-║  ◈ C O M M A N D   M A T R I X   ·   N I G H T   C I T Y     ║
-║  type in client · Tab complete · help for live list            ║
-╚══════════════════════════════════════════════════════════════╝
++-------------------------------------------------------+
+|  COMMAND MATRIX  ·  NIGHT CITY                        |
+|  type in client · Tab complete · help (F3)            |
++-------------------------------------------------------+
 ```
 
 In-game: `help` or **F3**. Repeat commands: `10 punch` or `punch.10` (0.5s between).

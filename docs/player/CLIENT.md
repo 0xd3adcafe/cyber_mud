@@ -3,10 +3,10 @@
 > **中文：** [CLIENT.zh.md](CLIENT.zh.md) · Hub: [README.md](README.md)
 
 ```text
-  ┌──────────────────────────────────────────────────────────┐
-  │ ▓▓ TEXTUAL TUI · cyber_mud official interface ▓▓          │
-  │  log │ focus │ prompt │ hotkeys │ sidebar stack          │
-  └──────────────────────────────────────────────────────────┘
++-------------------------------------------------------+
+|  TEXTUAL TUI · cyber_mud official interface           |
+|  log | focus | prompt | hotkeys | sidebar stack       |
++-------------------------------------------------------+
 ```
 
 Launch:
@@ -18,15 +18,21 @@ Launch:
 ## Layout
 
 ```text
- ┌─ status / link / chrome ─────────────────────────────┐
- ├─ scrollback log (look, combat, MOTD) ────────────────┤
- ├─ focus block (gig / combat / command in flight) ─────┤
- ├─ prompt preview (expanded tokens while typing) ──────┤
- ├─ > your command here_                                │
- └─ hotkey bar: Tab · F2–F7 · ↑↓ history ────────────────┘
-      ┌─ sidebar (optional) ─┐
-      │ PDA · Map · Help · …  │
-      └───────────────────────┘
++-------------------------------------------------------+
+| status / link / chrome                                |
++-------------------------------------------------------+
+| scrollback log (look, combat, MOTD)                   |
++-------------------------------------------------------+
+| focus block (gig / combat / command in flight)        |
++-------------------------------------------------------+
+| prompt preview (tokens while typing)                  |
++-------------------------------------------------------+
+| > your command here_                                  |
++-------------------------------------------------------+
+| hotkeys: Tab · F2-F7 · history                        |
++-------------------------------------------------------+
+| sidebar (optional): PDA · Map · Help                  |
++-------------------------------------------------------+
 ```
 
 ## Function keys
@@ -123,12 +129,13 @@ Link status bar shows connection state and round-trip hint.
 ## Tips
 
 ```text
-  ┌─ RUNNER CHECKLIST ──────────────────────┐
-  │  ✓ ./run.sh + ./run.sh --client         │
-  │  ✓ register / login                     │
-  │  ✓ recall → tutorial → go west          │
-  │  ✓ F3 help · F4 map · /clear if noisy   │
-  └─────────────────────────────────────────┘
++-------------------------------------------------------+
+|  RUNNER CHECKLIST                                     |
+|  [x] ./run.sh + ./run.sh --client                     |
+|  [x] register / login                                 |
+|  [x] recall -> tutorial -> canteen sit/rest           |
+|  [x] F3 help · F4 map · /clear if noisy               |
++-------------------------------------------------------+
 ```
 
 Back to [Getting Started](GETTING_STARTED.md) · [Commands](COMMANDS.md).

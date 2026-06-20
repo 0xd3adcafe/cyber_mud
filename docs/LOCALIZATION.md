@@ -43,6 +43,8 @@
 
 Edit both languages when changing project docs.
 
+**ASCII diagrams:** use `+---+` / `|` boxes with **equal line length** inside ` ```text ` blocks; keep box labels ASCII-only (put Chinese captions **below** the block). Mixed CJK inside box-drawing chars misaligns on GitHub.
+
 ## Switching language in-game
 
 ```
