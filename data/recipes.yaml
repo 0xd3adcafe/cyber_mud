@@ -19,6 +19,26 @@ recipes:
     gold_cost: 10
     output: med_stim
     output_count: 1
+  street_stim:
+    name_zh: 調製街頭興奮劑
+    name_en: Brew Street Stim
+    station_room_tags: [shop, ripperdoc]
+    ingredients:
+      grid_ration: 1
+      energy_drink: 1
+    gold_cost: 8
+    output: street_stim
+    output_count: 1
+  gutter_blade:
+    name_zh: 打磨陰溝短刃
+    name_en: File Gutter Blade
+    station_room_tags: [shop, ripperdoc]
+    ingredients:
+      pipe: 1
+      combat_scrap: 1
+    gold_cost: 12
+    output: gutter_blade
+    output_count: 1
 
 disassemble:
   mod_chip:
@@ -28,4 +48,24 @@ disassemble:
   liberty_pistol:
     outputs:
       mod_chip: 1
+    gold_gain: 25
+  combat_scrap:
+    outputs:
+      pipe: 1
+    gold_gain: 10
+  gutter_blade:
+    outputs:
+      pipe: 1
+    gold_gain: 8
+  black_ice_shard:
+    outputs:
+      mod_chip: 1
+    gold_gain: 20
+  neon_patch:
+    outputs:
+      glowstick: 1
+    gold_gain: 5
+  tyrell_sample:
+    outputs:
+      corpo_token: 1
     gold_gain: 25

@@ -166,13 +166,9 @@ rooms:
   little_china_gate:
     name_zh: 小中國街牌樓
     name_en: Little China Gate
-    description_zh: '紅色牌樓下香火與合成雨味交織。東邊通往廟宇，西邊回到小巷。
-
-      '
-    description_en: 'Incense and synthetic rain mix under a red arch. East to the
-      shrine; west to the alley.
-
-      '
+    description_zh: 紅色牌樓下香火與合成雨味交織。路邊藥販攪拌草藥湯，東邊通往廟宇，西邊回到小巷。
+    description_en: 'Incense and synthetic rain mix under a red arch. A herbalist
+      stirs broth by the gate—east to the shrine, west to the alley.'
     district: little_china
     grid_x: 2
     grid_y: 0
@@ -520,13 +516,9 @@ rooms:
   corpo_plaza:
     name_zh: 企業廣場
     name_en: Corpo Plaza
-    description_zh: '全息企業標誌在酸雨中旋轉。荒坂與軍武的勢力在這裡交錯。
-
-      '
+    description_zh: 全息企業標誌在酸雨中旋轉。荒坂與軍武的勢力在這裡交錯；接待員掃描每一位訪客。
     description_en: 'Holo corporate logos spin in acid rain—Arasaka and Militech influence
-      collides here.
-
-      '
+      collides here. Handlers scan every visitor.'
     district: corpo
     grid_x: -2
     grid_y: 1
@@ -561,9 +553,9 @@ rooms:
   tyrell_plaza:
     name_zh: 泰瑞廣場
     name_en: Tyrell Plaza
-    description_zh: 高聳實驗室大樓與冷色全息廣告，精英與禁忌科技交會之地。
+    description_zh: 高聳實驗室大樓與冷色全息廣告，精英與禁忌科技交會之地。巡邏無人機在樣本運輸車上方盤旋。
     description_en: Towering labs and cold holo ads—elites and forbidden tech meet
-      here.
+      here. Patrol drones circle above sample convoys.
     district: tyrell
     grid_x: 0
     grid_y: 0
@@ -576,9 +568,9 @@ rooms:
   combat_zone_gate:
     name_zh: 戰鬥區界碑
     name_en: Combat Zone Gate
-    description_zh: 燒毀的界碑與塗鴉警告：越過此線，規則由槍桿決定。
+    description_zh: 燒毀的界碑與塗鴉警告：越過此線，規則由槍桿決定。界碑守衛記錄每一個穿越者。
     description_en: 'A scorched marker and graffiti warn: past this line, guns set
-      the rules.'
+      the rules. A warden logs every crossing.'
     district: combat_zone
     grid_x: 0
     grid_y: 0
@@ -4342,3 +4334,50 @@ npcs:
     - rusty_key
     idle_msg_zh: 發出刺耳的電子吱吱聲。
     idle_msg_en: Emits a grating electronic squeal.
+  tyrell_liaison:
+    name_zh: 泰瑞聯絡員
+    name_en: Tyrell Liaison
+    room_id: tyrell_plaza
+    faction: tyrell
+    description_zh: 穿著白袍的聯絡員，手持樣本運輸清單與巡邏路線板。
+    description_en: A white-coated liaison with sample manifests and patrol route boards.
+    hp: 45
+    hostile: false
+    talk_key: tyrell_liaison
+    idle_msg_zh: 核對樣本車的加密封條。
+    idle_msg_en: Checks encrypted seals on sample convoys.
+  zone_warden:
+    name_zh: 界碑守衛
+    name_en: Zone Warden
+    room_id: combat_zone_gate
+    description_zh: 戰鬥區界碑的兼職守衛，記錄每一個穿越者與槍聲回報。
+    description_en: A part-time warden at the Combat Zone gate—logs crossings and gunfire reports.
+    hp: 52
+    attack: 4
+    hostile: false
+    talk_key: zone_warden
+    idle_msg_zh: 在界碑上刻下新的塗鴉編號。
+    idle_msg_en: Etches a fresh graffiti code on the marker.
+  plaza_handler:
+    name_zh: 企業接待員
+    name_en: Plaza Handler
+    room_id: corpo_plaza
+    faction: arasaka
+    description_zh: 企業廣場的訪客接待員，掃描識別碼與武器登記。
+    description_en: A corpo plaza handler—scanning IDs and weapon registries.
+    hp: 42
+    hostile: false
+    talk_key: plaza_handler
+    idle_msg_zh: 對著訪客名單點頭示意。
+    idle_msg_en: Nods along a visitor manifest.
+  gate_herbalist:
+    name_zh: 牌樓藥販
+    name_en: Gate Herbalist
+    room_id: little_china_gate
+    description_zh: 在牌樓下攪拌草藥湯的攤販，賣線香與止痛貼片。
+    description_en: A gate-side herbalist stirring broth—sells incense and pain patches.
+    hp: 36
+    hostile: false
+    talk_key: gate_herbalist
+    idle_msg_zh: 攪拌著冒熱氣的藥湯。
+    idle_msg_en: Stirs steaming herbal broth.

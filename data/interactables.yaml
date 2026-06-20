@@ -134,3 +134,59 @@ interactables:
     description_en: A sim-clinic teaching terminal showing cyber slot info.
     message_zh: 螢幕列出九個義體槽與 install／uninstall 流程——此處為安全模擬，不會觸發幻痛。
     message_en: "The screen lists nine cyber slots and install/uninstall steps—safe sim, no psychosis."
+  tyrell_plaza_scanner:
+    room_id: tyrell_plaza
+    name_zh: 樣本掃描台
+    name_en: Sample Scanner
+    description_zh: 泰瑞廣場的樣本加密封條掃描台，連接巡邏路線資料庫。
+    description_en: A Tyrell plaza sample seal scanner linked to patrol route databases.
+    message_zh: 掃描台顯示：「樣本車 ETA 每小時更新——net 模式下可 probe tyrell_grid_node。」
+    message_en: 'The scanner reads: "Convoy ETA updates hourly—probe tyrell_grid_node in NETRUN."'
+  zone_gate_memorial:
+    room_id: combat_zone_gate
+    name_zh: 界碑紀念牌
+    name_en: Gate Memorial Plaque
+    description_zh: 燒毀界碑旁的紀念牌，刻著戰鬥區大火的日期與失蹤名單。
+    description_en: A memorial plaque by the scorched marker—fire dates and missing names from the Zone.
+    message_zh: 牌面閃過一行字：「守衛記錄每次穿越——向 zone_warden 報到可換座標。」
+    message_en: 'The plaque flashes: "Crossings are logged—check in with the zone warden for coordinates."'
+  watson_grid_terminal:
+    room_id: watson_0_0
+    name_zh: 格點公共終端
+    name_en: Grid Public Terminal
+    description_zh: 沃森格點邊角的公共終端，維護狀態堪憂但尚可 jack-in。
+    description_en: A battered public terminal on the Watson grid corner—still jackable.
+    message_zh: 終端提示：「輸入 net，再 hack watson_grid_node 測試連線。」
+    message_en: 'Prompt reads: "Type net, then hack watson_grid_node to test the link."'
+  docks_container_tag:
+    room_id: docks_0_0
+    name_zh: 貨櫃識別牌
+    name_en: Container ID Tag
+    description_zh: 碼頭格點上的生鏽貨櫃識別牌，加密貨單殘留。
+    description_en: A rusted container ID tag on the docks grid—encrypted manifest fragments remain.
+    message_zh: 識別牌顯示模糊貨單——與 dock_manifest 物品描述吻合。
+    message_en: "The tag shows a blurred manifest—matches dock_manifest item lore."
+  china_incense_burner:
+    room_id: little_china_0_0
+    name_zh: 路邊香爐
+    name_en: Street Incense Burner
+    description_zh: 小中國格點路邊的公共香爐，香火與合成雨味交織。
+    description_en: A street incense burner on the Little China grid—synthetic rain and ash mix.
+    message_zh: 香爐旁擺著 china_incense 供品——向 gate_herbalist 打聽牌樓藥方。
+    message_en: "china_incense offerings sit nearby—ask the gate herbalist about remedies."
+  corpo_guest_kiosk:
+    room_id: corpo_1_0
+    name_zh: 訪客登記機
+    name_en: Guest Registry Kiosk
+    description_zh: 企業格點的訪客登記機，掃描識別碼與武器登記。
+    description_en: A corpo grid guest kiosk—ID scans and weapon registry.
+    message_zh: 登記機提示：「corpo_grid_node 僅限授權 NETRUN——企業區禁止錄影。」
+    message_en: 'Kiosk warns: "corpo_grid_node is authorized NETRUN only—no recording in corpo zone."'
+  undercity_flood_sensor:
+    room_id: undercity_0_0
+    name_zh: 淹水感測器
+    name_en: Flood Sensor
+    description_zh: 地下城格點的淹水感測器，積水深度與毒素讀數閃爍。
+    description_en: An undercity grid flood sensor—depth and toxin readings blink.
+    message_zh: 感測器讀數異常——undercity_grid_node 可能有未封鎖的資料殘留。
+    message_en: "Sensor readings spike—undercity_grid_node may hold unsealed data remnants."

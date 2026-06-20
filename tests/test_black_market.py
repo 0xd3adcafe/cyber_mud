@@ -59,8 +59,10 @@ def test_give_mod_chip_to_broker_advances_gray_market():
     state.npc_rooms["broker"] = "square"
     result = dispatch("give mod_chip broker", player, state, [], [])
     assert "mod_chip" not in player.inventory
-    assert player.quest_flags["gray_market"] == "ready"
+    assert player.quest_flags["gray_market"] == "stage_4"
     assert any("交給" in line or "give" in line.lower() for line in result.lines)
+    dispatch("talk broker", player, state, [], [])
+    assert player.quest_flags["gray_market"] == "ready"
     dispatch("talk broker", player, state, [], [])
     assert quest_is_done(player, "gray_market")
 

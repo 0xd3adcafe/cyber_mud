@@ -193,6 +193,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | World expansion W.8–W.10 (2026-06) | `data/schedule.yaml` shop hours + period patrol multipliers; NPC schedules (`bazaar_fixer`, `dock_smuggler`, `corp_guard`); `docks_gray` shop + `gray_market` quest (`give_npc`); corp/street `appraise`; `give <item> <npc>`; `presence.enter`/`leave` on `go`; sender-excluded `say`/`give` broadcasts; `tests/test_schedule.py`, `tests/test_black_market.py`, `tests/test_multiplayer.py` |
 | World expansion W.12–W.13 (2026-06) | `poison` tick + `antidote` consumable; player `overheat` debuff (quickhack backlash); `world/reactions.py` reputation shifts (pledge/hack/combat); broker rep/wanted talk; tick `ambient_tick` + `trauma_tick` broadcast; `tests/test_status_effects.py`, `tests/test_world_reactions.py` |
 | World expansion W.14 (2026-06) | `tools/expand_world_population.py` + `data/world_population.yaml` overlay; **109 NPCs**, **45 items** on 263-room grid; loader merge; `tests/test_world_scale.py` |
+| Content depth D.1–D.6 (2026-06) | Archetype `talk.*` keys + regen population; quest WARN fixes + `hub_briefing`; hub NPCs (`tyrell_liaison`, `zone_warden`, etc.); grid loot craft/disassemble + shop stock; 8 district grid net nodes + interactables; `tests/test_content_depth.py`; population workflow in `CONTRIBUTING.md` |
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 
 ## Multi-session development (mandatory)
@@ -274,18 +275,18 @@ Not yet implemented or only partially implemented.
 
 **Goal:** After procedural grid scale (W.14), replace template filler with **authored** dialogue, quests, hubs, economy, and district hooks so Night City reads as lived-in—not just counted.
 
-**Baseline:** 86 procedural NPCs in `data/world_population.yaml` share four generic `talk.grid_*` keys (`grid_civilian`, `grid_thug`, `grid_corpo`, `grid_fixer`). Quest author WARNs: `gray_market`, `tyrell_intel`, `velvet_job` — `complete_npc_id` not in any `talk_npc` stage.
+**Baseline (2026-06):** **113 NPCs** (27 hand-authored + 86 procedural overlay). Procedural NPCs use archetype `talk.*` keys (21 archetypes). `./admin.sh quests validate` — 0 warnings. **Content depth D.1–D.6 shipped.**
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
-| D.1 | Grid NPC dialogue | District/archetype-specific `talk.*` keys for priority grid NPCs (hubs, fixers, aggro archetypes); update `tools/expand_world_population.py` `talk_key` map; `data/locale/en.yaml` + `zh.yaml` in lockstep |
-| D.2 | Grid NPC quests & quest hygiene | Broker chains / gigs targeting procedural NPCs or districts; add `talk_npc` turn-in stages or adjust `complete_npc_id` for `gray_market`, `tyrell_intel`, `velvet_job`; `./admin.sh quests` clean (no WARN) |
-| D.3 | Hand-authored district hubs | 1–2 named NPCs + distinctive `look` flavor per district hub beyond procedural templates; edit `data/world.yaml` hubs (`tyrell_plaza`, `combat_zone_gate`, etc.) |
-| D.4 | Item lore & economy | More hand items, shop stock, craft/disassemble hooks for `world_population` loot; tie archetype `loot` to shops and `disassemble` recipes |
-| D.5 | Interactables & NETRUN on grid | District interactables + net nodes in grid rooms (not only `crypt`/`data_vault` anchors); `data/interactables.yaml`, `data/net_nodes.yaml`; `look`/`scan`/`hack` coverage |
-| D.6 | Population tool workflow | Document regen workflow (`python -m tools.expand_world_population`, loader merge, hand-authored overrides); optional archetype upgrades (schedules, faction, quest hooks) |
+| ~~D.1~~ | ~~Grid NPC dialogue~~ | ✅ Archetype `talk.*` in `tools/expand_world_population.py`; regen `data/world_population.yaml`; `data/locale/en.yaml` + `zh.yaml` |
+| ~~D.2~~ | ~~Grid NPC quests & quest hygiene~~ | ✅ `talk_npc` turn-in for `gray_market`, `tyrell_intel`, `velvet_job`; `hub_briefing` gig; `./admin.sh quests` 0 WARN |
+| ~~D.3~~ | ~~Hand-authored district hubs~~ | ✅ `tyrell_liaison`, `zone_warden`, `plaza_handler`, `gate_herbalist`; hub `look` flavor in `data/world.yaml` |
+| ~~D.4~~ | ~~Item lore & economy~~ | ✅ `street_stim`/`gutter_blade` craft; `combat_scrap`/`black_ice_shard` disassemble; `kabuki_bazaar`/`docks_gray` stock |
+| ~~D.5~~ | ~~Interactables & NETRUN on grid~~ | ✅ 7 grid interactables; 8 district `*_grid_node` in `data/net_nodes.yaml`; `tests/test_content_depth.py` |
+| ~~D.6~~ | ~~Population tool workflow~~ | ✅ Regen workflow in `CONTRIBUTING.md` § World population overlay |
 
-**Suggested order:** D.2 → D.1 → D.3 → D.4 → D.5 → D.6.
+**Suggested order:** D.2 → D.1 → D.3 → D.4 → D.5 → D.6. **All phases shipped (2026-06).**
 
 ### Life commands (posture, rest & environment)
 

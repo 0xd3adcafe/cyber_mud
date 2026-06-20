@@ -74,6 +74,9 @@ shops:
       mod_chip: 130
       energy_drink: 20
       pipe: 28
+      neon_patch: 12
+      kabuki_token: 22
+      street_stim: 24
     buy_items: true
     buy_rate: 0.55
   docks_gray:
@@ -89,5 +92,9 @@ shops:
       pipe: 25
       energy_drink: 18
       synth_ramen: 14
+      smuggler_pack: 14
+      dock_manifest: 28
+      street_stim: 22
+      gutter_blade: 20
     buy_items: true
     buy_rate: 0.6

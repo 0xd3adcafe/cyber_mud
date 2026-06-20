@@ -72,6 +72,8 @@ quests:
         objective_target: corp_guard
       - objective_type: visit_room
         objective_target: tyrell_plaza
+      - objective_type: talk_npc
+        objective_target: broker
   gray_market:
     name_zh: 灰市憑證
     name_en: Gray Market Proof
@@ -96,6 +98,8 @@ quests:
       - objective_type: give_npc
         objective_target: broker
         objective_item: mod_chip
+      - objective_type: talk_npc
+        objective_target: broker
   alley_clearance:
     name_zh: 小巷清剿
     name_en: Alley Clearance
@@ -114,3 +118,26 @@ quests:
     stages:
       - objective_type: defeat_npc
         objective_target: thug
+  hub_briefing:
+    name_zh: 樞紐座標
+    name_en: Hub Coordinates
+    npc_id: broker
+    description_zh: 經紀人要你向各區界碑與樞紐確認巡邏座標，再回報他。
+    description_en: The broker wants patrol coordinates from district gates and hubs—then report back.
+    hint_zh: 與戰鬥區界碑守衛、泰瑞聯絡員交談，再 talk broker 交件。
+    hint_en: Talk to the zone warden and Tyrell liaison, then check in with the broker.
+    complete_npc_id: broker
+    requires_quest: broker_rumor
+    street_cred_req: 4
+    reward_gold: 80
+    reward_xp: 35
+    reward_street_cred: 6
+    stages:
+      - objective_type: talk_npc
+        objective_target: zone_warden
+      - objective_type: visit_room
+        objective_target: tyrell_plaza
+      - objective_type: talk_npc
+        objective_target: tyrell_liaison
+      - objective_type: talk_npc
+        objective_target: broker

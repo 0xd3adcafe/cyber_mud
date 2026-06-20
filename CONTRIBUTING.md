@@ -54,6 +54,21 @@ docs: clarify CC BY scope for data/ / 釐清 data CC BY 範圍
 
 One **major item** per commit (see [CLAUDE.md](CLAUDE.md) § Version control).
 
+## World population overlay
+
+Procedural grid NPCs and district loot live in `data/world_population.yaml`, merged at load time by `world/loader.py` (`POPULATION_PATH`). Hand-authored entries in `data/world.yaml` are **not** overwritten.
+
+**Regenerate** after changing district grids in `data/world.yaml` or archetype rules in `tools/expand_world_population.py`:
+
+```bash
+python -m tools.expand_world_population          # writes data/world_population.yaml
+./admin.sh validate
+```
+
+- Edit archetype `talk_key`, loot, and counts in `tools/expand_world_population.py`; add matching `talk.*` keys to `data/locale/en.yaml` and `zh.yaml`.
+- Add hub NPCs, quests, shops, and story anchors in `data/world.yaml` (or `quests.yaml`) — keep them out of the generated overlay.
+- Use `--dry-run` to preview counts without writing the file.
+
 ## Pull requests
 
 - Describe what changed and how you verified it.

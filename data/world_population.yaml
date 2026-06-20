@@ -111,7 +111,7 @@ npcs:
     hp: 35
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: street_runner
     idle_msg_zh: 低頭刷著訊息，匆匆走過。
     idle_msg_en: Scrolls a feed and hurries past.
   watson_thug_0_3:
@@ -125,7 +125,7 @@ npcs:
     hostile: true
     aggro: 6
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: street_thug
     idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
     idle_msg_en: Blades on a cyber-arm catch the neon glare.
     loot: &id001
@@ -142,7 +142,7 @@ npcs:
     hp: 40
     attack: 2
     hostile: false
-    talk_key: grid_fixer
+    talk_key: fixer
     idle_msg_zh: 低聲對著空氣嘀咕著價碼。
     idle_msg_en: Mumbles prices to no one in particular.
   watson_street_runner_1_1:
@@ -154,7 +154,7 @@ npcs:
     hp: 35
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: street_runner
     idle_msg_zh: 低頭刷著訊息，匆匆走過。
     idle_msg_en: Scrolls a feed and hurries past.
   watson_thug_1_4:
@@ -168,7 +168,7 @@ npcs:
     hostile: true
     aggro: 6
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: street_thug
     idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
     idle_msg_en: Blades on a cyber-arm catch the neon glare.
     loot: *id001
@@ -184,7 +184,7 @@ npcs:
     hp: 40
     attack: 2
     hostile: false
-    talk_key: grid_fixer
+    talk_key: fixer
     idle_msg_zh: 低聲對著空氣嘀咕著價碼。
     idle_msg_en: Mumbles prices to no one in particular.
   watson_street_runner_2_2:
@@ -196,7 +196,7 @@ npcs:
     hp: 35
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: street_runner
     idle_msg_zh: 低頭刷著訊息，匆匆走過。
     idle_msg_en: Scrolls a feed and hurries past.
   watson_thug_2_5:
@@ -210,7 +210,7 @@ npcs:
     hostile: true
     aggro: 6
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: street_thug
     idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
     idle_msg_en: Blades on a cyber-arm catch the neon glare.
     loot: *id001
@@ -226,7 +226,7 @@ npcs:
     hp: 40
     attack: 2
     hostile: false
-    talk_key: grid_fixer
+    talk_key: fixer
     idle_msg_zh: 低聲對著空氣嘀咕著價碼。
     idle_msg_en: Mumbles prices to no one in particular.
   watson_street_runner_3_3:
@@ -238,7 +238,7 @@ npcs:
     hp: 35
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: street_runner
     idle_msg_zh: 低頭刷著訊息，匆匆走過。
     idle_msg_en: Scrolls a feed and hurries past.
   watson_thug_3_6:
@@ -252,7 +252,7 @@ npcs:
     hostile: true
     aggro: 6
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: street_thug
     idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
     idle_msg_en: Blades on a cyber-arm catch the neon glare.
     loot: *id001
@@ -268,7 +268,7 @@ npcs:
     hp: 40
     attack: 2
     hostile: false
-    talk_key: grid_fixer
+    talk_key: fixer
     idle_msg_zh: 低聲對著空氣嘀咕著價碼。
     idle_msg_en: Mumbles prices to no one in particular.
   watson_street_runner_4_4:
@@ -280,7 +280,7 @@ npcs:
     hp: 35
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: street_runner
     idle_msg_zh: 低頭刷著訊息，匆匆走過。
     idle_msg_en: Scrolls a feed and hurries past.
   watson_thug_4_7:
@@ -294,7 +294,7 @@ npcs:
     hostile: true
     aggro: 6
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: street_thug
     idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
     idle_msg_en: Blades on a cyber-arm catch the neon glare.
     loot: *id001
@@ -310,7 +310,7 @@ npcs:
     hp: 40
     attack: 2
     hostile: false
-    talk_key: grid_fixer
+    talk_key: fixer
     idle_msg_zh: 低聲對著空氣嘀咕著價碼。
     idle_msg_en: Mumbles prices to no one in particular.
   watson_street_runner_5_5:
@@ -322,7 +322,7 @@ npcs:
     hp: 35
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: street_runner
     idle_msg_zh: 低頭刷著訊息，匆匆走過。
     idle_msg_en: Scrolls a feed and hurries past.
   watson_thug_6_0:
@@ -336,7 +336,7 @@ npcs:
     hostile: true
     aggro: 6
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: street_thug
     idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
     idle_msg_en: Blades on a cyber-arm catch the neon glare.
     loot: *id001
@@ -352,7 +352,7 @@ npcs:
     hp: 40
     attack: 2
     hostile: false
-    talk_key: grid_fixer
+    talk_key: fixer
     idle_msg_zh: 低聲對著空氣嘀咕著價碼。
     idle_msg_en: Mumbles prices to no one in particular.
   watson_street_runner_6_6:
@@ -364,7 +364,7 @@ npcs:
     hp: 35
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: street_runner
     idle_msg_zh: 低頭刷著訊息，匆匆走過。
     idle_msg_en: Scrolls a feed and hurries past.
   watson_thug_7_1:
@@ -378,7 +378,7 @@ npcs:
     hostile: true
     aggro: 6
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: street_thug
     idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
     idle_msg_en: Blades on a cyber-arm catch the neon glare.
     loot: *id001
@@ -394,7 +394,7 @@ npcs:
     hp: 40
     attack: 2
     hostile: false
-    talk_key: grid_fixer
+    talk_key: fixer
     idle_msg_zh: 低聲對著空氣嘀咕著價碼。
     idle_msg_en: Mumbles prices to no one in particular.
   tyrell_lab_tech_0_0:
@@ -407,7 +407,7 @@ npcs:
     attack: 2
     hostile: false
     faction: tyrell
-    talk_key: grid_corpo
+    talk_key: lab_tech
     idle_msg_zh: 抱著樣本箱匆匆穿過走廊。
     idle_msg_en: Rushes past with a sample case.
   tyrell_corp_guard_0_3:
@@ -420,7 +420,7 @@ npcs:
     attack: 6
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: corp_guard
     idle_msg_zh: 掃描證件與武器。
     idle_msg_en: Scans IDs and weapons.
   tyrell_runner_1_0:
@@ -432,7 +432,7 @@ npcs:
     hp: 36
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: runner
     idle_msg_zh: 抱著加密平板快步離開。
     idle_msg_en: Clutches an encrypted slate and moves on.
   tyrell_lab_tech_1_3:
@@ -445,7 +445,7 @@ npcs:
     attack: 2
     hostile: false
     faction: tyrell
-    talk_key: grid_corpo
+    talk_key: lab_tech
     idle_msg_zh: 抱著樣本箱匆匆穿過走廊。
     idle_msg_en: Rushes past with a sample case.
   tyrell_corp_guard_2_1:
@@ -458,7 +458,7 @@ npcs:
     attack: 6
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: corp_guard
     idle_msg_zh: 掃描證件與武器。
     idle_msg_en: Scans IDs and weapons.
   tyrell_runner_2_4:
@@ -470,7 +470,7 @@ npcs:
     hp: 36
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: runner
     idle_msg_zh: 抱著加密平板快步離開。
     idle_msg_en: Clutches an encrypted slate and moves on.
   tyrell_lab_tech_3_1:
@@ -483,7 +483,7 @@ npcs:
     attack: 2
     hostile: false
     faction: tyrell
-    talk_key: grid_corpo
+    talk_key: lab_tech
     idle_msg_zh: 抱著樣本箱匆匆穿過走廊。
     idle_msg_en: Rushes past with a sample case.
   tyrell_corp_guard_3_4:
@@ -496,7 +496,7 @@ npcs:
     attack: 6
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: corp_guard
     idle_msg_zh: 掃描證件與武器。
     idle_msg_en: Scans IDs and weapons.
   tyrell_runner_4_2:
@@ -508,7 +508,7 @@ npcs:
     hp: 36
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: runner
     idle_msg_zh: 抱著加密平板快步離開。
     idle_msg_en: Clutches an encrypted slate and moves on.
   tyrell_lab_tech_4_5:
@@ -521,7 +521,7 @@ npcs:
     attack: 2
     hostile: false
     faction: tyrell
-    talk_key: grid_corpo
+    talk_key: lab_tech
     idle_msg_zh: 抱著樣本箱匆匆穿過走廊。
     idle_msg_en: Rushes past with a sample case.
   tyrell_corp_guard_5_2:
@@ -534,7 +534,7 @@ npcs:
     attack: 6
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: corp_guard
     idle_msg_zh: 掃描證件與武器。
     idle_msg_en: Scans IDs and weapons.
   combat_zone_raider_0_0:
@@ -548,7 +548,7 @@ npcs:
     hostile: true
     aggro: 8
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: raider
     loot: &id002
     - pipe
     patrol:
@@ -563,7 +563,7 @@ npcs:
     hp: 32
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: scavenger
     idle_msg_zh: 翻找廢墟裡還能賣的零件。
     idle_msg_en: Digs for parts worth selling in the rubble.
   combat_zone_merc_1_0:
@@ -576,7 +576,7 @@ npcs:
     attack: 7
     hostile: true
     aggro: 7
-    talk_key: grid_thug
+    talk_key: merc
     equipment: &id003
       weapon_primary: liberty_pistol
     patrol:
@@ -593,7 +593,7 @@ npcs:
     hostile: true
     aggro: 8
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: raider
     loot: *id002
     patrol:
     - combat_zone_1_3
@@ -607,7 +607,7 @@ npcs:
     hp: 32
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: scavenger
     idle_msg_zh: 翻找廢墟裡還能賣的零件。
     idle_msg_en: Digs for parts worth selling in the rubble.
   combat_zone_merc_2_4:
@@ -620,7 +620,7 @@ npcs:
     attack: 7
     hostile: true
     aggro: 7
-    talk_key: grid_thug
+    talk_key: merc
     equipment: *id003
     patrol:
     - combat_zone_2_4
@@ -636,7 +636,7 @@ npcs:
     hostile: true
     aggro: 8
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: raider
     loot: *id002
     patrol:
     - combat_zone_3_1
@@ -650,7 +650,7 @@ npcs:
     hp: 32
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: scavenger
     idle_msg_zh: 翻找廢墟裡還能賣的零件。
     idle_msg_en: Digs for parts worth selling in the rubble.
   combat_zone_merc_4_2:
@@ -663,7 +663,7 @@ npcs:
     attack: 7
     hostile: true
     aggro: 7
-    talk_key: grid_thug
+    talk_key: merc
     equipment: *id003
     patrol:
     - combat_zone_4_2
@@ -679,7 +679,7 @@ npcs:
     hostile: true
     aggro: 8
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: raider
     loot: *id002
     patrol:
     - combat_zone_4_5
@@ -693,7 +693,7 @@ npcs:
     hp: 32
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: scavenger
     idle_msg_zh: 翻找廢墟裡還能賣的零件。
     idle_msg_en: Digs for parts worth selling in the rubble.
   kabuki_bouncer_0_0:
@@ -705,7 +705,7 @@ npcs:
     hp: 50
     attack: 5
     hostile: false
-    talk_key: grid_civilian
+    talk_key: bouncer
     idle_msg_zh: 掃視排隊的人潮。
     idle_msg_en: Eyes the queue.
   kabuki_dealer_0_2:
@@ -717,7 +717,7 @@ npcs:
     hp: 38
     attack: 3
     hostile: false
-    talk_key: grid_fixer
+    talk_key: dealer
     idle_msg_zh: 敲了敲晶片托盤。
     idle_msg_en: Taps a tray of chips.
   kabuki_dancer_1_0:
@@ -729,7 +729,7 @@ npcs:
     hp: 30
     attack: 1
     hostile: false
-    talk_key: grid_civilian
+    talk_key: dancer
     idle_msg_zh: 殘影在霓虹裡旋轉。
     idle_msg_en: A ghost image spins in the neon.
   kabuki_bouncer_1_3:
@@ -741,7 +741,7 @@ npcs:
     hp: 50
     attack: 5
     hostile: false
-    talk_key: grid_civilian
+    talk_key: bouncer
     idle_msg_zh: 掃視排隊的人潮。
     idle_msg_en: Eyes the queue.
   kabuki_dealer_2_1:
@@ -753,7 +753,7 @@ npcs:
     hp: 38
     attack: 3
     hostile: false
-    talk_key: grid_fixer
+    talk_key: dealer
     idle_msg_zh: 敲了敲晶片托盤。
     idle_msg_en: Taps a tray of chips.
   kabuki_dancer_2_3:
@@ -765,7 +765,7 @@ npcs:
     hp: 30
     attack: 1
     hostile: false
-    talk_key: grid_civilian
+    talk_key: dancer
     idle_msg_zh: 殘影在霓虹裡旋轉。
     idle_msg_en: A ghost image spins in the neon.
   kabuki_bouncer_3_1:
@@ -777,7 +777,7 @@ npcs:
     hp: 50
     attack: 5
     hostile: false
-    talk_key: grid_civilian
+    talk_key: bouncer
     idle_msg_zh: 掃視排隊的人潮。
     idle_msg_en: Eyes the queue.
   kabuki_dealer_3_4:
@@ -789,7 +789,7 @@ npcs:
     hp: 38
     attack: 3
     hostile: false
-    talk_key: grid_fixer
+    talk_key: dealer
     idle_msg_zh: 敲了敲晶片托盤。
     idle_msg_en: Taps a tray of chips.
   kabuki_dancer_4_2:
@@ -801,7 +801,7 @@ npcs:
     hp: 30
     attack: 1
     hostile: false
-    talk_key: grid_civilian
+    talk_key: dancer
     idle_msg_zh: 殘影在霓虹裡旋轉。
     idle_msg_en: A ghost image spins in the neon.
   undercity_scavenger_0_0:
@@ -813,7 +813,7 @@ npcs:
     hp: 32
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: scavenger
     idle_msg_zh: 翻找廢墟裡還能賣的零件。
     idle_msg_en: Digs for parts worth selling in the rubble.
   undercity_ghost_0_2:
@@ -825,7 +825,7 @@ npcs:
     hp: 33
     attack: 4
     hostile: false
-    talk_key: grid_civilian
+    talk_key: ghost
     idle_msg_zh: 半透明的殘影一閃而過。
     idle_msg_en: A translucent afterimage flickers past.
   undercity_rat_1_0:
@@ -838,7 +838,7 @@ npcs:
     attack: 4
     hostile: true
     aggro: 6
-    talk_key: grid_thug
+    talk_key: rat_gang
     loot: &id004
     - rusty_key
     patrol:
@@ -853,7 +853,7 @@ npcs:
     hp: 32
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: scavenger
     idle_msg_zh: 翻找廢墟裡還能賣的零件。
     idle_msg_en: Digs for parts worth selling in the rubble.
   undercity_ghost_2_1:
@@ -865,7 +865,7 @@ npcs:
     hp: 33
     attack: 4
     hostile: false
-    talk_key: grid_civilian
+    talk_key: ghost
     idle_msg_zh: 半透明的殘影一閃而過。
     idle_msg_en: A translucent afterimage flickers past.
   undercity_rat_2_3:
@@ -878,7 +878,7 @@ npcs:
     attack: 4
     hostile: true
     aggro: 6
-    talk_key: grid_thug
+    talk_key: rat_gang
     loot: *id004
     patrol:
     - undercity_2_3
@@ -892,7 +892,7 @@ npcs:
     hp: 32
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: scavenger
     idle_msg_zh: 翻找廢墟裡還能賣的零件。
     idle_msg_en: Digs for parts worth selling in the rubble.
   undercity_ghost_3_4:
@@ -904,7 +904,7 @@ npcs:
     hp: 33
     attack: 4
     hostile: false
-    talk_key: grid_civilian
+    talk_key: ghost
     idle_msg_zh: 半透明的殘影一閃而過。
     idle_msg_en: A translucent afterimage flickers past.
   undercity_rat_4_2:
@@ -917,7 +917,7 @@ npcs:
     attack: 4
     hostile: true
     aggro: 6
-    talk_key: grid_thug
+    talk_key: rat_gang
     loot: *id004
     patrol:
     - undercity_4_2
@@ -931,7 +931,7 @@ npcs:
     hp: 40
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: docker
     idle_msg_zh: 拖著貨櫃吊鉤匆匆走過。
     idle_msg_en: Hauls a container hook past you.
   docks_smuggler_0_2:
@@ -943,7 +943,7 @@ npcs:
     hp: 38
     attack: 3
     hostile: false
-    talk_key: grid_fixer
+    talk_key: smuggler
     idle_msg_zh: 別問貨從哪來。
     idle_msg_en: Do not ask where the cargo came from.
   docks_thug_1_0:
@@ -957,7 +957,7 @@ npcs:
     hostile: true
     aggro: 6
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: street_thug
     idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
     idle_msg_en: Blades on a cyber-arm catch the neon glare.
     loot: *id001
@@ -973,7 +973,7 @@ npcs:
     hp: 40
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: docker
     idle_msg_zh: 拖著貨櫃吊鉤匆匆走過。
     idle_msg_en: Hauls a container hook past you.
   docks_smuggler_2_0:
@@ -985,7 +985,7 @@ npcs:
     hp: 38
     attack: 3
     hostile: false
-    talk_key: grid_fixer
+    talk_key: smuggler
     idle_msg_zh: 別問貨從哪來。
     idle_msg_en: Do not ask where the cargo came from.
   docks_thug_2_2:
@@ -999,7 +999,7 @@ npcs:
     hostile: true
     aggro: 6
     faction: maelstrom
-    talk_key: grid_thug
+    talk_key: street_thug
     idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
     idle_msg_en: Blades on a cyber-arm catch the neon glare.
     loot: *id001
@@ -1015,7 +1015,7 @@ npcs:
     hp: 40
     attack: 3
     hostile: false
-    talk_key: grid_civilian
+    talk_key: docker
     idle_msg_zh: 拖著貨櫃吊鉤匆匆走過。
     idle_msg_en: Hauls a container hook past you.
   docks_smuggler_3_2:
@@ -1027,7 +1027,7 @@ npcs:
     hp: 38
     attack: 3
     hostile: false
-    talk_key: grid_fixer
+    talk_key: smuggler
     idle_msg_zh: 別問貨從哪來。
     idle_msg_en: Do not ask where the cargo came from.
   corpo_corp_guard_0_0:
@@ -1040,7 +1040,7 @@ npcs:
     attack: 6
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: corp_guard
     idle_msg_zh: 掃描證件與武器。
     idle_msg_en: Scans IDs and weapons.
   corpo_exec_0_2:
@@ -1053,7 +1053,7 @@ npcs:
     attack: 2
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: exec
     idle_msg_zh: 對著全息會議點頭。
     idle_msg_en: Nods at a holo conference.
   corpo_scout_1_0:
@@ -1066,7 +1066,7 @@ npcs:
     attack: 4
     hostile: false
     faction: militech
-    talk_key: grid_corpo
+    talk_key: scout
     idle_msg_zh: 義眼不停掃描路人識別碼。
     idle_msg_en: Cyber eyes scan every passerby.
   corpo_corp_guard_1_2:
@@ -1079,7 +1079,7 @@ npcs:
     attack: 6
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: corp_guard
     idle_msg_zh: 掃描證件與武器。
     idle_msg_en: Scans IDs and weapons.
   corpo_exec_2_0:
@@ -1092,7 +1092,7 @@ npcs:
     attack: 2
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: exec
     idle_msg_zh: 對著全息會議點頭。
     idle_msg_en: Nods at a holo conference.
   corpo_scout_2_2:
@@ -1105,7 +1105,7 @@ npcs:
     attack: 4
     hostile: false
     faction: militech
-    talk_key: grid_corpo
+    talk_key: scout
     idle_msg_zh: 義眼不停掃描路人識別碼。
     idle_msg_en: Cyber eyes scan every passerby.
   corpo_corp_guard_3_0:
@@ -1118,7 +1118,7 @@ npcs:
     attack: 6
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: corp_guard
     idle_msg_zh: 掃描證件與武器。
     idle_msg_en: Scans IDs and weapons.
   corpo_exec_3_2:
@@ -1131,7 +1131,7 @@ npcs:
     attack: 2
     hostile: false
     faction: arasaka
-    talk_key: grid_corpo
+    talk_key: exec
     idle_msg_zh: 對著全息會議點頭。
     idle_msg_en: Nods at a holo conference.
   little_china_vendor_0_0:
@@ -1143,7 +1143,7 @@ npcs:
     hp: 34
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: vendor
     idle_msg_zh: 攪拌著冒熱氣的麵湯。
     idle_msg_en: Stirs steaming noodle broth.
   little_china_monk_0_1:
@@ -1155,7 +1155,7 @@ npcs:
     hp: 36
     attack: 1
     hostile: false
-    talk_key: grid_civilian
+    talk_key: monk
     idle_msg_zh: 低聲念誦，手持香爐。
     idle_msg_en: Murmurs a prayer, incense in hand.
   little_china_triad_0_3:
@@ -1168,7 +1168,7 @@ npcs:
     attack: 5
     hostile: true
     aggro: 5
-    talk_key: grid_thug
+    talk_key: triad
     equipment: &id005
       weapon_primary: knife
     patrol:
@@ -1183,7 +1183,7 @@ npcs:
     hp: 34
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: vendor
     idle_msg_zh: 攪拌著冒熱氣的麵湯。
     idle_msg_en: Stirs steaming noodle broth.
   little_china_monk_1_3:
@@ -1195,7 +1195,7 @@ npcs:
     hp: 36
     attack: 1
     hostile: false
-    talk_key: grid_civilian
+    talk_key: monk
     idle_msg_zh: 低聲念誦，手持香爐。
     idle_msg_en: Murmurs a prayer, incense in hand.
   little_china_triad_2_0:
@@ -1208,7 +1208,7 @@ npcs:
     attack: 5
     hostile: true
     aggro: 5
-    talk_key: grid_thug
+    talk_key: triad
     equipment: *id005
     patrol:
     - little_china_2_0
@@ -1222,7 +1222,7 @@ npcs:
     hp: 34
     attack: 2
     hostile: false
-    talk_key: grid_civilian
+    talk_key: vendor
     idle_msg_zh: 攪拌著冒熱氣的麵湯。
     idle_msg_en: Stirs steaming noodle broth.
   little_china_monk_3_0:
@@ -1234,7 +1234,7 @@ npcs:
     hp: 36
     attack: 1
     hostile: false
-    talk_key: grid_civilian
+    talk_key: monk
     idle_msg_zh: 低聲念誦，手持香爐。
     idle_msg_en: Murmurs a prayer, incense in hand.
   little_china_triad_3_2:
@@ -1247,7 +1247,7 @@ npcs:
     attack: 5
     hostile: true
     aggro: 5
-    talk_key: grid_thug
+    talk_key: triad
     equipment: *id005
     patrol:
     - little_china_3_2

@@ -29,3 +29,43 @@ net_nodes:
     name_zh: 資料庫核心
     name_en: Vault Core
     hackable: true
+  watson_grid_node:
+    room_id: watson_1_0
+    name_zh: 沃森格點節點
+    name_en: Watson Grid Node
+    hackable: true
+  tyrell_grid_node:
+    room_id: tyrell_0_0
+    name_zh: 泰瑞格點節點
+    name_en: Tyrell Grid Node
+    hackable: true
+  combat_grid_node:
+    room_id: combat_zone_1_0
+    name_zh: 戰區格點節點
+    name_en: Combat Zone Grid Node
+    hackable: true
+  kabuki_grid_node:
+    room_id: kabuki_1_0
+    name_zh: 歌舞伎格點節點
+    name_en: Kabuki Grid Node
+    hackable: true
+  china_grid_node:
+    room_id: little_china_1_0
+    name_zh: 小中國格點節點
+    name_en: Little China Grid Node
+    hackable: true
+  corpo_grid_node:
+    room_id: corpo_1_0
+    name_zh: 企業格點節點
+    name_en: Corpo Grid Node
+    hackable: true
+  docks_grid_node:
+    room_id: docks_0_0
+    name_zh: 碼頭格點節點
+    name_en: Docks Grid Node
+    hackable: true
+  undercity_grid_node:
+    room_id: undercity_1_0
+    name_zh: 地下城格點節點
+    name_en: Undercity Grid Node
+    hackable: true

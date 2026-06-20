@@ -193,6 +193,7 @@
 | 世界擴充 W.8–W.10（2026-06） | `data/schedule.yaml` 商店營業＋時段巡邏倍率；NPC schedule（`bazaar_fixer`、`dock_smuggler`、`corp_guard`）；`docks_gray` 灰市＋`gray_market` 任務（`give_npc`）；企業／街頭 `appraise`；`give <物品> <NPC>`；`go` 觸發 `presence.enter`／`leave`；`say`／`give` 廣播排除發送者；`tests/test_schedule.py`、`tests/test_black_market.py`、`tests/test_multiplayer.py` |
 | 世界擴充 W.12–W.13（2026-06） | `poison` tick＋`antidote` 消耗品；玩家 `overheat` debuff（快速破解反噬）；`world/reactions.py` 聲望變動（宣誓／駭入／戰鬥）；經紀人聲望／通緝對話；tick `ambient_tick`＋`trauma_tick` 廣播；`tests/test_status_effects.py`、`tests/test_world_reactions.py` |
 | 世界擴充 W.14（2026-06） | `tools/expand_world_population.py`＋`data/world_population.yaml` 覆蓋層；**109 NPC**、**45 物品**（263 房格點）；loader 合併；`tests/test_world_scale.py` |
+| 內容深度 D.1–D.6（2026-06） | 原型 `talk.*`＋重產 population；任務 WARN 修復＋`hub_briefing`；樞紐 NPC；格點戰利品 craft/disassemble＋商店；8 區 net 節點＋互動物；`tests/test_content_depth.py`；`CONTRIBUTING.md` 工作流 |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 
 ## 多 session 開發（必做）
@@ -272,18 +273,18 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 **目標：** 程序格點規模（W.14）達標後，以**手寫**對話、任務、樞紐、經濟與區域掛鉤取代模板填充，讓夜城有生活感而不只是數字達標。
 
-**現況：** `data/world_population.yaml` 中 86 個程序 NPC 共用四組通用 `talk.grid_*`（`grid_civilian`、`grid_thug`、`grid_corpo`、`grid_fixer`）。任務編寫器 WARN：`gray_market`、`tyrell_intel`、`velvet_job`——`complete_npc_id` 未出現在任何 `talk_npc` 階段。
+**現況（2026-06）：** **113 NPC**（27 手寫＋86 程序覆蓋）。程序 NPC 使用 21 種原型 `talk.*`。`./admin.sh quests validate` 0 警告。**內容深度 D.1–D.6 已交付。**
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
-| D.1 | 格點 NPC 對話 | 優先格點 NPC（樞紐、中介、敵意原型）改用區域／原型專屬 `talk.*`；更新 `tools/expand_world_population.py` 的 `talk_key` 對照；`data/locale/en.yaml`＋`zh.yaml` 同步 |
-| D.2 | 格點任務與任務整潔 | 經紀人鏈／委託鎖定程序 NPC 或區域；為 `gray_market`、`tyrell_intel`、`velvet_job` 補 `talk_npc` 交件階段或調整 `complete_npc_id`；`./admin.sh quests` 無 WARN |
-| D.3 | 手寫區域樞紐 | 各區樞紐 1–2 名具名 NPC＋獨特 `look` 敘事，超越程序模板；編輯 `data/world.yaml` 樞紐（`tyrell_plaza`、`combat_zone_gate` 等） |
-| D.4 | 物品敘事與經濟 | 更多手寫物品、商店庫存、`world_population` 戰利品的 craft／disassemble 掛鉤；原型 `loot` 對應商店與拆解配方 |
-| D.5 | 格點互動物與 NETRUN | 區域互動物＋格點房 net 節點（不限 `crypt`／`data_vault` 錨點）；`data/interactables.yaml`、`data/net_nodes.yaml`；`look`／`scan`／`hack` 覆蓋 |
-| D.6 | 人口工具工作流 | 文件化重產流程（`python -m tools.expand_world_population`、loader 合併、手寫覆蓋保留）；可選原型升級（schedule、派系、任務掛鉤） |
+| ~~D.1~~ | ~~格點 NPC 對話~~ | ✅ 原型 `talk.*`；`tools/expand_world_population.py`；重產 `data/world_population.yaml`；locale 中英 |
+| ~~D.2~~ | ~~格點任務與任務整潔~~ | ✅ `gray_market`／`tyrell_intel`／`velvet_job` 交件 `talk_npc`；`hub_briefing`；`./admin.sh quests` 0 WARN |
+| ~~D.3~~ | ~~手寫區域樞紐~~ | ✅ `tyrell_liaison`、`zone_warden`、`plaza_handler`、`gate_herbalist`；樞紐 `look` 敘事 |
+| ~~D.4~~ | ~~物品敘事與經濟~~ | ✅ `street_stim`／`gutter_blade` craft；`combat_scrap` 等 disassemble；`kabuki_bazaar`／`docks_gray` 庫存 |
+| ~~D.5~~ | ~~格點互動物與 NETRUN~~ | ✅ 7 個格點互動物；8 區 `*_grid_node`；`tests/test_content_depth.py` |
+| ~~D.6~~ | ~~人口工具工作流~~ | ✅ `CONTRIBUTING.md` § World population overlay |
 
-**建議順序：** D.2 → D.1 → D.3 → D.4 → D.5 → D.6。
+**建議順序：** D.2 → D.1 → D.3 → D.4 → D.5 → D.6。**全階段已交付（2026-06）。**
 
 ### 生活指令（姿態、休息與環境）
 
