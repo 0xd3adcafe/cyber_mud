@@ -231,7 +231,7 @@ class CyberMudApp(App):
                             suggester=MudSuggester(lambda: self.view),
                         )
                 yield Static("", id="prompt_preview", classes="preview-hidden")
-                yield Static(format_hotkey_bar(), id="hotkey_bar")
+                yield Static(format_hotkey_bar(locale="en"), id="hotkey_bar")
 
         yield Footer()
 
@@ -643,7 +643,7 @@ class CyberMudApp(App):
         if not self.view.authenticated:
             return
         self.query_one("#info_bar", Static).update(self._info_bar())
-        self.query_one("#hotkey_bar", Static).update(format_hotkey_bar())
+        self.query_one("#hotkey_bar", Static).update(format_hotkey_bar(locale=self._client_locale()))
         self.query_one("#prompt_prefix", Static).update(self._prompt_prefix())
         self._update_chrome_bar()
 
@@ -689,7 +689,7 @@ class CyberMudApp(App):
             content.update("")
             return
         dropdown.remove_class("help-dropdown-hidden")
-        header.update(help_overlay_header())
+        header.update(help_overlay_header(locale=self._client_locale()))
         panel = self.view.sidebar_panels.get(HELP_OVERLAY_PANEL)
         content.update(format_help_overlay_content(panel))
         self.call_after_refresh(self._focus_game_prompt)
@@ -850,7 +850,13 @@ class CyberMudApp(App):
                     asyncio.create_task(self._refresh_sidebar_panels(list(self.view.sidebar_stack)))
         elif key == "auth" and value == "0" and was_auth:
             self._return_to_login_screen()
-        self._update_status()
+        if key == "locale":
+            self._update_status()
+            self._render_sidebar()
+            if self._help_panel_active():
+                self._render_help_overlay()
+        else:
+            self._update_status()
         if key == "ui_panel_end":
             if self._help_panel_active():
                 if HELP_OVERLAY_PANEL in self.view.sidebar_stack:

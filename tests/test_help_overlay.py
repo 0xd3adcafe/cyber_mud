@@ -2,9 +2,14 @@ from client.help_overlay import format_help_overlay_content, help_overlay_header
 from client.meta_handlers import SidebarPanel
 
 
-def test_help_overlay_header():
-    assert "指令說明" in help_overlay_header()
-    assert "F3" in help_overlay_header()
+def test_help_overlay_header_zh():
+    assert "指令說明" in help_overlay_header(locale="zh")
+    assert "F3" in help_overlay_header(locale="zh")
+
+
+def test_help_overlay_header_en():
+    assert "Command help" in help_overlay_header(locale="en")
+    assert "F3" in help_overlay_header(locale="en")
 
 
 def test_format_help_overlay_from_ui_list():

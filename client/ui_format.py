@@ -11,30 +11,49 @@ from client.status_indicators import (
     status_needs_animation,
     vitals_alert,
 )
+from shared.i18n import t
 
-
-_PANEL_HEADERS: dict[str, tuple[str, str, str]] = {
-    "pda": ("F2", "◈ PDA", "個人終端"),
-    "help": ("F3", "? 說明", "指令清單"),
-    "map": ("F4", "◎ 地圖", "探索視圖"),
-    "equipment": ("F5", "⛶ 裝備", "義體與裝備"),
-    "gigs": ("F7", "◆ 委託", "任務追蹤"),
+_PANEL_KEYS: dict[str, tuple[str, str]] = {
+    "pda": ("F2", "pda"),
+    "help": ("F3", "help"),
+    "map": ("F4", "map"),
+    "equipment": ("F5", "equipment"),
+    "gigs": ("F7", "gigs"),
 }
 
 
-def panel_header(panel: str) -> str:
-    key, icon, desc = _PANEL_HEADERS.get(panel, ("F6", f"◈ {panel}", "側邊面板"))
-    return f"[bold magenta]❙[/]  [bold]{icon}[/]  [dim]{desc}[/]  [dim]· {key}[/]"
+def _ui(locale: str, key: str, **kwargs: str) -> str:
+    return t(locale, f"client.ui.{key}", **kwargs)
+
+
+def panel_header(panel: str, *, locale: str = "en") -> str:
+    hotkey, panel_key = _PANEL_KEYS.get(panel, ("F6", "generic"))
+    if panel_key == "generic":
+        icon = _ui(locale, "panels.generic.icon", panel=panel)
+        desc = _ui(locale, "panels.generic.desc")
+    else:
+        icon = _ui(locale, f"panels.{panel_key}.icon")
+        desc = _ui(locale, f"panels.{panel_key}.desc")
+    return f"[bold magenta]❙[/]  [bold]{icon}[/]  [dim]{desc}[/]  [dim]· {hotkey}[/]"
 
 
 def format_sidebar_header(state: ClientViewState) -> str:
+    locale = state.locale or "en"
     stack = ordered_sidebar_stack(state.sidebar_stack)
     if not stack:
         return ""
     if len(stack) == 1:
-        return panel_header(stack[0])
-    labels = " · ".join(_PANEL_HEADERS.get(panel, ("", f"◈ {panel}", ""))[1] for panel in stack)
-    return f"[bold magenta]❙[/]  [bold]{labels}[/]  [dim]· F6 收合[/]"
+        return panel_header(stack[0], locale=locale)
+    labels: list[str] = []
+    for panel_id in stack:
+        panel_key = _PANEL_KEYS.get(panel_id, (None, "generic"))[1]
+        if panel_key == "generic":
+            labels.append(_ui(locale, "panels.generic.icon", panel=panel_id))
+        else:
+            labels.append(_ui(locale, f"panels.{panel_key}.icon"))
+    joined = " · ".join(labels)
+    collapse = _ui(locale, "panels.collapse")
+    return f"[bold magenta]❙[/]  [bold]{joined}[/]  [dim]· {collapse}[/]"
 
 
 def format_info_bar(
@@ -63,6 +82,7 @@ def format_status_markup(
     reconnecting: bool = False,
     spinner_frame: int = 0,
 ) -> str:
+    locale = state.locale or "en"
     weather = f"  [dim]│[/]  [cyan]{state.weather}[/]" if state.weather else ""
     hp_alert = vitals_alert(state) or combat_active(state)
     hp_icon = animated_icon("♥", frame=spinner_frame, active=hp_alert)
@@ -75,7 +95,9 @@ def format_status_markup(
     if state.quest and not combat_active(state):
         q_icon = animated_icon("◆", frame=spinner_frame, active=quest_active(state))
         quest_chip = f"  [dim]│[/]  [yellow]{q_icon} {state.quest}[/]"
-    link = "  [dim]│[/]  [yellow]重連中…[/]" if reconnecting else ""
+    link = ""
+    if reconnecting:
+        link = f"  [dim]│[/]  [yellow]{_ui(locale, 'status.reconnecting')}[/]"
     return (
         f"[bold cyan]◈[/]  [bold]{state.room}[/]"
         f"  [dim]│[/]  [{hp_style}]{hp_icon} HP {state.hp}[/]"
@@ -85,18 +107,19 @@ def format_status_markup(
     )
 
 
-def format_hotkey_bar() -> str:
+def format_hotkey_bar(*, locale: str = "en") -> str:
+    hk = lambda key: _ui(locale, f"hotkeys.{key}")
     return (
-        "[bold cyan]快捷鍵[/]"
-        "  Tab"
-        "  [magenta]F2[/]PDA"
-        "  [cyan]F3[/]說明"
-        "  [green]F4[/]地圖"
-        "  [yellow]F5[/]裝備"
-        "  F6收合"
-        "  [yellow]F7[/]委託"
-        "  [dim]│[/]  [yellow]/reconnect[/]"
-        "  [dim]│[/]  ↑↓歷史"
+        f"[bold cyan]{hk('label')}[/]"
+        f"  {hk('tab')}"
+        f"  [magenta]F2[/]{hk('f2_pda')}"
+        f"  [cyan]F3[/]{hk('f3_help')}"
+        f"  [green]F4[/]{hk('f4_map')}"
+        f"  [yellow]F5[/]{hk('f5_equip')}"
+        f"  F6{hk('f6_collapse')}"
+        f"  [yellow]F7[/]{hk('f7_gigs')}"
+        f"  [dim]│[/]  [yellow]/reconnect[/]"
+        f"  [dim]│[/]  {hk('history')}"
     )
 
 
@@ -110,6 +133,7 @@ def _live_combat_cd(state: ClientViewState) -> str:
 
 
 def format_hint_rows(state: ClientViewState, *, spinner_frame: int = 0) -> str:
+    locale = state.locale or "en"
     rows: list[str] = []
     if combat_active(state):
         rows.append(_format_combat_hint(state, spinner_frame=spinner_frame))
@@ -120,11 +144,12 @@ def format_hint_rows(state: ClientViewState, *, spinner_frame: int = 0) -> str:
     if not rows and not status_needs_animation(state):
         return ""
     if not rows:
-        rows.append("[dim]▸  探索夜城 · look · go · help[/]")
+        rows.append(f"[dim]{_ui(locale, 'hint.explore')}[/]")
     return "\n".join(rows)
 
 
 def _format_combat_hint(state: ClientViewState, *, spinner_frame: int) -> str:
+    locale = state.locale or "en"
     spin = animated_icon("⚔", frame=spinner_frame, active=True)
     target = state.combat_target
     npc_hp = state.combat_npc_hp
@@ -134,7 +159,7 @@ def _format_combat_hint(state: ClientViewState, *, spinner_frame: int) -> str:
         target_part = f"  [bold red]vs {target}[/]{hp_bit}"
     cd_label = _live_combat_cd(state)
     cd_part = f"  [bold cyan]{cd_label}[/]" if cd_label else ""
-    body = state.combat_log or "交戰中"
+    body = state.combat_log or t(locale, "focus.combat_default")
     return f"[bold red]{spin}[/]  [yellow]{body}[/]{target_part}{cd_part}"
 
 
@@ -147,7 +172,8 @@ def _format_quest_hint(state: ClientViewState, *, spinner_frame: int, dimmed: bo
 
 
 def format_hint_markup(state: ClientViewState, *, spinner_frame: int = 0) -> str:
-    return format_hint_rows(state, spinner_frame=spinner_frame) or "[dim]▸  探索夜城 · look · go · help[/]"
+    locale = state.locale or "en"
+    return format_hint_rows(state, spinner_frame=spinner_frame) or f"[dim]{_ui(locale, 'hint.explore')}[/]"
 
 
 def format_ui_sections(ui: dict) -> str:
@@ -183,19 +209,23 @@ def format_panel_content(panel: SidebarPanel, *, panel_id: str = "") -> str:
 
 
 def format_stacked_sidebar(state: ClientViewState) -> str:
+    locale = state.locale or "en"
     blocks: list[str] = []
     for panel_id in ordered_sidebar_stack(state.sidebar_stack):
         panel = state.sidebar_panels.get(panel_id)
         if panel is None:
             continue
-        blocks.append(f"[bold underline]{panel_header(panel_id)}[/]")
+        blocks.append(f"[bold underline]{panel_header(panel_id, locale=locale)}[/]")
         content = format_panel_content(panel, panel_id=panel_id)
         if content:
             blocks.append(content)
-    return "\n\n".join(blocks) if blocks else "[dim]（側欄空白 · F2–F5／F7 開啟面板）[/]"
+    if blocks:
+        return "\n\n".join(blocks)
+    return f"[dim]{_ui(locale, 'sidebar.empty_hint')}[/]"
 
 
 def format_sidebar_markup(state: ClientViewState) -> str:
+    locale = state.locale or "en"
     if state.sidebar_stack:
         return format_stacked_sidebar(state)
-    return "[dim]（側欄空白）[/]"
+    return f"[dim]{_ui(locale, 'sidebar.empty')}[/]"

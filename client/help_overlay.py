@@ -3,12 +3,15 @@ from __future__ import annotations
 import re
 
 from client.meta_handlers import SidebarPanel
+from shared.i18n import t
 
 _LINE_RE = re.compile(r"^\s*(?P<name>\S+)\s+[—–-]\s+(?P<desc>.+)$")
 
 
-def help_overlay_header() -> str:
-    return "[bold magenta]❙[/]  [bold]? 指令說明[/]  [dim]· F3 / Esc 關閉[/]"
+def help_overlay_header(*, locale: str = "en") -> str:
+    title = t(locale, "client.ui.help_overlay.title")
+    close = t(locale, "client.ui.help_overlay.close")
+    return f"[bold magenta]❙[/]  [bold]{title}[/]  [dim]· {close}[/]"
 
 
 def _format_entry(name: str, desc: str) -> str:

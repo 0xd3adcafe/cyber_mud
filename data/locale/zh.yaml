@@ -944,6 +944,47 @@ client:
   credentials:
     pin_digits: PIN 僅能為數字。
     pin_length: "PIN 需為 {min}–{max} 位數字。"
+  ui:
+    hotkeys:
+      label: 快捷鍵
+      tab: Tab
+      f2_pda: PDA
+      f3_help: 說明
+      f4_map: 地圖
+      f5_equip: 裝備
+      f6_collapse: 收合
+      f7_gigs: 委託
+      history: ↑↓歷史
+    panels:
+      pda:
+        icon: "◈ PDA"
+        desc: 個人終端
+      help:
+        icon: "? 說明"
+        desc: 指令清單
+      map:
+        icon: "◎ 地圖"
+        desc: 探索視圖
+      equipment:
+        icon: "⛶ 裝備"
+        desc: 義體與裝備
+      gigs:
+        icon: "◆ 委託"
+        desc: 任務追蹤
+      generic:
+        icon: "◈ {panel}"
+        desc: 側邊面板
+      collapse: F6 收合
+    sidebar:
+      empty: （側欄空白）
+      empty_hint: （側欄空白 · F2–F5／F7 開啟面板）
+    status:
+      reconnecting: 重連中…
+    hint:
+      explore: "▸  探索夜城 · look · go · help"
+    help_overlay:
+      title: "? 指令說明"
+      close: F3 / Esc 關閉
   motd_fallback:
     - "建立連線中…請 register 或 login。"
     - "登入後輸入 look 探索，go <方向> 移動。"

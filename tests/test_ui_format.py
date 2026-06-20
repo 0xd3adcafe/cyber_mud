@@ -1,8 +1,8 @@
 from client.meta_handlers import ClientViewState
-from client.ui_format import format_hotkey_bar
 from client.meta_handlers import SidebarPanel
 from client.ui_format import (
     format_hint_markup,
+    format_hotkey_bar,
     format_info_bar,
     format_sidebar_header,
     format_sidebar_markup,
@@ -11,27 +11,45 @@ from client.ui_format import (
 )
 
 
-def test_panel_header_labels():
-    assert "PDA" in panel_header("pda")
-    assert "F4" in panel_header("map")
-    assert "委託" in panel_header("gigs")
-    assert "F7" in panel_header("gigs")
+def test_panel_header_labels_en():
+    assert "PDA" in panel_header("pda", locale="en")
+    assert "F4" in panel_header("map", locale="en")
+    assert "Gigs" in panel_header("gigs", locale="en")
+    assert "F7" in panel_header("gigs", locale="en")
 
 
-def test_format_hotkey_bar():
-    text = format_hotkey_bar()
+def test_panel_header_labels_zh():
+    assert "委託" in panel_header("gigs", locale="zh")
+    assert "地圖" in panel_header("map", locale="zh")
+
+
+def test_format_hotkey_bar_en():
+    text = format_hotkey_bar(locale="en")
+    assert "Hotkeys" in text
     assert "Tab" in text
-    assert "↑↓" in text
+    assert "history" in text
     assert "F2" in text
-    assert "F6" in text
     assert "F7" in text
     assert "/reconnect" in text
 
 
-def test_format_info_bar_reconnecting():
-    state = ClientViewState(room="廣場")
+def test_format_hotkey_bar_zh():
+    text = format_hotkey_bar(locale="zh")
+    assert "快捷鍵" in text
+    assert "說明" in text
+    assert "↑↓" in text
+
+
+def test_format_info_bar_reconnecting_zh():
+    state = ClientViewState(room="廣場", locale="zh")
     text = format_info_bar(state, host="127.0.0.1", port=4000, reconnecting=True)
     assert "重連中" in text
+
+
+def test_format_info_bar_reconnecting_en():
+    state = ClientViewState(room="Square", locale="en")
+    text = format_info_bar(state, host="127.0.0.1", port=4000, reconnecting=True)
+    assert "Reconnecting" in text
 
 
 def test_format_hint_combat_priority():
@@ -60,11 +78,18 @@ def test_format_sidebar_row_markup():
     assert "HP" in text
 
 
-def test_format_sidebar_header_stacked():
-    state = ClientViewState(sidebar_stack=["map", "pda"])
+def test_format_sidebar_header_stacked_zh():
+    state = ClientViewState(sidebar_stack=["map", "pda"], locale="zh")
     text = format_sidebar_header(state)
     assert "PDA" in text
     assert "地圖" in text
+
+
+def test_format_sidebar_header_stacked_en():
+    state = ClientViewState(sidebar_stack=["map", "pda"], locale="en")
+    text = format_sidebar_header(state)
+    assert "PDA" in text
+    assert "Map" in text
 
 
 def test_format_ui_sections():

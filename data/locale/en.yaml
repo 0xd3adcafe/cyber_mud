@@ -944,6 +944,47 @@ client:
   credentials:
     pin_digits: "PIN must be digits only."
     pin_length: "PIN must be {min}–{max} digits."
+  ui:
+    hotkeys:
+      label: Hotkeys
+      tab: Tab
+      f2_pda: PDA
+      f3_help: Help
+      f4_map: Map
+      f5_equip: Gear
+      f6_collapse: Collapse
+      f7_gigs: Gigs
+      history: "↑↓ history"
+    panels:
+      pda:
+        icon: "◈ PDA"
+        desc: Personal agent
+      help:
+        icon: "? Help"
+        desc: Command list
+      map:
+        icon: "◎ Map"
+        desc: Exploration view
+      equipment:
+        icon: "⛶ Gear"
+        desc: Cyberware & loadout
+      gigs:
+        icon: "◆ Gigs"
+        desc: Quest tracker
+      generic:
+        icon: "◈ {panel}"
+        desc: Sidebar panel
+      collapse: "F6 collapse"
+    sidebar:
+      empty: "(sidebar empty)"
+      empty_hint: "(sidebar empty · F2–F5 / F7 to open panels)"
+    status:
+      reconnecting: Reconnecting…
+    hint:
+      explore: "▸  Explore Night City · look · go · help"
+    help_overlay:
+      title: "? Command help"
+      close: "F3 / Esc close"
   motd_fallback:
     - "Establishing link… use register or login."
     - "After login, type look to explore, go <dir> to move."

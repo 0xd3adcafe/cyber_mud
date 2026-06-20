@@ -255,9 +255,9 @@ def test_chrome_bar_link_status_after_auth():
             assert chrome.region.height >= 1
             assert chrome.size.height >= 1
             rendered = str(chrome.render())
-            assert "連線" in rendered
+            assert "Link" in rendered
             assert "127.0.0.1:4000" in rendered
-            assert "快捷鍵" not in rendered
+            assert "Hotkeys" not in rendered
 
     asyncio.run(_run())
 
@@ -289,7 +289,7 @@ def test_hotkey_bar_below_prompt_after_auth():
             assert hotkey.region.y == prompt.region.y + prompt.region.height
             assert main.region.y == chrome.region.y + chrome.region.height
             rendered = str(hotkey.render())
-            assert "快捷鍵" in rendered
+            assert "Hotkeys" in rendered
             assert "F2" in rendered
             assert "/reconnect" in rendered
 
