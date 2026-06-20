@@ -510,13 +510,19 @@ class CyberMudApp(App):
         self._refresh_login_banner()
 
     def _refresh_login_banner(self) -> None:
+        from textual.css.query import NoMatches
+
+        try:
+            title_widget = self.query_one("#login_title", Static)
+        except NoMatches:
+            return
         text = banner_text(
             locale=self._login_locale,
             tips=self._login_motd_tips,
             tip_index=self._login_motd_index,
             frame=self._login_motd_frame,
         )
-        self.query_one("#login_title", Static).update(text)
+        title_widget.update(text)
 
     def _add_login_motd_tip(self, line: str) -> None:
         title = t(self._login_locale, "motd.title")

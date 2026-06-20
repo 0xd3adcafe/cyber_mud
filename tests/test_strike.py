@@ -9,7 +9,7 @@ from tests.conftest import make_player, make_state
 
 
 def _fighter(**kwargs):
-    player = make_player(room_id="alley", name="V", **kwargs)
+    player = make_player(room_id="alley", name="Vy", **kwargs)
     player.body = 5
     player.reflex = 4
     player.cool = 6

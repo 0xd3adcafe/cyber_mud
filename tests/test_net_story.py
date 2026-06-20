@@ -17,7 +17,7 @@ def test_crypt_and_vault_net_nodes():
 
 def test_hack_core_quest_advances_on_terminal_hack():
     state = make_state()
-    player = make_player(locale="en", room_id="square", name="V")
+    player = make_player(locale="en", room_id="square", name="Vy")
     player.quest_flags["broker_rumor"] = "done"
     accept_lines = accept_quest(player, state, "hack_core", "en")
     assert accept_lines

@@ -46,7 +46,7 @@ def test_login_bad_password(save_dir):
 
     player2, state2 = _ctx()
     result = dispatch("login TestRunner wrong", player2, state2, [], [])
-    assert any("密碼" in line for line in result.lines)
+    assert any("帳號" in line or "密碼" in line for line in result.lines)
     assert not player2.named
 
 
@@ -55,6 +55,6 @@ def test_register_name_taken(save_dir):
     dispatch("register TestRunner secret123", player, state, [], [])
 
     player2, state2 = _ctx()
-    result = dispatch("register TestRunner other", player2, state2, [], [])
+    result = dispatch("register TestRunner otherpass", player2, state2, [], [])
     assert any("已被使用" in line for line in result.lines)
     assert not player2.named

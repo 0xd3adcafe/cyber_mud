@@ -115,7 +115,7 @@ def test_movement_adds_fatigue():
 
 def test_combat_adds_fatigue():
     reset_life_config()
-    player = make_player(room_id="alley", name="V", fatigue=0)
+    player = make_player(room_id="alley", name="Vy", fatigue=0)
     state = make_state()
     dispatch("attack thug", player, state, [], [])
     assert player.fatigue == 4

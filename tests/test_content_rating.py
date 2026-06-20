@@ -41,7 +41,7 @@ def test_mature_room_blocked(save_dir):
 def test_register_with_mature_flag(save_dir):
     state = make_state()
     player = make_player(locale="en", named=False, name="Guest")
-    result = dispatch("register GoreTest s3cret mature", player, state, [], [player])
+    result = dispatch("register GoreTest s3cret12 mature", player, state, [], [player])
     assert player.named
     assert is_mature(player)
     loaded = load_player("GoreTest")

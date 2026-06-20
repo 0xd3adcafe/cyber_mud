@@ -200,6 +200,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Client log UX CL.1–CL.8 (2026-06) | `log_classifier.py`/`log_styles.py`/`LogPalette`; combat/env/social/progression channels; block separators; `tests/test_log_classifier.py`; `docs/player/CLIENT.md` legend |
 | Client log UX CL.9–CL.11 (2026-06) | `/log compact`; `/log hide`/`show` channel toggles; `/log export`; `log_settings.py`; `tests/test_log_settings.py`; settings.json persistence |
 | Validate speedup (2026-06) | Cache `load_world`/`default_room_items`/time+weather YAML; `pytest-xdist` in `./admin.sh validate`; `clear_world_cache()` on dev reload; ~6 min → ~50s |
+| Security ASVS L1 ASVS.1–5 (2026-06) | PBKDF2 passwords + legacy rehash; unified `invalid_credentials`; save path validation; input bounds; per-connection auth rate limit; save `0600`; `docs/SECURITY.md`; `tests/test_security_auth.py` |
 
 ## Multi-session development (mandatory)
 
@@ -344,6 +345,29 @@ Not yet implemented or only partially implemented.
 | ~~CL.11~~ | ~~Export & tests~~ | ✅ `/log export [path]`; `plain_lines()`; `tests/test_log_settings.py`; `tests/test_client_app.py` |
 
 **Suggested order:** CL.1 → CL.2 → CL.3 + CL.4 → CL.5 + CL.6 → CL.7 → CL.8 → CL.9 → CL.10 → CL.11. **All phases shipped (2026-06).**
+
+### Security (OWASP ASVS L1)
+
+**Goal:** Align authentication and save I/O with [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) Level 1 for the hobby MUD threat model. Full matrix: [`SECURITY.md`](SECURITY.md) / [`SECURITY.zh.md`](SECURITY.zh.md).
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| ~~ASVS.1~~ | ~~Password hashing~~ | ✅ PBKDF2-HMAC-SHA256 600k iter; legacy SHA-256 verify + login rehash; `persistence/passwords.py` |
+| ~~ASVS.2~~ | ~~Unified login errors~~ | ✅ `auth.invalid_credentials` on bad name/password; no enumeration; `commands/auth_helpers.py` |
+| ~~ASVS.3~~ | ~~Save path validation~~ | ✅ Reject `..`, `/`, `\`, control chars; `shared/security.py`, `persistence/save.py` |
+| ~~ASVS.4~~ | ~~Input bounds~~ | ✅ Name/password length; `maxsplit=1` passwords with spaces; 4 KiB line cap; `shared/protocol.py`, `server/main.py` |
+| ~~ASVS.5~~ | ~~Auth rate limiting~~ | ✅ Per-connection 5 fails / 60s → 5 min block; `server/rate_limit.py`, `server/game.py` |
+| ASVS.6 | Idle / connection limits | Max connections per IP; guest session timeout |
+| ASVS.7 | Save file permissions | ✅ `chmod 0o600` on write (partial — no directory hardening yet) |
+| ASVS.8 | Transport encryption | TLS wrapper or documented VPN-only deployment |
+| ASVS.9 | Reconnect without password replay | Token-based session resume |
+| ASVS.10 | `changepass` command | Authenticated password change |
+| ASVS.11 | Account lockout | Persistent lockout after repeated failures |
+| ASVS.12 | Security audit log | Structured auth-failure / admin log |
+| ASVS.13 | Client credential hygiene | Optional PIN-only unlock; no raw password storage |
+| ASVS.14 | Security regression suite | Rate-limit integration + protocol edge cases in `tests/test_security_auth.py` |
+
+**Suggested order:** ASVS.1–5 (shipped) → ASVS.6 → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14.
 
 ---
 

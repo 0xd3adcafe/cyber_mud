@@ -42,7 +42,7 @@ def test_neon_haze_has_no_penalty():
 
 
 def test_acid_rain_affects_combat_damage():
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     player.body = 10
     state = make_state()
     state.weather["watson"] = "acid_rain"

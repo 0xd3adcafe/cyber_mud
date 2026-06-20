@@ -8,7 +8,7 @@ from entities.player import Player
 from server.game import ClientSession, Game, create_game
 from server.heartbeat import heartbeat_loop, log_server_event
 from shared.i18n import t
-from shared.protocol import DEFAULT_HOST, DEFAULT_PORT, ENCODING
+from shared.protocol import DEFAULT_HOST, DEFAULT_PORT, ENCODING, MAX_LINE_BYTES
 from shared.server_locale import server_locale
 
 
@@ -24,6 +24,9 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         while True:
             data = await reader.readline()
             if not data:
+                break
+            if len(data) > MAX_LINE_BYTES:
+                await game.handle_oversized_line(session)
                 break
             line = data.decode(ENCODING).rstrip("\r\n")
             if not line:

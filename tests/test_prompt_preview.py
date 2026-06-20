@@ -35,7 +35,7 @@ def test_detect_prompt_edit_ignores_other_commands():
 
 def test_expand_prompt_from_view_tokens():
     view = _view(
-        player_name="V",
+        player_name="Vy",
         room="霓虹廣場",
         hp="80/100",
         gold="500",
@@ -52,24 +52,24 @@ def test_expand_prompt_from_view_tokens():
     expanded = expand_prompt_from_view("★%v [%h] %n@%r %p", view)
     assert "★2" in expanded
     assert "80/100" in expanded
-    assert "V@霓虹廣場" in expanded
+    assert "Vy@霓虹廣場" in expanded
     assert "夜晚" in expanded
 
 
 def test_format_prompt_preview_markup_en():
-    text = format_prompt_preview("[%h] %n>", "[80/100] V>", locale="en")
+    text = format_prompt_preview("[%h] %n>", "[80/100] Vy>", locale="en")
     assert "Preview" in text
-    assert "[80/100] V>" in text
+    assert "[80/100] Vy>" in text
 
 
 def test_format_prompt_preview_markup_zh():
-    text = format_prompt_preview("[%h] %n>", "[80/100] V>", locale="zh")
+    text = format_prompt_preview("[%h] %n>", "[80/100] Vy>", locale="zh")
     assert "預覽" in text
-    assert "[80/100] V>" in text
+    assert "[80/100] Vy>" in text
 
 
 def test_format_prompt_show_lines_lists_tokens_en():
-    lines = format_prompt_show_lines(_view(player_name="V", hp="100/100", locale="en"))
+    lines = format_prompt_show_lines(_view(player_name="Vy", hp="100/100", locale="en"))
     text = "\n".join(lines)
     assert "Prompt" in text
     assert "%n" in text
@@ -77,7 +77,7 @@ def test_format_prompt_show_lines_lists_tokens_en():
 
 
 def test_format_prompt_show_lines_lists_tokens_zh():
-    lines = format_prompt_show_lines(_view(player_name="V", hp="100/100", locale="zh"))
+    lines = format_prompt_show_lines(_view(player_name="Vy", hp="100/100", locale="zh"))
     text = "\n".join(lines)
     assert "提示符" in text
     assert "%n" in text

@@ -173,6 +173,7 @@ Full doc index (English default; `*.zh.md` mirrors where listed):
 | [`docs/PHASES.md`](docs/PHASES.md) ([`PHASES.zh.md`](docs/PHASES.zh.md)) | Phased delivery checklist |
 | [`docs/CLIENT_UI_DEBUG.md`](docs/CLIENT_UI_DEBUG.md) ([`CLIENT_UI_DEBUG.zh.md`](docs/CLIENT_UI_DEBUG.zh.md)) | Client layout / sidebar debug cases and delivery checklist |
 | [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md) ([`LOCALIZATION.zh.md`](docs/LOCALIZATION.zh.md)) | Bilingual policy (English primary + zh) |
+| [`docs/SECURITY.md`](docs/SECURITY.md) ([`SECURITY.zh.md`](docs/SECURITY.zh.md)) | OWASP ASVS L1 alignment and security backlog |
 | [`docs/WORLD_TOOLS.md`](docs/WORLD_TOOLS.md) ([`WORLD_TOOLS.zh.md`](docs/WORLD_TOOLS.zh.md)) | World grid / population / quest authoring CLI |
 
 ## Development conventions
@@ -246,6 +247,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Client log UX** | CL.1–CL.11 shipped — log channels, `LogPalette`, `/log compact` & hide/show toggles, export; see PHASES **Client log UX** |
 | **World expansion (WORLD.md)** | W.1–W.14 shipped (263 rooms / 121 NPCs / 45 items); see PHASES **World expansion** |
 | **Content depth** | D.1–D.10 shipped (spotlight NPCs, district quests, grid look flavor); see PHASES **Content depth** |
+| **Security (ASVS L1)** | ASVS.1–5 shipped (PBKDF2, unified login errors, save validation, input bounds, rate limit); ASVS.6–14 backlog; see [`docs/SECURITY.md`](docs/SECURITY.md) |
 
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.7 shipped — see PHASES **Mature / NSFW content** table.
 
@@ -343,6 +345,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | Content depth D.7–D.10 | 8 spotlight NPCs; `district.grid.*` look flavor; 4 district quests; `world.ambient.*` all districts; `tests/test_content_depth.py` |
 | Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions |
 | Life commands L.1–L.8 | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable anchors; vitals/RAM regen; PDA + `%posture`; `tests/test_life_commands.py` |
+| Security ASVS L1 ASVS.1–5 | `persistence/passwords.py`, `shared/security.py`, `server/rate_limit.py`; unified `invalid_credentials`; save `0600`; `docs/SECURITY.md`; `tests/test_security_auth.py` |
 
 World setting and district expansion: [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)).
 

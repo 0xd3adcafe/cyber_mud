@@ -8,7 +8,7 @@ from tests.conftest import make_player, make_state
 
 
 def test_cyber_arm_bonus_damage():
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     player.body = 3
     player.cyberware["arms"] = "cyber_arm_v1"
     state = make_state()
@@ -19,7 +19,7 @@ def test_cyber_arm_bonus_damage():
 
 
 def test_breach_protocol_boosts_quickhack():
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     player.intelligence = 5
     player.skills.extend(["quickhack", "breach_protocol"])
     player.ram = 8

@@ -5,15 +5,28 @@ from pathlib import Path
 
 from entities.player import Player
 from shared.equipment import normalize_equipment
+from shared.security import validate_character_name
 
 SAVE_DIR = Path(__file__).resolve().parent.parent / "data" / "saves"
 
 
+def save_name_allowed(name: str) -> bool:
+    return validate_character_name(name) is None
+
+
 def _save_path(name: str) -> Path:
-    return SAVE_DIR / f"{name.lower()}.json"
+    if not save_name_allowed(name):
+        raise ValueError(f"invalid save name: {name!r}")
+    base = SAVE_DIR.resolve()
+    path = (base / f"{name.lower()}.json").resolve()
+    if not path.is_relative_to(base):
+        raise ValueError(f"invalid save path for name: {name!r}")
+    return path
 
 
 def player_exists(name: str) -> bool:
+    if not save_name_allowed(name):
+        return False
     return _save_path(name).exists()
 
 
@@ -157,14 +170,17 @@ def player_from_dict(data: dict) -> Player:
 
 def save_player(player: Player) -> Path:
     if not player.named:
-        return _save_path(player.name)
+        raise ValueError("cannot save unnamed player")
     SAVE_DIR.mkdir(parents=True, exist_ok=True)
     path = _save_path(player.name)
     path.write_text(json.dumps(player_to_dict(player), ensure_ascii=False, indent=2), encoding="utf-8")
+    path.chmod(0o600)
     return path
 
 
 def load_player(name: str) -> Player | None:
+    if not save_name_allowed(name):
+        return None
     path = _save_path(name)
     if not path.exists():
         return None
@@ -173,6 +189,8 @@ def load_player(name: str) -> Player | None:
 
 
 def delete_save(name: str) -> bool:
+    if not save_name_allowed(name):
+        return False
     path = _save_path(name)
     if not path.exists():
         return False

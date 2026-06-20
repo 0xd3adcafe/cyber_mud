@@ -7,7 +7,7 @@ from tests.conftest import make_player, make_state
 
 
 def test_quit_logs_out_without_closing_session():
-    player = make_player(named=True, name="V", inventory=["knife"])
+    player = make_player(named=True, name="Vy", inventory=["knife"])
     state = make_state()
     result = dispatch("quit", player, state, [], [])
     assert not result.quit_game

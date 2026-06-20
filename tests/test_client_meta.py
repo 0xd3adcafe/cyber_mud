@@ -227,8 +227,8 @@ def test_sidebar_prefers_ui_json_over_panel_lines():
 
 
 def test_active_prompt_expands_local_override():
-    state = ClientViewState(hp="50/100", player_name="V")
-    assert active_prompt(state, local_override="[%h] %n>") == "[50/100] V>"
+    state = ClientViewState(hp="50/100", player_name="Vy")
+    assert active_prompt(state, local_override="[%h] %n>") == "[50/100] Vy>"
 
 
 def test_netrun_prompt_and_blocking():

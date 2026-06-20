@@ -13,7 +13,7 @@ from world.tick import PATROL_EVERY, process_tick
 
 
 def _fighter(*, room_id: str = "alley", body: int = 3, intelligence: int = 6, reflex: int = 4):
-    player = make_player(room_id=room_id, name="V")
+    player = make_player(room_id=room_id, name="Vy")
     player.body = body
     player.intelligence = intelligence
     player.reflex = reflex

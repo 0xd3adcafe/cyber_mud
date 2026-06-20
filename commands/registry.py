@@ -35,6 +35,7 @@ class CommandResult:
     quit_game: bool = False
     world_changed: bool = False
     auth_event: bool = False
+    auth_failure: bool = False
     broadcast_key: str = ""
     broadcast_kwargs: dict[str, str] = field(default_factory=dict)
     broadcast_room_id: str = ""
@@ -56,6 +57,7 @@ def ok(
     document: bool = False,
     world_changed: bool = False,
     auth_event: bool = False,
+    auth_failure: bool = False,
     refresh_sidebar: bool = False,
     broadcast_key: str = "",
     broadcast_kwargs: dict[str, str] | None = None,
@@ -69,6 +71,7 @@ def ok(
         document=document,
         world_changed=world_changed,
         auth_event=auth_event,
+        auth_failure=auth_failure,
         refresh_sidebar=refresh_sidebar,
         broadcast_key=broadcast_key,
         broadcast_kwargs=broadcast_kwargs or {},

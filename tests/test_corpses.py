@@ -7,7 +7,7 @@ from world.tick import process_tick
 
 
 def _killer():
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     player.body = 50
     player.equipment["weapon_secondary"] = "knife"
     return player, make_state()

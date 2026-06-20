@@ -51,6 +51,6 @@ def test_take_persists_in_save(save_dir):
     player, state = _ctx()
     dispatch("take glowstick", player, state, [], [])
     save_player(player)
-    loaded = load_player("V")
+    loaded = load_player("Vy")
     assert loaded is not None
     assert "glowstick" in loaded.inventory

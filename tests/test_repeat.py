@@ -56,7 +56,7 @@ def test_repeat_blocked_command_runs_once():
 
 
 def test_repeat_stops_when_combat_ends():
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     player.body = 50
     player.equipment["weapon_secondary"] = "knife"
     state = make_state()

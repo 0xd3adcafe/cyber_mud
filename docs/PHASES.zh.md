@@ -198,6 +198,7 @@
 | 內容深度 D.7–D.10（2026-06） | 八區聚光 NPC；`district.grid.*` look 敘事；四條區域委託；完整 `world.ambient.*`；`tests/test_content_depth.py` |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 | Validate 加速（2026-06） | 快取 `load_world`／`default_room_items`／時段與天氣 YAML；`pytest-xdist` 平行 pytest；dev reload 呼叫 `clear_world_cache()`；約 6 分鐘→約 50 秒 |
+| 安全性 ASVS L1 ASVS.1–5（2026-06） | PBKDF2 密碼＋舊版自動升級；統一 `invalid_credentials`；存檔路徑驗證；輸入邊界；每連線認證速率限制；存檔 `0600`；`docs/SECURITY.md`；`tests/test_security_auth.py` |
 
 ## 多 session 開發（必做）
 
@@ -340,6 +341,29 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~CL.11~~ | ~~匯出與測試~~ | ✅ `/log export [path]`；`plain_lines()`；`tests/test_log_settings.py` |
 
 **建議順序：** CL.1 → CL.2 → CL.3＋CL.4 → CL.5＋CL.6 → CL.7 → CL.8 → CL.9 → CL.10 → CL.11。**全階段已交付（2026-06）。**
+
+### 安全性（OWASP ASVS L1）
+
+**目標：** 依 [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) Level 1 強化認證與存檔 I/O。完整對照表：[`SECURITY.md`](SECURITY.md)／[`SECURITY.zh.md`](SECURITY.zh.md)。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| ~~ASVS.1~~ | ~~密碼雜湊~~ | ✅ PBKDF2-HMAC-SHA256 60 萬次迭代；舊版 SHA-256 驗證＋登入升級；`persistence/passwords.py` |
+| ~~ASVS.2~~ | ~~統一登入錯誤~~ | ✅ 錯誤名稱／密碼皆回 `auth.invalid_credentials`；`commands/auth_helpers.py` |
+| ~~ASVS.3~~ | ~~存檔路徑驗證~~ | ✅ 拒絕 `..`、`/`、`\`、控制字元；`shared/security.py`、`persistence/save.py` |
+| ~~ASVS.4~~ | ~~輸入邊界~~ | ✅ 名稱／密碼長度；`maxsplit=1` 支援含空格密碼；單行 4 KiB 上限 |
+| ~~ASVS.5~~ | ~~認證速率限制~~ | ✅ 每連線 60 秒內 5 次失敗→封鎖 5 分鐘；`server/rate_limit.py` |
+| ASVS.6 | 閒置／連線上限 | 每 IP 最大連線；訪客逾時 |
+| ASVS.7 | 存檔檔案權限 | ✅ 寫入 `chmod 0o600`（部分——目錄強化待做） |
+| ASVS.8 | 傳輸加密 | TLS 包裝或 VPN 部署文件 |
+| ASVS.9 | 重連不重送密碼 | Token 恢復工作階段 |
+| ASVS.10 | `changepass` 指令 | 已登入變更密碼 |
+| ASVS.11 | 帳號鎖定 | 多次失敗後持久鎖定 |
+| ASVS.12 | 安全稽核日誌 | 結構化認證失敗／管理日誌 |
+| ASVS.13 | 客戶端憑證衛生 | 選用 PIN 解鎖；不儲存明文密碼 |
+| ASVS.14 | 安全迴歸測試 | 速率限制整合與協定邊界；`tests/test_security_auth.py` |
+
+**建議順序：** ASVS.1–5（已交付）→ ASVS.6 → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14。
 
 ---
 

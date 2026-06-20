@@ -16,7 +16,7 @@ def _start_fight(player, state):
 
 
 def test_flee_fail_sets_chased_by_npc(monkeypatch):
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     state = make_state()
     _start_fight(player, state)
     monkeypatch.setattr(random, "random", lambda: 1.0)
@@ -28,7 +28,7 @@ def test_flee_fail_sets_chased_by_npc(monkeypatch):
 
 
 def test_flee_success_clears_chase(monkeypatch):
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     player.reflex = 10
     state = make_state()
     _start_fight(player, state)
@@ -38,7 +38,7 @@ def test_flee_success_clears_chase(monkeypatch):
 
 
 def test_chase_restarts_combat_in_same_room(monkeypatch):
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     state = make_state()
     _start_fight(player, state)
     monkeypatch.setattr(random, "random", lambda: 1.0)
@@ -52,7 +52,7 @@ def test_chase_restarts_combat_in_same_room(monkeypatch):
 
 
 def test_chase_follows_to_adjacent_room(monkeypatch):
-    player = make_player(room_id="square", name="V")
+    player = make_player(room_id="square", name="Vy")
     state = make_state()
     state.npc_rooms["thug"] = "alley"
     player.chased_by_npc = "thug"

@@ -14,7 +14,7 @@ def test_format_heartbeat_includes_world_stats():
     state.corpses["c"] = object()  # type: ignore[assignment]
     state.npc_respawns["thug"] = 99
     game = Game(state=state)
-    game.sessions.append(ClientSession(writer=object(), player=make_player(name="V")))
+    game.sessions.append(ClientSession(writer=object(), player=make_player(name="Vy")))
 
     line = format_heartbeat(game, started_at=0.0, dev=True, locale="en")
 

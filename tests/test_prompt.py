@@ -21,7 +21,7 @@ def test_prompt_set():
 
 
 def test_expand_prompt_tokens():
-    player, state = make_player(name="V"), make_state()
+    player, state = make_player(name="Vy"), make_state()
     expanded = expand_prompt("%n|%r|%h|%t", player, state)
     assert "V" in expanded
     assert "霓虹廣場" in expanded

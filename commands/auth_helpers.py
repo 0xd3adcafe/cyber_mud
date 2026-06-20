@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import hashlib
-
 from commands.registry import CommandContext, ok
 from entities.player import Player
-from persistence.save import load_player, player_exists, save_player
+from persistence.passwords import hash_password, needs_rehash, verify_password
+from persistence.save import load_player, player_exists, save_name_allowed, save_player
 from shared.i18n import t
+from shared.security import validate_character_name, validate_password
 from world.mature import set_content_rating
 
 AUTH_COMMANDS = frozenset({"login", "register", "help", "quit"})
@@ -13,12 +13,30 @@ AUTH_COMMANDS = frozenset({"login", "register", "help", "quit"})
 STARTING_GOLD = 100
 
 
-def hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+def parse_auth_credentials(args: str) -> tuple[str, str] | None:
+    text = args.strip()
+    if not text:
+        return None
+    parts = text.split(maxsplit=1)
+    if len(parts) != 2 or not parts[0] or not parts[1]:
+        return None
+    return parts[0], parts[1]
 
 
-def verify_password(password: str, password_hash: str) -> bool:
-    return hash_password(password) == password_hash
+def parse_register_credentials(args: str) -> tuple[str, str, bool] | None:
+    text = args.strip()
+    if not text:
+        return None
+    mature = False
+    lowered = text.lower()
+    if lowered.endswith(" mature"):
+        text = text[: -len(" mature")].rstrip()
+        mature = True
+    creds = parse_auth_credentials(text)
+    if creds is None:
+        return None
+    name, password = creds
+    return name, password, mature
 
 
 def find_online_player(ctx: CommandContext, name: str):
@@ -144,14 +162,17 @@ def handle_register(ctx: CommandContext):
     if ctx.player.named:
         return ok([t(ctx.player.locale, "auth.already_logged_in")])
 
-    parts = ctx.args.split()
-    if len(parts) < 2:
+    parsed = parse_register_credentials(ctx.args)
+    if parsed is None:
         return ok([t(ctx.player.locale, "auth.register_usage")])
 
-    name, password = parts[0], parts[1]
-    mature_opt_in = len(parts) >= 3 and parts[2].lower() == "mature"
-    if len(name) < 2:
-        return ok([t(ctx.player.locale, "auth.name_short")])
+    name, password, mature_opt_in = parsed
+    if err := validate_character_name(name):
+        return ok([t(ctx.player.locale, err)])
+    if not save_name_allowed(name):
+        return ok([t(ctx.player.locale, "auth.name_invalid")])
+    if err := validate_password(password):
+        return ok([t(ctx.player.locale, err)])
     if find_online_player(ctx, name):
         return ok([t(ctx.player.locale, "auth.name_online", name=name)])
 
@@ -176,19 +197,20 @@ def handle_login(ctx: CommandContext):
     if ctx.player.named:
         return ok([t(ctx.player.locale, "auth.already_logged_in")])
 
-    parts = ctx.args.split()
-    if len(parts) < 2:
+    creds = parse_auth_credentials(ctx.args)
+    if creds is None:
         return ok([t(ctx.player.locale, "auth.login_usage")])
 
-    name, password = parts[0], parts[1]
+    name, password = creds
     if find_online_player(ctx, name):
         return ok([t(ctx.player.locale, "auth.name_online", name=name)])
 
     loaded = load_player(name)
-    if loaded is None:
-        return ok([t(ctx.player.locale, "auth.no_such_player", name=name)])
-    if not verify_password(password, loaded.password_hash):
-        return ok([t(ctx.player.locale, "auth.bad_password")])
+    if loaded is None or not verify_password(password, loaded.password_hash):
+        return ok([t(ctx.player.locale, "auth.invalid_credentials")], auth_failure=True)
 
     apply_loaded_player(ctx.player, loaded)
+    if needs_rehash(loaded.password_hash):
+        ctx.player.password_hash = hash_password(password)
+        save_player(ctx.player)
     return ok([t(ctx.player.locale, "auth.login_ok", name=name)], auth_event=True)

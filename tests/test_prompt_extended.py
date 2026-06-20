@@ -7,7 +7,7 @@ from world.weather import set_district_weather
 
 
 def test_expand_extended_tokens():
-    player = make_player(name="V")
+    player = make_player(name="Vy")
     player.gold = 500
     player.faction = "arasaka"
     player.ram = 3
@@ -24,7 +24,7 @@ def test_expand_extended_tokens():
 
 
 def test_expand_faction_none():
-    player = make_player(name="V")
+    player = make_player(name="Vy")
     state = make_state()
     expanded = expand_prompt("%f", player, state)
     assert "邊緣人" in expanded

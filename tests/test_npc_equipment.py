@@ -16,7 +16,7 @@ def test_look_npc_shows_equipment():
 
 
 def test_npc_equipment_drops_on_death():
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     player.body = 50
     player.equipment["weapon_secondary"] = "knife"
     state = make_state()

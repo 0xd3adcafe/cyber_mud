@@ -9,7 +9,7 @@ from world.corpses import corpses_in_room
 
 
 def _victim():
-    player = make_player(room_id="alley", name="V")
+    player = make_player(room_id="alley", name="Vy")
     player.hp = 1
     player.inventory = ["glowstick"]
     player.equipment["weapon_secondary"] = "knife"
@@ -34,7 +34,7 @@ def test_player_death_spawns_corpse_and_respawns():
     assert result.world_changed
     corpses = corpses_in_room(state, "alley")
     assert len(corpses) == 1
-    assert corpses[0].player_name == "V"
+    assert corpses[0].player_name == "Vy"
     assert "glowstick" in corpses[0].loot
     assert "knife" in corpses[0].loot
     assert any("義體診所" in line for line in result.lines)
@@ -53,7 +53,7 @@ def test_player_death_via_combat_tick():
 
     assert results
     assert player.room_id == "ripper_clinic"
-    assert "V_corpse" in state.corpses
+    assert "Vy_corpse" in state.corpses
 
 
 def test_other_player_can_loot_player_corpse():
@@ -65,8 +65,8 @@ def test_other_player_can_loot_player_corpse():
     encounter.npc_cd = 0
     resolve_npc_attack(state, victim, encounter)
 
-    result = dispatch("take knife from V", looter, state, [victim], [victim, looter])
+    result = dispatch("take knife from Vy", looter, state, [victim], [victim, looter])
 
     assert "knife" in looter.inventory
-    assert "knife" not in state.corpses["V_corpse"].loot
+    assert "knife" not in state.corpses["Vy_corpse"].loot
     assert result.world_changed

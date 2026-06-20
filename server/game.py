@@ -11,6 +11,7 @@ from entities.player import Player
 from persistence.save import save_player
 from persistence.world_state import load_world_state, save_world_state
 from shared.i18n import t, t_list
+from server.rate_limit import AuthRateLimiter
 from shared.protocol import MOTD_PREFIX, PANEL_PREFIX, SYS_PREFIX, meta_line, ui_line
 from shared.startup import StartupReport
 from world.clock import load_time_config
@@ -25,6 +26,7 @@ register_builtin_commands()
 class ClientSession:
     writer: object
     player: Player
+    auth_rate_limit: AuthRateLimiter = field(default_factory=AuthRateLimiter)
 
     async def send(self, text: str) -> None:
         self.writer.write((text + "\n").encode("utf-8"))
@@ -138,12 +140,25 @@ class Game:
                 continue
             await target.send(t(target.player.locale, key, **kwargs))
 
+    async def handle_oversized_line(self, session: ClientSession) -> None:
+        await session.send(t(session.player.locale, "auth.line_too_long"))
+
     async def handle_command(self, session: ClientSession, line: str) -> bool:
         from commands.registry import dispatch, player_meta
+
+        verb = line.strip().split(maxsplit=1)[0].lower() if line.strip() else ""
+        if verb == "login" and session.auth_rate_limit.is_blocked():
+            await session.send(t(session.player.locale, "auth.rate_limited"))
+            return True
 
         unnamed_before = not session.player.named
         peers = self.peers_in_room(session.player.room_id, exclude=session.player)
         result = dispatch(line, session.player, self.state, peers, self.all_named_players())
+
+        if result.auth_failure:
+            session.auth_rate_limit.record_failure()
+        elif result.auth_event:
+            session.auth_rate_limit.reset()
 
         if result.panel:
             await session.send_panel(result.panel, result.lines, ui_json=result.ui_json)

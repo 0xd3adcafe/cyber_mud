@@ -3,7 +3,7 @@ from tests.conftest import make_player, make_state
 
 
 def test_give_item_to_peer():
-    giver = make_player(name="V")
+    giver = make_player(name="Vy")
     receiver = make_player(name="Alt")
     state = make_state()
     dispatch("take glowstick", giver, state, [], [])
@@ -15,7 +15,7 @@ def test_give_item_to_peer():
 
 
 def test_give_missing_player():
-    giver = make_player(name="V")
+    giver = make_player(name="Vy")
     state = make_state()
     dispatch("take glowstick", giver, state, [], [])
     result = dispatch("give glowstick Nobody", giver, state, [], [giver])
