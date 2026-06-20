@@ -261,6 +261,25 @@ Not yet implemented or only partially implemented.
 
 **Suggested order:** W.4 → W.5 → W.11 (story anchors) → W.1 → W.2 → W.3 (geography scale) → W.6 → W.7 → W.8 → W.9 → W.10 → W.12 → W.13 → W.14.
 
+### Life commands (posture, rest & environment)
+
+**Goal:** `sit`, `stand`, `rest`, `sleep`, `wake`, etc. change **body state** (posture, fatigue, HP/RAM recovery) and are **modified by room, weather, time, and interactables**—not cosmetic emotes.
+
+**Hooks (existing):** `world/vitals.py` tick regen; `world/trauma.py` `player_status`; `world/modifiers.py` period/weather; `data/interactables.yaml`; `home` / `rent`; room `tags`.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| L.1 | Posture & fatigue model | `Player.posture` (`standing`/`sitting`/`lying`/`sleeping`); `fatigue` 0–100 (save + meta); `world/life.py`; `persistence/save.py` migration default `standing` |
+| L.2 | Core life commands | `commands/life.py`: `sit`, `stand`, `lie`, `rest`, `sleep`, `wake`; block in combat, NETRUN (`net_shell`), and while `chased_by_npc`; `stand` clears posture; locale `life.*` en/zh |
+| L.3 | Environment rest rules | `data/life.yaml` rest profiles; room `tags` (`rest`, `safe`, `home`, `clinic`) + district `safety` gate `sleep`; `world/modifiers.py` period/weather multipliers (e.g. acid rain outdoor penalty, night bonus indoors) |
+| L.4 | Interactable rest anchors | Interactable kind `rest`/`sleep` in `data/interactables.yaml` + `world/interactables.py`; beds/benches in `watson_flat`, `ripper_clinic`, tutorial canteen, `kabuki_lounge`; `interact <target>` or `sleep` at anchor grants posture + regen bonus |
+| L.5 | Vitals & status integration | `world/vitals.py` rest/sleep tick HP (and optional RAM) regen stacks with period regen; `rest` reduces `fatigue`; bleed/poison (`player_status`) slows or blocks sleep; low `humanity` reduces sleep quality (cyberpsychosis hook) |
+| L.6 | Risk & social presence | Same-room `look` / enter-leave shows player posture; sleeping outdoors in Combat Zone / high `wanted` may interrupt rest (tick or NPC AI hook); `say`/`talk` while `sleeping` auto-wakes or blocked |
+| L.7 | Client & PDA | Meta `posture`/`fatigue`; `pda` row; optional prompt token `%posture`; `look` self shows life state |
+| L.8 | Tests, help, tutorial | `tests/test_life_commands.py`; help category **Life / Vitals**; tutorial interactable or instructor line demoing `sit`/`rest` |
+
+**Suggested order:** L.1 → L.2 → L.3 → L.4 → L.5 → L.6 → L.7 → L.8.
+
 ---
 
 Suggested route: **0 → A → D.2/D.7 (playability) → B → C → remaining D → E**; for a social-exploration MUD, consider B before C.

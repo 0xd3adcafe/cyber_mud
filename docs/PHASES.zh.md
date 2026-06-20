@@ -259,6 +259,25 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 **建議順序：** W.4 → W.5 → W.11（主線錨點）→ W.1 → W.2 → W.3（地理規模）→ W.6 → W.7 → W.8 → W.9 → W.10 → W.12 → W.13 → W.14。
 
+### 生活指令（姿態、休息與環境）
+
+**目標：** `sit`、`stand`、`rest`、`sleep`、`wake` 等會改變**身體狀態**（姿態、疲勞、HP／RAM 恢復），並受**房間、天氣、時段、互動物**影響——不是純敘事 emote。
+
+**既有掛鉤：** `world/vitals.py` tick 回血；`world/trauma.py` `player_status`；`world/modifiers.py` 時段／天氣；`data/interactables.yaml`；`home`／`rent`；房間 `tags`。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| L.1 | 姿態與疲勞模型 | `Player.posture`（`standing`／`sitting`／`lying`／`sleeping`）；`fatigue` 0–100（存檔＋meta）；`world/life.py`；`persistence/save.py` 預設 `standing` |
+| L.2 | 核心生活指令 | `commands/life.py`：`sit`、`stand`、`lie`、`rest`、`sleep`、`wake`；戰鬥、NETRUN（`net_shell`）、`chased_by_npc` 時禁止；`stand` 清除姿態；locale `life.*` 中英 |
+| L.3 | 環境休息規則 | `data/life.yaml` 休息配置；房間 `tags`（`rest`、`safe`、`home`、`clinic`）＋區域 `safety` 限制 `sleep`；`world/modifiers.py` 時段／天氣倍率（室外酸雨懲罰、室內夜間加成） |
+| L.4 | 互動物休息錨點 | `data/interactables.yaml` 類型 `rest`／`sleep`＋`world/interactables.py`；`watson_flat`、`ripper_clinic`、訓練場餐廳、`kabuki_lounge` 床位／長椅；`interact <目標>` 或錨點 `sleep` 加成姿態與回復 |
+| L.5 | 生命徵象與狀態整合 | `world/vitals.py` 休息／睡眠 tick HP（可選 RAM）與時段回血疊加；`rest` 降 `fatigue`；流血／中毒（`player_status`）減速或禁止睡眠；低 `humanity` 降低睡眠品質（義體幻痛掛鉤） |
+| L.6 | 風險與社交存在感 | 同房 `look`／進出顯示玩家姿態；戰鬥區／高通緝戶外睡眠可被 tick 或 NPC AI 打斷；`sleeping` 時 `say`／`talk` 自動醒來或禁止 |
+| L.7 | Client 與 PDA | meta `posture`／`fatigue`；`pda` 列；可選 prompt `%posture`；`look` 自己顯示生活狀態 |
+| L.8 | 測試、help、教程 | `tests/test_life_commands.py`；help 分類 **Life／Vitals**；教程互動點或教官示範 `sit`／`rest` |
+
+**建議順序：** L.1 → L.2 → L.3 → L.4 → L.5 → L.6 → L.7 → L.8。
+
 ---
 
 建議路線：**0 → A → D.2/D.7（可玩性）→ B → C → D 其餘 → E**；若新 MUD 偏社交探索，可先做 B 再做 C。
