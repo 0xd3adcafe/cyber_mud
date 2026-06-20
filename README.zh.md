@@ -16,6 +16,22 @@
 
 **預設語系為英文**；遊戲內輸入 `lang zh` 可切換繁體中文。雙語慣例見 [docs/LOCALIZATION.zh.md](docs/LOCALIZATION.zh.md)。
 
+## 玩家指南（GitHub 閱讀）
+
+```text
+  ◈ 神經連結文件 ── 連線前先讀
+```
+
+| 指南 | 用途 |
+|------|------|
+| **[docs/player/README.zh.md](docs/player/README.zh.md)** | 從這裡開始 |
+| [快速上手](docs/player/GETTING_STARTED.zh.md) | 安裝、登入 |
+| [新手訓練場](docs/player/TUTORIAL.zh.md) | 訓練場攻略 |
+| [指令參考](docs/player/COMMANDS.zh.md) | 完整指令 |
+| [Client](docs/player/CLIENT.zh.md) | 快捷鍵與 `/` 指令 |
+
+English: [docs/player/README.md](docs/player/README.md)
+
 ## 協作指引
 
 Agent 行為準則：**[CLAUDE.zh.md](CLAUDE.zh.md)**

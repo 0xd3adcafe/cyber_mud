@@ -39,6 +39,7 @@
 | [docs/PHASES.md](PHASES.md) | [docs/PHASES.zh.md](PHASES.zh.md) |
 | [docs/CLIENT_UI_DEBUG.md](CLIENT_UI_DEBUG.md) | [docs/CLIENT_UI_DEBUG.zh.md](CLIENT_UI_DEBUG.zh.md) |
 | [docs/LOCALIZATION.md](LOCALIZATION.md) | [docs/LOCALIZATION.zh.md](LOCALIZATION.zh.md) |
+| [docs/player/*.md](player/README.md) | [docs/player/*.zh.md](player/README.zh.md) — **player guides** |
 
 Edit both languages when changing project docs.
 

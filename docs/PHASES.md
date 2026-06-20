@@ -179,6 +179,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Split EN/ZH documentation | `*.zh.md` mirrors; English default on GitHub; README ASCII banner |
 | English default locale in project rules | `CLAUDE.md` § Project rules (mandatory); `LOCALIZATION.md` § Project rule; README core principle #1 |
 | Project licenses | `LICENSE` Apache 2.0 (code); `LICENSE-CONTENT.md` CC BY 4.0 (world copy); README badges; `CONTRIBUTING.md` |
+| Player guides (GitHub) | `docs/player/` ASCII-art tutorial, commands, client; EN + `*.zh.md`; README player section |
 
 ## Backlog maintenance convention
 

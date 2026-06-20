@@ -27,6 +27,22 @@ Built-in **Textual TUI client** is the primary player interface (`look` / `go` /
 
 **中文說明：** [README.zh.md](README.zh.md)
 
+## Player guides (read on GitHub)
+
+```text
+  ◈ NEURAL LINK DOCS ── jack in before you connect
+```
+
+| Guide | For players |
+|-------|-------------|
+| **[docs/player/README.md](docs/player/README.md)** | Start here — tutorial, commands, client |
+| [Getting Started](docs/player/GETTING_STARTED.md) | Install, login, first `look` |
+| [Tutorial](docs/player/TUTORIAL.md) | Training yard walkthrough |
+| [Commands](docs/player/COMMANDS.md) | Full command matrix |
+| [Client & Hotkeys](docs/player/CLIENT.md) | F2–F7, `/theme`, `/clear` |
+
+繁中：[docs/player/README.zh.md](docs/player/README.zh.md)
+
 ## Agent guide
 
 Collaboration rules: **[CLAUDE.md](CLAUDE.md)** (behavior guidelines reference `andrej-karpathy-skills.md`).
