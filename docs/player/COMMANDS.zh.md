@@ -50,6 +50,19 @@
 | `time` | 世界時間 |
 | `recall` | 回訓練場 |
 
+## 生活與生命徵象（Life & vitals）
+
+| 指令 | 說明 |
+|------|------|
+| `sit` | 坐下（休息姿態；戰鬥／NETRUN 中不可用） |
+| `stand` | 站起（清除休息姿態） |
+| `lie` | 躺下（休息時 HP 回復較佳） |
+| `rest` | 休息（站立時會先坐下；tick 降低疲勞） |
+| `sleep` | 睡眠（需安全房間或休息錨點；HP／RAM 回復最佳） |
+| `wake` | 從休息或睡眠中醒來 |
+
+休息／睡眠可加成 tick 回血（躺／睡時另有 RAM 回復）。訓練場餐廳長椅、公寓床、診所病床、夜總會包廂等可用 `interact`。移動、說話或進入戰鬥會喚醒。`look me` 顯示姿態與疲勞；PDA 有生活狀態列。
+
 ## 物品（Items）
 
 `take` `drop` `inventory` `give` `appraise` `craft` `disassemble`（支援 `all` 批次）

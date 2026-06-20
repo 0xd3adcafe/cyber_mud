@@ -54,6 +54,21 @@ In-game: `help` or **F3**. Repeat commands: `10 punch` or `punch.10` (0.5s betwe
 
 ---
 
+## Life & vitals
+
+| Command | Description |
+|---------|-------------|
+| `sit` | Sit down (rest posture; blocked in combat / NETRUN) |
+| `stand` | Stand up (clear rest posture) |
+| `lie` | Lie down (better HP regen while resting) |
+| `rest` | Rest (auto-sit if standing; reduces fatigue over ticks) |
+| `sleep` | Sleep (needs safe room or rest anchor; best HP/RAM regen) |
+| `wake` | Wake from rest or sleep |
+
+Rest and sleep boost tick HP (and RAM while lying/sleeping). Use `interact` on benches or beds in the tutorial canteen, your flat, ripper clinic, or lounge. Moving, speaking, or combat wakes you. `look me` shows posture and fatigue; PDA lists life state.
+
+---
+
 ## Items
 
 | Command | Description |
