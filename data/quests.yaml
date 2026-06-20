@@ -13,3 +13,23 @@ quests:
     reward_gold: 50
     reward_xp: 25
     reward_street_cred: 10
+  dock_watch:
+    name_zh: 碼頭監視
+    name_en: Dock Surveillance
+    npc_id: broker
+    description_zh: 經紀人委託你調查碼頭今晚的軍武貨櫃動向。
+    description_en: The broker wants intel on tonight's Militech container at the docks.
+    hint_zh: 前往貨櫃碼頭調查起重機排程。
+    hint_en: Scout the container crane schedule at the docks.
+    complete_npc_id: broker
+    street_cred_req: 5
+    reward_gold: 75
+    reward_xp: 40
+    reward_street_cred: 8
+    stages:
+      - objective_type: visit_room
+        objective_target: docks
+      - objective_type: interact
+        objective_target: dock_crane
+      - objective_type: talk_npc
+        objective_target: broker

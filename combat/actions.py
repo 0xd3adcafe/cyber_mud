@@ -271,10 +271,13 @@ def _finish_victory(
     npc = state.world.npc(encounter.npc_id)
     from world.progression import award_xp, npc_xp_reward
 
-    lines.extend(award_xp(player, npc_xp_reward(npc), locale))
+    lines.extend(award_xp(player, npc_xp_reward(npc), locale, state=state))
     from world.street_cred import STREET_CRED_PER_NPC, award_street_cred
 
     lines.extend(award_street_cred(player, STREET_CRED_PER_NPC, locale))
+    from world.wanted import add_wanted
+
+    lines.extend(add_wanted(player, 1, locale))
     return CombatActionResult(
         lines,
         world_changed=True,

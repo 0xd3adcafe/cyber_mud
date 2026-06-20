@@ -35,6 +35,11 @@ class Player:
     home_room_id: str = ""
     home_stash: list[str] = field(default_factory=list)
     vehicle_id: str = ""
+    vehicles: list[str] = field(default_factory=list)
+    active_vehicle: str = ""
+    wanted_level: int = 0
+    interact_flags: dict[str, str] = field(default_factory=dict)
+    braindance_flags: dict[str, str] = field(default_factory=dict)
     visited_rooms: list[str] = field(default_factory=list)
     prompt_mud: str = ""
     skills: list[str] = field(default_factory=list)

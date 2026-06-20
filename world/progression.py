@@ -12,9 +12,15 @@ def xp_to_next_level(level: int) -> int:
     return 100 + max(0, level - 1) * 50
 
 
-def award_xp(player: Player, amount: int, locale: str) -> list[str]:
+def award_xp(player: Player, amount: int, locale: str, *, state=None) -> list[str]:
     if amount <= 0 or player.level >= MAX_LEVEL:
         return []
+    if state is not None:
+        from combat.passives import xp_bonus_percent
+
+        bonus = xp_bonus_percent(player, state)
+        if bonus > 0:
+            amount = int(amount * (100 + bonus) / 100)
     lines = [t(locale, "progression.xp_gain", amount=str(amount))]
     player.xp += amount
     while player.level < MAX_LEVEL and player.xp >= xp_to_next_level(player.level):

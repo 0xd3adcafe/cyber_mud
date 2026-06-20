@@ -1,0 +1,22 @@
+chains:
+  chrome_brawler:
+    name_zh: 義體格鬥連鎖
+    name_en: Chrome Brawler Chain
+    requires_implants: [cyber_arm_v1]
+    requires_skills: [blade_flow]
+    bonus_attack: 2
+    description_zh: 義肢臂 + 刃流架勢：近戰傷害額外 +2。
+  net_overclock:
+    name_zh: 駭客超頻連鎖
+    name_en: Net Overclock Chain
+    requires_implants: [neural_link]
+    requires_skills: [breach_protocol]
+    quickhack_mult: 1.15
+    description_zh: 神經連結 + 入侵協定：快速破解傷害 +15%。
+  street_legend:
+    name_zh: 街頭傳奇
+    name_en: Street Legend
+    requires_perks: [street_fighter]
+    min_street_cred: 25
+    bonus_xp_percent: 10
+    description_zh: 街頭搏擊 + 聲望 25+：經驗 +10%。

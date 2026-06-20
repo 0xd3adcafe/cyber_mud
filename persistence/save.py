@@ -56,6 +56,11 @@ def player_to_dict(player: Player) -> dict:
         "home_room_id": player.home_room_id,
         "home_stash": list(player.home_stash),
         "vehicle_id": player.vehicle_id,
+        "vehicles": list(player.vehicles),
+        "active_vehicle": player.active_vehicle,
+        "wanted_level": player.wanted_level,
+        "interact_flags": dict(player.interact_flags),
+        "braindance_flags": dict(player.braindance_flags),
         "visited_rooms": list(player.visited_rooms),
         "prompt_mud": player.prompt_mud,
         "skills": list(player.skills),
@@ -109,6 +114,11 @@ def player_from_dict(data: dict) -> Player:
         home_room_id=str(data.get("home_room_id", "")),
         home_stash=list(data.get("home_stash", [])),
         vehicle_id=str(data.get("vehicle_id", "")),
+        vehicles=list(data.get("vehicles", [])),
+        active_vehicle=str(data.get("active_vehicle", "")),
+        wanted_level=int(data.get("wanted_level", 0)),
+        interact_flags=dict(data.get("interact_flags", {})),
+        braindance_flags=dict(data.get("braindance_flags", {})),
         visited_rooms=list(data.get("visited_rooms", [])),
         prompt_mud=str(data.get("prompt_mud", "")),
         skills=list(data.get("skills", [])),
@@ -123,6 +133,9 @@ def player_from_dict(data: dict) -> Player:
     )
     if not player.cyberware and player.implants:
         migrate_legacy_implants(player, load_world())
+    from world.vehicles_player import migrate_vehicle_fields
+
+    migrate_vehicle_fields(player)
     return player
 
 

@@ -78,7 +78,13 @@ class Encounter:
         from world.cyberpsychosis import player_damage_multiplier
         from world.modifiers import apply_damage_modifier
 
-        raw = int((player.body + self.player_weapon_damage(player, world) + bonus_attack_damage(player)) * player_damage_multiplier(player))
+        from world.wanted import wanted_damage_penalty
+
+        raw = int(
+            (player.body + self.player_weapon_damage(player, world) + bonus_attack_damage(player, state))
+            * player_damage_multiplier(player)
+            * wanted_damage_penalty(player)
+        )
         if state is not None and player.room_id:
             return apply_damage_modifier(state, player.room_id, raw)
         return raw
@@ -106,7 +112,16 @@ class Encounter:
 
         if damage_mult <= 0:
             return 0
-        raw = int(player.intelligence * 2 * quickhack_damage_multiplier(player) * damage_mult * player_damage_multiplier(player))
+        from world.wanted import wanted_damage_penalty
+
+        raw = int(
+            player.intelligence
+            * 2
+            * quickhack_damage_multiplier(player, state)
+            * damage_mult
+            * player_damage_multiplier(player)
+            * wanted_damage_penalty(player)
+        )
         if state is not None and player.room_id:
             return apply_damage_modifier(state, player.room_id, raw)
         return raw

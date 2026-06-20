@@ -35,7 +35,7 @@ from client.themes import (
 from client.animated_log import AnimatedLogBuffer
 from commands.aliases import DEFAULT_ALIASES
 from client.status_indicators import status_needs_animation
-from client.completion import MudPrompt, MudSuggester, complete_from_view
+from client.completion import MudPrompt, MudSuggester, complete_cycle_from_view, complete_from_view
 from client.history import CommandHistory
 from client.link_status import format_link_status_bar, make_link_snapshot
 from client.reconnect import reconnect_status_message, should_resend_auth
@@ -109,6 +109,8 @@ class CyberMudApp(App):
         self._panel_fetch_generation = 0
         self._cmd_sent_at = 0.0
         self._last_recv_at = 0.0
+        self._completion_cycle_key = ""
+        self._completion_cycle_index = 0
         self._last_rtt_ms: float | None = None
 
     def compose(self) -> ComposeResult:
@@ -653,9 +655,24 @@ class CyberMudApp(App):
         if prompt.cursor_at_end and prompt._suggestion:
             prompt.action_cursor_right()
             return True
-        suggestion = complete_from_view(self.view, prompt.value)
-        if suggestion and suggestion != prompt.value:
+        current = prompt.value
+        if current != self._completion_cycle_key:
+            self._completion_cycle_key = current
+            self._completion_cycle_index = 0
+        suggestion, next_index = complete_cycle_from_view(
+            self.view,
+            current,
+            self._completion_cycle_index,
+        )
+        if suggestion and suggestion != current:
             prompt.value = suggestion
+            prompt.cursor_position = len(prompt.value)
+            self._completion_cycle_key = current
+            self._completion_cycle_index = next_index
+            return True
+        fallback = complete_from_view(self.view, current)
+        if fallback and fallback != current:
+            prompt.value = fallback
             prompt.cursor_position = len(prompt.value)
             return True
         return False

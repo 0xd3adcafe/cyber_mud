@@ -54,6 +54,9 @@ class ClientViewState:
     complete_equipped: list[str] = field(default_factory=list)
     complete_shop_items: list[str] = field(default_factory=list)
     complete_net_nodes: list[str] = field(default_factory=list)
+    complete_interactables: list[str] = field(default_factory=list)
+    complete_recipes: list[str] = field(default_factory=list)
+    complete_braindances: list[str] = field(default_factory=list)
 
 
 def parse_meta_payload(payload: str) -> tuple[str, str]:
@@ -161,6 +164,12 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         state.complete_net_nodes = parse_csv_meta(value)
     elif key == "complete_shop_items":
         state.complete_shop_items = parse_csv_meta(value)
+    elif key == "complete_interactables":
+        state.complete_interactables = parse_csv_meta(value)
+    elif key == "complete_recipes":
+        state.complete_recipes = parse_csv_meta(value)
+    elif key == "complete_braindances":
+        state.complete_braindances = parse_csv_meta(value)
 
 
 def ordered_sidebar_stack(stack: list[str]) -> list[str]:

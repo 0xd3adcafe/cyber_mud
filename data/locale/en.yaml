@@ -28,6 +28,7 @@ look:
   exits: "Exits: {exits}"
   items: "On the ground: {items}"
   npcs: "Here: {npcs}"
+  interactables: "Interactable: {objects}"
   net_nodes: "Hackable nodes: {nodes}"
   net_node:
     hackable: "Status: breachable"
@@ -172,7 +173,11 @@ help:
 
 help_cmds:
   look: "Look around or at a target (look [item|NPC|equipment])"
-  go: "Move (e.g. go north)"
+  go: "Move (e.g. go north, go up, go down; aliases u/d)"
+  interact: "Interact with object (interact <object>)"
+  craft: "Craft item (craft <recipe>, shop/ripperdoc)"
+  disassemble: "Disassemble item (disassemble <item>)"
+  braindance: "Experience BD (braindance <clip> or bd)"
   take: "Pick up an item"
   drop: "Drop an item"
   inventory: "Show inventory"
@@ -186,7 +191,7 @@ help_cmds:
   home: "Fast travel to your apartment"
   stash: "Apartment locker (stash put/take <item>)"
   transit: "Public transit (transit <destination>)"
-  vehicles: "Vehicles (vehicles buy <model>, at docks)"
+  vehicles: "Vehicle garage (vehicles buy/select <model>, at docks)"
   drive: "Drive to destination (drive <dest>)"
   use: "Use consumable (use <item>)"
   eat: "Eat food (eat <food>)"
@@ -439,18 +444,24 @@ transit:
 vehicles:
   header: "◈ Vehicles"
   owned: "Current ride: {name}"
+  owned_line: "  {name}{marker}"
+  active: " (active)"
   none: "No vehicle owned."
   dealer_header: "Dock dealer:"
-  dealer_line: "  {name} — ${cost}: {desc}"
-  buy_hint: "Usage: vehicles buy <model>"
+  dealer_line: "  {name} — ${cost}: {desc}{owned}"
+  dealer_owned: " (owned)"
+  buy_hint: "Usage: vehicles buy <model>; vehicles select <model>"
   not_dealer: "Buy vehicles at the container docks."
-  already_owned: "You already own a vehicle."
+  already_owned: "You already own this vehicle."
+  not_owned: "You do not own {name}."
   unknown: "Unknown vehicle: {name}"
   no_gold: "Not enough eddies (need ${cost})."
   buy_ok: "You bought {name} (${cost}). Use drive on the road network."
+  select_ok: "Active vehicle set to {name}."
 
 drive:
   header: "◈ Drive to"
+  active: "Active ride: {vehicle}"
   usage: "Usage: drive <destination>"
   no_vehicle: "No vehicle—buy one at the docks."
   not_road: "Cannot summon your ride here."
@@ -472,6 +483,48 @@ scan:
   net_nodes: "Hackable nodes: {nodes}"
   player: "Player: {name}"
   hidden: "◈ Hidden clue: {hint}"
+  interactables: "Interactables: {objects}"
+
+interact:
+  header: "◈ Interactables"
+  usage: "Usage: interact <object>"
+  none: "Nothing to interact with here."
+  missing: "No interactable \"{name}\" here."
+  already: "\"{name}\" already used."
+  need_item: "Requires item: {item}"
+  need_skill: "Requires skill: {skill}"
+  got_item: "You receive {item}."
+
+craft:
+  header: "◈ Crafting recipes"
+  usage: "Usage: craft <recipe>"
+  ready: "Ready"
+  need_parts: "Missing parts"
+  unknown: "Unknown recipe: {name}"
+  no_station: "Craft at a shop or ripperdoc."
+  no_gold: "Not enough eddies (need ${cost})."
+  missing: "Missing ingredients."
+  ok: "You crafted: {name}."
+
+disassemble:
+  usage: "Usage: disassemble <item>"
+  unknown: "Cannot disassemble: {item}"
+  missing: "You do not have {item}."
+  ok: "You disassembled {item} (recovered ${gold})."
+
+braindance:
+  header: "◈ Braindance clips"
+  usage: "Usage: braindance <clip> or bd <clip>"
+  line: "  {name} — ${cost}"
+  unknown: "Unknown braindance: {name}"
+  no_gold: "Not enough eddies (need ${cost})."
+  already: "You already experienced: {name}."
+
+wanted:
+  increase: "◈ NCPD wanted level rises to {level} stars."
+  decay: "Wanted level drops to {level} stars."
+  cleared: "NCPD wanted cleared."
+  tick: "{text}"
 
 give:
   usage: "Usage: give <item> <player>"
@@ -525,6 +578,10 @@ prompt:
     period: "Time period"
     faction: "Faction"
     ram: "RAM"
+    level: "Level"
+    street_cred: "Street cred"
+    wanted: "Wanted level"
+    xp: "XP progress"
   faction_none: "Edgerunner"
   set_ok: "Prompt set to: {template}"
   reset_ok: "Prompt reset to default."
@@ -616,9 +673,13 @@ progression:
 
 quest:
   objective_done: "◈ Objective complete: {quest}"
+  stage_done: "◈ Gig progress: {quest} (stage {stage})"
   complete: "◈ Gig complete: {quest}"
   reward_gold: "You receive ${amount}."
   hint_return: "Return to {npc} for your payout."
+  hint_visit: "Go to {target}."
+  hint_interact: "Interact with {target}."
+  hint_talk: "Talk to {target}."
 
 gigs:
   header: "◈ Street Gigs"

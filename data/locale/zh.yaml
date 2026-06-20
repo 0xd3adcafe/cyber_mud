@@ -28,6 +28,7 @@ look:
   exits: "出口：{exits}"
   items: "地上：{items}"
   npcs: "這裡有：{npcs}"
+  interactables: "可互動：{objects}"
   net_nodes: "可駭入節點：{nodes}"
   net_node:
     hackable: "狀態：可入侵"
@@ -172,7 +173,11 @@ help:
 
 help_cmds:
   look: "察看環境或目標（look [物品|NPC|裝備]）"
-  go: "移動（例：go north）"
+  go: "移動（例：go north、go up、go down；捷徑 u/d）"
+  interact: "互動物件（interact <物件>）"
+  craft: "製作物品（craft <配方>，商店／診所）"
+  disassemble: "拆解物品（disassemble <物品>）"
+  braindance: "體驗腦舞（braindance <片段> 或 bd）"
   take: "撿起地上物品"
   drop: "丟下背包物品"
   inventory: "查看背包"
@@ -186,7 +191,7 @@ help_cmds:
   home: "傳送回公寓"
   stash: "公寓儲物櫃（stash put/take <物品>）"
   transit: "大眾運輸（transit <目的地>）"
-  vehicles: "載具（vehicles buy <型號>，碼頭）"
+  vehicles: "載具車庫（vehicles buy/select <型號>，碼頭）"
   drive: "駕車移動（drive <目的地>）"
   use: "使用消耗品（use <物品>）"
   eat: "食用食物（eat <食物>）"
@@ -439,18 +444,24 @@ transit:
 vehicles:
   header: "◈ 載具"
   owned: "目前座駕：{name}"
+  owned_line: "  {name}{marker}"
+  active: "（使用中）"
   none: "尚未擁有載具。"
   dealer_header: "碼頭車商："
-  dealer_line: "  {name} — ${cost}：{desc}"
-  buy_hint: "用法：vehicles buy <型號>"
+  dealer_line: "  {name} — ${cost}：{desc}{owned}"
+  dealer_owned: "（已擁有）"
+  buy_hint: "用法：vehicles buy <型號>；vehicles select <型號> 切換座駕"
   not_dealer: "請到貨櫃碼頭向車商購買。"
-  already_owned: "你已經有載具了。"
+  already_owned: "你已擁有此載具。"
+  not_owned: "你尚未擁有 {name}。"
   unknown: "未知載具：{name}"
   no_gold: "金錢不足（需要 ${cost}）。"
   buy_ok: "你購入 {name}（花費 ${cost}）。用 drive 在路網上移動。"
+  select_ok: "已切換座駕為 {name}。"
 
 drive:
   header: "◈ 可駕車前往"
+  active: "目前座駕：{vehicle}"
   usage: "用法：drive <目的地>"
   no_vehicle: "你還沒有載具。到碼頭用 vehicles buy 購買。"
   not_road: "這裡無法召喚載具。"
@@ -472,6 +483,48 @@ scan:
   net_nodes: "可駭入節點：{nodes}"
   player: "玩家：{name}"
   hidden: "◈ 隱藏線索：{hint}"
+  interactables: "互動物件：{objects}"
+
+interact:
+  header: "◈ 可互動物件"
+  usage: "用法：interact <物件>"
+  none: "這裡沒有可互動的物件。"
+  missing: "你看不到可互動的「{name}」。"
+  already: "「{name}」已經互動過了。"
+  need_item: "需要物品：{item}"
+  need_skill: "需要協定：{skill}"
+  got_item: "你獲得 {item}。"
+
+craft:
+  header: "◈ 製作配方"
+  usage: "用法：craft <配方>"
+  ready: "可製作"
+  need_parts: "缺材料"
+  unknown: "未知配方：{name}"
+  no_station: "需要在商店或 ripperdoc 才能製作。"
+  no_gold: "金錢不足（需要 ${cost}）。"
+  missing: "材料不足。"
+  ok: "你完成了：{name}。"
+
+disassemble:
+  usage: "用法：disassemble <物品>"
+  unknown: "無法拆解：{item}"
+  missing: "你身上沒有 {item}。"
+  ok: "你拆解了 {item}（回收 ${gold}）。"
+
+braindance:
+  header: "◈ 腦舞片段"
+  usage: "用法：braindance <片段> 或 bd <片段>"
+  line: "  {name} — ${cost}"
+  unknown: "未知腦舞：{name}"
+  no_gold: "金錢不足（需要 ${cost}）。"
+  already: "你已體驗過：{name}。"
+
+wanted:
+  increase: "◈ NCPD 通緝等級上升至 {level} 星。"
+  decay: "通緝等級降至 {level} 星。"
+  cleared: "NCPD 通緝已清除。"
+  tick: "{text}"
 
 give:
   usage: "用法：give <物品> <玩家>"
@@ -525,6 +578,10 @@ prompt:
     period: "時段"
     faction: "派系"
     ram: "RAM"
+    level: "等級"
+    street_cred: "街頭聲望"
+    wanted: "通緝等級"
+    xp: "經驗進度"
   faction_none: "邊緣人"
   set_ok: "提示符已設為：{template}"
   reset_ok: "提示符已重設為預設。"
@@ -616,9 +673,13 @@ progression:
 
 quest:
   objective_done: "◈ 委託目標達成：{quest}"
+  stage_done: "◈ 委託進度：{quest}（階段 {stage}）"
   complete: "◈ 委託完成：{quest}"
   reward_gold: "獲得 ${amount}。"
   hint_return: "回去找 {npc} 領取報酬。"
+  hint_visit: "前往 {target}。"
+  hint_interact: "與 {target} 互動。"
+  hint_talk: "與 {target} 交談。"
 
 gigs:
   header: "◈ 街頭委託"

@@ -15,7 +15,7 @@ def test_cyber_arm_bonus_damage():
     dispatch("attack thug", player, state, [], [])
     encounter = encounter_for_player(state, player)
     assert encounter is not None
-    assert encounter.npc_hp == 25
+    assert encounter.npc_hp == 26
 
 
 def test_breach_protocol_boosts_quickhack():
@@ -30,4 +30,4 @@ def test_breach_protocol_boosts_quickhack():
     encounter.player_cd = 0
     before_hp = encounter.npc_hp
     resolve_quickhack(state, player)
-    assert encounter.npc_hp == before_hp - 11
+    assert encounter.npc_hp == before_hp - 10

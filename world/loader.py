@@ -9,11 +9,15 @@ from entities.item import Item
 from shared.equipment import WEAPON_ITEM_SLOT, normalize_equipment, resolve_slot_id
 from entities.npc import NPC
 from world.content import (
+    load_braindances,
     load_housing,
+    load_interactables,
     load_mods,
     load_net_nodes,
+    load_passive_chains,
     load_quests,
     load_quickhacks,
+    load_recipes,
     load_shops,
     load_skills,
     load_talents,
@@ -143,6 +147,7 @@ def load_world(path: Path | None = None) -> World:
 
     factions = {str(k): str(v) for k, v in (raw.get("factions") or {}).items()}
     implants = _load_implants()
+    recipes, disassemble = load_recipes()
 
     start_room = str(raw.get("start_room", "square"))
     return World(
@@ -163,6 +168,11 @@ def load_world(path: Path | None = None) -> World:
         transit_routes=load_transit(),
         shops=load_shops(),
         net_nodes=load_net_nodes(),
+        interactables=load_interactables(),
+        recipes=recipes,
+        disassemble=disassemble,
+        braindances=load_braindances(),
+        passive_chains=load_passive_chains(),
     )
 
 

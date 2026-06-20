@@ -106,7 +106,7 @@ def resolve_player_strike(
         player=player,
         world=state.world,
         weapon_damage=weapon_damage,
-        bonus_damage=bonus_attack_damage(player),
+        bonus_damage=bonus_attack_damage(player, state),
         backstab_hit=backstab_hit,
         room_modifier=room_mod,
     )

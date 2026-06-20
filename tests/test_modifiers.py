@@ -19,7 +19,7 @@ def test_acid_rain_reduces_damage():
     assert combat_damage_multiplier("acid_rain") == 0.9
     state = make_state()
     state.weather["watson"] = "acid_rain"
-    assert apply_damage_modifier(state, "alley", 10) == 9
+    assert apply_damage_modifier(state, "alley", 10) == 8
 
 
 def test_fog_increases_flee_chance():
@@ -27,7 +27,7 @@ def test_fog_increases_flee_chance():
     state = make_state()
     state.weather["docks"] = "fog"
     modified = modified_flee_chance(0.5, state, "docks")
-    assert modified == 0.6
+    assert modified == 0.65
 
 
 def test_neon_haze_has_no_penalty():
@@ -44,7 +44,7 @@ def test_acid_rain_affects_combat_damage():
     dispatch("attack thug", player, state, [], [])
     encounter = encounter_for_player(state, player)
     assert encounter is not None
-    assert encounter.npc_hp == 30 - 9
+    assert encounter.npc_hp == 21
 
 
 def test_movement_blocked_by_weather(monkeypatch):

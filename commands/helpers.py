@@ -483,4 +483,13 @@ def format_look(ctx: CommandContext) -> list[str]:
     if corpse_labels:
         lines.append(t(ctx.player.locale, "corpse.room_line", corpses="、".join(corpse_labels)))
 
+    from world.interactables import interactable_label
+
+    interact_labels = [
+        interactable_label(obj, ctx.player.locale)
+        for obj in ctx.state.world.interactables_in_room(ctx.player.room_id)
+    ]
+    if interact_labels:
+        lines.append(t(ctx.player.locale, "look.interactables", objects="、".join(interact_labels)))
+
     return lines

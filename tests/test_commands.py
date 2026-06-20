@@ -12,7 +12,10 @@ def test_look_square():
     assert any("霓虹廣場" in line for line in result.lines)
 
 
-def test_go_north():
+def test_go_north(monkeypatch):
+    import random
+
+    monkeypatch.setattr(random, "random", lambda: 1.0)
     player, state = _ctx()
     result = dispatch("go north", player, state, [], [])
     assert player.room_id == "alley"

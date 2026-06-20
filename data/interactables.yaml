@@ -1,0 +1,46 @@
+interactables:
+  holo_ad:
+    room_id: square
+    name_zh: 全息廣告看板
+    name_en: Holo Ad Board
+    description_zh: 循環播放企業招募與黑市藥物廣告的全息看板。
+    description_en: A holo board cycling corpo recruitment and black-market pharma ads.
+    message_zh: 看板閃過一行字：「想升級義體？西邊診所全天候開放。」
+    message_en: 'The board flashes: "Chrome upgrades—ripper clinic west, 24/7."'
+  smuggler_cache:
+    room_id: alley
+    name_zh: 走私貨櫃
+    name_en: Smuggler Cache
+    description_zh: 牆縫裡的隱藏貨櫃，需要密碼或鑰匙才能開啟。
+    description_en: A hidden cache in the wall seam—needs a key or code.
+    requires_item: rusty_key
+    gives_item: mod_chip
+    once_key: smuggler_cache
+    message_zh: 你用生鏽鑰匙撬開貨櫃，裡面有一枚戰術晶片。
+    message_en: You pry the cache open with the rusty key—a tactical chip inside.
+  dock_crane:
+    room_id: docks
+    name_zh: 貨櫃起重機
+    name_en: Container Crane
+    description_zh: 生鏽的起重機控制面板，仍可操作。
+    description_en: A rusted crane panel—still operational.
+    requires_skill: breach_protocol
+    message_zh: 你駭入起重機排程，發現今晚有一批軍武貨櫃進港。
+    message_en: You breach the crane schedule—a Militech container lands tonight.
+  rooftop_antenna:
+    room_id: square_rooftop
+    name_zh: 訊號天線
+    name_en: Signal Antenna
+    description_zh: 屋頂上的非法訊號放大器。
+    description_en: An illegal signal booster on the rooftop.
+    message_zh: 天線捕捉到一段加密廣播：漩渦幫在碼頭集結。
+    message_en: "The antenna catches encrypted chatter—Maelstrom gathering at the docks."
+  bd_booth:
+    room_id: undercity
+    name_zh: 腦舞艙
+    name_en: BD Booth
+    description_zh: 地下廢棄的腦舞體驗艙，接觸不良但還能啟動。
+    description_en: A derelict BD booth—shaky but bootable.
+    braindance_id: dock_heist
+    message_zh: 艙門嘶嘶作響，神經介面等待插入。
+    message_en: The booth hisses—neural jacks waiting.

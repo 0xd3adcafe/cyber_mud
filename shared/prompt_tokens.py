@@ -3,6 +3,7 @@ from __future__ import annotations
 from entities.player import Player
 from shared.i18n import t
 from shared.locale_content import room_name
+from world.progression import xp_to_next_level
 from world.state import WorldState
 from world.weather import weather_label
 
@@ -18,6 +19,10 @@ PROMPT_TOKENS = {
     "%p": "prompt.token.period",
     "%f": "prompt.token.faction",
     "%m": "prompt.token.ram",
+    "%l": "prompt.token.level",
+    "%c": "prompt.token.street_cred",
+    "%v": "prompt.token.wanted",
+    "%x": "prompt.token.xp",
 }
 
 CP2077_TEMPLATES = {
@@ -26,6 +31,8 @@ CP2077_TEMPLATES = {
     "minimal": "%n> ",
     "full": "[%h|%m] %n@%r %p %w> ",
     "edgerunner": "[%g] %f │ %n> ",
+    "ncpd": "★%v [%h] %n@%r> ",
+    "runner": "[%l|%x] %n> ",
 }
 
 
@@ -56,6 +63,10 @@ def expand_prompt(template: str, player: Player, state: WorldState) -> str:
         "%p": clock.format_period(player.locale, config),
         "%f": faction_label(player, state),
         "%m": f"{player.ram}/{player.max_ram}",
+        "%l": str(player.level),
+        "%c": str(player.street_cred),
+        "%v": str(player.wanted_level),
+        "%x": f"{player.xp}/{xp_to_next_level(player.level)}",
     }
     result = template
     for token, value in replacements.items():

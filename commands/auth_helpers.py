@@ -55,6 +55,11 @@ def reset_player_to_guest(player, start_room: str) -> None:
     player.home_room_id = fresh.home_room_id
     player.home_stash = list(fresh.home_stash)
     player.vehicle_id = fresh.vehicle_id
+    player.vehicles = list(fresh.vehicles)
+    player.active_vehicle = fresh.active_vehicle
+    player.wanted_level = fresh.wanted_level
+    player.interact_flags = dict(fresh.interact_flags)
+    player.braindance_flags = dict(fresh.braindance_flags)
     player.visited_rooms = list(fresh.visited_rooms)
     player.prompt_mud = fresh.prompt_mud
     player.skills = list(fresh.skills)
@@ -99,6 +104,11 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.home_room_id = loaded.home_room_id
     session_player.home_stash = list(loaded.home_stash)
     session_player.vehicle_id = loaded.vehicle_id
+    session_player.vehicles = list(loaded.vehicles)
+    session_player.active_vehicle = loaded.active_vehicle
+    session_player.wanted_level = loaded.wanted_level
+    session_player.interact_flags = dict(loaded.interact_flags)
+    session_player.braindance_flags = dict(loaded.braindance_flags)
     session_player.visited_rooms = list(loaded.visited_rooms)
     session_player.prompt_mud = loaded.prompt_mud
     session_player.skills = list(loaded.skills)

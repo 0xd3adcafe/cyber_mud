@@ -1,0 +1,31 @@
+recipes:
+  mod_chip:
+    name_zh: 組裝智慧連結晶片
+    name_en: Assemble Smart Link Chip
+    station_room_tags: [shop, ripperdoc]
+    ingredients:
+      pipe: 1
+      glowstick: 1
+    gold_cost: 20
+    output: mod_chip
+    output_count: 1
+  med_stim:
+    name_zh: 調製興奮劑
+    name_en: Brew Combat Stim
+    station_room_tags: [shop, ripperdoc]
+    ingredients:
+      synth_ramen: 1
+      energy_drink: 1
+    gold_cost: 10
+    output: med_stim
+    output_count: 1
+
+disassemble:
+  mod_chip:
+    outputs:
+      glowstick: 1
+    gold_gain: 15
+  liberty_pistol:
+    outputs:
+      mod_chip: 1
+    gold_gain: 25

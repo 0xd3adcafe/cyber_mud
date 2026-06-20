@@ -30,7 +30,7 @@ def test_attack_starts_combat_with_hostile_npc():
     encounter = encounter_for_player(state, player)
     assert encounter is not None
     assert encounter.npc_id == "thug"
-    assert encounter.npc_hp == 26
+    assert encounter.npc_hp == 27
 
 
 def test_attack_without_target_not_in_combat():
@@ -110,7 +110,7 @@ def test_quickhack_costs_ram_and_deals_damage():
     before_hp = encounter.npc_hp
     result = resolve_quickhack(state, player)
     assert player.ram == before_ram - 2
-    assert encounter.npc_hp == before_hp - 10
+    assert encounter.npc_hp == before_hp - 9
     assert any("過熱" in line or "快速破解" in line for line in result.lines)
 
 

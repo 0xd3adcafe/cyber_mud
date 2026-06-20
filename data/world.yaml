@@ -9,6 +9,7 @@ factions:
 
 room_items:
   square: [glowstick, knife, jacket, cyber_arm_kit, mod_chip, liberty_pistol, pipe, synth_ramen]
+  alley: [rusty_key]
   tutorial: [glowstick]
   tutorial_armory: [trainee_blade, training_sidearm, trainee_undersuit, trainee_vest, trainee_pants, trainee_boots, trainee_helmet, trainee_baton, practice_cyber_kit, mod_chip, med_stim]
   tutorial_range: [training_sidearm, training_carbine, trainee_helmet]
@@ -30,6 +31,7 @@ rooms:
       east: tutorial
       south: docks
       west: ripper_clinic
+      up: square_rooftop
   alley:
     name_zh: 陰暗小巷
     name_en: Dark Alley
@@ -42,6 +44,30 @@ rooms:
     hidden_hint_en: A smuggler cache password seems hidden in the wall seam.
     exits:
       south: square
+      down: undercity
+  square_rooftop:
+    name_zh: 廣場屋頂
+    name_en: Square Rooftop
+    description_zh: 霓虹燈管在腳下嗡鳴，夜城天際線一覽無遺。
+    description_en: Neon hums underfoot—the skyline spreads before you.
+    district: watson
+    grid_x: 1
+    grid_y: 1
+    tags: [rooftop]
+    exits:
+      down: square
+  undercity:
+    name_zh: 地下廢墟
+    name_en: Undercity Ruins
+    description_zh: 積水與電纜交織的地下層，腦舞艙與資料墓穴的入口。
+    description_en: Flooded tunnels and cables—the BD booths and data crypts begin here.
+    district: undercity
+    grid_x: 1
+    grid_y: -1
+    tags: [undercity]
+    exits:
+      up: alley
+      north: docks
   tutorial:
     name_zh: 新手訓練場
     name_en: Training Yard
@@ -117,6 +143,7 @@ rooms:
     tags: [vehicle_dealer, transit]
     exits:
       north: square
+      down: undercity
   ripper_clinic:
     name_zh: 義體診所
     name_en: Ripper Clinic
@@ -351,6 +378,13 @@ items:
     consumable: medicine
     hp_restore: 30
     value: 25
+  rusty_key:
+    name_zh: 生鏽鑰匙
+    name_en: Rusty Key
+    description_zh: 走私貨櫃的舊鑰匙，齒痕磨損但仍能轉動。
+    description_en: A worn smuggler-cache key—the teeth are ground down but it still turns.
+    takeable: true
+    value: 5
   synth_ramen:
     name_zh: 合成拉麵
     name_en: Synth Ramen

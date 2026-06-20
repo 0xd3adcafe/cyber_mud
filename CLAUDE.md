@@ -247,11 +247,24 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 
 維護規則見 [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)——**之後所有修正或變動都要更新 backlog**。
 
-- Tab 補全多候選輪替
-- 環境互動系統（`interact`、可互動物件、條件觸發）
-- 上下方向移動（`go up`／`go down`、電梯／樓梯／垂直出口）
+- Prompt 完整版（client 即時預覽 UI）
 - Phase E.4 文件 GitHub 風格 + TOC
-- NPC 任務驅動 AI、玩法數值深度平衡等（見 PHASES Backlog）
+- NPC 任務驅動 AI（進階追蹤、編排工具）
+
+### 近期完成（2026-06 backlog 批次）
+
+| 項目 | 模組／驗收 |
+|------|------------|
+| Tab 多候選輪替 | `complete_input_cycle`、`client/app.py` |
+| 環境互動 | `interact`、`data/interactables.yaml`、`look`／`scan` |
+| 上下移動 | `go up/down`、`u`/`d`、屋頂／地下區 |
+| Prompt token | `%l` `%c` `%v` `%x`、`prompt template ncpd` |
+| 多階段委託 | `dock_watch`、`world/quests.py` stages |
+| 時段平衡 | `world/modifiers.py` period 修正 |
+| 義體連鎖 | `passive_chains.yaml`、`combat/passives.py` |
+| NCPD 通緝 | `world/wanted.py`、tick 衰減 |
+| 載具車庫 | `vehicles buy/select`、`vehicles[]` |
+| 製作拆解腦舞 | `craft`／`disassemble`／`braindance`、`tests/test_backlog_features.py` |
 
 世界觀與區域擴充見 [`docs/WORLD.md`](docs/WORLD.md)。
 

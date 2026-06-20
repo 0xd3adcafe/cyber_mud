@@ -133,6 +133,8 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
         "humanity": str(ctx.player.humanity),
         "reputation": str(ctx.player.reputation),
         "street_cred": str(ctx.player.street_cred),
+        "wanted": str(ctx.player.wanted_level),
+        "level": str(ctx.player.level),
         "faction": faction_label(ctx.state.world, ctx.player.faction, ctx.player.locale),
         "prompt_mud": expand_prompt(effective_prompt(ctx.player), ctx.player, ctx.state),
     }
@@ -349,4 +351,8 @@ def register_builtin_commands() -> None:
         time_cmd,
         unequip,
         use,
+        interact,
+        craft,
+        disassemble_cmd,
+        braindance,
     )

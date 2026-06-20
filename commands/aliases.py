@@ -11,6 +11,8 @@ DEFAULT_ALIASES: dict[str, str] = {
     "s": "go south",
     "e": "go east",
     "w": "go west",
+    "u": "go up",
+    "d": "go down",
     "h": "help",
     "q": "quit",
     "eq": "equipment",

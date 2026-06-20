@@ -17,6 +17,10 @@ VEHICLES_PATH = DATA_DIR / "vehicles.yaml"
 TRANSIT_PATH = DATA_DIR / "transit.yaml"
 SHOPS_PATH = DATA_DIR / "shops.yaml"
 NET_NODES_PATH = DATA_DIR / "net_nodes.yaml"
+INTERACTABLES_PATH = DATA_DIR / "interactables.yaml"
+RECIPES_PATH = DATA_DIR / "recipes.yaml"
+BRAINDANCES_PATH = DATA_DIR / "braindances.yaml"
+PASSIVE_CHAINS_PATH = DATA_DIR / "passive_chains.yaml"
 
 
 @dataclass
@@ -57,6 +61,12 @@ class Mod:
 
 
 @dataclass
+class QuestStage:
+    objective_type: str = ""
+    objective_target: str = ""
+
+
+@dataclass
 class Quest:
     id: str
     name_zh: str = ""
@@ -73,6 +83,7 @@ class Quest:
     reward_xp: int = 0
     reward_street_cred: int = 0
     street_cred_req: int = 0
+    stages: list[QuestStage] = field(default_factory=list)
 
 
 @dataclass
@@ -147,6 +158,70 @@ class NetNode:
     hackable: bool = True
 
 
+@dataclass
+class Interactable:
+    id: str
+    room_id: str = ""
+    name_zh: str = ""
+    name_en: str = ""
+    description_zh: str = ""
+    description_en: str = ""
+    message_zh: str = ""
+    message_en: str = ""
+    requires_item: str = ""
+    requires_skill: str = ""
+    gives_item: str = ""
+    once_key: str = ""
+    braindance_id: str = ""
+
+
+@dataclass
+class Recipe:
+    id: str
+    name_zh: str = ""
+    name_en: str = ""
+    station_room_tags: list[str] = field(default_factory=list)
+    ingredients: dict[str, int] = field(default_factory=dict)
+    gold_cost: int = 0
+    output: str = ""
+    output_count: int = 1
+
+
+@dataclass
+class DisassembleRecipe:
+    id: str
+    outputs: dict[str, int] = field(default_factory=dict)
+    gold_gain: int = 0
+
+
+@dataclass
+class Braindance:
+    id: str
+    name_zh: str = ""
+    name_en: str = ""
+    cost: int = 0
+    lines_zh: list[str] = field(default_factory=list)
+    lines_en: list[str] = field(default_factory=list)
+    sets_flag: str = ""
+    street_cred: int = 0
+
+
+@dataclass
+class PassiveChain:
+    id: str
+    name_zh: str = ""
+    name_en: str = ""
+    requires_implants: list[str] = field(default_factory=list)
+    requires_skills: list[str] = field(default_factory=list)
+    requires_perks: list[str] = field(default_factory=list)
+    min_street_cred: int = 0
+    bonus_attack: int = 0
+    quickhack_mult: float = 1.0
+    bonus_xp_percent: int = 0
+    description_zh: str = ""
+    description_en: str = ""
+
+
 def _load_yaml(path: Path) -> dict:
     if not path.exists():
         return {}
@@ -206,6 +281,27 @@ def load_mods(path: Path | None = None) -> dict[str, Mod]:
     }
 
 
+def _parse_quest_stages(data: dict) -> list[QuestStage]:
+    stages_raw = data.get("stages") or []
+    if stages_raw:
+        return [
+            QuestStage(
+                objective_type=str(stage.get("objective_type", "")),
+                objective_target=str(stage.get("objective_target", "")),
+            )
+            for stage in stages_raw
+        ]
+    objective_type = str(data.get("objective_type", ""))
+    if objective_type:
+        return [
+            QuestStage(
+                objective_type=objective_type,
+                objective_target=str(data.get("objective_target", "")),
+            )
+        ]
+    return []
+
+
 def load_quests(path: Path | None = None) -> dict[str, Quest]:
     raw = _load_yaml(path or QUESTS_PATH)
     return {
@@ -225,6 +321,7 @@ def load_quests(path: Path | None = None) -> dict[str, Quest]:
             objective_type=str(data.get("objective_type", "")),
             objective_target=str(data.get("objective_target", "")),
             complete_npc_id=str(data.get("complete_npc_id", "")),
+            stages=_parse_quest_stages(data),
         )
         for qid, data in (raw.get("quests") or {}).items()
     }
@@ -332,4 +429,90 @@ def load_net_nodes(path: Path | None = None) -> dict[str, NetNode]:
             hackable=bool(data.get("hackable", True)),
         )
         for nid, data in (raw.get("net_nodes") or {}).items()
+    }
+
+
+def load_interactables(path: Path | None = None) -> dict[str, Interactable]:
+    raw = _load_yaml(path or INTERACTABLES_PATH)
+    return {
+        iid: Interactable(
+            id=iid,
+            room_id=str(data.get("room_id", "")),
+            name_zh=str(data.get("name_zh", "")),
+            name_en=str(data.get("name_en", "")),
+            description_zh=str(data.get("description_zh", "")),
+            description_en=str(data.get("description_en", "")),
+            message_zh=str(data.get("message_zh", "")),
+            message_en=str(data.get("message_en", "")),
+            requires_item=str(data.get("requires_item", "")),
+            requires_skill=str(data.get("requires_skill", "")),
+            gives_item=str(data.get("gives_item", "")),
+            once_key=str(data.get("once_key", "")),
+            braindance_id=str(data.get("braindance_id", "")),
+        )
+        for iid, data in (raw.get("interactables") or {}).items()
+    }
+
+
+def load_recipes(path: Path | None = None) -> tuple[dict[str, Recipe], dict[str, DisassembleRecipe]]:
+    raw = _load_yaml(path or RECIPES_PATH)
+    recipes = {
+        rid: Recipe(
+            id=rid,
+            name_zh=str(data.get("name_zh", "")),
+            name_en=str(data.get("name_en", "")),
+            station_room_tags=[str(tag) for tag in (data.get("station_room_tags") or [])],
+            ingredients={str(k): int(v) for k, v in (data.get("ingredients") or {}).items()},
+            gold_cost=int(data.get("gold_cost", 0)),
+            output=str(data.get("output", "")),
+            output_count=int(data.get("output_count", 1)),
+        )
+        for rid, data in (raw.get("recipes") or {}).items()
+    }
+    disassemble = {
+        iid: DisassembleRecipe(
+            id=iid,
+            outputs={str(k): int(v) for k, v in (data.get("outputs") or {}).items()},
+            gold_gain=int(data.get("gold_gain", 0)),
+        )
+        for iid, data in (raw.get("disassemble") or {}).items()
+    }
+    return recipes, disassemble
+
+
+def load_braindances(path: Path | None = None) -> dict[str, Braindance]:
+    raw = _load_yaml(path or BRAINDANCES_PATH)
+    return {
+        bid: Braindance(
+            id=bid,
+            name_zh=str(data.get("name_zh", "")),
+            name_en=str(data.get("name_en", "")),
+            cost=int(data.get("cost", 0)),
+            lines_zh=[str(line) for line in (data.get("lines_zh") or [])],
+            lines_en=[str(line) for line in (data.get("lines_en") or [])],
+            sets_flag=str(data.get("sets_flag", "")),
+            street_cred=int(data.get("street_cred", 0)),
+        )
+        for bid, data in (raw.get("braindances") or {}).items()
+    }
+
+
+def load_passive_chains(path: Path | None = None) -> dict[str, PassiveChain]:
+    raw = _load_yaml(path or PASSIVE_CHAINS_PATH)
+    return {
+        cid: PassiveChain(
+            id=cid,
+            name_zh=str(data.get("name_zh", "")),
+            name_en=str(data.get("name_en", "")),
+            requires_implants=[str(i) for i in (data.get("requires_implants") or [])],
+            requires_skills=[str(s) for s in (data.get("requires_skills") or [])],
+            requires_perks=[str(p) for p in (data.get("requires_perks") or [])],
+            min_street_cred=int(data.get("min_street_cred", 0)),
+            bonus_attack=int(data.get("bonus_attack", 0)),
+            quickhack_mult=float(data.get("quickhack_mult", 1.0)),
+            bonus_xp_percent=int(data.get("bonus_xp_percent", 0)),
+            description_zh=str(data.get("description_zh", "")),
+            description_en=str(data.get("description_en", "")),
+        )
+        for cid, data in (raw.get("chains") or {}).items()
     }

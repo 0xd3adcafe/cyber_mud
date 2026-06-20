@@ -7,22 +7,32 @@ from textual.binding import Binding
 from textual.suggester import Suggester
 from textual.widgets import Input
 
-from shared.completion import complete_input
+from shared.completion import complete_input, complete_input_cycle
+
+
+def _completion_kwargs(view: object) -> dict:
+    return {
+        "room_items": tuple(view.complete_room_items),
+        "room_npcs": tuple(view.complete_npcs),
+        "room_corpses": tuple(getattr(view, "complete_corpses", ())),
+        "room_exits": tuple(view.complete_exits),
+        "inventory": tuple(view.complete_inventory),
+        "equipped": tuple(getattr(view, "complete_equipped", ())),
+        "shop_items": tuple(getattr(view, "complete_shop_items", ())),
+        "net_nodes": tuple(getattr(view, "complete_net_nodes", ())),
+        "interactables": tuple(getattr(view, "complete_interactables", ())),
+        "recipes": tuple(getattr(view, "complete_recipes", ())),
+        "braindances": tuple(getattr(view, "complete_braindances", ())),
+        "net_shell": view.net_shell,
+    }
 
 
 def complete_from_view(view: object, value: str) -> str | None:
-    return complete_input(
-        value,
-        room_items=tuple(view.complete_room_items),
-        room_npcs=tuple(view.complete_npcs),
-        room_corpses=tuple(getattr(view, "complete_corpses", ())),
-        room_exits=tuple(view.complete_exits),
-        inventory=tuple(view.complete_inventory),
-        equipped=tuple(getattr(view, "complete_equipped", ())),
-        shop_items=tuple(getattr(view, "complete_shop_items", ())),
-        net_nodes=tuple(getattr(view, "complete_net_nodes", ())),
-        net_shell=view.net_shell,
-    )
+    return complete_input(value, **_completion_kwargs(view))
+
+
+def complete_cycle_from_view(view: object, value: str, cycle_index: int) -> tuple[str | None, int]:
+    return complete_input_cycle(value, cycle_index, **_completion_kwargs(view))
 
 
 class MudPrompt(Input):

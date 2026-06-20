@@ -112,5 +112,16 @@ def test_complete_input_go_direction():
     assert result == "go north"
 
 
+def test_complete_input_go_up():
+    result = complete_input(
+        "go u",
+        room_items=(),
+        room_npcs=(),
+        room_exits=("up", "down", "north"),
+        inventory=(),
+    )
+    assert result == "go up"
+
+
 def test_complete_input_local_theme():
     assert complete_input("/th", room_items=(), room_npcs=(), room_exits=(), inventory=()) == "/theme"

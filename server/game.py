@@ -261,6 +261,12 @@ class Game:
                         else event.message_kwargs.get("label_en", event.message_kwargs.get("label_zh", ""))
                     )
                     await target.send(t(target.player.locale, event.message_key, label=label))
+            elif event.kind == "wanted_decay":
+                for target in self.sessions:
+                    if target.player.name != event.player_name:
+                        continue
+                    await target.send(event.message_kwargs.get("text", ""))
+                    await target.send_meta({"wanted": str(target.player.wanted_level)})
             elif event.kind == "hp_regen":
                 for target in self.sessions:
                     if target.player.name != event.player_name:
@@ -342,7 +348,7 @@ class Game:
                 if result.time_changed or result.events or result.combat_results:
                     save_world_state(self.state)
                 for event in result.events:
-                    if event.kind != "hp_regen":
+                    if event.kind not in {"hp_regen", "wanted_decay"}:
                         continue
                     player = next(
                         (p for p in self.all_named_players() if p.name == event.player_name),

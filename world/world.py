@@ -5,7 +5,23 @@ from dataclasses import dataclass, field
 from entities.implant import Implant
 from entities.item import Item
 from entities.npc import NPC
-from world.content import Housing, Mod, NetNode, Quest, Quickhack, Shop, Skill, Talent, TransitRoute, Vehicle
+from world.content import (
+    Braindance,
+    DisassembleRecipe,
+    Housing,
+    Interactable,
+    Mod,
+    NetNode,
+    PassiveChain,
+    Quest,
+    Quickhack,
+    Recipe,
+    Shop,
+    Skill,
+    Talent,
+    TransitRoute,
+    Vehicle,
+)
 
 
 @dataclass
@@ -44,6 +60,11 @@ class World:
     transit_routes: list[TransitRoute] = field(default_factory=list)
     shops: dict[str, Shop] = field(default_factory=dict)
     net_nodes: dict[str, NetNode] = field(default_factory=dict)
+    interactables: dict[str, Interactable] = field(default_factory=dict)
+    recipes: dict[str, Recipe] = field(default_factory=dict)
+    disassemble: dict[str, DisassembleRecipe] = field(default_factory=dict)
+    braindances: dict[str, Braindance] = field(default_factory=dict)
+    passive_chains: dict[str, PassiveChain] = field(default_factory=dict)
 
     def room(self, room_id: str) -> Room | None:
         return self.rooms.get(room_id)
@@ -89,3 +110,18 @@ class World:
 
     def net_nodes_in_room(self, room_id: str) -> list[NetNode]:
         return [node for node in self.net_nodes.values() if node.room_id == room_id]
+
+    def interactable(self, interactable_id: str) -> Interactable | None:
+        return self.interactables.get(interactable_id)
+
+    def interactables_in_room(self, room_id: str) -> list[Interactable]:
+        return [obj for obj in self.interactables.values() if obj.room_id == room_id]
+
+    def recipe(self, recipe_id: str) -> Recipe | None:
+        return self.recipes.get(recipe_id)
+
+    def disassemble_recipe(self, item_id: str) -> DisassembleRecipe | None:
+        return self.disassemble.get(item_id)
+
+    def braindance(self, bd_id: str) -> Braindance | None:
+        return self.braindances.get(bd_id)

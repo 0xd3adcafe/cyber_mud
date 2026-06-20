@@ -11,5 +11,10 @@ transit:
     square: {fare: 3, name_zh: 廣場線, name_en: Square Line}
   alley:
     square: {fare: 2, name_zh: 廣場線, name_en: Square Line}
+  undercity:
+    alley: {fare: 3, name_zh: 巷弄線, name_en: Alley Line}
+    docks: {fare: 4, name_zh: 碼頭線, name_en: Docks Line}
+  square_rooftop:
+    square: {fare: 2, name_zh: 廣場線, name_en: Square Line}
   watson_flat:
     square: {fare: 8, name_zh: 廣場線, name_en: Square Line}

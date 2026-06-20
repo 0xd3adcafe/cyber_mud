@@ -1,0 +1,86 @@
+from __future__ import annotations
+
+from entities.player import Player
+from shared.i18n import t
+from shared.names import matches_name
+from world.content import Interactable
+from world.state import WorldState
+
+
+def interactable_label(obj: Interactable, locale: str) -> str:
+    if locale == "en" and obj.name_en:
+        return f"{obj.name_en} ({obj.id})"
+    return f"{obj.name_zh or obj.id} ({obj.id})"
+
+
+def find_interactable_id(state: WorldState, room_id: str, name: str) -> str | None:
+    for obj in state.world.interactables_in_room(room_id):
+        if matches_name(name, obj.id, obj.name_zh, obj.name_en):
+            return obj.id
+    return None
+
+
+def interactable_description(obj: Interactable, locale: str) -> str:
+    if locale == "en" and obj.description_en:
+        return obj.description_en
+    return obj.description_zh or ""
+
+
+def interactable_message(obj: Interactable, locale: str) -> str:
+    if locale == "en" and obj.message_en:
+        return obj.message_en
+    return obj.message_zh or ""
+
+
+def interact_once_done(player: Player, obj: Interactable) -> bool:
+    if not obj.once_key:
+        return False
+    return player.interact_flags.get(obj.once_key) == "done"
+
+
+def perform_interact(
+    player: Player,
+    state: WorldState,
+    obj: Interactable,
+    locale: str,
+) -> list[str]:
+    if interact_once_done(player, obj):
+        return [t(locale, "interact.already", name=interactable_label(obj, locale))]
+
+    if obj.requires_item and obj.requires_item not in player.inventory:
+        item = state.world.item(obj.requires_item)
+        label = item.name_zh if item and locale == "zh" else (item.name_en if item else obj.requires_item)
+        return [t(locale, "interact.need_item", item=label or obj.requires_item)]
+
+    if obj.requires_skill and obj.requires_skill not in player.skills:
+        skill = state.world.skill(obj.requires_skill)
+        label = skill.name_zh if skill and locale == "zh" else (skill.name_en if skill else obj.requires_skill)
+        return [t(locale, "interact.need_skill", skill=label or obj.requires_skill)]
+
+    lines: list[str] = []
+    msg = interactable_message(obj, locale)
+    if msg:
+        lines.append(msg)
+
+    if obj.gives_item:
+        player.inventory.append(obj.gives_item)
+        item = state.world.item(obj.gives_item)
+        if item:
+            label = item.name_zh if locale == "zh" else (item.name_en or item.name_zh)
+            lines.append(t(locale, "interact.got_item", item=label or obj.gives_item))
+
+    if obj.requires_item and obj.gives_item:
+        player.inventory.remove(obj.requires_item)
+
+    if obj.once_key:
+        player.interact_flags[obj.once_key] = "done"
+
+    if obj.braindance_id:
+        from world.braindance import play_braindance
+
+        lines.extend(play_braindance(player, state, obj.braindance_id, locale, free=True))
+
+    from world.quests import advance_quest_on_interact
+
+    lines.extend(advance_quest_on_interact(player, state, obj.id, locale))
+    return lines

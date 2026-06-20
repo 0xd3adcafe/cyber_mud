@@ -149,6 +149,17 @@
 | CP2077 義體槽位 | 九槽 `cyberware`／`chrome`／`uninstall`；`data/implants.yaml` 擴充；ripperdoc 限定；`tests/test_cyberware.py` |
 | 住宅與儲物 | `rent`／`home`／`stash`；`watson_flat`；`data/housing.yaml`；`tests/test_housing_transport.py` |
 | 交通與載具 | `transit` NCART；`vehicles buy`／`drive`；`data/transit.yaml`／`vehicles.yaml` |
+| Tab 補全多候選輪替 | `shared/completion.py` `complete_input_cycle`；client `_completion_cycle_index`；`tests/test_backlog_features.py` |
+| 環境互動系統 | `interact`；`data/interactables.yaml`；`world/interactables.py`；整合 `look`／`scan`；`tests/test_backlog_features.py` |
+| 上下方向移動 | `go up`／`go down`；`u`／`d` 別名；`square_rooftop`／`undercity`；locale `direction.up/down` |
+| Prompt 擴充 token | `%l` `%c` `%v` `%x`；範本 `ncpd`／`runner`；`shared/prompt_tokens.py` |
+| NPC 任務多階段 | `world/quests.py` `stages`；`dock_watch` 委託；`tests/test_backlog_features.py` |
+| 天氣／時段玩法平衡 | `world/modifiers.py` 時段修正傷害／逃跑／移動；`tests/test_modifiers.py` 更新 |
+| 被動技能樹與義體連鎖 | `data/passive_chains.yaml`；`combat/passives.py` `_active_chains`；XP 加成 |
+| NCPD 通緝 | `world/wanted.py`；擊倒 NPC 升級；tick 衰減；`wanted` meta |
+| 多載具車庫 | `world/vehicles_player.py`；`vehicles buy/select`；`vehicles[]` 存檔 |
+| 製作／拆解 | `craft`／`disassemble`；`data/recipes.yaml`；`world/craft.py` |
+| 腦舞 | `braindance`／`bd`；`data/braindances.yaml`；`world/braindance.py`；艙體互動 |
 
 ## Backlog 維護慣例
 
@@ -164,14 +175,8 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 尚未實作或僅部分實作，新專案可選做：
 
-- Tab 補全多候選輪替（連按 Tab 切換下一個匹配）
-- **環境互動系統**：可互動物件／機關（終端、門禁、貨櫃、全息看板）；`interact`／`use <環境>`；`data/interactables.yaml`；與 `look`／`scan`／`search` 整合；條件觸發（技能、物品、駭入）
-- **上下方向移動**：`go up`／`go down`（或 `u`／`d`）；電梯、樓梯、下水道、屋頂；`data/world.yaml` 垂直出口；地圖／Tab 補全／locale 方向文案
-- Prompt 完整版（更多 token、即時預覽 UI）
-- NPC 任務驅動 AI（進階追蹤、多階段任務編排工具）
-- 天氣／時段對玩法數值的深度平衡
-- 完整被動技能樹與義體連鎖觸發
-- NCPD 通緝等級、多載具車庫、製作／拆解、腦舞
+- Prompt 完整版（client 即時預覽 UI）
+- NPC 任務驅動 AI（進階追蹤、任務編排工具）
 - 文件 GitHub 風格 + TOC（Phase E.4）
 - pyenv 原生編譯 Python（環境設定，非遊戲功能）
 

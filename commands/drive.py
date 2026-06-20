@@ -4,13 +4,11 @@ from commands.helpers import format_look
 from commands.registry import CommandContext, ok, ok_document, player_meta, register
 from shared.i18n import t
 from shared.locale_content import room_name
+from world.vehicles_player import active_vehicle_id, owned_vehicle_ids
 
 
-def _resolve_dest(ctx: CommandContext, needle: str) -> str | None:
+def _resolve_dest(ctx: CommandContext, needle: str, vehicle) -> str | None:
     needle = needle.strip().lower()
-    vehicle = ctx.state.world.vehicle(ctx.player.vehicle_id)
-    if vehicle is None:
-        return None
     if ctx.player.room_id not in vehicle.routes:
         return None
     for room_id in vehicle.routes:
@@ -27,10 +25,11 @@ def handle(ctx: CommandContext):
     if ctx.player.in_combat:
         return ok([t(locale, "combat.busy")])
 
-    if not ctx.player.vehicle_id:
+    vid = active_vehicle_id(ctx.player)
+    if not vid:
         return ok([t(locale, "drive.no_vehicle")])
 
-    vehicle = ctx.state.world.vehicle(ctx.player.vehicle_id)
+    vehicle = ctx.state.world.vehicle(vid)
     if vehicle is None:
         return ok([t(locale, "drive.no_vehicle")])
 
@@ -40,6 +39,9 @@ def handle(ctx: CommandContext):
     dest_arg = ctx.args.strip()
     if not dest_arg:
         lines = [t(locale, "drive.header"), ""]
+        if len(owned_vehicle_ids(ctx.player)) > 1:
+            lines.append(t(locale, "drive.active", vehicle=vehicle.name_zh if locale == "zh" else (vehicle.name_en or vehicle.name_zh)))
+            lines.append("")
         for room_id in vehicle.routes:
             if room_id == ctx.player.room_id:
                 continue
@@ -50,7 +52,7 @@ def handle(ctx: CommandContext):
         lines.append(t(locale, "drive.usage"))
         return ok(lines, meta=player_meta(ctx))
 
-    dest_id = _resolve_dest(ctx, dest_arg)
+    dest_id = _resolve_dest(ctx, dest_arg, vehicle)
     if dest_id is None or dest_id == ctx.player.room_id:
         return ok([t(locale, "drive.unknown", dest=dest_arg)])
 

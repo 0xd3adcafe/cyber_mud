@@ -1,0 +1,15 @@
+braindances:
+  dock_heist:
+    name_zh: 碼頭搶劫（片段）
+    name_en: Dock Heist (Fragment)
+    cost: 15
+    lines_zh:
+      - "【腦舞】畫面切入第一人稱——雨夜碼頭。"
+      - "你看見軍武貨櫃被漩渦幫撬開，義體火花四濺。"
+      - "片段結束。你獲得碼頭動向的情報。"
+    lines_en:
+      - "[BD] First-person rain-soaked docks."
+      - "Maelstrom pries open a Militech container—chrome sparks fly."
+      - "Fragment ends. You know the dock layout now."
+    sets_flag: bd_dock_heist
+    street_cred: 2

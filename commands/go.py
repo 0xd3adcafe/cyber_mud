@@ -30,9 +30,18 @@ def handle(ctx: CommandContext):
         return ok([t(ctx.player.locale, weather_key)])
 
     ctx.player.room_id = dest_id
+    from world.quests import advance_quest_on_visit
+
+    quest_lines = advance_quest_on_visit(ctx.player, ctx.state, dest_id, ctx.player.locale)
     lines = [t(ctx.player.locale, "go.ok", direction=direction), ""]
+    lines.extend(quest_lines)
     lines.extend(format_look(ctx))
-    return ok_document(lines, meta=player_meta(ctx), moved=True)
+    return ok_document(
+        lines,
+        meta=player_meta(ctx),
+        moved=True,
+        world_changed=bool(quest_lines),
+    )
 
 
 register("go", handle)

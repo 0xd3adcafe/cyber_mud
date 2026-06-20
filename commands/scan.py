@@ -61,6 +61,15 @@ def handle(ctx: CommandContext):
     if corpse_labels:
         lines.append(t(ctx.player.locale, "corpse.room_line", corpses="、".join(corpse_labels)))
 
+    from world.interactables import interactable_label
+
+    interact_labels = [
+        interactable_label(obj, ctx.player.locale)
+        for obj in ctx.state.world.interactables_in_room(ctx.player.room_id)
+    ]
+    if interact_labels:
+        lines.append(t(ctx.player.locale, "scan.interactables", objects="、".join(interact_labels)))
+
     for peer in ctx.peers:
         if peer.named:
             lines.append(t(ctx.player.locale, "scan.player", name=peer.name))

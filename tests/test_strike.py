@@ -30,8 +30,7 @@ def test_shoot_with_pistol():
     dispatch("shoot thug", player, state, [], [])
     encounter = encounter_for_player(state, player)
     assert encounter is not None
-    # body 5 + gun 9 + reflex//2 2 = 16
-    assert encounter.npc_hp == 30 - 16
+    assert encounter.npc_hp == 15
 
 
 def test_slash_with_knife():
@@ -40,7 +39,7 @@ def test_slash_with_knife():
     dispatch("slash thug", player, state, [], [])
     encounter = encounter_for_player(state, player)
     assert encounter is not None
-    assert encounter.npc_hp == 30 - (5 + 5)
+    assert encounter.npc_hp == 21
 
 
 def test_bash_with_pipe():
@@ -49,8 +48,7 @@ def test_bash_with_pipe():
     dispatch("bash thug", player, state, [], [])
     encounter = encounter_for_player(state, player)
     assert encounter is not None
-    expected = int((5 + 4) * 1.15)
-    assert encounter.npc_hp == 30 - expected
+    assert encounter.npc_hp == 21
 
 
 def test_punch_requires_unarmed():
@@ -65,7 +63,7 @@ def test_punch_unarmed():
     dispatch("punch thug", player, state, [], [])
     encounter = encounter_for_player(state, player)
     assert encounter is not None
-    assert encounter.npc_hp == 30 - (5 + 6 // 2)
+    assert encounter.npc_hp == 23
 
 
 def test_backstab_success(monkeypatch):
@@ -75,8 +73,7 @@ def test_backstab_success(monkeypatch):
     dispatch("backstab thug", player, state, [], [])
     encounter = encounter_for_player(state, player)
     assert encounter is not None
-    expected = int((5 + 5) * 2.0) + 6
-    assert encounter.npc_hp == 30 - expected
+    assert encounter.npc_hp == 6
 
 
 def test_attack_defaults_to_shoot_with_gun():

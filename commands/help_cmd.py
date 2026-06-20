@@ -15,6 +15,10 @@ def _help_command_desc(ctx: CommandContext, key: str) -> str:
 HELP_ENTRIES = (
     ("look", "look"),
     ("go", "go"),
+    ("interact", "interact"),
+    ("craft", "craft"),
+    ("disassemble", "disassemble"),
+    ("braindance", "braindance"),
     ("take", "take"),
     ("drop", "drop"),
     ("inventory", "inventory"),

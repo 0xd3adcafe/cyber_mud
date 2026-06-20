@@ -14,6 +14,7 @@ from world.npc_respawn import process_npc_respawns
 from world.schedule import npc_scheduled_room
 from world.state import WorldState
 from world.vitals import apply_hp_regen
+from world.wanted import tick_wanted_decay
 from world.weather import WeatherConfig, load_weather_config, maybe_tick_weather
 
 PATROL_EVERY = 3
@@ -227,6 +228,25 @@ def _process_hp_regen(state: WorldState, config: TimeConfig, players: list[Playe
     return events
 
 
+def _process_wanted_decay(players: list[Player]) -> list[TickEvent]:
+    events: list[TickEvent] = []
+    for player in players:
+        if not player.named or player.wanted_level <= 0:
+            continue
+        lines = tick_wanted_decay(player, player.locale)
+        if not lines:
+            continue
+        events.append(
+            TickEvent(
+                kind="wanted_decay",
+                player_name=player.name,
+                message_key="wanted.tick",
+                message_kwargs={"level": str(player.wanted_level), "text": lines[0]},
+            )
+        )
+    return events
+
+
 def process_tick(
     state: WorldState,
     config: TimeConfig,
@@ -271,6 +291,7 @@ def process_tick(
     if players:
         events.extend(_process_chase(state, players))
         events.extend(_process_hp_regen(state, config, players))
+        events.extend(_process_wanted_decay(players))
 
     for room_id, message_key, message_kwargs in process_corpse_decay(state):
         events.append(
