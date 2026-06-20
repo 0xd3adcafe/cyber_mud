@@ -75,7 +75,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | E.1 | Client auto-reconnect | Restore after disconnect, resend auth | ✅ |
 | E.2 | `./run.sh --dev` hot reload | Code/data changes reload | ✅ |
 | E.3 | Sidebar equipment auto-refresh | F2/F5 update immediately after equip | ✅ |
-| E.4 | Split EN/ZH docs + README ASCII banner | Consistent `docs/` format, TOC | ✅ (partial) |
+| E.4 | Split EN/ZH docs + README ASCII banner | Consistent `docs/` format, TOC | ✅ |
 
 **Original project commit reference:** `34d5525` (sidebar refresh)
 
@@ -194,6 +194,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | World expansion W.12–W.13 (2026-06) | `poison` tick + `antidote` consumable; player `overheat` debuff (quickhack backlash); `world/reactions.py` reputation shifts (pledge/hack/combat); broker rep/wanted talk; tick `ambient_tick` + `trauma_tick` broadcast; `tests/test_status_effects.py`, `tests/test_world_reactions.py` |
 | World expansion W.14 (2026-06) | `tools/expand_world_population.py` + `data/world_population.yaml` overlay; **109 NPCs**, **45 items** on 263-room grid; loader merge; `tests/test_world_scale.py` |
 | Content depth D.1–D.6 (2026-06) | Archetype `talk.*` keys + regen population; quest WARN fixes + `hub_briefing`; hub NPCs (`tyrell_liaison`, `zone_warden`, etc.); grid loot craft/disassemble + shop stock; 8 district grid net nodes + interactables; `tests/test_content_depth.py`; [WORLD_TOOLS.md](WORLD_TOOLS.md) |
+| Content depth D.7–D.10 (2026-06) | 8 district spotlight NPCs; `district.grid.*` look flavor; 4 district quest chains; full `world.ambient.*`; `tests/test_content_depth.py` |
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 
 ## Multi-session development (mandatory)
@@ -254,17 +255,17 @@ Not yet implemented or only partially implemented.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
-| W.1 | Procedural district grids | Merge `python -m tools.generate_world <district> <rows> <cols>` YAML into `data/world.yaml`; district-prefixed room IDs (e.g. `watson_03_06`); every public room has `district` + optional `grid_x`/`grid_y`; hub rooms connect to grid edges; `tests/test_world_scale.py` |
-| W.2 | Eight-district room clusters | Full clusters for **Tyrell** and **Combat Zone**; expand partial **Watson**, **Kabuki**, **Little China**, **Corpo**, **Docks**, **Undercity** per WORLD geography table; `map` shows explored grid; locale `*_en`/`*_zh` on all new rooms |
-| W.3 | District safety & atmosphere | `safety` / `atmosphere` metadata per district drives `look` flavor, NPC patrol density, aggro modifiers, and tick weather bias; `world/npc_ai.py`, `world/modifiers.py`, `world/weather.py` |
-| W.4 | Story core rooms | Add **`crypt`** and **`data_vault`** anchors (alongside `square`, `alley`, `shrine`); wire exits from `data_crypt` / Undercity hub graph; onboarding path: `take glowstick` → `talk broker` → `pledge` → `hack` terminal |
-| W.5 | Story anchor NPCs & loot | NPCs **`guard`**, **`priest`**, **`rat`** in core areas; in-room **`terminal`** object; ground items **`rusty_key`**, **`glowstick`** per WORLD table; `tests/test_story_anchors.py` |
-| W.6 | `help tutorial` onboarding | Auto-generate tutorial text from `tutorial_*` rooms + command registry (`help tutorial`); locale keys; complements existing three-zone training ground; `tests/test_help_tutorial.py` |
-| W.7 | Faction gameplay depth | **`pledge tyrell`** quests and talk branches; faction affects **dialogue**, **quest hints**, **area hostility**, **shop buy/sell rates** (`world/trade.py`, `data/shops.yaml`); reputation thresholds; `tests/test_factions.py` |
+| ~~W.1~~ | ~~Procedural district grids~~ | ✅ `tools/merge_world_grid.py`; district-prefixed IDs (`watson_3_2`); `grid_x`/`grid_y`; hub↔grid links; `tests/test_world_scale.py` |
+| ~~W.2~~ | ~~Eight-district room clusters~~ | ✅ 8 districts merged → **263 rooms**; `map` explored grid; locale `*_en`/`*_zh` on grid cells |
+| ~~W.3~~ | ~~District safety & atmosphere~~ | ✅ `data/districts.yaml`; `look` atmosphere; patrol/aggro/weather bias; `tests/test_districts.py` |
+| ~~W.4~~ | ~~Story core rooms~~ | ✅ `crypt`, `data_vault`; Undercity graph; onboarding path wired |
+| ~~W.5~~ | ~~Story anchor NPCs & loot~~ | ✅ `guard`, `priest`, `rat`; terminals; `rusty_key`, `glowstick`; `tests/test_story_anchors.py` |
+| ~~W.6~~ | ~~`help tutorial` onboarding~~ | ✅ `help tutorial`; `tests/test_help_tutorial.py` |
+| ~~W.7~~ | ~~Faction gameplay depth~~ | ✅ `pledge tyrell`; faction talk/shop/hostility; `tests/test_factions.py` |
 | ~~W.8~~ | ~~District weather & schedules~~ | ✅ `data/schedule.yaml` all shop hours + period patrol multipliers; NPC schedules (`broker`, `bazaar_fixer`, `dock_smuggler`, `corp_guard`); `patrol_period_multiplier`; `tests/test_schedule.py` |
 | ~~W.9~~ | ~~Society & black market~~ | ✅ `docks_gray` shop, `dock_smuggler` NPC, `gray_market` quest (`give_npc`); corp/street `appraise`; `give <item> <npc>`; `tests/test_black_market.py` |
 | ~~W.10~~ | ~~Multiplayer presence~~ | ✅ `presence.enter`/`leave` on `go`; sender-excluded `say`/`give` broadcasts; peer `look`; `tests/test_multiplayer.py` |
-| W.11 | NETRUN story nodes | `data_vault` / `crypt` net nodes tied to physical rooms; `hack core terminal` quest step; expand `data/net_nodes.yaml`; `tests/test_net_story.py` |
+| ~~W.11~~ | ~~NETRUN story nodes~~ | ✅ `crypt_node`, `vault_core`; `hack_core` quest; `tests/test_net_story.py` |
 | ~~W.12~~ | ~~Extended status effects~~ | ✅ `poison` tick + `antidote` (`cures_status`); player `overheat` debuff on quickhack (≠ NPC `burn`); combat damage penalty; `tests/test_status_effects.py` |
 | ~~W.13~~ | ~~Live world reactions~~ | ✅ `world/reactions.py` rep shifts (pledge/NETRUN hack/combat/quickhack); broker rep/wanted talk; tick `ambient_tick`; `trauma_tick` client broadcast; `tests/test_world_reactions.py` |
 | ~~W.14~~ | ~~World scale targets~~ | ✅ **263 rooms**, **109 NPCs**, **45 items**; `tools/expand_world_population.py`; `data/world_population.yaml` loader overlay; `tests/test_world_scale.py` |
@@ -287,6 +288,17 @@ Not yet implemented or only partially implemented.
 | ~~D.6~~ | ~~Population tool workflow~~ | ✅ [WORLD_TOOLS.md](WORLD_TOOLS.md) / [WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md) |
 
 **Suggested order:** D.2 → D.1 → D.3 → D.4 → D.5 → D.6. **All phases shipped (2026-06).**
+
+#### Content depth round 2 (D.7–D.10)
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| ~~D.7~~ | ~~District grid look flavor~~ | ✅ `district.grid.*`; `grid_flavor_line()` in `look` on procedural cells |
+| ~~D.8~~ | ~~District quest chains~~ | ✅ `watson_pulse`, `docks_courier`, `kabuki_whisper`, `zone_sweep`; 0 quest WARN |
+| ~~D.9~~ | ~~District spotlight NPCs~~ | ✅ 8 named grid NPCs; unique `talk.*` in `data/world.yaml` |
+| ~~D.10~~ | ~~District ambient tick copy~~ | ✅ `world.ambient.*` all eight districts; `tests/test_content_depth.py` |
+
+**Suggested order:** D.9 → D.8 → D.7 → D.10. **All phases shipped (2026-06).**
 
 ### Life commands (posture, rest & environment)
 

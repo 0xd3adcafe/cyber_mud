@@ -150,15 +150,15 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 
 ## 規劃中
 
-變更紀錄與待辦以 [PHASES.md — Backlog](PHASES.md#backlog) 為準；**每次交付前須更新**（見 [Backlog 維護慣例](PHASES.md#backlog-維護慣例)）。
+變更紀錄與待辦以 [PHASES.zh.md — Backlog](PHASES.zh.md#backlog) 為準；**每次交付前須更新**（見 [Backlog 維護慣例](PHASES.zh.md#backlog-維護慣例)）。
 
-節錄：
+**待做（環境）：** pyenv 原生編譯 Python。
 
-- 天氣／時段對玩法數值修正
-- 完整被動技能與義體觸發
-- NPC 任務驅動 AI
-- NPC 任務驅動追擊與 flee 進階行為
-- 店鋪作息、任務編排工具
+**內容深度：** D.1–D.10 已交付——見 PHASES **內容深度**。
+
+**已自原 mud 分叉交付**（不再是 backlog）：時段／天氣修正（`world/modifiers.py`）、被動義體鏈（`combat/passives.py`）、派系 NPC AI（`world/npc_ai.py`）、店鋪作息（`data/schedule.yaml`）、任務編寫（`./admin.sh quests`）、世界擴充 W.1–W.14、內容深度 D.1–D.6、生活指令 L.1–L.8。
+
+**可選後續：** NPC 追擊進階調校；持久化／管理工具擴充。
 
 ---
 

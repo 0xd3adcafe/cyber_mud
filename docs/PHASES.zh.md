@@ -194,6 +194,7 @@
 | 世界擴充 W.12–W.13（2026-06） | `poison` tick＋`antidote` 消耗品；玩家 `overheat` debuff（快速破解反噬）；`world/reactions.py` 聲望變動（宣誓／駭入／戰鬥）；經紀人聲望／通緝對話；tick `ambient_tick`＋`trauma_tick` 廣播；`tests/test_status_effects.py`、`tests/test_world_reactions.py` |
 | 世界擴充 W.14（2026-06） | `tools/expand_world_population.py`＋`data/world_population.yaml` 覆蓋層；**109 NPC**、**45 物品**（263 房格點）；loader 合併；`tests/test_world_scale.py` |
 | 內容深度 D.1–D.6（2026-06） | 原型 `talk.*`＋重產 population；任務 WARN 修復＋`hub_briefing`；樞紐 NPC；格點戰利品 craft/disassemble＋商店；8 區 net 節點＋互動物；`tests/test_content_depth.py`；[WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md) |
+| 內容深度 D.7–D.10（2026-06） | 八區聚光 NPC；`district.grid.*` look 敘事；四條區域委託；完整 `world.ambient.*`；`tests/test_content_depth.py` |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 
 ## 多 session 開發（必做）
@@ -252,17 +253,17 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
-| W.1 | 程序生成區域格點 | 將 `python -m tools.generate_world <district> <rows> <cols>` 產出併入 `data/world.yaml`；房間 ID 含區域前綴（如 `watson_03_06`）；公開房皆有 `district` 與可選 `grid_x`/`grid_y`；樞紐房連接格點邊界；`tests/test_world_scale.py` |
-| W.2 | 八區房間群 | **泰瑞（Tyrell）**、**戰鬥區（Combat Zone）** 完整群集；擴充部分完成的 Watson／Kabuki／小中國街／企業區／碼頭／地下城；`map` 顯示已探索格點；新房間 locale `*_en`/`*_zh` |
-| W.3 | 區域安全與氛圍 | 各區 `safety`／`atmosphere` 影響 `look` 敘事、NPC 巡邏密度、敵意修正、tick 天氣傾向；`world/npc_ai.py`、`world/modifiers.py`、`world/weather.py` |
-| W.4 | 主線核心房間 | 新增 **`crypt`**、**`data_vault`**（與 `square`、`alley`、`shrine` 並列）；自 `data_crypt`／地下城樞紐串接出口；新手路徑：`take glowstick` → `talk broker` → `pledge` → `hack` terminal |
-| W.5 | 主線錨點 NPC 與戰利品 | 核心區 NPC **`guard`**、**`priest`**、**`rat`**；房內 **`terminal`** 物件；地上 **`rusty_key`**、**`glowstick`** 依 WORLD 表配置；`tests/test_story_anchors.py` |
-| W.6 | `help tutorial` 新手引導 | 依 `tutorial_*` 房間與指令註冊表自動產生教學（`help tutorial`）；locale 鍵；補強既有三區訓練場；`tests/test_help_tutorial.py` |
-| W.7 | 派系玩法深度 | **`pledge tyrell`** 任務與 talk 分支；派系影響**對話**、**任務提示**、**區域敵意**、**商店買賣比率**（`world/trade.py`、`data/shops.yaml`）；聲望門檻；`tests/test_factions.py` |
+| ~~W.1~~ | ~~程序生成區域格點~~ | ✅ `tools/merge_world_grid.py`；區域前綴 ID；`grid_x`/`grid_y`；樞紐↔格點；`tests/test_world_scale.py` |
+| ~~W.2~~ | ~~八區房間群~~ | ✅ 8 區併入→**263 房**；`map` 格點；locale `*_en`/`*_zh` |
+| ~~W.3~~ | ~~區域安全與氛圍~~ | ✅ `data/districts.yaml`；`look` 氛圍；巡邏／敵意／天氣；`tests/test_districts.py` |
+| ~~W.4~~ | ~~主線核心房間~~ | ✅ `crypt`、`data_vault`；地下城圖；新手路徑 |
+| ~~W.5~~ | ~~主線錨點 NPC 與戰利品~~ | ✅ `guard`、`priest`、`rat`；`tests/test_story_anchors.py` |
+| ~~W.6~~ | ~~`help tutorial` 新手引導~~ | ✅ `help tutorial`；`tests/test_help_tutorial.py` |
+| ~~W.7~~ | ~~派系玩法深度~~ | ✅ `pledge tyrell`；派系 talk／商店；`tests/test_factions.py` |
 | ~~W.8~~ | ~~區域天氣與作息~~ | ✅ `data/schedule.yaml` 全店營業＋時段巡邏倍率；NPC schedule（`broker`、`bazaar_fixer`、`dock_smuggler`、`corp_guard`）；`patrol_period_multiplier`；`tests/test_schedule.py` |
 | ~~W.9~~ | ~~社會與黑市~~ | ✅ `docks_gray` 商店、`dock_smuggler` NPC、`gray_market` 任務（`give_npc`）；企業／街頭 `appraise`；`give <物品> <NPC>`；`tests/test_black_market.py` |
 | ~~W.10~~ | ~~多人同屏存在感~~ | ✅ `go` 觸發 `presence.enter`／`leave`；`say`／`give` 廣播排除發送者；同室 `look` 列出玩家；`tests/test_multiplayer.py` |
-| W.11 | NETRUN 主線節點 | `data_vault`／`crypt` 實體房對應 net 節點；`hack core terminal` 任務步驟；擴充 `data/net_nodes.yaml`；`tests/test_net_story.py` |
+| ~~W.11~~ | ~~NETRUN 主線節點~~ | ✅ `crypt_node`、`vault_core`；`hack_core`；`tests/test_net_story.py` |
 | ~~W.12~~ | ~~延伸狀態效果~~ | ✅ `poison` tick＋`antidote`（`cures_status`）；玩家 `overheat` debuff（快速破解反噬，≠ NPC `burn`）；戰鬥傷害懲罰；`tests/test_status_effects.py` |
 | ~~W.13~~ | ~~動態世界回饋~~ | ✅ `world/reactions.py` 聲望變動（宣誓／NETRUN 駭入／戰鬥／快速破解）；經紀人聲望／通緝對話；tick `ambient_tick`；`trauma_tick` client 廣播；`tests/test_world_reactions.py` |
 | ~~W.14~~ | ~~世界規模里程碑~~ | ✅ **263 房**、**109 NPC**、**45 物品**；`tools/expand_world_population.py`；`data/world_population.yaml` loader 覆蓋；`tests/test_world_scale.py` |
@@ -285,6 +286,17 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~D.6~~ | ~~人口工具工作流~~ | ✅ [WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md)／[WORLD_TOOLS.md](WORLD_TOOLS.md) |
 
 **建議順序：** D.2 → D.1 → D.3 → D.4 → D.5 → D.6。**全階段已交付（2026-06）。**
+
+#### 內容深度第二輪（D.7–D.10）
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| ~~D.7~~ | ~~區域格點 look 敘事~~ | ✅ `district.grid.*`；程序格點 `look` 附加 `grid_flavor_line()` |
+| ~~D.8~~ | ~~區域委託鏈~~ | ✅ 四條區域委託；`./admin.sh quests` 0 WARN |
+| ~~D.9~~ | ~~區域聚光 NPC~~ | ✅ 八區具名格點 NPC；專屬 `talk.*` |
+| ~~D.10~~ | ~~區域環境 tick 文案~~ | ✅ 八區 `world.ambient.*`；`tests/test_content_depth.py` |
+
+**建議順序：** D.9 → D.8 → D.7 → D.10。**全階段已交付（2026-06）。**
 
 ### 生活指令（姿態、休息與環境）
 

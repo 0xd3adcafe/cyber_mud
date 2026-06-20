@@ -338,6 +338,23 @@ Convention: change a command or world logic → run related tests → full `pyte
 
 **No need to rewrite**: `server` connection model, `registry` dispatch, `protocol`, `persistence` skeleton, Textual client framework.
 
+## Documentation index
+
+English is canonical on GitHub; each row has a `*.zh.md` mirror where listed.
+
+| Doc | Purpose |
+|-----|---------|
+| [WORLD.md](WORLD.md) | Setting, districts, factions |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System overview |
+| [BOOTSTRAP.md](BOOTSTRAP.md) | MVP bootstrap |
+| [IMPLEMENTATION.md](IMPLEMENTATION.md) | Module blueprint (this file) |
+| [PHASES.md](PHASES.md) | Delivery checklist & backlog |
+| [WORLD_TOOLS.md](WORLD_TOOLS.md) | Grid / population / quest CLI |
+| [LOCALIZATION.md](LOCALIZATION.md) | Bilingual policy |
+| [CLIENT_UI_DEBUG.md](CLIENT_UI_DEBUG.md) | Client layout debug cases |
+| [MATURE_CONTENT.md](MATURE_CONTENT.md) | 18+ content policy |
+| [player/README.md](player/README.md) | Player guides (GitHub) |
+
 ---
 
 Next step: build the MVP per [BOOTSTRAP.md](BOOTSTRAP.md), then fill in phase by phase per [PHASES.md](PHASES.md).

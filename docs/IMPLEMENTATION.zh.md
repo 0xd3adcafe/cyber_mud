@@ -338,6 +338,23 @@ game.tick_loop (背景):
 
 **不必重寫**：`server` 連線模型、`registry` 派發、`protocol`、`persistence` 骨架、Textual client 框架。
 
+## 文件索引
+
+GitHub 以英文為準；下列文件皆有 `*.zh.md` 鏡像（標示處）。
+
+| 文件 | 用途 |
+|------|------|
+| [WORLD.zh.md](WORLD.zh.md) | 世界觀、區域、派系 |
+| [ARCHITECTURE.zh.md](ARCHITECTURE.zh.md) | 系統總覽 |
+| [BOOTSTRAP.zh.md](BOOTSTRAP.zh.md) | MVP 啟動 |
+| [IMPLEMENTATION.zh.md](IMPLEMENTATION.zh.md) | 模組藍圖（本文件） |
+| [PHASES.zh.md](PHASES.zh.md) | 交付清單與 backlog |
+| [WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md) | 格點／人口／任務 CLI |
+| [LOCALIZATION.zh.md](LOCALIZATION.zh.md) | 雙語政策 |
+| [CLIENT_UI_DEBUG.zh.md](CLIENT_UI_DEBUG.zh.md) | Client 版面除錯 |
+| [MATURE_CONTENT.zh.md](MATURE_CONTENT.zh.md) | 18+ 內容政策 |
+| [player/README.zh.md](player/README.zh.md) | 玩家指南 |
+
 ---
 
 下一步：依 [BOOTSTRAP.md](BOOTSTRAP.md) 建 MVP，再照 [PHASES.md](PHASES.md) 逐階段補齊。

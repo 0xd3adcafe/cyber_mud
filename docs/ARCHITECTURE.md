@@ -152,13 +152,13 @@ Full usage: **[WORLD_TOOLS.md](WORLD_TOOLS.md)** ([中文](WORLD_TOOLS.zh.md)).
 
 Changelog and todos: [PHASES.md — Backlog](PHASES.md#backlog). **Update before every delivery** ([backlog convention](PHASES.md#backlog-maintenance)).
 
-Excerpt:
+**Pending (environment):** pyenv native Python build.
 
-- Weather / period gameplay modifiers
-- Full passive skills and cyberware triggers
-- NPC quest-driven AI
-- Advanced NPC chase and flee
-- Shop hours, quest authoring tools
+**Content depth:** D.1–D.10 shipped — see PHASES **Content depth**.
+
+**Shipped since original mud fork** (no longer backlog): period/weather modifiers (`world/modifiers.py`), passive cyberware chains (`combat/passives.py`), faction NPC AI (`world/npc_ai.py`), shop hours (`data/schedule.yaml`), quest authoring (`./admin.sh quests`), world scale W.1–W.14, content depth D.1–D.6, life commands L.1–L.8.
+
+**Optional follow-up:** advanced NPC chase tuning; expanded persistence admin.
 
 ---
 
