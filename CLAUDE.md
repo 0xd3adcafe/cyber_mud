@@ -220,7 +220,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | look 目標察看 | `look <目標>` 察看物品／NPC／裝備狀態與數值 |
 | NPC 屍體與搜刮 | `world/corpses.py` 擊倒留屍、loot、腐化掉落 |
 | 屍體英文後綴 | `corpse_label` 顯示 `(English)`／`(corpse)` 方便指令 |
-| 新手區擴充 | 訓練場多房／NPC／裝備庫；`tests/test_tutorial_zone.py` |
+| 新手區擴充 | 訓練場 9 房、10 NPC、4 互動點；簡報室／餐廳／障礙道／模擬診所；`tests/test_tutorial_zone.py` |
 | 商店與交易 | `shop`／`buy`／`sell`；`data/shops.yaml`；註冊送起始金錢 |
 | 環境輸出著色 | `client/env_format.py` look／scan 分色顯示 |
 | 環境色隨主題 | `client/themes.py` `EnvPalette`；`/theme` 切換同步環境色 |
@@ -269,6 +269,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | NPC 任務編排工具 | `world/quest_author.py`、`./admin.sh quests`、`tests/test_quest_author.py` |
 | 完整任務系統 | `gigs accept`／`journal`、`defeat_npc`／`have_item`、`alley_clearance`、`tests/test_quest_system.py` |
 | Help log 區 dropdown | `client/help_overlay.py`、`#help_dropdown` 覆蓋 log、`tests/test_help_overlay.py` |
+| 新手區二次擴充 | 4 新房、6 教學 NPC、`patrol_dummy`、4 互動點、補給站新商品；`tests/test_tutorial_zone.py` |
 
 世界觀與區域擴充見 [`docs/WORLD.md`](docs/WORLD.md)。
 

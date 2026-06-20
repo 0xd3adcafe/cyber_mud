@@ -120,7 +120,7 @@
 | Client 連線狀態列 | `#link_status_bar` 顯示連線／等待／延遲；log 增量 append、spinner 不再每 0.2s 全量重繪 |
 | NPC 屍體與搜刮 | 擊倒留屍體、`take <物品> from <屍體>`、`look`／`scan` 顯示；tick 腐化掉落地上；`world/corpses.py`、`entities/corpse.py`、`tests/test_corpses.py` |
 | 屍體英文後綴 | `corpse_label` 顯示 `(Street Thug)`／`(corpse)` 方便指令；`tests/test_corpses.py` |
-| 新手區擴充 | `data/world.yaml` 訓練場 5 房、4 NPC、8 裝備物品；`tutorial_terminal`；`tests/test_tutorial_zone.py` |
+| 新手區擴充 | `data/world.yaml` 訓練場 9 房、10 NPC（含 `patrol_dummy`）；簡報室／餐廳／障礙道／模擬診所；`trainee_ration`／`training_smartgun`；`data/interactables.yaml` 4 互動點；`data/shops.yaml` tutorial_supply；locale `talk.*`；`tests/test_tutorial_zone.py` |
 | 商店與交易 | `shop`／`buy`／`sell`、`data/shops.yaml`、`world/trade.py`；註冊 ${STARTING_GOLD}；`tests/test_trade.py` |
 | 環境輸出著色 | `client/env_format.py` 房間／出口／物品／NPC 分色；`tests/test_env_format.py` |
 | 環境色隨主題 | `client/themes.py` `EnvPalette`／`env_palette_for_theme`；`/theme` 切換重繪 log |
@@ -166,6 +166,7 @@
 | NPC 任務編排工具 | `world/quest_author.py`；`tools/quest_author.py`；`./admin.sh quests list/show/validate/npc/scaffold`；`tests/test_quest_author.py` |
 | 完整任務系統 | `world/quests.py` `accept`／`abandon`／`requires_quest`／`reward_items`；目標 `defeat_npc`／`have_item`；`gigs accept`／`journal`；`alley_clearance`；`tests/test_quest_system.py` |
 | Help log 區 dropdown | `client/help_overlay.py`；`#help_dropdown` 覆蓋 `#scrollback_wrap`；F3／`help`／Esc 切換；不再進側欄 stack；`tests/test_help_overlay.py` |
+| 新手區二次擴充 | 簡報室 `rookie_fixer`／餐廳 `canteen_tech`／靶場 `range_officer`／義體診所 `clinic_tutor`／障礙道 `course_guide`＋`patrol_dummy`；互動委託板／儲物櫃／掃描柱／示範主機；`tests/test_tutorial_zone.py` 10 項 |
 
 ## Backlog 維護慣例
 

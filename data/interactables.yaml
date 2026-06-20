@@ -44,3 +44,37 @@ interactables:
     braindance_id: dock_heist
     message_zh: 艙門嘶嘶作響，神經介面等待插入。
     message_en: The booth hisses—neural jacks waiting.
+  tutorial_holo_board:
+    room_id: tutorial_briefing
+    name_zh: 全息委託板
+    name_en: Holo Gig Board
+    description_zh: 循環播放派系簡介與委託類型的全息板。
+    description_en: A holo board cycling faction primers and gig types.
+    message_zh: 板上浮現：「gigs 列出委託；accept 後用 journal 追蹤；完成可賺街頭聲望。」
+    message_en: 'The board reads: "gigs lists work; accept then journal to track—finish for street cred."'
+  tutorial_locker:
+    room_id: tutorial_canteen
+    name_zh: 學員儲物櫃
+    name_en: Trainee Locker
+    description_zh: 編號櫃裡還留著一份緊急口糧。
+    description_en: A numbered locker with emergency rations inside.
+    gives_item: trainee_ration
+    once_key: tutorial_locker
+    message_zh: 你打開櫃門，取出一包學員口糧。
+    message_en: You open the locker and take a trainee ration pack.
+  tutorial_scan_post:
+    room_id: tutorial_course
+    name_zh: 掃描信標柱
+    name_en: Scan Beacon Post
+    description_zh: 障礙道上的掃描示範柱，綠燈閃爍等待互動。
+    description_en: A scan demo post on the course—green light blinking.
+    message_zh: 信標亮起：「scan 可列出房間出口、物品與 NPC；練熟後進入夜城。」
+    message_en: 'The beacon glows: "scan lists exits, items, and NPCs—master it before Night City."'
+  tutorial_med_console:
+    room_id: tutorial_medbay
+    name_zh: 義體示範主機
+    name_en: Cyber Demo Console
+    description_zh: 模擬診所的教學終端，顯示義體槽位說明。
+    description_en: A sim-clinic teaching terminal showing cyber slot info.
+    message_zh: 螢幕列出九個義體槽與 install／uninstall 流程——此處為安全模擬，不會觸發幻痛。
+    message_en: "The screen lists nine cyber slots and install/uninstall steps—safe sim, no psychosis."

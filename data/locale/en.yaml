@@ -678,9 +678,14 @@ talk:
   broker: "The info broker whispers: \"Want Maelstrom intel? A thug in the alley knows something.\""
   broker_quest: "◈ New quest: Broker's Rumor"
   thug: "The thug grins: \"Maelstrom's scooping chrome lately. Tell your broker I talked.\""
-  instructor: "The holo instructor flickers: \"North for combat, east for netrun, south for gear. When ready, head west to the square.\""
-  netcoach: "The net coach taps a terminal: \"Type net to enter the sim, then hack or probe the training terminal.\""
-  quartermaster: "The quartermaster gestures at the racks: \"Free practice gear on the floor; use shop, buy, and sell to trade.\""
+  instructor: "The holo instructor flickers: \"Up for briefing—gigs and stats; north combat, east netrun, south gear; canteen west of armory. When ready, head west to the square.\""
+  netcoach: "The net coach taps a terminal: \"Type net to enter the sim, then hack or probe the training terminal. North sim-clinic for install practice.\""
+  quartermaster: "The quartermaster gestures at the racks: \"Free practice gear on the floor; use shop, buy, and sell to trade. Canteen west for eat and drink.\""
+  rookie_fixer: "The rookie fixer taps the board: \"Type gigs, accept to take work; journal for progress, abandon to drop. stats for level—recall returns you here.\""
+  canteen_tech: "The tech points at dispensers: \"eat rations when hungry, drink electrolyte when thirsty; use med_stim when hurt. interact the locker for a one-time stash.\""
+  range_officer: "The range officer mutters: \"Equip first—equipment shows slots; carbine two-handed, pistol secondary, smart gun demos lock-on. look your target before firing.\""
+  clinic_tutor: "The tutor opens a sterile booth: \"Take a practice_cyber_kit, install into a cyber slot; interact the console for notes. uninstall when done.\""
+  course_guide: "The guide raises a scanner: \"scan for exits and interactables; interact the scan post to finish basics. The patrol dummy practices punch and flee.\""
 
 say:
   usage: "Usage: say <message>"

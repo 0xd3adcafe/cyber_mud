@@ -678,9 +678,14 @@ talk:
   broker: "情報經紀人壓低聲音：「想打聽漩渦幫的動向？小巷裡有個暴徒知道內情。」"
   broker_quest: "◈ 新任務：經紀人的傳聞"
   thug: "街頭暴徒咧嘴一笑：「漩渦幫最近在收義體，別多問。回去跟你的經紀人說我講過了。」"
-  instructor: "教官的全息影像亮起：「北邊練戰鬥、東邊練駭入、南邊領裝備。準備好了就往西回到廣場。」"
-  netcoach: "駭客教練敲了敲終端：「輸入 net 進入模擬介面，對訓練用終端用 hack 或 probe 試試。」"
-  quartermaster: "裝備管理員指著架子：「地上有免費練習裝備；要交易用 shop 看價，buy／sell 即可。」"
+  instructor: "教官的全息影像亮起：「往上簡報室練 gigs／stats；北邊戰鬥、東邊駭入、南邊領裝備；裝備庫西邊有餐廳。準備好了就往西回廣場。」"
+  netcoach: "駭客教練敲了敲終端：「輸入 net 進入模擬介面，對訓練用終端用 hack 或 probe 試試。北邊模擬診所可練 install。」"
+  quartermaster: "裝備管理員指著架子：「地上有免費練習裝備；要交易用 shop 看價，buy／sell 即可。西邊餐廳練 eat／drink。」"
+  rookie_fixer: "實習中介敲委託板：「輸入 gigs 看委託，accept 接任務；journal 查進度，abandon 放棄。stats 看等級，recall 隨時回訓練場。」"
+  canteen_tech: "技師指著販賣機：「餓了 eat 口糧、渴了 drink 電解液；受傷用 use med_stim。儲物櫃 interact locker 還有一次性補給。」"
+  range_officer: "靶場教官壓低嗓音：「先裝備武器，equipment 看槽位；卡賓槍雙手、手槍副手，智慧槍示範鎖定。記得 look 目標再開火。」"
+  clinic_tutor: "示範導師掀開無菌帘：「撿 practice_cyber_kit，install 裝進義體槽；主機 interact console 看說明。拆下用 uninstall。」"
+  course_guide: "引導員舉起掃描儀：「scan 看出口與互動點；interact 掃描柱完成基礎課。移動靶 patrol_dummy 可練 punch／flee。」"
 
 say:
   usage: "用法：say <訊息>"

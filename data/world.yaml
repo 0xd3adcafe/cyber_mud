@@ -10,9 +10,13 @@ factions:
 room_items:
   square: [glowstick, knife, jacket, cyber_arm_kit, mod_chip, liberty_pistol, pipe, synth_ramen]
   alley: [rusty_key]
-  tutorial: [glowstick]
+  tutorial: [glowstick, field_manual]
+  tutorial_briefing: [field_manual]
   tutorial_armory: [trainee_blade, training_sidearm, trainee_undersuit, trainee_vest, trainee_pants, trainee_boots, trainee_helmet, trainee_baton, practice_cyber_kit, mod_chip, med_stim]
-  tutorial_range: [training_sidearm, training_carbine, trainee_helmet]
+  tutorial_canteen: [trainee_ration, trainee_flask, synth_ramen, energy_drink, med_stim]
+  tutorial_course: [field_manual, trainee_baton]
+  tutorial_medbay: [practice_cyber_kit, med_stim, trauma_kit]
+  tutorial_range: [training_sidearm, training_carbine, trainee_helmet, training_smartgun]
 
 rooms:
   square:
@@ -80,9 +84,23 @@ rooms:
     grid_y: 1
     exits:
       west: square
+      up: tutorial_briefing
       north: tutorial_combat
       east: tutorial_net
       south: tutorial_armory
+  tutorial_briefing:
+    name_zh: 任務簡報室
+    name_en: Mission Briefing Room
+    description_zh: |
+      全息委託板與派系簡介投影循環播放。新手可在這裡熟悉 gigs、stats 與 recall。
+    description_en: |
+      Holo gig boards and faction primers loop on the walls—learn gigs, stats, and recall here.
+    district: tutorial
+    grid_x: 2
+    grid_y: 2
+    tags: [tutorial, social]
+    exits:
+      down: tutorial
   tutorial_combat:
     name_zh: 戰鬥訓練區
     name_en: Combat Drill Zone
@@ -96,6 +114,20 @@ rooms:
     exits:
       south: tutorial
       north: tutorial_range
+      east: tutorial_course
+  tutorial_course:
+    name_zh: 障礙訓練道
+    name_en: Obstacle Course
+    description_zh: |
+      掃描信標與互動閘門排列成基礎課程。東側靶標機供額外戰鬥練習。
+    description_en: |
+      Scan beacons and interact gates line a basic drill lane—with extra combat targets at the end.
+    district: tutorial
+    grid_x: 3
+    grid_y: 0
+    tags: [tutorial, interact]
+    exits:
+      west: tutorial_combat
   tutorial_net:
     name_zh: 駭客模擬區
     name_en: Netrun Sim Bay
@@ -108,6 +140,20 @@ rooms:
     grid_y: 1
     exits:
       west: tutorial
+      north: tutorial_medbay
+  tutorial_medbay:
+    name_zh: 模擬義體診所
+    name_en: Sim Ripper Bay
+    description_zh: |
+      無菌霧面隔間與示範手術燈。可在這裡練習 install、use 與義體槽位概念（安全模擬）。
+    description_en: |
+      Sterile booths and demo surgical lamps—practice install, use, and cyber slots in a safe sim.
+    district: tutorial
+    grid_x: 3
+    grid_y: 2
+    tags: [tutorial, ripperdoc]
+    exits:
+      south: tutorial_net
   tutorial_armory:
     name_zh: 訓練裝備庫
     name_en: Training Armory
@@ -120,6 +166,20 @@ rooms:
     grid_y: 2
     exits:
       north: tutorial
+      west: tutorial_canteen
+  tutorial_canteen:
+    name_zh: 學員餐廳
+    name_en: Trainee Canteen
+    description_zh: |
+      合成餐與能量飲的自動販賣機嗡嗡運轉。適合練習 eat、drink、use 與補給管理。
+    description_en: |
+      Synth-food dispensers hum—practice eat, drink, use, and supply management here.
+    district: tutorial
+    grid_x: 1
+    grid_y: 2
+    tags: [tutorial, consumables]
+    exits:
+      east: tutorial_armory
   tutorial_range:
     name_zh: 射擊靶場
     name_en: Firing Range
@@ -378,6 +438,44 @@ items:
     consumable: medicine
     hp_restore: 30
     value: 25
+  trainee_ration:
+    name_zh: 學員口糧包
+    name_en: Trainee Ration Pack
+    description_zh: 企業配發的壓縮口糧，熱量足夠撐過一場模擬戰。
+    description_en: Corporate-issue calorie bricks—enough for one sim firefight.
+    takeable: true
+    consumable: food
+    hp_restore: 12
+    value: 8
+  trainee_flask:
+    name_zh: 學員電解液
+    name_en: Trainee Electrolyte Flask
+    description_zh: 訓練場標準飲料，可短暫恢復神經負載（RAM）。
+    description_en: Standard yard hydration—a brief neural (RAM) bump.
+    takeable: true
+    consumable: drink
+    hp_restore: 4
+    ram_restore: 1
+    value: 10
+  field_manual:
+    name_zh: 邊緣人戰術手冊
+    name_en: Edgerunner Field Manual
+    description_zh: 訓練場配發的口袋手冊，封面寫著「先 look，再出手」。
+    description_en: A pocket manual from the yard—cover reads "look first, then act."
+    takeable: true
+    value: 5
+  training_smartgun:
+    name_zh: 訓練用智慧手槍
+    name_en: Training Smart Pistol
+    description_zh: 鎖定輔助示範槍，熟悉 smart 武器種類與射擊節奏。
+    description_en: A lock-on demo pistol—learn smart weapons and firing cadence.
+    takeable: true
+    slot: weapon
+    weapon_type: handgun
+    weapon_class: smart
+    weapon_mode: secondary
+    weapon_damage: 8
+    value: 75
   rusty_key:
     name_zh: 生鏽鑰匙
     name_en: Rusty Key
@@ -521,3 +619,73 @@ npcs:
     equipment:
       weapon_primary: trainee_baton
     loot: [med_stim, trainee_vest]
+  patrol_dummy:
+    name_zh: 移動靶標機
+    name_en: Patrol Dummy
+    room_id: tutorial_course
+    description_zh: 沿障礙道巡邏的輕甲靶標，供進階攻擊與 flee 練習。
+    description_en: A light-armor dummy patrolling the course—for attack and flee drills.
+    hp: 18
+    attack: 2
+    hostile: true
+    aggro: 4
+    respawn_minutes: 5
+    patrol: [tutorial_course]
+    equipment:
+      weapon_primary: trainee_baton
+    loot: [trainee_ration]
+  rookie_fixer:
+    name_zh: 實習中介
+    name_en: Rookie Fixer
+    room_id: tutorial_briefing
+    description_zh: 剛轉正的街頭中介，熱心解說 gigs 與街頭聲望系統。
+    description_en: A newly minted fixer explaining gigs and street cred.
+    hp: 45
+    hostile: false
+    talk_key: rookie_fixer
+    idle_msg_zh: 敲著委託板：「想接活？輸入 gigs 看板，accept 接任務。」
+    idle_msg_en: 'Taps the gig board: "Want work? Type gigs, then accept."'
+  canteen_tech:
+    name_zh: 餐廳自動販賣技師
+    name_en: Canteen Vending Tech
+    room_id: tutorial_canteen
+    description_zh: 維修販賣機的技師，順便教新人 eat、drink、use。
+    description_en: A tech fixing vending rigs—teaches eat, drink, and use.
+    hp: 40
+    hostile: false
+    talk_key: canteen_tech
+    idle_msg_zh: 「餓了就 eat 口糧，渴了就 drink 電解液。」
+    idle_msg_en: '"Hungry? eat rations. Thirsty? drink electrolyte."'
+  range_officer:
+    name_zh: 靶場教官
+    name_en: Range Officer
+    room_id: tutorial_range
+    description_zh: 戴護耳的靶場教官，講解 weapon_mode 與遠程武器種類。
+    description_en: A range officer with ear guards—covers weapon modes and ranged types.
+    hp: 55
+    hostile: false
+    talk_key: range_officer
+    idle_msg_zh: 「卡賓槍要雙手，手槍可副手——裝備後看 equipment。」
+    idle_msg_en: '"Carbine is two-handed; pistols go secondary—check equipment."'
+  clinic_tutor:
+    name_zh: 義體示範導師
+    name_en: Cyber Demo Tutor
+    room_id: tutorial_medbay
+    description_zh: 模擬診所裡的導師，指導 install 與 uninstall 流程。
+    description_en: A sim-clinic tutor walking rookies through install and uninstall.
+    hp: 50
+    hostile: false
+    talk_key: clinic_tutor
+    idle_msg_zh: 「撿套件、到這裡 install，想拆就 uninstall。」
+    idle_msg_en: '"Grab a kit, install here, uninstall when done."'
+  course_guide:
+    name_zh: 障礙道引導員
+    name_en: Course Guide
+    room_id: tutorial_course
+    description_zh: 手持掃描儀的引導員，教 interact 與 scan 基礎。
+    description_en: A guide with a scanner—teaches interact and scan basics.
+    hp: 42
+    hostile: false
+    talk_key: course_guide
+    idle_msg_zh: 「先 scan 看環境，再 interact 閘門。」
+    idle_msg_en: '"scan first, then interact the gate."'
