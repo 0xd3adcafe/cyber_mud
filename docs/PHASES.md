@@ -249,7 +249,7 @@ Not yet implemented or only partially implemented.
 
 ### World expansion ([WORLD.md](WORLD.md))
 
-**Baseline (2026-06):** **263 rooms**, **109 NPCs**, **45 items** — WORLD.md scale targets met; district `safety`/`atmosphere`; `help tutorial`; faction depth; schedules + gray market; poison/overheat + live world reactions (`world/reactions.py`). **World expansion W.1–W.14 shipped** (ongoing content depth beyond counts remains in backlog as needed).
+**Baseline (2026-06):** **263 rooms**, **109 NPCs**, **45 items** — WORLD.md scale targets met; district `safety`/`atmosphere`; `help tutorial`; faction depth; schedules + gray market; poison/overheat + live world reactions (`world/reactions.py`). **World expansion W.1–W.14 shipped** — authored follow-up tracked under **Content depth** below.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
@@ -269,6 +269,23 @@ Not yet implemented or only partially implemented.
 | ~~W.14~~ | ~~World scale targets~~ | ✅ **263 rooms**, **109 NPCs**, **45 items**; `tools/expand_world_population.py`; `data/world_population.yaml` loader overlay; `tests/test_world_scale.py` |
 
 **Suggested order:** W.4 → W.5 → W.11 (story anchors) → W.1 → W.2 → W.3 (geography scale) → W.6 → W.7 → W.8 → W.9 → W.10 → W.12 → W.13 → W.14.
+
+### Content depth (post W.14 scale)
+
+**Goal:** After procedural grid scale (W.14), replace template filler with **authored** dialogue, quests, hubs, economy, and district hooks so Night City reads as lived-in—not just counted.
+
+**Baseline:** 86 procedural NPCs in `data/world_population.yaml` share four generic `talk.grid_*` keys (`grid_civilian`, `grid_thug`, `grid_corpo`, `grid_fixer`). Quest author WARNs: `gray_market`, `tyrell_intel`, `velvet_job` — `complete_npc_id` not in any `talk_npc` stage.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| D.1 | Grid NPC dialogue | District/archetype-specific `talk.*` keys for priority grid NPCs (hubs, fixers, aggro archetypes); update `tools/expand_world_population.py` `talk_key` map; `data/locale/en.yaml` + `zh.yaml` in lockstep |
+| D.2 | Grid NPC quests & quest hygiene | Broker chains / gigs targeting procedural NPCs or districts; add `talk_npc` turn-in stages or adjust `complete_npc_id` for `gray_market`, `tyrell_intel`, `velvet_job`; `./admin.sh quests` clean (no WARN) |
+| D.3 | Hand-authored district hubs | 1–2 named NPCs + distinctive `look` flavor per district hub beyond procedural templates; edit `data/world.yaml` hubs (`tyrell_plaza`, `combat_zone_gate`, etc.) |
+| D.4 | Item lore & economy | More hand items, shop stock, craft/disassemble hooks for `world_population` loot; tie archetype `loot` to shops and `disassemble` recipes |
+| D.5 | Interactables & NETRUN on grid | District interactables + net nodes in grid rooms (not only `crypt`/`data_vault` anchors); `data/interactables.yaml`, `data/net_nodes.yaml`; `look`/`scan`/`hack` coverage |
+| D.6 | Population tool workflow | Document regen workflow (`python -m tools.expand_world_population`, loader merge, hand-authored overrides); optional archetype upgrades (schedules, faction, quest hooks) |
+
+**Suggested order:** D.2 → D.1 → D.3 → D.4 → D.5 → D.6.
 
 ### Life commands (posture, rest & environment)
 

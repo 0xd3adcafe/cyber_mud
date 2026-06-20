@@ -247,7 +247,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 ### 世界擴充（[WORLD.md](WORLD.md)）
 
-**現況（2026-06）：** **263 房**、**109 NPC**、**45 物品**——已達 WORLD.md 規模目標；區域 `safety`／`atmosphere`；`help tutorial`；派系深度；作息＋灰市；中毒／過熱＋動態世界回饋。**世界擴充 W.1–W.14 已交付**。
+**現況（2026-06）：** **263 房**、**109 NPC**、**45 物品**——已達 WORLD.md 規模目標；區域 `safety`／`atmosphere`；`help tutorial`；派系深度；作息＋灰市；中毒／過熱＋動態世界回饋。**世界擴充 W.1–W.14 已交付**——後續手寫深度見下方 **內容深度**。
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
@@ -267,6 +267,23 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~W.14~~ | ~~世界規模里程碑~~ | ✅ **263 房**、**109 NPC**、**45 物品**；`tools/expand_world_population.py`；`data/world_population.yaml` loader 覆蓋；`tests/test_world_scale.py` |
 
 **建議順序：** W.4 → W.5 → W.11（主線錨點）→ W.1 → W.2 → W.3（地理規模）→ W.6 → W.7 → W.8 → W.9 → W.10 → W.12 → W.13 → W.14。
+
+### 內容深度（W.14 規模之後）
+
+**目標：** 程序格點規模（W.14）達標後，以**手寫**對話、任務、樞紐、經濟與區域掛鉤取代模板填充，讓夜城有生活感而不只是數字達標。
+
+**現況：** `data/world_population.yaml` 中 86 個程序 NPC 共用四組通用 `talk.grid_*`（`grid_civilian`、`grid_thug`、`grid_corpo`、`grid_fixer`）。任務編寫器 WARN：`gray_market`、`tyrell_intel`、`velvet_job`——`complete_npc_id` 未出現在任何 `talk_npc` 階段。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| D.1 | 格點 NPC 對話 | 優先格點 NPC（樞紐、中介、敵意原型）改用區域／原型專屬 `talk.*`；更新 `tools/expand_world_population.py` 的 `talk_key` 對照；`data/locale/en.yaml`＋`zh.yaml` 同步 |
+| D.2 | 格點任務與任務整潔 | 經紀人鏈／委託鎖定程序 NPC 或區域；為 `gray_market`、`tyrell_intel`、`velvet_job` 補 `talk_npc` 交件階段或調整 `complete_npc_id`；`./admin.sh quests` 無 WARN |
+| D.3 | 手寫區域樞紐 | 各區樞紐 1–2 名具名 NPC＋獨特 `look` 敘事，超越程序模板；編輯 `data/world.yaml` 樞紐（`tyrell_plaza`、`combat_zone_gate` 等） |
+| D.4 | 物品敘事與經濟 | 更多手寫物品、商店庫存、`world_population` 戰利品的 craft／disassemble 掛鉤；原型 `loot` 對應商店與拆解配方 |
+| D.5 | 格點互動物與 NETRUN | 區域互動物＋格點房 net 節點（不限 `crypt`／`data_vault` 錨點）；`data/interactables.yaml`、`data/net_nodes.yaml`；`look`／`scan`／`hack` 覆蓋 |
+| D.6 | 人口工具工作流 | 文件化重產流程（`python -m tools.expand_world_population`、loader 合併、手寫覆蓋保留）；可選原型升級（schedule、派系、任務掛鉤） |
+
+**建議順序：** D.2 → D.1 → D.3 → D.4 → D.5 → D.6。
 
 ### 生活指令（姿態、休息與環境）
 

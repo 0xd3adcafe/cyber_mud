@@ -243,6 +243,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 |------|--------|
 | Environment | pyenv native Python build |
 | **World expansion (WORLD.md)** | W.1–W.14 shipped (263 rooms / 109 NPCs / 45 items); see PHASES **World expansion** |
+| **Content depth** | D.1–D.6 pending — grid dialogue, quests, hubs, economy, interactables/NETRUN, population tool; see PHASES **Content depth** |
 
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.7 shipped — see PHASES **Mature / NSFW content** table.
 
