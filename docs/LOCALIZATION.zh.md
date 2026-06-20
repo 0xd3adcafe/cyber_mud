@@ -40,6 +40,7 @@
 | Client TUI | `client.*`；跟隨 `player.locale` | `en` |
 | 文件 | 英文 `*.md` 為 GitHub 預設；中文 `*.zh.md` 對照 | 英文 |
 | Commit | `<type>: 英文簡述` + 可選 ` / 中文` | 英文 |
+| **授權** | 程式：[Apache 2.0](../LICENSE)；文案：[CC BY 4.0](../LICENSE-CONTENT.md) | 見 [CONTRIBUTING.md](../CONTRIBUTING.md) |
 
 ## 遊戲內切換
 
