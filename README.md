@@ -53,10 +53,11 @@ Chinese mirrors: same paths with `.zh.md` suffix (e.g. [docs/WORLD.zh.md](docs/W
 
 ## Core principles
 
-1. **Built-in Textual client** — no third-party MUD clients for production play.  
-2. **World in `data/`** — code interprets YAML, not hardcoded rooms.  
-3. **One command per module** under `commands/`.  
-4. **English default**, bilingual `en` + `zh` locale files and `*.zh.md` doc mirrors.
+1. **English default locale (mandatory)** — `locale=en` at runtime; `lang zh` is opt-in. See [CLAUDE.md](CLAUDE.md) § Project rules and [docs/LOCALIZATION.md](docs/LOCALIZATION.md).  
+2. **Built-in Textual client** — no third-party MUD clients for production play.  
+3. **World in `data/`** — code interprets YAML, not hardcoded rooms.  
+4. **One command per module** under `commands/`.  
+5. **Bilingual mirrors** — `en.yaml` + `zh.yaml`, English `*.md` + `*.zh.md`.
 
 ## Quick start
 

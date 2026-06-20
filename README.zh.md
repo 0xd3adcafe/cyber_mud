@@ -42,10 +42,11 @@ Agent 行為準則：**[CLAUDE.zh.md](CLAUDE.zh.md)**
 
 ## 核心原則
 
-1. **內建 Textual client** 為正式介面。  
-2. **世界放 `data/`**，程式只負責解讀。  
-3. **一指令一模組**，`commands/` 註冊制。  
-4. **英文為預設**；`data/locale/en.yaml` 與 `zh.yaml` 並行；文件英文 `*.md` + 中文 `*.zh.md`。
+1. **英文為預設語系（強制）** — 執行時 `locale=en`；`lang zh` 為選用。見 [CLAUDE.zh.md](CLAUDE.zh.md) § 專案規則與 [docs/LOCALIZATION.zh.md](docs/LOCALIZATION.zh.md)。  
+2. **內建 Textual client** 為正式介面。  
+3. **世界放 `data/`**，程式只負責解讀。  
+4. **一指令一模組**，`commands/` 註冊制。  
+5. **雙語對照** — `en.yaml` + `zh.yaml`；英文 `*.md` + 中文 `*.zh.md`。
 
 ## 快速開始
 

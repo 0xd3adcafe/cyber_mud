@@ -5,6 +5,15 @@
 > **預設語系：English (`en`)**  
 > 遊戲文案、日誌、文件與 commit 採 **英文主述 + 繁體中文對照**。
 
+## 專案規則（強制）
+
+**本專案預設語系為英文。** 硬性規定見 [`CLAUDE.zh.md`](../CLAUDE.zh.md) § 專案規則（強制）。
+
+- 執行時預設：`Player.locale == "en"`、client 登入 `en`、存檔缺 `locale` 遷移為 `"en"`、`CYBER_MUD_SERVER_LOCALE=en`。
+- **不得**在未經維護者明確決策與完整測試／文件更新下，將專案預設改為 `zh`。
+- 新增文案：先 `en.yaml` 再 `zh.yaml`；新增文件：先英文 `*.md` 再 `*.zh.md`。
+- 中文為遊戲內**選用**（`lang zh`），非出廠預設。
+
 ## 文件對照
 
 | 英文（GitHub 預設） | 中文 |

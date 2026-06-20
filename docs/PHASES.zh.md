@@ -177,6 +177,7 @@
 | Prompt 輸入提示語系 | `#prompt` placeholder `client.ui.prompt_placeholder`；`_refresh_prompt_placeholder` |
 | Client clear 清除 log | `/clear` 本機指令；`AnimatedLogBuffer.clear()`；Tab 補全；`tests/test_client_app.py` |
 | 中英文文件分離 | 英文 `*.md` GitHub 預設；中文 `*.zh.md` 對照；README ASCII banner |
+| 英文預設語系寫入專案規則 | `CLAUDE.zh.md` § 專案規則（強制）；`LOCALIZATION.zh.md` § 專案規則；README 核心原則 #1 |
 
 ## Backlog 維護慣例
 

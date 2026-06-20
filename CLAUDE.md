@@ -7,8 +7,29 @@ This file guides Claude Code, Cursor, and Grok when collaborating in this repo.
 
 **Trade-off:** Guidelines favor caution over speed; trivial tasks may use judgment.
 
+## Project rules (mandatory)
+
+**These rules are non-negotiable for agents and contributors.**
+
+### English is the default locale
+
+| Area | Rule |
+|------|------|
+| **In-game** | New players, saves without `locale`, client login, and all `or "en"` fallbacks use **`locale=en`**. Chinese is opt-in: `lang zh`. |
+| **Copy** | `data/locale/en.yaml` is authoritative; always add the same key to `zh.yaml`. World YAML: maintain `*_en` / `*_zh`; English when `player.locale == "en"`. |
+| **Server logs** | `CYBER_MUD_SERVER_LOCALE` defaults to `en`; use `server.*` locale keys—no hardcoded Chinese/English in logic. |
+| **Client UI** | `client.*` keys; default chrome and placeholders in English until `lang zh` meta. |
+| **Docs** | English `*.md` is canonical on GitHub; mirror in `*.zh.md`. |
+| **Commits** | English summary required: `<type>: EN summary` — optional ` / 中文`. |
+| **Tests** | Use `Player()` or `make_player(locale="en")` for new tests unless explicitly testing `zh`. |
+
+**Do not:** switch project default to `zh`, ship Chinese-only user-facing strings without locale keys, or add English-only docs without updating `en.yaml` when the change is in-game text.
+
+Full policy: [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md).
+
 ## Table of contents
 
+- [Project rules (mandatory)](#project-rules-mandatory)
 - [Claude collaboration guidelines](#claude-collaboration-guidelines)
   - [1. Think before acting](#1-think-before-acting)
   - [2. Simplicity first](#2-simplicity-first)
@@ -95,7 +116,10 @@ For multi-step work, state a short plan first:
 
 This repo was forked from the original **mud** project: MVP code skeleton plus full implementation docs (see `docs/`).
 
-**Core principle: built-in client—no reliance on external MUD clients.**
+**Core principles**
+
+1. **English default locale** — see [Project rules (mandatory)](#project-rules-mandatory); `lang zh` is opt-in.
+2. **Built-in client** — no reliance on external MUD clients.
 
 - The primary player interface is this repo’s `client/` (Textual TUI).
 - MUDlet, TinTin++, `nc`, etc. are not the official way to play.
@@ -157,7 +181,7 @@ Full doc index (English default; `*.zh.md` mirrors where listed):
 - Transport: TCP newline text protocol (`shared/protocol.py`)
 - World data separate from code; add rooms in `data/` first, not hardcoded in logic
 - Command handling is registry-based; one module per command under `commands/`
-- **Bilingual convention:** English is default; maintain game copy in both `data/locale/en.yaml` and `zh.yaml` (see [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md))
+- **English default locale (mandatory):** see [Project rules](#project-rules-mandatory); `en.yaml` + `zh.yaml` in lockstep ([`docs/LOCALIZATION.md`](docs/LOCALIZATION.md))
 - **Documentation:** split `*.md` (English, canonical) + `*.zh.md` (mirror); update both when changing project docs
 - Tests: `pytest tests/`; after changing commands or world logic, run related tests
 - Runtime: `PYTHONPATH` points at repo root (`run.sh` / `admin.sh` handle this)
@@ -281,6 +305,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | Focus tracking block | Grok-style gradient block above prompt; gigs / combat / command execution; theme color + icons; `tests/test_focus_block.py` |
 | Client clear log | `/clear` local command; `AnimatedLogBuffer.clear()`; Tab completion; `tests/test_client_app.py` |
 | Split EN/ZH documentation | `*.zh.md` mirrors; English default on GitHub; README ASCII banner |
+| English default locale in project rules | `CLAUDE.md` § Project rules (mandatory); `LOCALIZATION.md`; README core principle #1 |
 
 World setting and district expansion: [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)).
 

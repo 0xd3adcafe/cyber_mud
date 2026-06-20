@@ -177,6 +177,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Prompt placeholder locale | `#prompt` placeholder `client.ui.prompt_placeholder`; `_refresh_prompt_placeholder` |
 | Client clear log | `/clear` local command; `AnimatedLogBuffer.clear()`; Tab completion; `tests/test_client_app.py` |
 | Split EN/ZH documentation | `*.zh.md` mirrors; English default on GitHub; README ASCII banner |
+| English default locale in project rules | `CLAUDE.md` § Project rules (mandatory); `LOCALIZATION.md` § Project rule; README core principle #1 |
 
 ## Backlog maintenance convention
 

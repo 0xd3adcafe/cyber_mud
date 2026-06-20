@@ -5,6 +5,15 @@
 > **Default locale: English (`en`)**  
 > User-facing text, logs, docs, and commits use **English primary + Traditional Chinese mirror**.
 
+## Project rule (mandatory)
+
+**English is the default locale for this project.** This is enforced in [`CLAUDE.md`](../CLAUDE.md) § Project rules (mandatory).
+
+- Runtime default: `Player.locale == "en"`, client login `en`, save migration `locale` → `"en"`, `CYBER_MUD_SERVER_LOCALE=en`.
+- **Never** change the project default to `zh` without an explicit maintainer decision and full test/doc update.
+- New strings: `en.yaml` first, then `zh.yaml`; new docs: English `*.md` first, then `*.zh.md`.
+- Chinese is **opt-in** in-game (`lang zh`), not the shipped default.
+
 ## Scope
 
 | Area | Mechanism | Default |
