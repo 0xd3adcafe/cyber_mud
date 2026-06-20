@@ -318,6 +318,27 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 **建議順序：** L.1 → L.2 → L.3 → L.4 → L.5 → L.6 → L.7 → L.8。**全階段已交付（2026-06）。**
 
+### Client 主 log 可讀性（頻道辨識）
+
+**目標：** 主畫面 `#log`／`#scrollback_wrap` 可快速掃讀——戰鬥、探索、社交、成長、系統訊息應**一眼可辨**，不必逐字閱讀。
+
+**現況（2026-06）：** `client/animated_log.py`＋`client/output_prefix.py` 僅分 `motd`／`sys`／`err`／`text`／`echo`；`client/env_format.py` 在 `text` 內為 look／scan 實體上色；戰鬥 CD 倒數會改寫行；`/clear` 可清緩衝。多數遊戲輸出仍共用暗淡 `›` 前綴。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| CL.1 | Log 種類分類 | `client/log_classifier.py`；擴充 `LogEntry.kind`；依 locale 前綴辨識（`combat.*`、`quest.*`、`go.ok`、`say`／`talk`、`progression.*`、`street_cred.*`、`proficiency.*`、`presence.*`、`world.ambient`）；接 `app._append_log` 與伺服器行路徑 |
+| CL.2 | 各類視覺識別 | `client/log_styles.py`＋`themes.py` `LogPalette`（如 `EnvPalette` 隨主題）；每類專用圖示＋色（戰鬥 ⚔、委託 ◆、社交 💬、環境 ▸、成長 ▲、環境 tick ～）；`/theme` 重繪 log |
+| CL.3 | 戰鬥頻道 | 命中／未中、CD、quickhack、狀態、gore、逃離／勝利／敗北用戰鬥色盤；可選回合間淡分隔；保留 CD 即時倒數（`cd_display.py`） |
+| CL.4 | 環境區塊 | look 與 scan 標題層級；房名／描述／實體列表層次；look 區塊間空行或細線；格點風味與區域行視覺上從屬房間標題 |
+| CL.5 | 社交與存在感 | `say`／`talk`／NPC 回覆／`presence.enter`／`leave`／戰鬥廣播獨立社交頻道；中英前綴偵測；多人可掃讀 |
+| CL.6 | 成長與委託 feed | XP、升級、天賦／屬性點、街頭聲望、熟練度、任務目標／完成／提示用成長色盤（金／青）；與 F7 委託側欄風格一致 |
+| CL.7 | 環境 tick 與世界回饋 | `ambient_tick`、`trauma_tick`、聲望變動、通緝無人機等弱化（斜體暗淡），不淹沒戰鬥／社交；換主題仍可讀 |
+| CL.8 | 測試與文件 | `tests/test_log_classifier.py`；擴充 `tests/test_output_prefix.py`／`tests/test_env_format.py`；[CLIENT_UI_DEBUG.md](CLIENT_UI_DEBUG.md) log 一節；玩家指南 `docs/player/client.md` 圖例 |
+
+**可選後續（不在 CL.1–CL.8）：** `/log compact` 或分類開關（隱藏 ambient）；log 匯出檔案。
+
+**建議順序：** CL.1 → CL.2 → CL.3＋CL.4（可並行）→ CL.5＋CL.6 → CL.7 → CL.8。
+
 ---
 
 建議路線：**0 → A → D.2/D.7（可玩性）→ B → C → D 其餘 → E**；若新 MUD 偏社交探索，可先做 B 再做 C。

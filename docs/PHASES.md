@@ -320,6 +320,27 @@ Not yet implemented or only partially implemented.
 
 **Suggested order:** L.1 → L.2 → L.3 → L.4 → L.5 → L.6 → L.7 → L.8. **All phases shipped (2026-06).**
 
+### Client log UX (readability & channel identity)
+
+**Goal:** Make the main `#log` / `#scrollback_wrap` area scannable—combat, exploration, social, progression, and system lines should be **instantly distinguishable** without reading every word.
+
+**Baseline (2026-06):** `client/animated_log.py` + `client/output_prefix.py` classify only `motd` / `sys` / `err` / `text` / `echo`; `client/env_format.py` colors look/scan entity lists inside `text`; combat CD countdown rewrites lines; `/clear` clears buffer. Most game output still shares the same dim `›` prefix.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| CL.1 | Log kind taxonomy | `client/log_classifier.py`; extend `LogEntry.kind` beyond 5 kinds; classify from locale prefixes (`combat.*`, `quest.*`, `go.ok`, `say`/`talk`, `progression.*`, `street_cred.*`, `proficiency.*`, `presence.*`, `world.ambient`); wire `app._append_log` + `classify_server_line` path |
+| CL.2 | Per-kind visual identity | `client/log_styles.py` + `themes.py` `LogPalette` (theme-synced like `EnvPalette`); distinct glyph + color per kind (combat ⚔, quest ◆, social 💬, env ▸, progression ▲, ambient ～); `/theme` redraws log |
+| CL.3 | Combat log channel | Combat hit/miss, CD, quickhack, status, gore, flee/victory/defeat use combat palette; optional faint separator between encounter rounds; preserve live CD tick (`cd_display.py`) |
+| CL.4 | Environment blocks | look vs scan header tiers; room title / description / entity list hierarchy; blank or rule between look blocks; grid flavor + district lines visually subordinate to room header |
+| CL.5 | Social & presence | `say` / `talk` / NPC reply / `presence.enter`/`leave` / combat broadcast distinct social channel; EN+ZH prefix detection; multiplayer skimmable |
+| CL.6 | Progression & gigs feed | XP, level-up, perk/attribute points, street cred, proficiency, quest objective/complete/hint lines use progression palette (gold/cyan); gig sidebar hint matches log styling |
+| CL.7 | Ambient & world tick | `ambient_tick`, `trauma_tick`, rep shift, wanted drone lines de-emphasized (dim italic) so they do not drown combat/social; still readable on `/theme` switch |
+| CL.8 | Tests & docs | `tests/test_log_classifier.py`, extend `tests/test_output_prefix.py` / `tests/test_env_format.py`; log section in [CLIENT_UI_DEBUG.md](CLIENT_UI_DEBUG.md); player guide `docs/player/client.md` log legend |
+
+**Optional follow-up (not in CL.1–CL.8):** `/log compact` or category toggles (hide ambient); log export to file.
+
+**Suggested order:** CL.1 → CL.2 → CL.3 + CL.4 (parallel) → CL.5 + CL.6 → CL.7 → CL.8.
+
 ---
 
 Suggested route: **0 → A → D.2/D.7 (playability) → B → C → remaining D → E**; for a social-exploration MUD, consider B before C.

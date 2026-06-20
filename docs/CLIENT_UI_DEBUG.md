@@ -137,3 +137,16 @@ Verify in **Windows Terminal / your usual terminal** and `pytest`:
 | Non-blocking fetch + cancel | `client/app.py` |
 
 Full backlog entry: [PHASES.md](PHASES.md) — hotkey bar visibility.
+
+## Client log UX (planned — CL.1–CL.8)
+
+**Problem:** Most server lines use the same dim `›` prefix (`client/output_prefix.py` kind `text`). Only MOTD/SYS/ERR/echo differ; `env_format.py` colors look/scan entity rows but not combat, quests, social, or progression.
+
+**Before changing log styling:**
+
+1. Read PHASES **Client log UX** — implement CL.1 classifier before palette tweaks.
+2. Add tests in `tests/test_log_classifier.py` (prefix → kind); extend `test_output_prefix` / `test_env_format`.
+3. Theme changes must redraw log via `AnimatedLogBuffer` + `LogPalette` (mirror `EnvPalette` pattern in `client/themes.py`).
+4. Do not break CD countdown (`cd_display.py`) or pending-command spinner on the in-flight echo line.
+
+**Key files:** `client/animated_log.py`, `client/output_prefix.py`, `client/env_format.py`, `client/app.py` (`_append_log`, `_read_loop`).
