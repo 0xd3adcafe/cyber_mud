@@ -25,7 +25,7 @@ Welcome to **cyber_mud**. These guides mirror what you will see in-game, but you
 | Need | In game | On GitHub |
 |------|---------|-----------|
 | Short verb list | `help` or **F3** | [COMMANDS.md](COMMANDS.md) |
-| Vitals / gear | **F2** PDA, **F5** equipment | [CLIENT.md](CLIENT.md) |
+| Vitals / gear / rest | **F2** PDA (posture, fatigue), **F5** equipment; `sit` `rest` `sleep` | [COMMANDS.md](COMMANDS.md) § Life & vitals |
 | Map | **F4** or `map` | [WORLD.md](../WORLD.md) (lore) |
 | Gigs | **F7** or `gigs` | [TUTORIAL.md](TUTORIAL.md) § Briefing |
 

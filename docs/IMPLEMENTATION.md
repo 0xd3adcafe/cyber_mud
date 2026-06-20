@@ -48,7 +48,7 @@ server/          Game, ClientSession, tick_loop, broadcast
 server/main.py   accept connections, read lines, graceful shutdown
 client/          MudClientApp (Textual), connection, sidebar, autocomplete
 shared/          protocol constants, i18n, completion, ui_json
-world/           World, Room, WorldState, clock, weather, tick
+world/           World, Room, WorldState, clock, weather, tick, life, vitals
 entities/        Player, NPC, Item data classes
 commands/        all player commands + registry + helpers
 combat/          Encounter real-time combat state
@@ -233,7 +233,7 @@ game.tick_loop (background):
 
 | Key | Panel |
 |-----|-------|
-| F2 | PDA (vitals + equipment + cyberware + skills) |
+| F2 | PDA (vitals + posture/fatigue + equipment + cyberware + skills) |
 | F3 | Help |
 | F4 | Map |
 | F5 | Equipment |

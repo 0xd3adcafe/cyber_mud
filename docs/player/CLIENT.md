@@ -34,7 +34,7 @@ Launch:
 | Key | Panel | Also |
 |-----|-------|------|
 | **Tab** | Complete command / cycle candidates | |
-| **F2** | PDA — HP, stats, faction, implants | `pda` |
+| **F2** | PDA — HP, posture, fatigue, stats, faction, implants | `pda` |
 | **F3** | Help overlay on log | `help`, `h` |
 | **F4** | Map | `map` |
 | **F5** | Equipment | `equipment`, `eq` |
@@ -96,6 +96,7 @@ While typing, `#prompt_preview` expands tokens such as:
 | `%c` | Combat indicator |
 | `%v` | Vehicle |
 | `%x` | XP |
+| `%posture` | Rest posture (standing / sitting / lying / sleeping) |
 
 Server `prompt` command and client `/prompt` share templates—see `prompt show` in game.
 

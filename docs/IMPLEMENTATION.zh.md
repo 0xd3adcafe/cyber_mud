@@ -48,7 +48,7 @@ server/          Game、ClientSession、tick_loop、廣播
 server/main.py   accept 連線、逐行讀取、優雅關閉
 client/          MudClientApp（Textual）、連線、側邊欄、自動完成
 shared/          protocol 常數、i18n、completion、ui_json
-world/           World、Room、WorldState、clock、weather、tick
+world/           World、Room、WorldState、clock、weather、tick、life、vitals
 entities/        Player、NPC、Item 資料類別
 commands/        所有玩家指令 + registry + helpers
 combat/          Encounter 即時戰鬥狀態
@@ -233,7 +233,7 @@ game.tick_loop (背景):
 
 | 鍵 | 面板 |
 |----|------|
-| F2 | PDA（vitals + 裝備 + 義體 + 技能） |
+| F2 | PDA（vitals + 姿態／疲勞 + 裝備 + 義體 + 技能） |
 | F3 | Help |
 | F4 | Map |
 | F5 | Equipment |

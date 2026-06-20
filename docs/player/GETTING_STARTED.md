@@ -86,7 +86,7 @@ pda
 | `go <dir>` / `n` `s` `e` `w` `u` `d` | Move (includes **up** / **down**) |
 | `scan` / `sc` | Scan environment (colored in client) |
 | `help` / `h` | Command list (**F3** overlay in client) |
-| `pda` / `st` | Personal agent panel (**F2**) |
+| `pda` / `st` | Personal agent panel (**F2**) — includes posture and fatigue |
 
 ```text
       [ YOU ]

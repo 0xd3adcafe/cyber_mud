@@ -29,7 +29,8 @@ Use `recall` anytime to return to the hub. Tutorial is isolated from open PvP in
 | `north` | Combat Drill | attack, defend, flee |
 | `east` | Netrun Sim Bay | `net`, hack, RAM |
 | `south` | Armory | equip, take, inventory |
-| `west` | *(after ready)* Neon Square | enter Night City |
+| `west` (from armory) | Trainee Canteen | sit, rest, eat, drink |
+| `west` (from hub) | *(after ready)* Neon Square | enter Night City |
 
 Start with:
 
@@ -78,7 +79,32 @@ equipment
 
 Use **F5** for equipment sidebar. Try `look trainee_blade` for item details.
 
-`north` back to hub.
+`north` back to hub. `west` → **Trainee Canteen**.
+
+## 2b. Trainee Canteen (`tutorial_canteen`)
+
+```text
+  ┌─ VENDING ──┐   ┌─ BENCH ──┐
+  │ eat drink  │   │ sit rest │
+  └────────────┘   └──────────┘
+```
+
+Practice life commands and consumables:
+
+```text
+interact canteen_bench
+sit
+rest
+look me
+wake
+```
+
+- **interact canteen_bench** — sit on the bench (rest anchor)  
+- **sit** / **rest** — posture and fatigue recovery over world ticks  
+- **look me** — HP, fatigue, and posture  
+- **wake** / **stand** — clear rest before moving (`go` also wakes you)  
+
+Also try `eat`, `drink`, and `use med_stim` with the canteen tech NPC. `east` returns to armory.
 
 ## 3. Combat Drill (`tutorial_combat`)
 

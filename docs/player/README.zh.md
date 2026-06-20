@@ -25,7 +25,7 @@
 | 需求 | 遊戲內 | GitHub |
 |------|--------|--------|
 | 簡短指令表 | `help` 或 **F3** | [COMMANDS.zh.md](COMMANDS.zh.md) |
-| 數值／裝備 | **F2** PDA、**F5** 裝備 | [CLIENT.zh.md](CLIENT.zh.md) |
+| 數值／裝備／休息 | **F2** PDA（姿態、疲勞）、**F5** 裝備；`sit` `rest` `sleep` | [COMMANDS.zh.md](COMMANDS.zh.md) § 生活與生命徵象 |
 | 地圖 | **F4** 或 `map` | [WORLD.zh.md](../WORLD.zh.md)（世界觀） |
 | 委託 | **F7** 或 `gigs` | [TUTORIAL.zh.md](TUTORIAL.zh.md) § 簡報室 |
 

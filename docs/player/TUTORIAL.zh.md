@@ -29,7 +29,8 @@
 | `north` | Combat Drill | attack、defend、flee |
 | `east` | Netrun Sim | `net`、hack、RAM |
 | `south` | Armory | equip、take、inventory |
-| `west` | *(畢業後)* Neon Square | 進入夜城 |
+| `west`（自軍械庫） | Trainee Canteen | sit、rest、eat、drink |
+| `west`（自中樞） | *(畢業後)* Neon Square | 進入夜城 |
 
 起手：
 
@@ -74,7 +75,32 @@ equipment
 
 **F5** 開裝備側欄。`look trainee_blade` 看物品細節。
 
-`north` 回中樞。
+`north` 回中樞。`west` → **學員餐廳**。
+
+## 2b. 學員餐廳 (`tutorial_canteen`)
+
+```text
+  ┌─ 販賣機 ──┐   ┌─ 長椅 ──┐
+  │ eat drink │   │ sit rest│
+  └───────────┘   └─────────┘
+```
+
+練習生活指令與消耗品：
+
+```text
+interact canteen_bench
+sit
+rest
+look me
+wake
+```
+
+- **interact canteen_bench** — 坐長椅（休息錨點）  
+- **sit**／**rest** — 姿態與疲勞，隨世界 tick 緩解  
+- **look me** — HP、疲勞、姿態  
+- **wake**／**stand** — 移動前先起身（`go` 也會喚醒）  
+
+也可向餐廳技師學 `eat`、`drink`、`use med_stim`。`east` 回軍械庫。
 
 ## 3. 戰鬥訓練區 (`tutorial_combat`)
 
