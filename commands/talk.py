@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from commands.helpers import find_npc_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.target_resolve import resolve_npc
 from shared.i18n import t
 from world.mature import has_mature_tag
 
@@ -15,9 +15,12 @@ def handle(ctx: CommandContext):
     if not target:
         return ok([t(ctx.player.locale, "talk.usage")])
 
-    npc_id = find_npc_id(ctx.state, target, ctx.player.room_id)
-    if npc_id is None:
+    npc_result = resolve_npc(ctx, target, verb="talk")
+    if npc_result.needs_response:
+        return ok(npc_result.lines)
+    if not npc_result.ok:
         return ok([t(ctx.player.locale, "talk.missing", name=target)])
+    npc_id = npc_result.value
 
     npc = ctx.state.world.npc(npc_id)
     if npc is None:

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from commands.helpers import find_item_id
 from commands.registry import CommandContext
 from shared.equipment import is_equippable_slot
+from shared.target_resolve import TargetResolveResult, resolve_item_id
 
 BULK_MARKERS = frozenset({"all", "全部", "*"})
 
@@ -12,47 +12,62 @@ def is_bulk(args: str) -> bool:
     return text.lower() in BULK_MARKERS or text in BULK_MARKERS
 
 
-def resolve_take_targets(ctx: CommandContext, args: str) -> list[str]:
+def resolve_take_targets(ctx: CommandContext, args: str) -> TargetResolveResult[list[str]]:
     if is_bulk(args):
         targets: list[str] = []
         for item_id in ctx.state.items_in_room(ctx.player.room_id):
             item = ctx.state.world.item(item_id)
             if item and item.takeable:
                 targets.append(item_id)
-        return targets
-    item_id = find_item_id(ctx.state, args, room_id=ctx.player.room_id)
-    return [item_id] if item_id else []
+        return TargetResolveResult(value=targets)
+    result = resolve_item_id(ctx, args, scopes=("ground",), verb="take")
+    if result.needs_response:
+        return TargetResolveResult(lines=result.lines)
+    if result.ok:
+        return TargetResolveResult(value=[result.value])
+    return TargetResolveResult(value=[])
 
 
-def resolve_inventory_targets(ctx: CommandContext, args: str) -> list[str]:
+def resolve_inventory_targets(ctx: CommandContext, args: str) -> TargetResolveResult[list[str]]:
     if is_bulk(args):
-        return list(ctx.player.inventory)
-    item_id = find_item_id(ctx.state, args, inventory=ctx.player.inventory)
-    return [item_id] if item_id else []
+        return TargetResolveResult(value=list(ctx.player.inventory))
+    result = resolve_item_id(ctx, args, scopes=("inventory",), verb="drop")
+    if result.needs_response:
+        return TargetResolveResult(lines=result.lines)
+    if result.ok:
+        return TargetResolveResult(value=[result.value])
+    return TargetResolveResult(value=[])
 
 
-def resolve_equip_targets(ctx: CommandContext, args: str) -> list[str]:
+def resolve_equip_targets(ctx: CommandContext, args: str) -> TargetResolveResult[list[str]]:
     if is_bulk(args):
         targets: list[str] = []
         for item_id in ctx.player.inventory:
             item = ctx.state.world.item(item_id)
             if item and is_equippable_slot(item.slot) and not item.implant_id:
                 targets.append(item_id)
-        return targets
-    item_id = find_item_id(ctx.state, args, inventory=ctx.player.inventory)
-    return [item_id] if item_id else []
+        return TargetResolveResult(value=targets)
+    result = resolve_item_id(ctx, args, scopes=("inventory",), verb="equip")
+    if result.needs_response:
+        return TargetResolveResult(lines=result.lines)
+    if result.ok:
+        return TargetResolveResult(value=[result.value])
+    return TargetResolveResult(value=[])
 
 
-def resolve_unequip_targets(ctx: CommandContext, args: str) -> list[str]:
+def resolve_unequip_targets(ctx: CommandContext, args: str) -> TargetResolveResult[list[str]]:
     if is_bulk(args):
-        return list(ctx.player.equipment.values())
-    item_id = find_item_id(ctx.state, args, inventory=list(ctx.player.equipment.values()))
-    if item_id and item_id in ctx.player.equipment.values():
-        return [item_id]
-    for slot, equipped_id in ctx.player.equipment.items():
-        item = ctx.state.world.item(equipped_id)
-        if item and find_item_id(ctx.state, args, inventory=[equipped_id]):
-            return [equipped_id]
-        if slot == args.strip().lower():
-            return [equipped_id]
-    return []
+        return TargetResolveResult(value=[v for v in ctx.player.equipment.values() if v])
+    from commands.helpers import resolve_equipment_slot_name
+
+    slot = resolve_equipment_slot_name(ctx, args)
+    if slot:
+        item_id = ctx.player.equipment.get(slot, "")
+        if item_id:
+            return TargetResolveResult(value=[item_id])
+    result = resolve_item_id(ctx, args, scopes=("equipped",), verb="unequip")
+    if result.needs_response:
+        return TargetResolveResult(lines=result.lines)
+    if result.ok:
+        return TargetResolveResult(value=[result.value])
+    return TargetResolveResult(value=[])

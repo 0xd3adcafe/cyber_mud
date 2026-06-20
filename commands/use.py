@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from commands.helpers import find_item_id
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
 from shared.locale_content import item_label
+from shared.target_resolve import resolve_item_id
 from world.consumables import (
     apply_consumable,
     apply_status_cure,
@@ -16,14 +16,18 @@ from world.consumables import (
 
 def _handle_consumable(ctx: CommandContext, *, required_type: str | None = None):
     locale = ctx.player.locale
+    verb_name = "eat" if required_type == "food" else "drink" if required_type == "drink" else "use"
     if not ctx.args:
         usage_key = "eat.usage" if required_type == "food" else "drink.usage" if required_type == "drink" else "use.usage"
         return ok([t(locale, usage_key)])
 
-    item_id = find_item_id(ctx.state, ctx.args, inventory=ctx.player.inventory)
-    if item_id is None:
+    result = resolve_item_id(ctx, ctx.args, scopes=("inventory",), verb=verb_name)
+    if result.needs_response:
+        return ok(result.lines)
+    if not result.ok:
         return ok([t(locale, "use.missing")])
 
+    item_id = result.value
     item = ctx.state.world.item(item_id)
     if not is_consumable(item):
         return ok([t(locale, "use.not_consumable")])

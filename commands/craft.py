@@ -2,16 +2,8 @@ from __future__ import annotations
 
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
-from shared.names import matches_name
+from shared.target_resolve import resolve_recipe
 from world.craft import can_craft, perform_craft
-
-
-def _resolve_recipe_id(ctx: CommandContext, name: str) -> str | None:
-    needle = name.strip().lower()
-    for rid, recipe in ctx.state.world.recipes.items():
-        if matches_name(needle, rid, recipe.name_zh, recipe.name_en):
-            return rid
-    return None
 
 
 def handle(ctx: CommandContext):
@@ -30,9 +22,12 @@ def handle(ctx: CommandContext):
         lines.append(t(locale, "craft.usage"))
         return ok(lines, meta=player_meta(ctx))
 
-    rid = _resolve_recipe_id(ctx, target)
-    if rid is None:
+    recipe_result = resolve_recipe(ctx, target, verb="craft")
+    if recipe_result.needs_response:
+        return ok(recipe_result.lines)
+    if not recipe_result.ok:
         return ok([t(locale, "craft.unknown", name=target)])
+    rid = recipe_result.value
 
     recipe = ctx.state.world.recipe(rid)
     if recipe is None:

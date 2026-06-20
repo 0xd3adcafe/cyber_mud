@@ -21,9 +21,31 @@ from shared.locale_content import (
     room_name,
 )
 from shared.names import matches_name
+from shared.target_resolve import (
+    ItemRef,
+    item_location_line_for_ref,
+    resolve_corpse,
+    resolve_item,
+    resolve_net_node,
+    resolve_npc,
+)
 from world.corpses import corpse_label, corpses_in_room, decay_time_label, find_corpse_id
 from world.state import WorldState
 from world.weather import weather_label
+
+
+def resolve_look_item(ctx: CommandContext, target: str) -> list[str] | None:
+    result = resolve_item(
+        ctx,
+        target,
+        scopes=("ground", "inventory", "equipped", "corpse", "stash"),
+        verb="look",
+    )
+    if result.needs_response:
+        return result.lines
+    if not result.ok:
+        return None
+    return format_look_item(ctx, result.value)
 
 
 def find_item_id(
@@ -155,10 +177,17 @@ def item_location_line(ctx: CommandContext, item_id: str) -> str | None:
     for slot, equipped_id in ctx.player.equipment.items():
         if equipped_id == item_id:
             return t(locale, "look.location.equipped", slot=slot_label(slot, locale))
+    for corpse in corpses_in_room(ctx.state, ctx.player.room_id):
+        if item_id in corpse.loot:
+            return t(locale, "look.location.corpse", corpse=corpse_label(ctx.state, corpse, locale))
+    if item_id in ctx.player.home_stash:
+        return t(locale, "look.location.stash")
     return None
 
 
-def format_look_item(ctx: CommandContext, item_id: str) -> list[str]:
+def format_look_item(ctx: CommandContext, ref: ItemRef | str) -> list[str]:
+    item_ref = ref if isinstance(ref, ItemRef) else ItemRef(str(ref), "")
+    item_id = item_ref.item_id
     item = ctx.state.world.item(item_id)
     if item is None:
         return [t(ctx.player.locale, "look.not_found", target=item_id)]
@@ -169,7 +198,11 @@ def format_look_item(ctx: CommandContext, item_id: str) -> list[str]:
         "",
         item_description(item, locale),
     ]
-    location = item_location_line(ctx, item_id)
+    location = (
+        item_location_line_for_ref(ctx, item_ref)
+        if item_ref.scope
+        else item_location_line(ctx, item_id)
+    )
     if location:
         lines.append(location)
     if item.slot:
@@ -313,7 +346,7 @@ def format_look_equipment_slot(ctx: CommandContext, slot: str) -> list[str]:
     item_id = ctx.player.equipment.get(slot, "")
     if not item_id:
         return [t(ctx.player.locale, "look.slot_missing", slot=slot_label(slot, ctx.player.locale))]
-    return format_look_item(ctx, item_id)
+    return format_look_item(ctx, ItemRef(item_id, "equipped", slot=slot))
 
 
 def format_look_equipment(ctx: CommandContext) -> list[str]:
@@ -362,21 +395,27 @@ def format_look_target(ctx: CommandContext, target: str) -> list[str]:
     if slot:
         return format_look_equipment_slot(ctx, slot)
 
-    corpse_id = find_corpse_id(ctx.state, text, ctx.player.room_id)
-    if corpse_id:
-        return format_look_corpse(ctx, corpse_id)
+    corpse_result = resolve_corpse(ctx, text, verb="look")
+    if corpse_result.needs_response:
+        return corpse_result.lines
+    if corpse_result.ok:
+        return format_look_corpse(ctx, corpse_result.value)
 
-    npc_id = find_npc_id(ctx.state, text, ctx.player.room_id)
-    if npc_id:
-        return format_look_npc(ctx, npc_id)
+    npc_result = resolve_npc(ctx, text, verb="look")
+    if npc_result.needs_response:
+        return npc_result.lines
+    if npc_result.ok:
+        return format_look_npc(ctx, npc_result.value)
 
-    node_id = find_net_node_id(ctx.state, text, ctx.player.room_id)
-    if node_id:
-        return format_look_net_node(ctx, node_id)
+    node_result = resolve_net_node(ctx, text, verb="look")
+    if node_result.needs_response:
+        return node_result.lines
+    if node_result.ok:
+        return format_look_net_node(ctx, node_result.value)
 
-    item_id = find_item_anywhere(ctx, text)
-    if item_id:
-        return format_look_item(ctx, item_id)
+    item_lines = resolve_look_item(ctx, text)
+    if item_lines is not None:
+        return item_lines
 
     return [t(ctx.player.locale, "look.not_found", target=text)]
 

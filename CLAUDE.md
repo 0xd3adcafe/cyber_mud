@@ -249,6 +249,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Content depth** | D.1–D.10 shipped (spotlight NPCs, district quests, grid look flavor); see PHASES **Content depth** |
 | **Security (ASVS L1)** | ASVS.1–5 shipped (PBKDF2, unified login errors, save validation, input bounds, rate limit); ASVS.6–14 backlog; see [`docs/SECURITY.md`](docs/SECURITY.md) |
 
+
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.17 shipped — see PHASES **Mature / NSFW content** table.
 
 Recent completions (2026-06) summary:
@@ -276,6 +277,7 @@ Recent completions (2026-06) summary:
 | Client input history | ↑↓ command history, Esc restore, `command_history.json` persistence |
 | Client saved credentials / PIN | `client/credentials.py` encrypted storage, PIN quick login, F7 clear memory |
 | `look` target inspection | `look <target>` shows item / NPC / equipment state and stats |
+| Target disambiguation TD.1–TD.5 | `shared/target_resolve.py`; ordinal/scope on items, NPCs, environment, shop commands |
 | NPC corpses and looting | `world/corpses.py` knockdown leaves corpse, loot, decay drops |
 | Corpse English suffix | `corpse_label` shows `(English)` / `(corpse)` for command entry |
 | Tutorial zone expansion | Training ground 9 rooms, 10 NPCs, 4 interactables; briefing / cafeteria / obstacle course / sim clinic; `tests/test_tutorial_zone.py` |

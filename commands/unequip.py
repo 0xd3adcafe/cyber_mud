@@ -30,7 +30,10 @@ def handle(ctx: CommandContext):
     if not ctx.args:
         return ok([t(ctx.player.locale, "unequip.usage")])
 
-    targets = resolve_unequip_targets(ctx, ctx.args)
+    resolved = resolve_unequip_targets(ctx, ctx.args)
+    if resolved.needs_response:
+        return ok(resolved.lines)
+    targets = resolved.value or []
     if not targets:
         return ok([t(ctx.player.locale, "unequip.missing")])
 

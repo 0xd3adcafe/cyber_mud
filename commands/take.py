@@ -1,19 +1,22 @@
 from __future__ import annotations
 
 from commands.bulk_helpers import is_bulk, resolve_take_targets
-from commands.helpers import find_item_in_corpse
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
 from shared.locale_content import item_label
-from world.corpses import corpse_label, find_corpse_id, split_take_from
+from shared.target_resolve import resolve_corpse, resolve_item_id
+from world.corpses import corpse_label, split_take_from
 
 
 def _take_from_corpse(ctx: CommandContext, item_args: str, corpse_name: str):
     locale = ctx.player.locale
-    corpse_id = find_corpse_id(ctx.state, corpse_name, ctx.player.room_id)
-    if corpse_id is None:
+    corpse_resolved = resolve_corpse(ctx, corpse_name, verb="take")
+    if corpse_resolved.needs_response:
+        return ok(corpse_resolved.lines)
+    if not corpse_resolved.ok:
         return ok([t(locale, "corpse.corpse_missing")])
 
+    corpse_id = corpse_resolved.value
     corpse = ctx.state.corpses.get(corpse_id)
     if corpse is None:
         return ok([t(locale, "corpse.corpse_missing")])
@@ -27,8 +30,16 @@ def _take_from_corpse(ctx: CommandContext, item_args: str, corpse_name: str):
             if item and item.takeable:
                 targets.append(item_id)
     else:
-        item_id = find_item_in_corpse(ctx.state, item_args, corpse_id)
-        targets = [item_id] if item_id else []
+        item_resolved = resolve_item_id(
+            ctx,
+            item_args,
+            scopes=("corpse",),
+            corpse_name=corpse_name,
+            verb="take",
+        )
+        if item_resolved.needs_response:
+            return ok(item_resolved.lines)
+        targets = [item_resolved.value] if item_resolved.ok else []
 
     if not targets:
         return ok([t(locale, "corpse.take_missing")])
@@ -73,7 +84,10 @@ def handle(ctx: CommandContext):
     if corpse_name:
         return _take_from_corpse(ctx, item_args, corpse_name)
 
-    targets = resolve_take_targets(ctx, item_args)
+    resolved = resolve_take_targets(ctx, item_args)
+    if resolved.needs_response:
+        return ok(resolved.lines)
+    targets = resolved.value or []
     if not targets:
         return ok([t(ctx.player.locale, "take.missing")])
 

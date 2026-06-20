@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from commands.helpers import find_item_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.target_resolve import resolve_item_id
 from shared.i18n import t
 from shared.locale_content import item_label
 from world.trade import appraisal_value
@@ -11,21 +11,17 @@ def handle(ctx: CommandContext):
     if not ctx.args:
         return ok([t(ctx.player.locale, "appraise.usage")])
 
-    item_id = find_item_id(
-        ctx.state,
+    result = resolve_item_id(
+        ctx,
         ctx.args,
-        room_id=ctx.player.room_id,
-        inventory=ctx.player.inventory,
+        scopes=("ground", "inventory", "equipped"),
+        verb="appraise",
     )
-    if item_id is None:
-        for slot, equipped_id in ctx.player.equipment.items():
-            item = ctx.state.world.item(equipped_id)
-            if item and find_item_id(ctx.state, ctx.args, inventory=[equipped_id]):
-                item_id = equipped_id
-                break
-
-    if item_id is None:
+    if result.needs_response:
+        return ok(result.lines)
+    if not result.ok:
         return ok([t(ctx.player.locale, "appraise.missing")])
+    item_id = result.value
 
     item = ctx.state.world.item(item_id)
     if item is None:

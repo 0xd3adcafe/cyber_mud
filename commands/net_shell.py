@@ -3,7 +3,7 @@ from __future__ import annotations
 from commands.registry import CommandContext, CommandResult, ok, player_meta
 from shared.i18n import t
 from shared.locale_content import item_label_with_id, net_node_label_with_id
-from shared.names import matches_name
+from shared.target_resolve import resolve_net_node
 
 NET_SHELL_COMMANDS = frozenset({"hack", "probe", "exit", "help", "status"})
 NET_ALLOWED_MUD_COMMANDS = frozenset({"look", "scan", "search", "talk", "say"})
@@ -45,19 +45,17 @@ def _sector_context_lines(ctx: CommandContext) -> list[str]:
     return lines
 
 
-def _find_node(ctx: CommandContext, target: str):
-    for node in _nodes_in_room(ctx):
-        if matches_name(target, node.id, node.name_zh, node.name_en):
-            return node
-    return None
-
-
 def _handle_hack(ctx: CommandContext) -> CommandResult:
     target = ctx.args.strip()
     if not target:
         return ok([t(ctx.player.locale, "net.hack_usage")], meta=net_meta(ctx))
 
-    node = _find_node(ctx, target)
+    node_result = resolve_net_node(ctx, target, verb="hack")
+    if node_result.needs_response:
+        return ok(node_result.lines, meta=net_meta(ctx))
+    if not node_result.ok:
+        return ok([t(ctx.player.locale, "net.no_node")], meta=net_meta(ctx))
+    node = ctx.state.world.net_node(node_result.value)
     if node is None:
         return ok([t(ctx.player.locale, "net.no_node")], meta=net_meta(ctx))
 

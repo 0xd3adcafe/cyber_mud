@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from commands.helpers import find_npc_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.target_resolve import resolve_npc
 from shared.i18n import t
 from world.romance import flirt_with_npc, load_romance_profiles, spend_time_with_npc
 
@@ -19,9 +19,12 @@ def handle(ctx: CommandContext):
         target = rest[5:].strip()
 
     profiles = load_romance_profiles()
-    npc_id = find_npc_id(ctx.state, target, ctx.player.room_id)
-    if npc_id is None:
+    npc_result = resolve_npc(ctx, target, verb="flirt")
+    if npc_result.needs_response:
+        return ok(npc_result.lines)
+    if not npc_result.ok:
         return ok([t(locale, "talk.missing", name=target or args)])
+    npc_id = npc_result.value
 
     if verb in {"spend", "time"} or args.lower().startswith("spend time "):
         lines = spend_time_with_npc(ctx.player, npc_id, locale, profiles)

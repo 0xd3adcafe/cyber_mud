@@ -15,6 +15,13 @@ motd:
     - "記住帳號可用 PIN 快速登入 · F7 清除記憶。"
     - "夜城永不入眠——chrome optional, attitude required."
 
+target:
+  ambiguous:
+    header: "「{name}」有多個符合項目："
+    line: "  {index}. {label} — {location}"
+    hint: "提示：{verb} {name} <編號>  （例如 {verb} {name} 2）"
+  index_out_of_range: "「{name}」沒有第 {index} 個（共 {count} 個）。"
+
 direction:
   north: 北
   south: 南
@@ -51,10 +58,17 @@ look:
   empty: "這裡空無一物。"
   not_found: "你看不到「{target}」。"
   slot_missing: "{slot} 槽位沒有裝備。"
+  ambiguous:
+    header: "「{name}」有多個符合項目："
+    line: "  {index}. {label} — {location}"
+    hint: "提示：look {name} <編號>  （例如 look {name} 2、look inventory {name}）"
+  index_out_of_range: "「{name}」沒有第 {index} 個（共 {count} 個）。"
   location:
     ground: "位置：地上"
     inventory: "位置：背包"
     equipped: "位置：{slot}"
+    corpse: "位置：{corpse}"
+    stash: "位置：住家儲物"
   item:
     slot: "類型：{slot}"
     weapon_type: "武器：{type}"

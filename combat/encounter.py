@@ -177,15 +177,22 @@ def npc_label(state: WorldState, npc_id: str, locale: str) -> str:
     return npc.name_zh or npc.id
 
 
-def find_hostile_npc_in_room(state: WorldState, room_id: str, target: str):
-    from shared.names import matches_name
+def find_hostile_npc_in_room(state: WorldState, room_id: str, target: str, *, locale: str = "en"):
+    from shared.target_resolve import resolve_npc_in_room
 
-    for npc_id, npc in state.world.npcs.items():
-        if not npc.hostile or state.npc_room(npc_id) != room_id:
-            continue
-        if matches_name(target, npc.id, npc.name_zh, npc.name_en):
-            return npc
-    return None
+    result = resolve_npc_in_room(
+        state,
+        room_id,
+        locale,
+        target,
+        hostile_only=True,
+        verb="attack",
+    )
+    if result.needs_response:
+        return result
+    if not result.ok:
+        return None
+    return state.world.npc(result.value)
 
 
 def start_encounter(state: WorldState, player: Player, npc_id: str) -> Encounter:

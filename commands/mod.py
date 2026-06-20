@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from commands.helpers import find_item_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.target_resolve import resolve_item_id
 from shared.equipment import active_weapon_id
 from shared.i18n import t
 from shared.locale_content import item_label
@@ -19,9 +19,12 @@ def handle(ctx: CommandContext):
     if not chip_name:
         return ok([t(ctx.player.locale, "mod.usage")])
 
-    chip_id = find_item_id(ctx.state, chip_name, inventory=ctx.player.inventory)
-    if chip_id is None:
+    chip_result = resolve_item_id(ctx, chip_name, scopes=("inventory",), verb="mod")
+    if chip_result.needs_response:
+        return ok(chip_result.lines)
+    if not chip_result.ok:
         return ok([t(ctx.player.locale, "mod.missing_chip")])
+    chip_id = chip_result.value
 
     mod_id, mod = _mod_for_chip(ctx.state.world, chip_id)
     if mod is None:

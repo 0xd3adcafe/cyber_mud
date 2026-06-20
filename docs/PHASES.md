@@ -117,6 +117,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Client input history | `client/history.py` `CommandHistory`; `MudPrompt` ↑↓/Ctrl+P/N browse, Esc restore draft, editable before send; `~/.config/cyber_mud/command_history.json` |
 | Client saved credentials/PIN | `client/credentials.py` PBKDF2 + AES-GCM encryption; login PIN quick unlock, remember + set PIN, F7 clear; `~/.config/cyber_mud/credentials.json` (0600); fix cred write when login success text precedes auth meta |
 | look target inspection | `look <item|NPC|equip slot|equipment>` shows description, location, stats and combat HP; Tab completion `complete_equipped` |
+| Target disambiguation TD.1–TD.5 | `shared/target_resolve.py`; `target.*` locale; ordinal/scope/ambiguous lists on look, take/drop/equip/unequip/use/install/mod/sell/stash/give/appraise/disassemble, talk/flirt/taunt/attack, interact/hack, buy/craft/braindance; `tests/test_target_resolve.py` |
 | quit logout to login screen | `quit` logs out (keep connection, no reconnect); client `auth=0` returns to login UI |
 | Sidebar stack focus fix | Sidebar doesn't steal focus, click returns to prompt; panel refresh serialized to avoid PDA+map parallel hang |
 | Client connection status bar | `#link_status_bar` shows connected/waiting/latency; log incremental append, spinner no longer full redraw every 0.2s |

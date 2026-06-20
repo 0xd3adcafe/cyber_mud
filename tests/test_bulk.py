@@ -46,6 +46,7 @@ def test_equip_all():
 def test_resolve_take_targets_bulk():
     player, state = _ctx()
     ctx = CommandContext(player, state, "all")
-    targets = resolve_take_targets(ctx, "all")
-    assert "knife" in targets
-    assert "jacket" in targets
+    result = resolve_take_targets(ctx, "all")
+    assert result.ok
+    assert "knife" in result.value
+    assert "jacket" in result.value

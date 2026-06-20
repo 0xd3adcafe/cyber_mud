@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from commands.helpers import find_item_anywhere
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.target_resolve import resolve_item_id
 from shared.i18n import t
 from shared.locale_content import item_label
 from world.trade import (
@@ -29,9 +29,17 @@ def handle(ctx: CommandContext):
     if not shop.buy_items:
         return ok([t(ctx.player.locale, "sell.not_buying")])
 
-    item_id = find_item_anywhere(ctx, item_name)
-    if item_id is None:
+    result = resolve_item_id(
+        ctx,
+        item_name,
+        scopes=("ground", "inventory", "equipped"),
+        verb="sell",
+    )
+    if result.needs_response:
+        return ok(result.lines)
+    if not result.ok:
         return ok([t(ctx.player.locale, "sell.missing", item=item_name)])
+    item_id = result.value
 
     item = ctx.state.world.item(item_id)
     if item is None:

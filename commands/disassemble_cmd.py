@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from commands.helpers import find_item_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.target_resolve import resolve_item_id
 from shared.i18n import t
 from world.craft import perform_disassemble
 
@@ -12,9 +12,12 @@ def handle(ctx: CommandContext):
     if not target:
         return ok([t(locale, "disassemble.usage")])
 
-    item_id = find_item_id(ctx.state, target, inventory=ctx.player.inventory)
-    if item_id is None:
+    result = resolve_item_id(ctx, target, scopes=("inventory",), verb="disassemble")
+    if result.needs_response:
+        return ok(result.lines)
+    if not result.ok:
         return ok([t(locale, "disassemble.missing", item=target)])
+    item_id = result.value
 
     lines = perform_disassemble(ctx.player, ctx.state, item_id, locale)
     return ok(lines, meta=player_meta(ctx), world_changed=True)

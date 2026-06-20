@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
-from world.interactables import find_interactable_id, interactable_label, perform_interact
+from shared.target_resolve import resolve_interactable
+from world.interactables import interactable_label, perform_interact
 
 
 def handle(ctx: CommandContext):
@@ -19,9 +20,12 @@ def handle(ctx: CommandContext):
         lines.append(t(locale, "interact.usage"))
         return ok(lines, meta=player_meta(ctx))
 
-    obj_id = find_interactable_id(ctx.state, ctx.player.room_id, target)
-    if obj_id is None:
+    obj_result = resolve_interactable(ctx, target, verb="interact")
+    if obj_result.needs_response:
+        return ok(obj_result.lines)
+    if not obj_result.ok:
         return ok([t(locale, "interact.missing", name=target)])
+    obj_id = obj_result.value
 
     obj = ctx.state.world.interactable(obj_id)
     if obj is None:

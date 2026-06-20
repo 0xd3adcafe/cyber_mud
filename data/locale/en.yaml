@@ -15,6 +15,13 @@ motd:
     - "Store credentials behind a PIN · F7 clears memory."
     - "The city never sleeps — chrome optional, attitude required."
 
+target:
+  ambiguous:
+    header: "Multiple matches for \"{name}\":"
+    line: "  {index}. {label} — {location}"
+    hint: "Hint: {verb} {name} <number>  (e.g. {verb} {name} 2)"
+  index_out_of_range: "No match #{index} for \"{name}\" ({count} found)."
+
 direction:
   north: north
   south: south
@@ -51,10 +58,17 @@ look:
   empty: "Nothing notable here."
   not_found: "You don't see \"{target}\" here."
   slot_missing: "Nothing equipped in {slot}."
+  ambiguous:
+    header: "Multiple matches for \"{name}\":"
+    line: "  {index}. {label} — {location}"
+    hint: "Hint: look {name} <number>  (e.g. look {name} 2, look inventory {name})"
+  index_out_of_range: "No match #{index} for \"{name}\" ({count} found)."
   location:
     ground: "Location: on the ground"
     inventory: "Location: inventory"
     equipped: "Location: {slot}"
+    corpse: "Location: {corpse}"
+    stash: "Location: home stash"
   item:
     slot: "Type: {slot}"
     weapon_type: "Weapon: {type}"

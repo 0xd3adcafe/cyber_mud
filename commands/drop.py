@@ -10,7 +10,10 @@ def handle(ctx: CommandContext):
     if not ctx.args:
         return ok([t(ctx.player.locale, "drop.usage")])
 
-    targets = resolve_inventory_targets(ctx, ctx.args)
+    resolved = resolve_inventory_targets(ctx, ctx.args)
+    if resolved.needs_response:
+        return ok(resolved.lines)
+    targets = resolved.value or []
     if not targets:
         return ok([t(ctx.player.locale, "drop.missing")])
 

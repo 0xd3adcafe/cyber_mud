@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from commands.helpers import find_item_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.target_resolve import resolve_item_id
 from shared.i18n import t
 from shared.locale_content import item_label
 
@@ -46,9 +46,12 @@ def handle(ctx: CommandContext):
     if verb in {"put", "store", "drop"}:
         if not target:
             return ok([t(locale, "stash.put_usage")])
-        item_id = find_item_id(ctx.state, target, inventory=ctx.player.inventory)
-        if item_id is None:
+        result = resolve_item_id(ctx, target, scopes=("inventory",), verb="stash")
+        if result.needs_response:
+            return ok(result.lines)
+        if not result.ok:
             return ok([t(locale, "stash.missing_item")])
+        item_id = result.value
         cap = _stash_capacity(ctx)
         if len(ctx.player.home_stash) >= cap:
             return ok([t(locale, "stash.full", max=str(cap))])
@@ -64,9 +67,12 @@ def handle(ctx: CommandContext):
     if verb in {"take", "get"}:
         if not target:
             return ok([t(locale, "stash.take_usage")])
-        item_id = find_item_id(ctx.state, target, inventory=ctx.player.home_stash)
-        if item_id is None:
+        result = resolve_item_id(ctx, target, scopes=("stash",), verb="stash")
+        if result.needs_response:
+            return ok(result.lines)
+        if not result.ok:
             return ok([t(locale, "stash.missing_stash")])
+        item_id = result.value
         ctx.player.home_stash.remove(item_id)
         ctx.player.inventory.append(item_id)
         item = ctx.state.world.item(item_id)

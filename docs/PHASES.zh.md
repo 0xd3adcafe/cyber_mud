@@ -117,6 +117,7 @@
 | Client 輸入歷史 | `client/history.py` `CommandHistory`；`MudPrompt` ↑↓／Ctrl+P/N 瀏覽、Esc 還原草稿、可編輯後送出；`~/.config/cyber_mud/command_history.json` |
 | Client 記憶帳密／PIN | `client/credentials.py` PBKDF2 + AES-GCM 加密；登入畫面 PIN 快速解鎖、勾選記住＋設定 PIN、F7 清除；`~/.config/cyber_mud/credentials.json`（0600）；修正登入成功文字先於 auth meta 時仍寫入憑證 |
 | look 目標察看 | `look <物品|NPC|裝備槽|equipment>` 顯示描述、位置、數值與戰鬥 HP；Tab 補全 `complete_equipped` |
+| 目標消歧 TD.1–TD.5 | `shared/target_resolve.py`；`target.*` locale；look／物品／NPC／戰鬥／環境／商店指令統一序號與範圍；`tests/test_target_resolve.py` |
 | quit 登出回登入畫面 | `quit` 改為登出（保持連線、不觸發重連）；client `auth=0` 回到登入 UI |
 | 側欄 stack 焦點修正 | 側欄不可搶焦點、點擊回 prompt；panel 刷新序列化避免 PDA+地圖並行卡住 |
 | Client 連線狀態列 | `#link_status_bar` 顯示連線／等待／延遲；log 增量 append、spinner 不再每 0.2s 全量重繪 |

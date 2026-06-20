@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from commands.helpers import find_item_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.target_resolve import resolve_item_id
 from shared.cyberware_slots import slot_label
 from shared.i18n import t
 from world.cyberware import can_install, install_implant
@@ -26,9 +26,12 @@ def handle(ctx: CommandContext):
     if not ctx.args:
         return ok([t(ctx.player.locale, "install.usage")])
 
-    item_id = find_item_id(ctx.state, ctx.args, inventory=ctx.player.inventory)
-    if item_id is None:
+    result = resolve_item_id(ctx, ctx.args, scopes=("inventory",), verb="install")
+    if result.needs_response:
+        return ok(result.lines)
+    if not result.ok:
         return ok([t(ctx.player.locale, "install.missing")])
+    item_id = result.value
 
     item = ctx.state.world.item(item_id)
     if item is None or not item.implant_id:

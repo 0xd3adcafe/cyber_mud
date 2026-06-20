@@ -2,16 +2,8 @@ from __future__ import annotations
 
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
-from shared.names import matches_name
+from shared.target_resolve import resolve_braindance
 from world.braindance import braindance_label, play_braindance
-
-
-def _resolve_bd_id(ctx: CommandContext, name: str) -> str | None:
-    needle = name.strip().lower()
-    for bid, bd in ctx.state.world.braindances.items():
-        if matches_name(needle, bid, bd.name_zh, bd.name_en):
-            return bid
-    return None
 
 
 def handle(ctx: CommandContext):
@@ -30,9 +22,12 @@ def handle(ctx: CommandContext):
         lines.append(t(locale, "braindance.usage"))
         return ok(lines, meta=player_meta(ctx))
 
-    bd_id = _resolve_bd_id(ctx, target)
-    if bd_id is None:
+    bd_result = resolve_braindance(ctx, target, verb="braindance")
+    if bd_result.needs_response:
+        return ok(bd_result.lines)
+    if not bd_result.ok:
         return ok([t(locale, "braindance.unknown", name=target)])
+    bd_id = bd_result.value
 
     lines = play_braindance(ctx.player, ctx.state, bd_id, locale)
     return ok(lines, meta=player_meta(ctx), world_changed=True)

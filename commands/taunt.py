@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from commands.helpers import find_npc_id
 from commands.registry import CommandContext, ok, player_meta, register
+from shared.target_resolve import resolve_npc
 from combat.encounter import encounter_for_player, npc_label
 from shared.i18n import t
 from world.mature import is_mature
@@ -16,9 +16,12 @@ def handle(ctx: CommandContext):
     if not is_mature(ctx.player):
         return ok([t(locale, "mature.refused")])
 
-    npc_id = find_npc_id(ctx.state, target, ctx.player.room_id)
-    if npc_id is None:
+    npc_result = resolve_npc(ctx, target, verb="taunt")
+    if npc_result.needs_response:
+        return ok(npc_result.lines)
+    if not npc_result.ok:
         return ok([t(locale, "taunt.missing", name=target)])
+    npc_id = npc_result.value
 
     encounter = encounter_for_player(ctx.state, ctx.player)
     if encounter is None or encounter.npc_id != npc_id:

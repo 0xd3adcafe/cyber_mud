@@ -3,10 +3,10 @@ from __future__ import annotations
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
 from shared.locale_content import item_label
+from shared.target_resolve import resolve_shop_item
 from world.trade import (
     active_shop,
     buy_price,
-    find_shop_item_id,
     shop_access_error,
     shop_label,
 )
@@ -26,9 +26,12 @@ def handle(ctx: CommandContext):
     if shop is None:
         return ok([t(ctx.player.locale, "trade.no_shop")])
 
-    item_id = find_shop_item_id(ctx, item_name, shop)
-    if item_id is None:
+    item_result = resolve_shop_item(ctx, item_name, shop, verb="buy")
+    if item_result.needs_response:
+        return ok(item_result.lines)
+    if not item_result.ok:
         return ok([t(ctx.player.locale, "buy.not_sold", item=item_name)])
+    item_id = item_result.value
 
     item = ctx.state.world.item(item_id)
     if item is None or not item.takeable:

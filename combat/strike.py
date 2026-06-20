@@ -22,6 +22,7 @@ from combat.encounter import cd_ticks_to_seconds
 from combat.actions import resolve_npc_departed
 from entities.player import Player
 from shared.i18n import t
+from shared.target_resolve import TargetResolveResult
 from world.state import WorldState
 
 
@@ -57,7 +58,9 @@ def resolve_player_strike(
     if encounter is None:
         if not target:
             return CombatActionResult([t(locale, "combat.attack_usage")])
-        npc = find_hostile_npc_in_room(state, player.room_id, target)
+        npc = find_hostile_npc_in_room(state, player.room_id, target, locale=locale)
+        if isinstance(npc, TargetResolveResult):
+            return CombatActionResult(npc.lines)
         if npc is None:
             return CombatActionResult([t(locale, "combat.no_target")])
         encounter = start_encounter(state, player, npc.id)

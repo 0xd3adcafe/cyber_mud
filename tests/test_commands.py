@@ -50,7 +50,7 @@ def test_look_equipped_weapon():
     player, state = _ctx()
     player.inventory = ["knife"]
     dispatch("equip knife", player, state, [], [])
-    result = dispatch("look knife", player, state, [], [])
+    result = dispatch("look equipped knife", player, state, [], [])
     text = "\n".join(result.lines)
     assert "武器" in text or "weapon" in text.lower()
 
@@ -81,3 +81,40 @@ def test_look_npc_combat_hp():
     text = "\n".join(result.lines)
     assert "交戰中" in text or "in combat" in text
     assert "30/30" in text
+
+
+def test_look_item_ambiguous_lists_matches():
+    player, state = _ctx()
+    player.inventory = ["knife"]
+    result = dispatch("look knife", player, state, [], [])
+    text = "\n".join(result.lines)
+    assert "1." in text and "2." in text
+    assert "地上" in text or "ground" in text
+    assert "背包" in text or "inventory" in text
+
+
+def test_look_item_index_selects_match():
+    player, state = _ctx()
+    player.inventory = ["knife"]
+    ground = dispatch("look knife 1", player, state, [], [])
+    inv = dispatch("look knife 2", player, state, [], [])
+    assert "地上" in "\n".join(ground.lines) or "ground" in "\n".join(ground.lines)
+    assert "背包" in "\n".join(inv.lines) or "inventory" in "\n".join(inv.lines)
+
+
+def test_look_item_scoped_to_inventory():
+    player, state = _ctx()
+    player.inventory = ["knife"]
+    result = dispatch("look inventory knife", player, state, [], [])
+    text = "\n".join(result.lines)
+    assert "1." not in text
+    assert "背包" in text or "inventory" in text
+    assert "地上" not in text and "ground" not in text
+
+
+def test_look_item_dot_index():
+    player, state = _ctx()
+    player.inventory = ["knife"]
+    result = dispatch("look knife.2", player, state, [], [])
+    text = "\n".join(result.lines)
+    assert "背包" in text or "inventory" in text

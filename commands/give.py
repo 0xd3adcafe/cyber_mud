@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from commands.auth_helpers import find_online_player
-from commands.helpers import find_item_id, find_npc_id
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
 from shared.locale_content import item_label
+from shared.target_resolve import resolve_item_id, resolve_npc, split_give_args
 from world.mature import is_mature
 from world.mature_give import romance_gift_line
 
@@ -18,15 +18,17 @@ def _remove_item(ctx: CommandContext, item_id: str) -> None:
 
 
 def handle(ctx: CommandContext):
-    parts = ctx.args.split()
-    if len(parts) < 2:
+    item_name, target_name = split_give_args(ctx.args)
+    if not item_name or not target_name:
         return ok([t(ctx.player.locale, "give.usage")])
 
-    item_name, target_name = parts[0], parts[1]
-    item_id = find_item_id(ctx.state, item_name, inventory=ctx.player.inventory)
-    if item_id is None:
+    item_result = resolve_item_id(ctx, item_name, scopes=("inventory",), verb="give")
+    if item_result.needs_response:
+        return ok(item_result.lines)
+    if not item_result.ok:
         return ok([t(ctx.player.locale, "give.missing_item")])
 
+    item_id = item_result.value
     item = ctx.state.world.item(item_id)
     label = item_label(item, ctx.player.locale)
 
@@ -42,10 +44,13 @@ def handle(ctx: CommandContext):
             broadcast_kwargs={"name": ctx.player.name, "target": target.name, "label": label},
         )
 
-    npc_id = find_npc_id(ctx.state, target_name, ctx.player.room_id)
-    if npc_id is None:
+    npc_result = resolve_npc(ctx, target_name, verb="give")
+    if npc_result.needs_response:
+        return ok(npc_result.lines)
+    if not npc_result.ok:
         return ok([t(ctx.player.locale, "give.missing_target", name=target_name)])
 
+    npc_id = npc_result.value
     npc = ctx.state.world.npc(npc_id)
     if npc is None:
         return ok([t(ctx.player.locale, "give.missing_target", name=target_name)])
