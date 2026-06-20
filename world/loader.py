@@ -108,6 +108,7 @@ def load_world(path: Path | None = None) -> World:
             consumable=str(data.get("consumable", "")),
             hp_restore=int(data.get("hp_restore", 0)),
             ram_restore=int(data.get("ram_restore", 0)),
+            cures_status=str(data.get("cures_status", "")),
         )
         for iid, data in (raw.get("items") or {}).items()
     }

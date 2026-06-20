@@ -33,6 +33,7 @@ shops:
       trainee_helmet: 40
       trauma_kit: 75
       med_stim: 40
+      antidote: 45
     buy_items: true
     buy_rate: 0.4
   tutorial_supply:
@@ -52,6 +53,7 @@ shops:
       practice_cyber_kit: 80
       mod_chip: 100
       med_stim: 20
+      antidote: 30
       trainee_ration: 6
       trainee_flask: 8
       synth_ramen: 12

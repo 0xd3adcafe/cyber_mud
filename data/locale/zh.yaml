@@ -477,6 +477,9 @@ consumable:
     medicine: 使用
   effect_hp: "恢復 {hp} HP"
   effect_ram: "恢復 {ram} RAM"
+  cure_only: "生命徵象無明顯變化"
+  cure_poison: "解毒劑將毒素從血液中沖刷出去。"
+  cure_ok: "已清除狀態：{effect}。"
 
 use:
   usage: "用法：use <物品>"
@@ -769,6 +772,7 @@ combat:
   quickhack_named: "{hack} → {target}，造成 {damage} 傷害（敵 HP {hp}）。"
   status_applied: "附加狀態：{effect}"
   burn_tick: "{target} 灼燒中，受到 {damage} 傷害（敵 HP {hp}）。"
+  overheat_self: "你的 chrome 過熱——義體散熱 debuff 已套用。"
   shock_skip: "{target} 義體短路，本輪無法反擊。"
   victory: "你擊倒了 {target}！"
   player_down: "你倒下了……"
@@ -792,6 +796,9 @@ talk:
   missing: "這裡沒有 {name}。"
   silent: "{name} 沒有回應。"
   broker: "情報經紀人壓低聲音：「想打聽漩渦幫的動向？小巷裡有個暴徒知道內情。」"
+  broker_rep_high: "經紀人咧嘴笑：「你的名字能開門——繼續把 cred 滾動起來。」"
+  broker_rep_low: "經紀人打量你：「街上傳言說你是麻煩人物。」"
+  broker_wanted: "經紀人壓低聲音：「NCPD 通緝你 {level} 星——別上主頻道。」"
   broker_tyrell: "經紀人看著你的泰瑞證件點頭：「情報活交辦了——先找企業保全，再去泰瑞廣場。」"
   broker_quest: "◈ 經紀人招手，有新的街頭委託。"
   thug: "街頭暴徒咧嘴一笑：「漩渦幫最近在收義體，別多問。回去跟你的經紀人說我講過了。」"
@@ -884,11 +891,33 @@ street_cred:
     veteran: "夜城老手"
     legend: "傳奇邊緣人"
 
+reputation:
+  shift: "街頭聲望變動（{delta}）——目前 {rep}。"
+
+world:
+  ambient:
+    wanted: "NCPD 無人機在頭頂盤旋——通緝 {level} 星。"
+    watson: "酸雨在路面上嘶嘶作響；仲介在暗處觀察。"
+    docks: "走私起重機在霧中低鳴。"
+    corpo: "企業廣播循環播放合規提醒。"
+    kabuki: "霓虹低音從 VIP 包廂傳來。"
+    faction_tyrell: "泰瑞保全在你經過檢查點時點頭。"
+    faction_maelstrom: "漩渦幫塗鴉在附近牆上閃爍。"
+    period_night: "夜之城從不睡眠——只是慢下來。"
+
 status:
   burn: "灼燒"
   shock: "短路"
   blind: "致盲"
   bleed: "流血"
+  poison: "中毒"
+  overheat: "過熱"
+  bleed_tick: "失血：-{damage} HP（目前 {hp}）。"
+  bleed_stop: "流血停止了。"
+  poison_tick: "毒素傷害：-{damage} HP（目前 {hp}）。"
+  poison_stop: "毒素消退。"
+  overheat_active: "義體過熱——輸出降低。"
+  overheat_stop: "散熱系統恢復。"
 
 mature:
   refused: "此內容需啟用 18+ 選項：settings mature on"

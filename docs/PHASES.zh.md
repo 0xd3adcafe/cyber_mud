@@ -191,6 +191,7 @@
 | 世界擴充 W.1、W.2、W.14 規模（2026-06） | `tools/merge_world_grid.py`；8 區生成格點→**263 房**；樞紐 `tyrell_plaza`、`combat_zone_gate`；樞紐↔格點連接；`tests/test_world_scale.py`；`admin.sh validate` 統計 |
 | 世界擴充 W.3、W.6、W.7（2026-06） | `data/districts.yaml` 安全／氛圍；`look` 敘事；巡邏／aggro／天氣權重；`help tutorial`；`tyrell_intel`＋派系商店／對話／區域門檻；`tests/test_districts.py`、`tests/test_help_tutorial.py`、`tests/test_factions.py` |
 | 世界擴充 W.8–W.10（2026-06） | `data/schedule.yaml` 商店營業＋時段巡邏倍率；NPC schedule（`bazaar_fixer`、`dock_smuggler`、`corp_guard`）；`docks_gray` 灰市＋`gray_market` 任務（`give_npc`）；企業／街頭 `appraise`；`give <物品> <NPC>`；`go` 觸發 `presence.enter`／`leave`；`say`／`give` 廣播排除發送者；`tests/test_schedule.py`、`tests/test_black_market.py`、`tests/test_multiplayer.py` |
+| 世界擴充 W.12–W.13（2026-06） | `poison` tick＋`antidote` 消耗品；玩家 `overheat` debuff（快速破解反噬）；`world/reactions.py` 聲望變動（宣誓／駭入／戰鬥）；經紀人聲望／通緝對話；tick `ambient_tick`＋`trauma_tick` 廣播；`tests/test_status_effects.py`、`tests/test_world_reactions.py` |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 
 ## 多 session 開發（必做）
@@ -245,7 +246,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 ### 世界擴充（[WORLD.md](WORLD.md)）
 
-**現況（2026-06）：** **263 房**、**23 NPC**、**31 物品**；區域 `safety`／`atmosphere`（`data/districts.yaml`）；`help tutorial`；派系深度（`tyrell_intel`、商店倍率、區域封鎖）；作息＋灰市（`docks_gray`、`gray_market`）。**尚待：** ~109 NPC、~45 物品；W.12–W.13 仍開放。
+**現況（2026-06）：** **263 房**、**23 NPC**、**32 物品**；區域 `safety`／`atmosphere`；`help tutorial`；派系深度；作息＋灰市；中毒／過熱狀態＋動態世界回饋（`world/reactions.py`）。**尚待：** ~109 NPC、~45 物品；W.14 規模推進。
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
@@ -260,8 +261,8 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~W.9~~ | ~~社會與黑市~~ | ✅ `docks_gray` 商店、`dock_smuggler` NPC、`gray_market` 任務（`give_npc`）；企業／街頭 `appraise`；`give <物品> <NPC>`；`tests/test_black_market.py` |
 | ~~W.10~~ | ~~多人同屏存在感~~ | ✅ `go` 觸發 `presence.enter`／`leave`；`say`／`give` 廣播排除發送者；同室 `look` 列出玩家；`tests/test_multiplayer.py` |
 | W.11 | NETRUN 主線節點 | `data_vault`／`crypt` 實體房對應 net 節點；`hack core terminal` 任務步驟；擴充 `data/net_nodes.yaml`；`tests/test_net_story.py` |
-| W.12 | 延伸狀態效果 | **`poison`** tick 傷害與解毒消耗品；**`cyberware overheat`** debuff（與 quickhack 燃燒分開）；`world/status_effects.py`；戰鬥 locale 文案 |
-| W.13 | 動態世界回饋 | 派系宣誓、駭入成功、戰鬥結果可見影響**聲望**／通緝／經紀人對話；tick 推送環境敘事；對應 WORLD「世界非靜態背景」 |
+| ~~W.12~~ | ~~延伸狀態效果~~ | ✅ `poison` tick＋`antidote`（`cures_status`）；玩家 `overheat` debuff（快速破解反噬，≠ NPC `burn`）；戰鬥傷害懲罰；`tests/test_status_effects.py` |
+| ~~W.13~~ | ~~動態世界回饋~~ | ✅ `world/reactions.py` 聲望變動（宣誓／NETRUN 駭入／戰鬥／快速破解）；經紀人聲望／通緝對話；tick `ambient_tick`；`trauma_tick` client 廣播；`tests/test_world_reactions.py` |
 | W.14 | 世界規模里程碑 | 朝 ~200 房／~109 NPC／~45 物品成長（生成器＋手寫樞紐）；`admin.sh validate` 統計；達標後更新 WORLD.md 數字 |
 
 **建議順序：** W.4 → W.5 → W.11（主線錨點）→ W.1 → W.2 → W.3（地理規模）→ W.6 → W.7 → W.8 → W.9 → W.10 → W.12 → W.13 → W.14。

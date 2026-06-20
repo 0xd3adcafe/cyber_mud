@@ -76,6 +76,9 @@ def _handle_hack(ctx: CommandContext) -> CommandResult:
     from world.street_cred import STREET_CRED_PER_HACK, award_street_cred
 
     lines.extend(award_street_cred(ctx.player, STREET_CRED_PER_HACK, ctx.player.locale))
+    from world.reactions import reputation_from_net_hack, shift_reputation
+
+    lines.extend(shift_reputation(ctx.player, reputation_from_net_hack(), ctx.player.locale))
     from world.quests import advance_quest_on_hack
 
     lines.extend(advance_quest_on_hack(ctx.player, ctx.state, node.id, ctx.player.locale))

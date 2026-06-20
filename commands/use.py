@@ -6,6 +6,7 @@ from shared.i18n import t
 from shared.locale_content import item_label
 from world.consumables import (
     apply_consumable,
+    apply_status_cure,
     calc_consumable_gains,
     consumable_action_verb,
     format_consumable_effect,
@@ -36,23 +37,28 @@ def _handle_consumable(ctx: CommandContext, *, required_type: str | None = None)
         return ok([msg])
 
     hp_gain, ram_gain = calc_consumable_gains(ctx.player, item)
-    if hp_gain <= 0 and ram_gain <= 0:
+    has_cure = bool(item.cures_status and item.cures_status in ctx.player.player_status)
+    if hp_gain <= 0 and ram_gain <= 0 and not has_cure:
         return ok([t(locale, "use.no_effect", label=item_label(item, locale))])
 
     ctx.player.inventory.remove(item_id)
     apply_consumable(ctx.player, item)
+    cure_line = apply_status_cure(ctx.player, item, locale)
     verb = consumable_action_verb(item.consumable, locale)
     effect = format_consumable_effect(locale, hp_gain=hp_gain, ram_gain=ram_gain)
+    lines = [
+        t(
+            locale,
+            "use.ok",
+            verb=verb,
+            label=item_label(item, locale),
+            effect=effect or t(locale, "consumable.cure_only"),
+        )
+    ]
+    if cure_line:
+        lines.append(cure_line)
     return ok(
-        [
-            t(
-                locale,
-                "use.ok",
-                verb=verb,
-                label=item_label(item, locale),
-                effect=effect,
-            )
-        ],
+        lines,
         meta=player_meta(ctx),
         world_changed=True,
         refresh_sidebar=True,

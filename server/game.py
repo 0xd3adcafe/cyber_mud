@@ -329,6 +329,15 @@ class Game:
                         continue
                     await target.send(event.message_kwargs.get("text", ""))
                     await target.send_meta({"wanted": str(target.player.wanted_level)})
+            elif event.kind in {"trauma_tick", "ambient_tick"}:
+                for target in self.sessions:
+                    if target.player.name != event.player_name:
+                        continue
+                    text = event.message_kwargs.get("text", "")
+                    if text:
+                        await target.send(text)
+                    if event.kind == "trauma_tick" and "hp" in event.message_kwargs:
+                        await target.send_meta({"hp": event.message_kwargs["hp"]})
             elif event.kind == "hp_regen":
                 for target in self.sessions:
                     if target.player.name != event.player_name:
@@ -427,7 +436,7 @@ class Game:
                 if result.time_changed or result.events or result.combat_results:
                     save_world_state(self.state)
                 for event in result.events:
-                    if event.kind not in {"hp_regen", "wanted_decay"}:
+                    if event.kind not in {"hp_regen", "wanted_decay", "trauma_tick", "ambient_tick"}:
                         continue
                     player = next(
                         (p for p in self.all_named_players() if p.name == event.player_name),

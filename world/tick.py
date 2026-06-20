@@ -222,6 +222,32 @@ def _process_hp_regen(state: WorldState, config: TimeConfig, players: list[Playe
     return events
 
 
+def _process_ambient_reactions(
+    state: WorldState,
+    config: TimeConfig,
+    players: list[Player],
+) -> list[TickEvent]:
+    from world.reactions import ambient_tick_line
+
+    period = state.clock.period_id(config)
+    events: list[TickEvent] = []
+    for player in players:
+        if not player.named or player.in_combat:
+            continue
+        line = ambient_tick_line(player, state, period, player.locale)
+        if not line:
+            continue
+        events.append(
+            TickEvent(
+                kind="ambient_tick",
+                room_id=player.room_id,
+                player_name=player.name,
+                message_kwargs={"text": line},
+            )
+        )
+    return events
+
+
 def _process_wanted_decay(players: list[Player]) -> list[TickEvent]:
     events: list[TickEvent] = []
     for player in players:
@@ -288,6 +314,7 @@ def process_tick(
         events.extend(_process_hp_regen(state, config, players))
         events.extend(_process_player_trauma(state, players))
         events.extend(_process_wanted_decay(players))
+        events.extend(_process_ambient_reactions(state, config, players))
 
     for room_id, message_key, message_kwargs in process_corpse_decay(state):
         events.append(

@@ -191,6 +191,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | World expansion W.1, W.2, W.14 scale (2026-06) | `tools/merge_world_grid.py`; 8 district grids → **263 rooms**; hubs `tyrell_plaza`, `combat_zone_gate`; hub↔grid links; `tests/test_world_scale.py`; `admin.sh validate` counts |
 | World expansion W.3, W.6, W.7 (2026-06) | `data/districts.yaml` safety/atmosphere; `look` flavor; patrol/aggro/weather bias; `help tutorial`; `tyrell_intel` quest + faction shop/talk/entry gates; `tests/test_districts.py`, `tests/test_help_tutorial.py`, `tests/test_factions.py` |
 | World expansion W.8–W.10 (2026-06) | `data/schedule.yaml` shop hours + period patrol multipliers; NPC schedules (`bazaar_fixer`, `dock_smuggler`, `corp_guard`); `docks_gray` shop + `gray_market` quest (`give_npc`); corp/street `appraise`; `give <item> <npc>`; `presence.enter`/`leave` on `go`; sender-excluded `say`/`give` broadcasts; `tests/test_schedule.py`, `tests/test_black_market.py`, `tests/test_multiplayer.py` |
+| World expansion W.12–W.13 (2026-06) | `poison` tick + `antidote` consumable; player `overheat` debuff (quickhack backlash); `world/reactions.py` reputation shifts (pledge/hack/combat); broker rep/wanted talk; tick `ambient_tick` + `trauma_tick` broadcast; `tests/test_status_effects.py`, `tests/test_world_reactions.py` |
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 
 ## Multi-session development (mandatory)
@@ -247,7 +248,7 @@ Not yet implemented or only partially implemented.
 
 ### World expansion ([WORLD.md](WORLD.md))
 
-**Baseline (2026-06):** **263 rooms**, **23 NPCs**, **31 items**; district `safety`/`atmosphere` in `data/districts.yaml`; `help tutorial`; faction depth (`tyrell_intel`, shop rates, area gates); schedules + gray market (`docks_gray`, `gray_market`). **Targets** remaining: ~109 NPCs, ~45 items; W.12–W.13 still open.
+**Baseline (2026-06):** **263 rooms**, **23 NPCs**, **32 items**; district `safety`/`atmosphere` in `data/districts.yaml`; `help tutorial`; faction depth; schedules + gray market; poison/overheat status + live world reactions (`world/reactions.py`). **Targets** remaining: ~109 NPCs, ~45 items; W.14 scale push.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
@@ -262,8 +263,8 @@ Not yet implemented or only partially implemented.
 | ~~W.9~~ | ~~Society & black market~~ | ✅ `docks_gray` shop, `dock_smuggler` NPC, `gray_market` quest (`give_npc`); corp/street `appraise`; `give <item> <npc>`; `tests/test_black_market.py` |
 | ~~W.10~~ | ~~Multiplayer presence~~ | ✅ `presence.enter`/`leave` on `go`; sender-excluded `say`/`give` broadcasts; peer `look`; `tests/test_multiplayer.py` |
 | W.11 | NETRUN story nodes | `data_vault` / `crypt` net nodes tied to physical rooms; `hack core terminal` quest step; expand `data/net_nodes.yaml`; `tests/test_net_story.py` |
-| W.12 | Extended status effects | **`poison`** tick damage and antidote consumables; **`cyberware overheat`** debuff (separate from quickhack burn); `world/status_effects.py`; locale combat lines |
-| W.13 | Live world reactions | Faction pledge, hacking success, and combat outcomes visibly shift **reputation** / wanted / broker dialogue; tick pushes ambient world lines; aligns with WORLD “world is not a static backdrop” |
+| ~~W.12~~ | ~~Extended status effects~~ | ✅ `poison` tick + `antidote` (`cures_status`); player `overheat` debuff on quickhack (≠ NPC `burn`); combat damage penalty; `tests/test_status_effects.py` |
+| ~~W.13~~ | ~~Live world reactions~~ | ✅ `world/reactions.py` rep shifts (pledge/NETRUN hack/combat/quickhack); broker rep/wanted talk; tick `ambient_tick`; `trauma_tick` client broadcast; `tests/test_world_reactions.py` |
 | W.14 | World scale targets | Grow toward ~200 rooms / ~109 NPCs / ~45 items via generator + hand hubs; `admin.sh validate` reports counts; update WORLD.md stats when milestone hit |
 
 **Suggested order:** W.4 → W.5 → W.11 (story anchors) → W.1 → W.2 → W.3 (geography scale) → W.6 → W.7 → W.8 → W.9 → W.10 → W.12 → W.13 → W.14.

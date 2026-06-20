@@ -3994,6 +3994,16 @@ items:
     consumable: medicine
     hp_restore: 50
     value: 60
+  antidote:
+    name_zh: 解毒劑
+    name_en: Antidote
+    description_zh: 單劑中和劑，可清除血液中的神經毒素。
+    description_en: A single-dose neutralizer—flushes neuro-toxins from the blood.
+    takeable: true
+    consumable: medicine
+    cures_status: poison
+    hp_restore: 5
+    value: 35
 npcs:
   broker:
     name_zh: 情報經紀人

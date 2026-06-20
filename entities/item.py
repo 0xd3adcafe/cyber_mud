@@ -22,3 +22,4 @@ class Item:
     consumable: str = ""
     hp_restore: int = 0
     ram_restore: int = 0
+    cures_status: str = ""

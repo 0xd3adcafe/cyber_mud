@@ -52,6 +52,12 @@ def handle(ctx: CommandContext):
     if dialogue != f"talk.{talk_key}":
         lines.append(dialogue)
 
+    from world.reactions import broker_talk_extra
+
+    extra = broker_talk_extra(ctx.player, npc_id, ctx.player.locale)
+    if extra:
+        lines.append(extra)
+
     from world.quests import advance_quest_on_talk, offer_quest_from_giver
 
     offer_lines = offer_quest_from_giver(ctx.player, ctx.state, npc_id, ctx.player.locale)

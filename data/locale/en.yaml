@@ -477,6 +477,9 @@ consumable:
     medicine: used
   effect_hp: "restored {hp} HP"
   effect_ram: "restored {ram} RAM"
+  cure_only: "no immediate vitals change"
+  cure_poison: "The antidote flushes the toxin from your blood."
+  cure_ok: "Cleared status: {effect}."
 
 use:
   usage: "Usage: use <item>"
@@ -769,6 +772,7 @@ combat:
   quickhack_named: "{hack} → {target} for {damage} damage (enemy HP {hp})."
   status_applied: "Status applied: {effect}"
   burn_tick: "{target} burns for {damage} damage (enemy HP {hp})."
+  overheat_self: "Your chrome runs hot—cyberware overheat debuff applied."
   shock_skip: "{target}'s cyberware shorts out—no counter this round."
   victory: "You drop {target}!"
   player_down: "You go down..."
@@ -792,6 +796,9 @@ talk:
   missing: "No {name} here."
   silent: "{name} says nothing."
   broker: "The info broker whispers: \"Want Maelstrom intel? A thug in the alley knows something.\""
+  broker_rep_high: "The broker grins: \"Your name opens doors—keep the cred flowing.\""
+  broker_rep_low: "The broker eyes you: \"Word on the street says you're trouble.\""
+  broker_wanted: "The broker lowers his voice: \"NCPD has you at {level} stars—stay off the main feeds.\""
   broker_tyrell: "The broker nods at your Tyrell badge: \"Intel drop ready—talk corpo guard, then hit Tyrell Plaza.\""
   broker_quest: "◈ The broker flags you for new street work."
   thug: "The thug grins: \"Maelstrom's scooping chrome lately. Tell your broker I talked.\""
@@ -884,11 +891,33 @@ street_cred:
     veteran: "veteran"
     legend: "legend"
 
+reputation:
+  shift: "Street rep shifts ({delta})—now {rep}."
+
+world:
+  ambient:
+    wanted: "NCPD drones buzz overhead—wanted level {level}."
+    watson: "Acid rain hisses on the pavement; fixers watch from the shadows."
+    docks: "Smuggler cranes groan through the fog."
+    corpo: "Corporate PA loops compliance reminders."
+    kabuki: "Neon bass thumps from a VIP lounge."
+    faction_tyrell: "Tyrell security nods as you pass the checkpoint."
+    faction_maelstrom: "Maelstrom tags flicker on a nearby wall."
+    period_night: "Night City never sleeps—only slows down."
+
 status:
   burn: "burn"
   shock: "shock"
   blind: "blind"
   bleed: "bleeding"
+  poison: "poisoned"
+  overheat: "overheating"
+  bleed_tick: "Blood loss: -{damage} HP (now {hp})."
+  bleed_stop: "The bleeding stops."
+  poison_tick: "Toxin damage: -{damage} HP (now {hp})."
+  poison_stop: "The poison fades."
+  overheat_active: "Cyberware runs hot—output reduced."
+  overheat_stop: "Cooling systems recover."
 
 mature:
   refused: "That content requires 18+ opt-in: settings mature on"

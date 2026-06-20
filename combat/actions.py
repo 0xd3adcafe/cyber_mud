@@ -169,6 +169,14 @@ def resolve_quickhack(state: WorldState, player: Player, quickhack_id: str = "")
             t(locale, "combat.status_applied", effect=t(locale, f"status.{quickhack.status_effect}"))
         )
 
+    from world.trauma import apply_player_overheat
+
+    apply_player_overheat(player, duration=3)
+    lines.append(t(locale, "combat.overheat_self"))
+    from world.reactions import reputation_from_quickhack, shift_reputation
+
+    lines.extend(shift_reputation(player, reputation_from_quickhack(), locale))
+
     if encounter.npc_hp <= 0:
         return _finish_victory(state, player, encounter, lines)
 
@@ -210,9 +218,16 @@ def resolve_npc_attack(state: WorldState, player: Player, encounter: Encounter) 
         )
     ]
     encounter.npc_cd = NPC_ATTACK_CD
-    from world.trauma import maybe_bleed_on_hit
+    from world.trauma import maybe_bleed_on_hit, maybe_poison_on_hit
 
     maybe_bleed_on_hit(player, damage)
+    npc = state.world.npc(encounter.npc_id)
+    maybe_poison_on_hit(
+        player,
+        encounter.npc_id,
+        damage,
+        npc_faction=npc.faction if npc else "",
+    )
 
     if player.hp <= 0:
         lines.append(encounter.append_log(locale, "combat.player_down"))
@@ -296,8 +311,10 @@ def _finish_victory(
 
     lines.extend(add_wanted(player, 1, locale))
     from world.quests import advance_quest_on_defeat
+    from world.reactions import reputation_from_combat_victory, shift_reputation
 
     lines.extend(advance_quest_on_defeat(player, state, encounter.npc_id, locale))
+    lines.extend(shift_reputation(player, reputation_from_combat_victory(npc), locale))
     return CombatActionResult(
         lines,
         world_changed=True,

@@ -30,6 +30,18 @@ def apply_consumable(player: Player, item: Item) -> tuple[int, int]:
     return hp_gain, ram_gain
 
 
+def apply_status_cure(player: Player, item: Item, locale: str) -> str | None:
+    if not item.cures_status:
+        return None
+    from world.status_effects import cure_player_status
+
+    if not cure_player_status(player.player_status, item.cures_status):
+        return None
+    key = f"consumable.cure_{item.cures_status}"
+    line = t(locale, key)
+    return line if line != key else t(locale, "consumable.cure_ok", effect=item.cures_status)
+
+
 def consumable_action_verb(consumable_type: str, locale: str) -> str:
     key = f"consumable.verb.{consumable_type}"
     label = t(locale, key)

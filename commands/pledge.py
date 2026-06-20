@@ -20,8 +20,12 @@ def handle(ctx: CommandContext):
 
     ctx.player.faction = faction_id
     label = faction_label(ctx.state.world, faction_id, ctx.player.locale)
+    from world.reactions import reputation_from_pledge, shift_reputation
+
+    lines = [t(ctx.player.locale, "pledge.ok", faction=label)]
+    lines.extend(shift_reputation(ctx.player, reputation_from_pledge(faction_id), ctx.player.locale))
     return ok(
-        [t(ctx.player.locale, "pledge.ok", faction=label)],
+        lines,
         meta=player_meta(ctx),
         world_changed=True,
         refresh_sidebar=True,

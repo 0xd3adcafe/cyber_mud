@@ -80,10 +80,13 @@ class Encounter:
 
         from world.wanted import wanted_damage_penalty
 
+        from world.status_effects import player_overheat_damage_multiplier
+
         raw = int(
             (player.body + self.player_weapon_damage(player, world) + bonus_attack_damage(player, state))
             * player_damage_multiplier(player)
             * wanted_damage_penalty(player)
+            * player_overheat_damage_multiplier(player.player_status)
         )
         if state is not None and player.room_id:
             return apply_damage_modifier(state, player.room_id, raw)
@@ -114,6 +117,8 @@ class Encounter:
             return 0
         from world.wanted import wanted_damage_penalty
 
+        from world.status_effects import player_overheat_damage_multiplier
+
         raw = int(
             player.intelligence
             * 2
@@ -121,6 +126,7 @@ class Encounter:
             * damage_mult
             * player_damage_multiplier(player)
             * wanted_damage_penalty(player)
+            * player_overheat_damage_multiplier(player.player_status)
         )
         if state is not None and player.room_id:
             return apply_damage_modifier(state, player.room_id, raw)

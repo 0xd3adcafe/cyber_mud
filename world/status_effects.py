@@ -7,6 +7,11 @@ EFFECT_SHOCK = "shock"
 EFFECT_BLIND = "blind"
 EFFECT_BLEED = "bleed"
 EFFECT_POISON = "poison"
+EFFECT_OVERHEAT = "overheat"
+
+PLAYER_STATUS_EFFECTS = frozenset(
+    {EFFECT_BLEED, EFFECT_POISON, EFFECT_OVERHEAT}
+)
 
 
 @dataclass
@@ -41,6 +46,23 @@ class StatusEffectState:
 
 def burn_tick_damage(intelligence: int) -> int:
     return max(1, intelligence // 2)
+
+
+def poison_tick_damage(body: int) -> int:
+    return max(1, body // 5)
+
+
+def player_overheat_damage_multiplier(player_status: dict[str, int]) -> float:
+    if player_status.get(EFFECT_OVERHEAT, 0) > 0:
+        return 0.85
+    return 1.0
+
+
+def cure_player_status(player_status: dict[str, int], effect: str) -> bool:
+    if effect in player_status:
+        del player_status[effect]
+        return True
+    return False
 
 
 def npc_damage_multiplier(status: StatusEffectState) -> float:
