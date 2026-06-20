@@ -31,6 +31,10 @@ game:
   no_exit: "那個方向沒有路。"
   quit: "已登出。請重新登入。"
 
+presence:
+  enter: "{name} 進入了房間。"
+  leave: "{name} 離開了房間。"
+
 look:
   header: "◈ {name}"
   target_header: "◈ {name}"
@@ -650,10 +654,13 @@ wanted:
   tick: "{text}"
 
 give:
-  usage: "用法：give <物品> <玩家>"
+  usage: "用法：give <物品> <玩家|NPC>"
   missing_item: "你身上沒有那個物品。"
   missing_player: "這裡沒有玩家 {name}。"
+  missing_target: "這裡沒有玩家或 NPC {name}。"
   ok: "你把 {label} 交給了 {name}。"
+  npc_ok: "你把 {label} 交給了 {name}。"
+  npc_refused: "{name} 不想要那個。"
   broadcast: "{name} 把 {label} 交給了 {target}。"
 
 trade:
@@ -682,7 +689,11 @@ sell:
 appraise:
   usage: "用法：appraise <物品>"
   missing: "找不到那個物品。"
-  ok: "{label} 估價約 ${value}。"
+  ok: "{label} — {tier} 估價：${value}。"
+  tier:
+    corp: "企業"
+    street: "街頭"
+    neutral: "標準"
 
 prompt:
   usage: "用法：prompt show | prompt set <範本> | prompt template <名稱> | prompt reset"
@@ -793,6 +804,7 @@ talk:
   clinic_tutor: "示範導師掀開無菌帘：「撿 practice_cyber_kit，install 裝進義體槽；主機 interact console 看說明。拆下用 uninstall。」"
   course_guide: "引導員舉起掃描儀：「scan 看出口與互動點；interact 掃描柱完成基礎課。移動靶 patrol_dummy 可練 punch／flee。」"
   bazaar_fixer: "中介敲了敲晶片：「灰市價在這——shop 看看。東邊夜總會，南邊小中國街。」"
+  dock_smuggler: "走私客低聲說：「碼頭灰市——黃昏後 shop。經紀人要憑證就帶給他。」"
   shrine_keeper: "司祭微微鞠躬：「人性有限。每次義體升級都會帶走一部分。升級前先想清楚。」"
   corp_guard: "保全面罩閃爍：「證件掃描通過。企業區禁止拔槍。」"
   corp_guard_tyrell: "保全放下掃描儀：「泰瑞通行已記錄——廣場在東，實驗室在更深處。」"
@@ -822,6 +834,7 @@ quest:
   hint_talk: "與 {target} 交談。"
   hint_defeat: "擊倒 {target}。"
   hint_have_item: "取得 {target}。"
+  hint_give_npc: "把 {item} 交給 {npc}。"
   hint_hack_net: "輸入 net 進入駭入介面，hack {target}。"
 
 gigs:

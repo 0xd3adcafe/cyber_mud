@@ -66,11 +66,17 @@ def atmosphere_line(room: Room | None, locale: str) -> str | None:
     return line if line != key else None
 
 
-def patrol_move_chance(base: float, room: Room | None) -> float:
+def patrol_move_chance(base: float, room: Room | None, *, period_id: str = "") -> float:
     if room is None or not room.district:
-        return base
-    density = district_profile(room.district).patrol_density
-    return min(0.95, base * density)
+        chance = base
+    else:
+        density = district_profile(room.district).patrol_density
+        chance = base * density
+    if period_id:
+        from world.schedule import patrol_period_multiplier
+
+        chance *= patrol_period_multiplier(period_id)
+    return min(0.95, chance)
 
 
 def aggro_chance_bonus(room: Room | None) -> float:

@@ -4,13 +4,20 @@ from commands.registry import dispatch
 from entities.npc import NPC
 from tests.conftest import make_player, make_state
 from world.clock import WorldClock
-from world.schedule import npc_scheduled_room, shop_is_open
+from world.schedule import npc_scheduled_room, patrol_period_multiplier, shop_is_open
 from world.tick import process_tick
 
 
 def test_shop_is_open_during_hours():
     assert shop_is_open("ripperdoc", 12) is True
     assert shop_is_open("ripperdoc", 3) is False
+    assert shop_is_open("kabuki_bazaar", 23) is True
+    assert shop_is_open("docks_gray", 20) is True
+    assert shop_is_open("docks_gray", 10) is False
+
+
+def test_patrol_period_multiplier():
+    assert patrol_period_multiplier("night") < patrol_period_multiplier("dusk")
 
 
 def test_npc_scheduled_room_uses_period():

@@ -190,6 +190,7 @@
 | 世界擴充 W.4–W.5、W.11（2026-06） | 主線錨點 `crypt`、`data_vault`；NPC `guard`／`priest`／`rat`；`plaza_terminal`／`vault_terminal`；`hack_core` 任務＋`hack_net` 目標；net 節點 `crypt_node`／`vault_core`；`tests/test_story_anchors.py`、`tests/test_net_story.py` |
 | 世界擴充 W.1、W.2、W.14 規模（2026-06） | `tools/merge_world_grid.py`；8 區生成格點→**263 房**；樞紐 `tyrell_plaza`、`combat_zone_gate`；樞紐↔格點連接；`tests/test_world_scale.py`；`admin.sh validate` 統計 |
 | 世界擴充 W.3、W.6、W.7（2026-06） | `data/districts.yaml` 安全／氛圍；`look` 敘事；巡邏／aggro／天氣權重；`help tutorial`；`tyrell_intel`＋派系商店／對話／區域門檻；`tests/test_districts.py`、`tests/test_help_tutorial.py`、`tests/test_factions.py` |
+| 世界擴充 W.8–W.10（2026-06） | `data/schedule.yaml` 商店營業＋時段巡邏倍率；NPC schedule（`bazaar_fixer`、`dock_smuggler`、`corp_guard`）；`docks_gray` 灰市＋`gray_market` 任務（`give_npc`）；企業／街頭 `appraise`；`give <物品> <NPC>`；`go` 觸發 `presence.enter`／`leave`；`say`／`give` 廣播排除發送者；`tests/test_schedule.py`、`tests/test_black_market.py`、`tests/test_multiplayer.py` |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 
 ## 多 session 開發（必做）
@@ -244,7 +245,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 ### 世界擴充（[WORLD.md](WORLD.md)）
 
-**現況（2026-06）：** **263 房**、**22 NPC**、**31 物品**；區域 `safety`／`atmosphere`（`data/districts.yaml`）；`help tutorial`；派系深度（`tyrell_intel`、商店倍率、區域封鎖）。**尚待：** ~109 NPC、~45 物品；W.8–W.10、W.12–W.13 仍開放。
+**現況（2026-06）：** **263 房**、**23 NPC**、**31 物品**；區域 `safety`／`atmosphere`（`data/districts.yaml`）；`help tutorial`；派系深度（`tyrell_intel`、商店倍率、區域封鎖）；作息＋灰市（`docks_gray`、`gray_market`）。**尚待：** ~109 NPC、~45 物品；W.12–W.13 仍開放。
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
@@ -255,9 +256,9 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | W.5 | 主線錨點 NPC 與戰利品 | 核心區 NPC **`guard`**、**`priest`**、**`rat`**；房內 **`terminal`** 物件；地上 **`rusty_key`**、**`glowstick`** 依 WORLD 表配置；`tests/test_story_anchors.py` |
 | W.6 | `help tutorial` 新手引導 | 依 `tutorial_*` 房間與指令註冊表自動產生教學（`help tutorial`）；locale 鍵；補強既有三區訓練場；`tests/test_help_tutorial.py` |
 | W.7 | 派系玩法深度 | **`pledge tyrell`** 任務與 talk 分支；派系影響**對話**、**任務提示**、**區域敵意**、**商店買賣比率**（`world/trade.py`、`data/shops.yaml`）；聲望門檻；`tests/test_factions.py` |
-| W.8 | 區域天氣與作息 | 各區天氣池（酸雨、霧、煙霾、霓虹眩光、乾熱等）於 `data/weather.yaml`；依時段擴充 NPC **schedule**（商店營業、巡邏路線）；`world/schedule.py` |
-| W.9 | 社會與黑市 | Kabuki／碼頭灰市商店、`appraise`／`give` 交易；情報經紀人任務鏈超越 `broker_rumor`；企業／街頭價差；`tests/test_black_market.py` |
-| W.10 | 多人同屏存在感 | 玩家進出房間廣播優化；同室 `look` 列出其他玩家；`say` 房間範圍可見性；`tests/test_multiplayer.py` |
+| ~~W.8~~ | ~~區域天氣與作息~~ | ✅ `data/schedule.yaml` 全店營業＋時段巡邏倍率；NPC schedule（`broker`、`bazaar_fixer`、`dock_smuggler`、`corp_guard`）；`patrol_period_multiplier`；`tests/test_schedule.py` |
+| ~~W.9~~ | ~~社會與黑市~~ | ✅ `docks_gray` 商店、`dock_smuggler` NPC、`gray_market` 任務（`give_npc`）；企業／街頭 `appraise`；`give <物品> <NPC>`；`tests/test_black_market.py` |
+| ~~W.10~~ | ~~多人同屏存在感~~ | ✅ `go` 觸發 `presence.enter`／`leave`；`say`／`give` 廣播排除發送者；同室 `look` 列出玩家；`tests/test_multiplayer.py` |
 | W.11 | NETRUN 主線節點 | `data_vault`／`crypt` 實體房對應 net 節點；`hack core terminal` 任務步驟；擴充 `data/net_nodes.yaml`；`tests/test_net_story.py` |
 | W.12 | 延伸狀態效果 | **`poison`** tick 傷害與解毒消耗品；**`cyberware overheat`** debuff（與 quickhack 燃燒分開）；`world/status_effects.py`；戰鬥 locale 文案 |
 | W.13 | 動態世界回饋 | 派系宣誓、駭入成功、戰鬥結果可見影響**聲望**／通緝／經紀人對話；tick 推送環境敘事；對應 WORLD「世界非靜態背景」 |

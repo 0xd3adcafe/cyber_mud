@@ -190,6 +190,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | World expansion W.4–W.5, W.11 (2026-06) | Story anchors `crypt`, `data_vault`; NPCs `guard`/`priest`/`rat`; `plaza_terminal`/`vault_terminal`; `hack_core` quest + `hack_net` objective; net nodes `crypt_node`/`vault_core`; `tests/test_story_anchors.py`, `tests/test_net_story.py` |
 | World expansion W.1, W.2, W.14 scale (2026-06) | `tools/merge_world_grid.py`; 8 district grids → **263 rooms**; hubs `tyrell_plaza`, `combat_zone_gate`; hub↔grid links; `tests/test_world_scale.py`; `admin.sh validate` counts |
 | World expansion W.3, W.6, W.7 (2026-06) | `data/districts.yaml` safety/atmosphere; `look` flavor; patrol/aggro/weather bias; `help tutorial`; `tyrell_intel` quest + faction shop/talk/entry gates; `tests/test_districts.py`, `tests/test_help_tutorial.py`, `tests/test_factions.py` |
+| World expansion W.8–W.10 (2026-06) | `data/schedule.yaml` shop hours + period patrol multipliers; NPC schedules (`bazaar_fixer`, `dock_smuggler`, `corp_guard`); `docks_gray` shop + `gray_market` quest (`give_npc`); corp/street `appraise`; `give <item> <npc>`; `presence.enter`/`leave` on `go`; sender-excluded `say`/`give` broadcasts; `tests/test_schedule.py`, `tests/test_black_market.py`, `tests/test_multiplayer.py` |
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 
 ## Multi-session development (mandatory)
@@ -246,7 +247,7 @@ Not yet implemented or only partially implemented.
 
 ### World expansion ([WORLD.md](WORLD.md))
 
-**Baseline (2026-06):** **263 rooms**, **22 NPCs**, **31 items**; district `safety`/`atmosphere` in `data/districts.yaml`; `help tutorial`; faction depth (`tyrell_intel`, shop rates, area gates). **Targets** remaining: ~109 NPCs, ~45 items; W.8–W.10, W.12–W.13 still open.
+**Baseline (2026-06):** **263 rooms**, **23 NPCs**, **31 items**; district `safety`/`atmosphere` in `data/districts.yaml`; `help tutorial`; faction depth (`tyrell_intel`, shop rates, area gates); schedules + gray market (`docks_gray`, `gray_market`). **Targets** remaining: ~109 NPCs, ~45 items; W.12–W.13 still open.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
@@ -257,9 +258,9 @@ Not yet implemented or only partially implemented.
 | W.5 | Story anchor NPCs & loot | NPCs **`guard`**, **`priest`**, **`rat`** in core areas; in-room **`terminal`** object; ground items **`rusty_key`**, **`glowstick`** per WORLD table; `tests/test_story_anchors.py` |
 | W.6 | `help tutorial` onboarding | Auto-generate tutorial text from `tutorial_*` rooms + command registry (`help tutorial`); locale keys; complements existing three-zone training ground; `tests/test_help_tutorial.py` |
 | W.7 | Faction gameplay depth | **`pledge tyrell`** quests and talk branches; faction affects **dialogue**, **quest hints**, **area hostility**, **shop buy/sell rates** (`world/trade.py`, `data/shops.yaml`); reputation thresholds; `tests/test_factions.py` |
-| W.8 | District weather & schedules | Per-district weather palette (acid rain, fog, smog, neon glare, dry heat) in `data/weather.yaml`; expanded NPC **schedules** by time band (shops open/close, patrol routes); `world/schedule.py` |
-| W.9 | Society & black market | Kabuki / Docks gray-market shops, `appraise` / `give` trade flows; info-broker intel chains beyond `broker_rumor`; corp vs street pricing; `tests/test_black_market.py` |
-| W.10 | Multiplayer presence | Polish player enter/leave broadcasts; same-room `look` lists other players; room-scoped `say` visibility; `tests/test_multiplayer.py` |
+| ~~W.8~~ | ~~District weather & schedules~~ | ✅ `data/schedule.yaml` all shop hours + period patrol multipliers; NPC schedules (`broker`, `bazaar_fixer`, `dock_smuggler`, `corp_guard`); `patrol_period_multiplier`; `tests/test_schedule.py` |
+| ~~W.9~~ | ~~Society & black market~~ | ✅ `docks_gray` shop, `dock_smuggler` NPC, `gray_market` quest (`give_npc`); corp/street `appraise`; `give <item> <npc>`; `tests/test_black_market.py` |
+| ~~W.10~~ | ~~Multiplayer presence~~ | ✅ `presence.enter`/`leave` on `go`; sender-excluded `say`/`give` broadcasts; peer `look`; `tests/test_multiplayer.py` |
 | W.11 | NETRUN story nodes | `data_vault` / `crypt` net nodes tied to physical rooms; `hack core terminal` quest step; expand `data/net_nodes.yaml`; `tests/test_net_story.py` |
 | W.12 | Extended status effects | **`poison`** tick damage and antidote consumables; **`cyberware overheat`** debuff (separate from quickhack burn); `world/status_effects.py`; locale combat lines |
 | W.13 | Live world reactions | Faction pledge, hacking success, and combat outcomes visibly shift **reputation** / wanted / broker dialogue; tick pushes ambient world lines; aligns with WORLD “world is not a static backdrop” |

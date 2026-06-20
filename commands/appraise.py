@@ -4,6 +4,7 @@ from commands.helpers import find_item_id
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
 from shared.locale_content import item_label
+from world.trade import appraisal_value
 
 
 def handle(ctx: CommandContext):
@@ -30,9 +31,12 @@ def handle(ctx: CommandContext):
     if item is None:
         return ok([t(ctx.player.locale, "appraise.missing")])
 
+    room = ctx.state.world.room(ctx.player.room_id)
+    value, tier = appraisal_value(item, room)
     label = item_label(item, ctx.player.locale)
+    tier_label = t(ctx.player.locale, f"appraise.tier.{tier}")
     return ok(
-        [t(ctx.player.locale, "appraise.ok", label=label, value=str(item.value))],
+        [t(ctx.player.locale, "appraise.ok", label=label, value=str(value), tier=tier_label)],
         meta=player_meta(ctx),
     )
 

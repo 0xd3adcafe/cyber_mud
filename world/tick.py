@@ -50,10 +50,11 @@ def _apply_npc_schedules(state: WorldState, config: TimeConfig) -> list[TickEven
     return events
 
 
-def _maybe_move_patrolling_npcs(state: WorldState) -> list[TickEvent]:
+def _maybe_move_patrolling_npcs(state: WorldState, config: TimeConfig) -> list[TickEvent]:
     if state.tick_count % PATROL_EVERY != 0:
         return []
 
+    period = state.clock.period_id(config)
     events: list[TickEvent] = []
     for npc_id, npc in state.world.npcs.items():
         if npc.schedule:
@@ -64,7 +65,7 @@ def _maybe_move_patrolling_npcs(state: WorldState) -> list[TickEvent]:
         room = state.world.room(current)
         from world.districts import patrol_move_chance
 
-        if random.random() > patrol_move_chance(0.5, room):
+        if random.random() > patrol_move_chance(0.5, room, period_id=period):
             continue
         if current not in npc.patrol:
             current = npc.patrol[0]
@@ -278,7 +279,7 @@ def process_tick(
         )
 
     events.extend(_apply_npc_schedules(state, config))
-    events.extend(_maybe_move_patrolling_npcs(state))
+    events.extend(_maybe_move_patrolling_npcs(state, config))
     events.extend(_maybe_npc_idle_messages(state))
     events.extend(process_npc_ai(state))
 

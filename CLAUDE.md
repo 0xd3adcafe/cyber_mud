@@ -242,7 +242,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | Area | Items |
 |------|--------|
 | Environment | pyenv native Python build |
-| **World expansion (WORLD.md)** | W.1–W.14 — procedural grids, eight districts, story anchors (`crypt`, `data_vault`, guard/priest/rat), `help tutorial`, faction depth, weather/schedules, black market, multiplayer presence, NETRUN story nodes, poison/overheat, live world reactions; see PHASES **World expansion** |
+| **World expansion (WORLD.md)** | W.12–W.13 — poison/overheat, live world reactions; NPC/item scale (~109/~45); see PHASES **World expansion** |
 
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.7 shipped — see PHASES **Mature / NSFW content** table.
 
@@ -333,6 +333,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | Player guides (GitHub) | `docs/player/` — getting started, tutorial, commands, client (ASCII art) |
 | Mature / NSFW content M.0–M.7 | `world/mature.py`, `combat/gore.py`, `settings mature`, `flirt`, mature locale/YAML, client 18+ login |
 | Kabuki & district expansion | `kabuki_vip`, `kabuki_bazaar`, Little China, Corpo hubs; `velvet_job`; `tests/test_world_districts.py` |
+| World expansion W.8–W.10 | `data/schedule.yaml`; `docks_gray`/`gray_market`; corp/street `appraise`; `give` to NPC; `presence` on `go`; `tests/test_black_market.py`, `tests/test_multiplayer.py` |
 | Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions |
 | Life commands L.1–L.8 | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable anchors; vitals/RAM regen; PDA + `%posture`; `tests/test_life_commands.py` |
 

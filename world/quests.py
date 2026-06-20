@@ -138,6 +138,7 @@ def _stage_matches(
     room_id: str = "",
     interactable_id: str = "",
     net_node_id: str = "",
+    item_id: str = "",
 ) -> bool:
     if stage.objective_type == "talk_npc":
         return event == "talk" and npc_id == stage.objective_target
@@ -151,6 +152,12 @@ def _stage_matches(
         return event == "inventory" and stage.objective_target in player.inventory
     if stage.objective_type == "hack_net":
         return event == "hack" and net_node_id == stage.objective_target
+    if stage.objective_type == "give_npc":
+        if event != "give" or npc_id != stage.objective_target:
+            return False
+        if stage.objective_item:
+            return item_id == stage.objective_item
+        return True
     return False
 
 
@@ -180,6 +187,7 @@ def _check_stage_progress(
     room_id: str = "",
     interactable_id: str = "",
     net_node_id: str = "",
+    item_id: str = "",
 ) -> list[str]:
     if player.active_quest != quest.id:
         return []
@@ -203,6 +211,7 @@ def _check_stage_progress(
         room_id=room_id,
         interactable_id=interactable_id,
         net_node_id=net_node_id,
+        item_id=item_id,
     ):
         return []
     return _advance_stage(player, quest, locale)
@@ -292,6 +301,29 @@ def advance_quest_on_hack(
     if quest is None:
         return []
     return _check_stage_progress(player, state, quest, locale, event="hack", net_node_id=node_id)
+
+
+def advance_quest_on_give(
+    player: Player,
+    state: WorldState,
+    npc_id: str,
+    item_id: str,
+    locale: str,
+) -> list[str]:
+    if not player.active_quest:
+        return []
+    quest = state.world.quest(player.active_quest)
+    if quest is None:
+        return []
+    return _check_stage_progress(
+        player,
+        state,
+        quest,
+        locale,
+        event="give",
+        npc_id=npc_id,
+        item_id=item_id,
+    )
 
 
 def offer_quest_from_giver(
@@ -387,6 +419,19 @@ def quest_hint_for_quest(player: Player, state: WorldState, quest: Quest, locale
                 label = node.name_zh if locale == "zh" else (node.name_en or node.name_zh)
                 return t(locale, "quest.hint_hack_net", target=label or stage.objective_target)
             return t(locale, "quest.hint_hack_net", target=stage.objective_target)
+        if stage.objective_type == "give_npc":
+            npc = state.world.npc(stage.objective_target)
+            npc_label_text = npc.name_zh if npc and locale == "zh" else (npc.name_en if npc else stage.objective_target)
+            if stage.objective_item:
+                item = state.world.item(stage.objective_item)
+                item_label_text = item_label(item, locale) if item else stage.objective_item
+                return t(
+                    locale,
+                    "quest.hint_give_npc",
+                    npc=npc_label_text or stage.objective_target,
+                    item=item_label_text,
+                )
+            return t(locale, "quest.hint_talk", target=npc_label_text or stage.objective_target)
     base = quest.hint_zh if locale == "zh" else (quest.hint_en or quest.hint_zh)
     from world.factions import faction_quest_hint_suffix
 

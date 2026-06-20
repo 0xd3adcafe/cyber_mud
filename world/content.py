@@ -66,6 +66,7 @@ class Mod:
 class QuestStage:
     objective_type: str = ""
     objective_target: str = ""
+    objective_item: str = ""
 
 
 @dataclass
@@ -297,6 +298,7 @@ def _parse_quest_stages(data: dict) -> list[QuestStage]:
             QuestStage(
                 objective_type=str(stage.get("objective_type", "")),
                 objective_target=str(stage.get("objective_target", "")),
+                objective_item=str(stage.get("objective_item", "")),
             )
             for stage in stages_raw
         ]

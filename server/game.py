@@ -168,10 +168,25 @@ class Game:
                 await session.send_meta(look.meta)
             save_player(session.player)
 
+        if result.moved and result.presence_from_room and session.player.named:
+            await self.broadcast_localized(
+                result.presence_from_room,
+                "presence.leave",
+                exclude=session,
+                name=session.player.name,
+            )
+            await self.broadcast_localized(
+                session.player.room_id,
+                "presence.enter",
+                exclude=session,
+                name=session.player.name,
+            )
+
         if result.broadcast_key:
             await self.broadcast_localized(
                 result.broadcast_room_id or session.player.room_id,
                 result.broadcast_key,
+                exclude=session,
                 **result.broadcast_kwargs,
             )
 

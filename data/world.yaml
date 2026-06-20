@@ -475,6 +475,7 @@ rooms:
     tags:
     - vehicle_dealer
     - transit
+    shop_id: docks_gray
     exits:
       north: square
       down: undercity
@@ -4227,8 +4228,31 @@ npcs:
     hp: 45
     hostile: false
     talk_key: bazaar_fixer
+    schedule:
+      morning: kabuki_bazaar
+      afternoon: kabuki_bazaar
+      dusk: kabuki_vip
+      night: kabuki_vip
     idle_msg_zh: 「要晶片還是座標？shop 或 talk。」
     idle_msg_en: '"Chips or coordinates? shop or talk."'
+  dock_smuggler:
+    name_zh: 碼頭走私客
+    name_en: Dock Smuggler
+    room_id: docks
+    description_zh: 斗篷下藏著未登記的改裝晶片，只在黃昏後現身碼頭。
+    description_en: Mod chips hide under a cloak—this smuggler only shows at the docks after dusk.
+    hp: 40
+    hostile: false
+    talk_key: dock_smuggler
+    schedule:
+      dawn: undercity
+      morning: undercity
+      noon: undercity
+      afternoon: undercity
+      dusk: docks
+      night: docks
+    idle_msg_zh: 「灰市價在這——shop 看看，別問來源。」
+    idle_msg_en: '"Gray market rates here—shop, do not ask where it came from."'
   shrine_keeper:
     name_zh: 神社司祭
     name_en: Shrine Keeper
@@ -4251,6 +4275,13 @@ npcs:
     attack: 6
     hostile: false
     talk_key: corp_guard
+    schedule:
+      dawn: corpo_lobby
+      morning: corpo_lobby
+      noon: corpo_lobby
+      afternoon: corpo_lobby
+      dusk: corpo_lobby
+      night: square
     idle_msg_zh: 「識別證。企業區禁止攝影。」
     idle_msg_en: '"ID badge. No recording in the corpo zone."'
   guard:

@@ -48,6 +48,7 @@ def handle(ctx: CommandContext):
         if wake_player(ctx.player):
             life_lines.append(t(ctx.player.locale, "life.wake_on_move"))
 
+    from_room = ctx.player.room_id
     ctx.player.room_id = dest_id
     from world.life import gain_fatigue
 
@@ -67,6 +68,7 @@ def handle(ctx: CommandContext):
         meta=player_meta(ctx),
         moved=True,
         world_changed=bool(quest_lines) or bool(trauma_lines),
+        presence_from_room=from_room,
     )
 
 

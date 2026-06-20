@@ -72,6 +72,30 @@ quests:
         objective_target: corp_guard
       - objective_type: visit_room
         objective_target: tyrell_plaza
+  gray_market:
+    name_zh: 灰市憑證
+    name_en: Gray Market Proof
+    npc_id: broker
+    description_zh: 經紀人要碼頭灰市的走私憑證——向走私客打聽後帶 mod_chip 給他。
+    description_en: The broker wants proof from the docks gray market—talk to the smuggler, then bring him a mod chip.
+    hint_zh: 到碼頭找走私客，購買 mod_chip，再 give mod_chip broker。
+    hint_en: Visit the docks smuggler, buy a mod_chip, then give mod_chip broker.
+    complete_npc_id: broker
+    requires_quest: broker_rumor
+    street_cred_req: 2
+    reward_gold: 60
+    reward_xp: 30
+    reward_street_cred: 8
+    stages:
+      - objective_type: visit_room
+        objective_target: docks
+      - objective_type: talk_npc
+        objective_target: dock_smuggler
+      - objective_type: have_item
+        objective_target: mod_chip
+      - objective_type: give_npc
+        objective_target: broker
+        objective_item: mod_chip
   alley_clearance:
     name_zh: 小巷清剿
     name_en: Alley Clearance

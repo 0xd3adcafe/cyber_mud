@@ -38,6 +38,7 @@ class CommandResult:
     broadcast_key: str = ""
     broadcast_kwargs: dict[str, str] = field(default_factory=dict)
     broadcast_room_id: str = ""
+    presence_from_room: str = ""
 
 
 _REGISTRY: dict[str, Handler] = {}
@@ -59,6 +60,7 @@ def ok(
     broadcast_key: str = "",
     broadcast_kwargs: dict[str, str] | None = None,
     broadcast_room_id: str = "",
+    presence_from_room: str = "",
 ) -> CommandResult:
     return CommandResult(
         lines=lines,
@@ -71,6 +73,7 @@ def ok(
         broadcast_key=broadcast_key,
         broadcast_kwargs=broadcast_kwargs or {},
         broadcast_room_id=broadcast_room_id,
+        presence_from_room=presence_from_room,
     )
 
 
@@ -97,8 +100,16 @@ def ok_document(
     meta: dict[str, str] | None = None,
     moved: bool = False,
     world_changed: bool = False,
+    presence_from_room: str = "",
 ) -> CommandResult:
-    return ok(lines, meta=meta, document=True, moved=moved, world_changed=world_changed)
+    return ok(
+        lines,
+        meta=meta,
+        document=True,
+        moved=moved,
+        world_changed=world_changed,
+        presence_from_room=presence_from_room,
+    )
 
 
 def player_meta(ctx: CommandContext) -> dict[str, str]:
@@ -211,6 +222,7 @@ def _merge_repeat_results(
         broadcast_key=last.broadcast_key,
         broadcast_kwargs=last.broadcast_kwargs,
         broadcast_room_id=last.broadcast_room_id,
+        presence_from_room=next((r.presence_from_room for r in results if r.presence_from_room), ""),
     )
 
 

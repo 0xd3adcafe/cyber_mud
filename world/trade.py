@@ -4,7 +4,13 @@ from commands.registry import CommandContext
 from shared.locale_content import item_label_with_id
 from world.content import Shop
 from world.schedule import shop_is_open
-from world.world import Room, World
+from world.world import Item, Room, World
+
+STREET_DISTRICTS = {"docks", "kabuki", "watson", "undercity", "little_china", "combat_zone"}
+CORPO_DISTRICTS = {"corpo", "tyrell"}
+STREET_APPRAISAL_RATE = 0.75
+CORPO_APPRAISAL_RATE = 1.0
+NEUTRAL_APPRAISAL_RATE = 0.9
 
 
 def shop_for_room(world: World, room: Room | None) -> Shop | None:
@@ -104,6 +110,26 @@ def remove_player_item(player, item_id: str) -> None:
         if equipped_id == item_id:
             player.equipment[slot] = ""
     player.weapon_mods.pop(item_id, None)
+
+
+def appraisal_tier(room: Room | None) -> str:
+    if room is None or not room.district:
+        return "neutral"
+    if room.district in CORPO_DISTRICTS:
+        return "corp"
+    if room.district in STREET_DISTRICTS:
+        return "street"
+    return "neutral"
+
+
+def appraisal_value(item: Item, room: Room | None) -> tuple[int, str]:
+    tier = appraisal_tier(room)
+    base = max(1, item.value)
+    if tier == "corp":
+        return max(1, int(base * CORPO_APPRAISAL_RATE)), tier
+    if tier == "street":
+        return max(1, int(base * STREET_APPRAISAL_RATE)), tier
+    return max(1, int(base * NEUTRAL_APPRAISAL_RATE)), tier
 
 
 def format_shop_lines(ctx: CommandContext, shop: Shop) -> list[str]:

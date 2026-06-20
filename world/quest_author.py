@@ -9,7 +9,7 @@ from world.quests import quest_stages
 from world.world import World
 
 VALID_OBJECTIVE_TYPES = frozenset(
-    {"talk_npc", "visit_room", "interact", "defeat_npc", "have_item", "hack_net"}
+    {"talk_npc", "visit_room", "interact", "defeat_npc", "have_item", "hack_net", "give_npc"}
 )
 
 
@@ -51,6 +51,10 @@ def resolve_target_label(world: World, objective_type: str, target: str) -> str:
         node = world.net_nodes.get(target)
         if node:
             return f"{target} ({node.name_zh or node.name_en})"
+    elif objective_type == "give_npc":
+        npc = world.npc(target)
+        if npc:
+            return f"{target} ({npc.name_zh or npc.name_en})"
     return target
 
 
@@ -69,6 +73,8 @@ def _target_exists(world: World, objective_type: str, target: str) -> bool:
         return world.item(target) is not None
     if objective_type == "hack_net":
         return target in world.net_nodes
+    if objective_type == "give_npc":
+        return world.npc(target) is not None
     return False
 
 
@@ -117,6 +123,15 @@ def validate_quest(world: World, quest: Quest) -> list[QuestIssue]:
                     f"stage {index} 目標不存在：{stage.objective_type} → {stage.objective_target}",
                 )
             )
+        if stage.objective_type == "give_npc" and stage.objective_item:
+            if world.item(stage.objective_item) is None:
+                issues.append(
+                    QuestIssue(
+                        qid,
+                        "error",
+                        f"stage {index} objective_item 不存在：{stage.objective_item}",
+                    )
+                )
 
     stage_npcs = {
         stage.objective_target

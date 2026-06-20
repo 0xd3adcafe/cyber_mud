@@ -31,6 +31,10 @@ game:
   no_exit: "You cannot go that way."
   quit: "Logged out. Please sign in again."
 
+presence:
+  enter: "{name} enters."
+  leave: "{name} leaves."
+
 look:
   header: "◈ {name}"
   target_header: "◈ {name}"
@@ -650,10 +654,13 @@ wanted:
   tick: "{text}"
 
 give:
-  usage: "Usage: give <item> <player>"
+  usage: "Usage: give <item> <player|npc>"
   missing_item: "You do not have that item."
   missing_player: "No player {name} here."
+  missing_target: "No player or NPC {name} here."
   ok: "You give {label} to {name}."
+  npc_ok: "You give {label} to {name}."
+  npc_refused: "{name} does not want that."
   broadcast: "{name} gives {label} to {target}."
 
 trade:
@@ -682,7 +689,11 @@ sell:
 appraise:
   usage: "Usage: appraise <item>"
   missing: "Cannot find that item."
-  ok: "{label} is worth about ${value}."
+  ok: "{label} — {tier} appraisal: ${value}."
+  tier:
+    corp: "corporate"
+    street: "street"
+    neutral: "standard"
 
 prompt:
   usage: "Usage: prompt show | prompt set <template> | prompt template <name> | prompt reset"
@@ -793,6 +804,7 @@ talk:
   clinic_tutor: "The tutor opens a sterile booth: \"Take a practice_cyber_kit, install into a cyber slot; interact the console for notes. uninstall when done.\""
   course_guide: "The guide raises a scanner: \"scan for exits and interactables; interact the scan post to finish basics. The patrol dummy practices punch and flee.\""
   bazaar_fixer: "The fixer taps a mod chip: \"Gray market prices—shop here. East lounge, south Little China Gate.\""
+  dock_smuggler: "The smuggler mutters: \"Docks gray market—shop after dusk. Bring proof to your broker if he asks.\""
   shrine_keeper: "The keeper bows slightly: \"Humanity is finite. Every chrome install takes a piece. Reflect before you upgrade.\""
   corp_guard: "The guard's visor flickers: \"Badge scan clear. No weapons drawn in the corpo zone.\""
   corp_guard_tyrell: "The guard lowers the scanner: \"Tyrell clearance noted—plaza east, labs beyond.\""
@@ -822,6 +834,7 @@ quest:
   hint_talk: "Talk to {target}."
   hint_defeat: "Defeat {target}."
   hint_have_item: "Obtain {target}."
+  hint_give_npc: "Give {item} to {npc}."
   hint_hack_net: "Jack in (net) and hack {target}."
 
 gigs:

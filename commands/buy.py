@@ -44,16 +44,20 @@ def handle(ctx: CommandContext):
     ctx.player.gold -= price
     ctx.player.inventory.append(item_id)
     label = item_label(item, ctx.player.locale)
+    from world.quests import advance_quest_on_inventory
+
+    lines = [
+        t(
+            ctx.player.locale,
+            "buy.ok",
+            label=label,
+            price=str(price),
+            shop=shop_label(shop, ctx.player.locale),
+        )
+    ]
+    lines.extend(advance_quest_on_inventory(ctx.player, ctx.state, ctx.player.locale))
     return ok(
-        [
-            t(
-                ctx.player.locale,
-                "buy.ok",
-                label=label,
-                price=str(price),
-                shop=shop_label(shop, ctx.player.locale),
-            )
-        ],
+        lines,
         meta=player_meta(ctx),
         world_changed=True,
         refresh_sidebar=True,

@@ -74,3 +74,18 @@ shops:
       pipe: 28
     buy_items: true
     buy_rate: 0.55
+  docks_gray:
+    name_zh: 碼頭灰市攤
+    name_en: Docks Gray Market
+    room_id: docks
+    npc_id: dock_smuggler
+    open_hour: 18
+    close_hour: 6
+    sells:
+      glowstick: 11
+      mod_chip: 125
+      pipe: 25
+      energy_drink: 18
+      synth_ramen: 14
+    buy_items: true
+    buy_rate: 0.6

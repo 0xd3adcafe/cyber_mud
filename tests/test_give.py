@@ -19,4 +19,4 @@ def test_give_missing_player():
     state = make_state()
     dispatch("take glowstick", giver, state, [], [])
     result = dispatch("give glowstick Nobody", giver, state, [], [giver])
-    assert any("沒有玩家" in line for line in result.lines)
+    assert any("沒有玩家" in line or "沒有玩家或 NPC" in line for line in result.lines)

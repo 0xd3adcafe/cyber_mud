@@ -50,3 +50,9 @@ def npc_scheduled_room(npc: NPC, period_id: str, fallback: str) -> str:
     if npc.schedule and period_id in npc.schedule:
         return npc.schedule[period_id]
     return fallback
+
+
+def patrol_period_multiplier(period_id: str) -> float:
+    periods = _load_schedule().get("periods") or {}
+    entry = periods.get(period_id) or {}
+    return float(entry.get("patrol_multiplier", 1.0))

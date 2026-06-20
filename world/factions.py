@@ -23,6 +23,11 @@ SHOP_FACTION_RATES: dict[str, dict[str, dict[str, float]]] = {
     "kabuki_bazaar": {
         "maelstrom": {"buy": 1.05, "sell": 0.95},
     },
+    "docks_gray": {
+        "maelstrom": {"buy": 0.95, "sell": 1.05},
+        "arasaka": {"buy": 1.1, "sell": 0.9},
+        "militech": {"buy": 1.08, "sell": 0.92},
+    },
     "ripperdoc": {
         "arasaka": {"buy": 0.95, "sell": 1.05},
         "tyrell": {"buy": 0.93, "sell": 1.07},
