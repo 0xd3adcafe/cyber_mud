@@ -29,7 +29,40 @@ from world.world import Room, World
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 DATA_PATH = DATA_DIR / "world.yaml"
+POPULATION_PATH = DATA_DIR / "world_population.yaml"
 IMPLANTS_PATH = DATA_DIR / "implants.yaml"
+
+
+def _load_world_raw(path: Path | None = None) -> dict:
+    src = path or DATA_PATH
+    with src.open(encoding="utf-8") as fh:
+        raw = yaml.safe_load(fh) or {}
+    overlay_path = POPULATION_PATH if path is None else path.parent / "world_population.yaml"
+    if overlay_path.exists() and overlay_path != src:
+        with overlay_path.open(encoding="utf-8") as fh:
+            overlay = yaml.safe_load(fh) or {}
+        for key in ("items", "npcs"):
+            if overlay.get(key):
+                raw.setdefault(key, {}).update(overlay[key])
+    return raw
+
+
+def _merge_room_items(raw: dict, path: Path | None = None) -> dict[str, list[str]]:
+    overlay_path = POPULATION_PATH if path is None else path.parent / "world_population.yaml"
+    room_items = {
+        str(rid): [str(i) for i in items]
+        for rid, items in (raw.get("room_items") or {}).items()
+    }
+    if overlay_path.exists():
+        with overlay_path.open(encoding="utf-8") as fh:
+            overlay = yaml.safe_load(fh) or {}
+        for rid, items in (overlay.get("room_items") or {}).items():
+            merged = list(room_items.get(str(rid), []))
+            for item_id in items:
+                if item_id not in merged:
+                    merged.append(str(item_id))
+            room_items[str(rid)] = merged
+    return room_items
 
 
 def _load_implants(path: Path | None = None) -> dict[str, Implant]:
@@ -62,9 +95,7 @@ def _load_implants(path: Path | None = None) -> dict[str, Implant]:
 
 
 def load_world(path: Path | None = None) -> World:
-    src = path or DATA_PATH
-    with src.open(encoding="utf-8") as fh:
-        raw = yaml.safe_load(fh) or {}
+    raw = _load_world_raw(path)
 
     rooms = {
         rid: Room(
@@ -185,7 +216,4 @@ def default_room_items(path: Path | None = None) -> dict[str, list[str]]:
     src = path or DATA_PATH
     with src.open(encoding="utf-8") as fh:
         raw = yaml.safe_load(fh) or {}
-    return {
-        str(rid): [str(i) for i in items]
-        for rid, items in (raw.get("room_items") or {}).items()
-    }
+    return _merge_room_items(raw, path)

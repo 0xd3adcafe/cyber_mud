@@ -1,0 +1,1281 @@
+items:
+  gutter_blade:
+    name_zh: 陰溝短刃
+    name_en: Gutter Blade
+    description_zh: 磨過的街頭短刃，便宜但夠用。
+    description_en: A filed street blade—cheap but sharp enough.
+    takeable: true
+    slot: weapon
+    weapon_type: blade
+    weapon_class: melee
+    weapon_damage: 5
+    value: 18
+  street_stim:
+    name_zh: 街頭興奮劑
+    name_en: Street Stim
+    description_zh: 黑市單劑興奮劑，能撐過一場衝突。
+    description_en: A black-market stim dose for one ugly fight.
+    takeable: true
+    consumable: medicine
+    hp_restore: 20
+    value: 22
+  corpo_token:
+    name_zh: 企業通行證
+    name_en: Corpo Pass Token
+    description_zh: 過期仍值錢的企業識別籌碼。
+    description_en: An expired corpo pass chip—still worth something.
+    takeable: true
+    value: 40
+  smuggler_pack:
+    name_zh: 走私壓縮包
+    name_en: Smuggler Pack
+    description_zh: 碼頭流通的壓縮口糧與電解液組合。
+    description_en: Dock-grade ration and electrolyte combo.
+    takeable: true
+    consumable: food
+    hp_restore: 10
+    ram_restore: 1
+    value: 16
+  combat_scrap:
+    name_zh: 戰區廢鐵
+    name_en: Combat Zone Scrap
+    description_zh: 戰鬥區撿來的義體殘件，回收商會收。
+    description_en: Cyber scrap from the zone—buyers still pay.
+    takeable: true
+    value: 28
+  neon_patch:
+    name_zh: 霓虹貼片
+    name_en: Neon Patch
+    description_zh: 歌舞伎區流行的發光裝飾貼片。
+    description_en: A glowing Kabuki fashion patch.
+    takeable: true
+    value: 14
+  grid_ration:
+    name_zh: 格點口糧
+    name_en: Grid Ration
+    description_zh: 企業配發的壓縮口糧。
+    description_en: Corporate-issue calorie brick.
+    takeable: true
+    consumable: food
+    hp_restore: 8
+    value: 6
+  black_ice_shard:
+    name_zh: 黑冰碎片
+    name_en: Black Ice Shard
+    description_zh: 非法 ICE 殘片，駭客會出價收購。
+    description_en: Illegal ICE shard—hackers pay for these.
+    takeable: true
+    value: 55
+  tyrell_sample:
+    name_zh: 泰瑞樣本管
+    name_en: Tyrell Sample Vial
+    description_zh: 實驗室遺落的樣本管，標籤已模糊。
+    description_en: A lost lab vial with a faded label.
+    takeable: true
+    value: 70
+  dock_manifest:
+    name_zh: 碼頭貨單
+    name_en: Dock Manifest
+    description_zh: 走私貨櫃的加密貨單影本。
+    description_en: An encrypted copy of a smuggler manifest.
+    takeable: true
+    value: 32
+  kabuki_token:
+    name_zh: 歌舞伎籌碼
+    name_en: Kabuki Token
+    description_zh: 夜總會兌換用的霓虹籌碼。
+    description_en: A neon token for the nightlife circuit.
+    takeable: true
+    value: 25
+  china_incense:
+    name_zh: 小中國線香
+    name_en: Little China Incense
+    description_zh: 小中國街廟口常見的線香束。
+    description_en: Incense bundle from Little China shrines.
+    takeable: true
+    value: 9
+  undercity_filament:
+    name_zh: 地下光纖
+    name_en: Undercity Filament
+    description_zh: 地下城剝下來的舊光纖，仍能導電。
+    description_en: Stripped undercity fiber—still conducts.
+    takeable: true
+    value: 20
+npcs:
+  watson_street_runner_0_0:
+    name_zh: 街區行者
+    name_en: Street Runner
+    room_id: watson_0_0
+    description_zh: watson 格點上的街區行者。
+    description_en: A street runner on the watson grid.
+    hp: 35
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低頭刷著訊息，匆匆走過。
+    idle_msg_en: Scrolls a feed and hurries past.
+  watson_thug_0_3:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: watson_0_3
+    description_zh: watson 格點上的街頭暴徒。
+    description_en: A street thug on the watson grid.
+    hp: 42
+    attack: 5
+    hostile: true
+    aggro: 6
+    faction: maelstrom
+    talk_key: grid_thug
+    idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
+    idle_msg_en: Blades on a cyber-arm catch the neon glare.
+    loot: &id001
+    - mod_chip
+    patrol:
+    - watson_0_3
+    - watson_0_2
+  watson_fixer_0_6:
+    name_zh: 街頭中介
+    name_en: Street Fixer
+    room_id: watson_0_6
+    description_zh: watson 格點上的街頭中介。
+    description_en: A street fixer on the watson grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 低聲對著空氣嘀咕著價碼。
+    idle_msg_en: Mumbles prices to no one in particular.
+  watson_street_runner_1_1:
+    name_zh: 街區行者
+    name_en: Street Runner
+    room_id: watson_1_1
+    description_zh: watson 格點上的街區行者。
+    description_en: A street runner on the watson grid.
+    hp: 35
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低頭刷著訊息，匆匆走過。
+    idle_msg_en: Scrolls a feed and hurries past.
+  watson_thug_1_4:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: watson_1_4
+    description_zh: watson 格點上的街頭暴徒。
+    description_en: A street thug on the watson grid.
+    hp: 42
+    attack: 5
+    hostile: true
+    aggro: 6
+    faction: maelstrom
+    talk_key: grid_thug
+    idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
+    idle_msg_en: Blades on a cyber-arm catch the neon glare.
+    loot: *id001
+    patrol:
+    - watson_1_4
+    - watson_1_3
+  watson_fixer_1_7:
+    name_zh: 街頭中介
+    name_en: Street Fixer
+    room_id: watson_1_7
+    description_zh: watson 格點上的街頭中介。
+    description_en: A street fixer on the watson grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 低聲對著空氣嘀咕著價碼。
+    idle_msg_en: Mumbles prices to no one in particular.
+  watson_street_runner_2_2:
+    name_zh: 街區行者
+    name_en: Street Runner
+    room_id: watson_2_2
+    description_zh: watson 格點上的街區行者。
+    description_en: A street runner on the watson grid.
+    hp: 35
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低頭刷著訊息，匆匆走過。
+    idle_msg_en: Scrolls a feed and hurries past.
+  watson_thug_2_5:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: watson_2_5
+    description_zh: watson 格點上的街頭暴徒。
+    description_en: A street thug on the watson grid.
+    hp: 42
+    attack: 5
+    hostile: true
+    aggro: 6
+    faction: maelstrom
+    talk_key: grid_thug
+    idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
+    idle_msg_en: Blades on a cyber-arm catch the neon glare.
+    loot: *id001
+    patrol:
+    - watson_2_5
+    - watson_2_4
+  watson_fixer_3_0:
+    name_zh: 街頭中介
+    name_en: Street Fixer
+    room_id: watson_3_0
+    description_zh: watson 格點上的街頭中介。
+    description_en: A street fixer on the watson grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 低聲對著空氣嘀咕著價碼。
+    idle_msg_en: Mumbles prices to no one in particular.
+  watson_street_runner_3_3:
+    name_zh: 街區行者
+    name_en: Street Runner
+    room_id: watson_3_3
+    description_zh: watson 格點上的街區行者。
+    description_en: A street runner on the watson grid.
+    hp: 35
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低頭刷著訊息，匆匆走過。
+    idle_msg_en: Scrolls a feed and hurries past.
+  watson_thug_3_6:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: watson_3_6
+    description_zh: watson 格點上的街頭暴徒。
+    description_en: A street thug on the watson grid.
+    hp: 42
+    attack: 5
+    hostile: true
+    aggro: 6
+    faction: maelstrom
+    talk_key: grid_thug
+    idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
+    idle_msg_en: Blades on a cyber-arm catch the neon glare.
+    loot: *id001
+    patrol:
+    - watson_3_6
+    - watson_3_5
+  watson_fixer_4_1:
+    name_zh: 街頭中介
+    name_en: Street Fixer
+    room_id: watson_4_1
+    description_zh: watson 格點上的街頭中介。
+    description_en: A street fixer on the watson grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 低聲對著空氣嘀咕著價碼。
+    idle_msg_en: Mumbles prices to no one in particular.
+  watson_street_runner_4_4:
+    name_zh: 街區行者
+    name_en: Street Runner
+    room_id: watson_4_4
+    description_zh: watson 格點上的街區行者。
+    description_en: A street runner on the watson grid.
+    hp: 35
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低頭刷著訊息，匆匆走過。
+    idle_msg_en: Scrolls a feed and hurries past.
+  watson_thug_4_7:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: watson_4_7
+    description_zh: watson 格點上的街頭暴徒。
+    description_en: A street thug on the watson grid.
+    hp: 42
+    attack: 5
+    hostile: true
+    aggro: 6
+    faction: maelstrom
+    talk_key: grid_thug
+    idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
+    idle_msg_en: Blades on a cyber-arm catch the neon glare.
+    loot: *id001
+    patrol:
+    - watson_4_7
+    - watson_4_6
+  watson_fixer_5_2:
+    name_zh: 街頭中介
+    name_en: Street Fixer
+    room_id: watson_5_2
+    description_zh: watson 格點上的街頭中介。
+    description_en: A street fixer on the watson grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 低聲對著空氣嘀咕著價碼。
+    idle_msg_en: Mumbles prices to no one in particular.
+  watson_street_runner_5_5:
+    name_zh: 街區行者
+    name_en: Street Runner
+    room_id: watson_5_5
+    description_zh: watson 格點上的街區行者。
+    description_en: A street runner on the watson grid.
+    hp: 35
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低頭刷著訊息，匆匆走過。
+    idle_msg_en: Scrolls a feed and hurries past.
+  watson_thug_6_0:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: watson_6_0
+    description_zh: watson 格點上的街頭暴徒。
+    description_en: A street thug on the watson grid.
+    hp: 42
+    attack: 5
+    hostile: true
+    aggro: 6
+    faction: maelstrom
+    talk_key: grid_thug
+    idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
+    idle_msg_en: Blades on a cyber-arm catch the neon glare.
+    loot: *id001
+    patrol:
+    - watson_6_0
+    - watson_6_1
+  watson_fixer_6_3:
+    name_zh: 街頭中介
+    name_en: Street Fixer
+    room_id: watson_6_3
+    description_zh: watson 格點上的街頭中介。
+    description_en: A street fixer on the watson grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 低聲對著空氣嘀咕著價碼。
+    idle_msg_en: Mumbles prices to no one in particular.
+  watson_street_runner_6_6:
+    name_zh: 街區行者
+    name_en: Street Runner
+    room_id: watson_6_6
+    description_zh: watson 格點上的街區行者。
+    description_en: A street runner on the watson grid.
+    hp: 35
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低頭刷著訊息，匆匆走過。
+    idle_msg_en: Scrolls a feed and hurries past.
+  watson_thug_7_1:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: watson_7_1
+    description_zh: watson 格點上的街頭暴徒。
+    description_en: A street thug on the watson grid.
+    hp: 42
+    attack: 5
+    hostile: true
+    aggro: 6
+    faction: maelstrom
+    talk_key: grid_thug
+    idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
+    idle_msg_en: Blades on a cyber-arm catch the neon glare.
+    loot: *id001
+    patrol:
+    - watson_7_1
+    - watson_7_0
+  watson_fixer_7_4:
+    name_zh: 街頭中介
+    name_en: Street Fixer
+    room_id: watson_7_4
+    description_zh: watson 格點上的街頭中介。
+    description_en: A street fixer on the watson grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 低聲對著空氣嘀咕著價碼。
+    idle_msg_en: Mumbles prices to no one in particular.
+  tyrell_lab_tech_0_0:
+    name_zh: 實驗室技師
+    name_en: Lab Tech
+    room_id: tyrell_0_0
+    description_zh: tyrell 格點上的實驗室技師。
+    description_en: A lab tech on the tyrell grid.
+    hp: 38
+    attack: 2
+    hostile: false
+    faction: tyrell
+    talk_key: grid_corpo
+    idle_msg_zh: 抱著樣本箱匆匆穿過走廊。
+    idle_msg_en: Rushes past with a sample case.
+  tyrell_corp_guard_0_3:
+    name_zh: 企業保全
+    name_en: Corpo Guard
+    room_id: tyrell_0_3
+    description_zh: tyrell 格點上的企業保全。
+    description_en: A corpo guard on the tyrell grid.
+    hp: 65
+    attack: 6
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 掃描證件與武器。
+    idle_msg_en: Scans IDs and weapons.
+  tyrell_runner_1_0:
+    name_zh: 企業跑腿
+    name_en: Corpo Runner
+    room_id: tyrell_1_0
+    description_zh: tyrell 格點上的企業跑腿。
+    description_en: A corpo runner on the tyrell grid.
+    hp: 36
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 抱著加密平板快步離開。
+    idle_msg_en: Clutches an encrypted slate and moves on.
+  tyrell_lab_tech_1_3:
+    name_zh: 實驗室技師
+    name_en: Lab Tech
+    room_id: tyrell_1_3
+    description_zh: tyrell 格點上的實驗室技師。
+    description_en: A lab tech on the tyrell grid.
+    hp: 38
+    attack: 2
+    hostile: false
+    faction: tyrell
+    talk_key: grid_corpo
+    idle_msg_zh: 抱著樣本箱匆匆穿過走廊。
+    idle_msg_en: Rushes past with a sample case.
+  tyrell_corp_guard_2_1:
+    name_zh: 企業保全
+    name_en: Corpo Guard
+    room_id: tyrell_2_1
+    description_zh: tyrell 格點上的企業保全。
+    description_en: A corpo guard on the tyrell grid.
+    hp: 65
+    attack: 6
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 掃描證件與武器。
+    idle_msg_en: Scans IDs and weapons.
+  tyrell_runner_2_4:
+    name_zh: 企業跑腿
+    name_en: Corpo Runner
+    room_id: tyrell_2_4
+    description_zh: tyrell 格點上的企業跑腿。
+    description_en: A corpo runner on the tyrell grid.
+    hp: 36
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 抱著加密平板快步離開。
+    idle_msg_en: Clutches an encrypted slate and moves on.
+  tyrell_lab_tech_3_1:
+    name_zh: 實驗室技師
+    name_en: Lab Tech
+    room_id: tyrell_3_1
+    description_zh: tyrell 格點上的實驗室技師。
+    description_en: A lab tech on the tyrell grid.
+    hp: 38
+    attack: 2
+    hostile: false
+    faction: tyrell
+    talk_key: grid_corpo
+    idle_msg_zh: 抱著樣本箱匆匆穿過走廊。
+    idle_msg_en: Rushes past with a sample case.
+  tyrell_corp_guard_3_4:
+    name_zh: 企業保全
+    name_en: Corpo Guard
+    room_id: tyrell_3_4
+    description_zh: tyrell 格點上的企業保全。
+    description_en: A corpo guard on the tyrell grid.
+    hp: 65
+    attack: 6
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 掃描證件與武器。
+    idle_msg_en: Scans IDs and weapons.
+  tyrell_runner_4_2:
+    name_zh: 企業跑腿
+    name_en: Corpo Runner
+    room_id: tyrell_4_2
+    description_zh: tyrell 格點上的企業跑腿。
+    description_en: A corpo runner on the tyrell grid.
+    hp: 36
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 抱著加密平板快步離開。
+    idle_msg_en: Clutches an encrypted slate and moves on.
+  tyrell_lab_tech_4_5:
+    name_zh: 實驗室技師
+    name_en: Lab Tech
+    room_id: tyrell_4_5
+    description_zh: tyrell 格點上的實驗室技師。
+    description_en: A lab tech on the tyrell grid.
+    hp: 38
+    attack: 2
+    hostile: false
+    faction: tyrell
+    talk_key: grid_corpo
+    idle_msg_zh: 抱著樣本箱匆匆穿過走廊。
+    idle_msg_en: Rushes past with a sample case.
+  tyrell_corp_guard_5_2:
+    name_zh: 企業保全
+    name_en: Corpo Guard
+    room_id: tyrell_5_2
+    description_zh: tyrell 格點上的企業保全。
+    description_en: A corpo guard on the tyrell grid.
+    hp: 65
+    attack: 6
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 掃描證件與武器。
+    idle_msg_en: Scans IDs and weapons.
+  combat_zone_raider_0_0:
+    name_zh: 戰區掠奪者
+    name_en: Zone Raider
+    room_id: combat_zone_0_0
+    description_zh: combat_zone 格點上的戰區掠奪者。
+    description_en: A zone raider on the combat_zone grid.
+    hp: 48
+    attack: 6
+    hostile: true
+    aggro: 8
+    faction: maelstrom
+    talk_key: grid_thug
+    loot: &id002
+    - pipe
+    patrol:
+    - combat_zone_0_0
+    - combat_zone_0_1
+  combat_zone_scavenger_0_3:
+    name_zh: 拾荒者
+    name_en: Scavenger
+    room_id: combat_zone_0_3
+    description_zh: combat_zone 格點上的拾荒者。
+    description_en: A scavenger on the combat_zone grid.
+    hp: 32
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 翻找廢墟裡還能賣的零件。
+    idle_msg_en: Digs for parts worth selling in the rubble.
+  combat_zone_merc_1_0:
+    name_zh: 雇傭兵
+    name_en: Mercenary
+    room_id: combat_zone_1_0
+    description_zh: combat_zone 格點上的雇傭兵。
+    description_en: A mercenary on the combat_zone grid.
+    hp: 55
+    attack: 7
+    hostile: true
+    aggro: 7
+    talk_key: grid_thug
+    equipment: &id003
+      weapon_primary: liberty_pistol
+    patrol:
+    - combat_zone_1_0
+    - combat_zone_1_1
+  combat_zone_raider_1_3:
+    name_zh: 戰區掠奪者
+    name_en: Zone Raider
+    room_id: combat_zone_1_3
+    description_zh: combat_zone 格點上的戰區掠奪者。
+    description_en: A zone raider on the combat_zone grid.
+    hp: 48
+    attack: 6
+    hostile: true
+    aggro: 8
+    faction: maelstrom
+    talk_key: grid_thug
+    loot: *id002
+    patrol:
+    - combat_zone_1_3
+    - combat_zone_1_2
+  combat_zone_scavenger_2_1:
+    name_zh: 拾荒者
+    name_en: Scavenger
+    room_id: combat_zone_2_1
+    description_zh: combat_zone 格點上的拾荒者。
+    description_en: A scavenger on the combat_zone grid.
+    hp: 32
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 翻找廢墟裡還能賣的零件。
+    idle_msg_en: Digs for parts worth selling in the rubble.
+  combat_zone_merc_2_4:
+    name_zh: 雇傭兵
+    name_en: Mercenary
+    room_id: combat_zone_2_4
+    description_zh: combat_zone 格點上的雇傭兵。
+    description_en: A mercenary on the combat_zone grid.
+    hp: 55
+    attack: 7
+    hostile: true
+    aggro: 7
+    talk_key: grid_thug
+    equipment: *id003
+    patrol:
+    - combat_zone_2_4
+    - combat_zone_2_3
+  combat_zone_raider_3_1:
+    name_zh: 戰區掠奪者
+    name_en: Zone Raider
+    room_id: combat_zone_3_1
+    description_zh: combat_zone 格點上的戰區掠奪者。
+    description_en: A zone raider on the combat_zone grid.
+    hp: 48
+    attack: 6
+    hostile: true
+    aggro: 8
+    faction: maelstrom
+    talk_key: grid_thug
+    loot: *id002
+    patrol:
+    - combat_zone_3_1
+    - combat_zone_3_0
+  combat_zone_scavenger_3_4:
+    name_zh: 拾荒者
+    name_en: Scavenger
+    room_id: combat_zone_3_4
+    description_zh: combat_zone 格點上的拾荒者。
+    description_en: A scavenger on the combat_zone grid.
+    hp: 32
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 翻找廢墟裡還能賣的零件。
+    idle_msg_en: Digs for parts worth selling in the rubble.
+  combat_zone_merc_4_2:
+    name_zh: 雇傭兵
+    name_en: Mercenary
+    room_id: combat_zone_4_2
+    description_zh: combat_zone 格點上的雇傭兵。
+    description_en: A mercenary on the combat_zone grid.
+    hp: 55
+    attack: 7
+    hostile: true
+    aggro: 7
+    talk_key: grid_thug
+    equipment: *id003
+    patrol:
+    - combat_zone_4_2
+    - combat_zone_4_1
+  combat_zone_raider_4_5:
+    name_zh: 戰區掠奪者
+    name_en: Zone Raider
+    room_id: combat_zone_4_5
+    description_zh: combat_zone 格點上的戰區掠奪者。
+    description_en: A zone raider on the combat_zone grid.
+    hp: 48
+    attack: 6
+    hostile: true
+    aggro: 8
+    faction: maelstrom
+    talk_key: grid_thug
+    loot: *id002
+    patrol:
+    - combat_zone_4_5
+    - combat_zone_4_4
+  combat_zone_scavenger_5_2:
+    name_zh: 拾荒者
+    name_en: Scavenger
+    room_id: combat_zone_5_2
+    description_zh: combat_zone 格點上的拾荒者。
+    description_en: A scavenger on the combat_zone grid.
+    hp: 32
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 翻找廢墟裡還能賣的零件。
+    idle_msg_en: Digs for parts worth selling in the rubble.
+  kabuki_bouncer_0_0:
+    name_zh: 門禁保鑣
+    name_en: Bouncer
+    room_id: kabuki_0_0
+    description_zh: kabuki 格點上的門禁保鑣。
+    description_en: A bouncer on the kabuki grid.
+    hp: 50
+    attack: 5
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 掃視排隊的人潮。
+    idle_msg_en: Eyes the queue.
+  kabuki_dealer_0_2:
+    name_zh: 灰市攤販
+    name_en: Gray Dealer
+    room_id: kabuki_0_2
+    description_zh: kabuki 格點上的灰市攤販。
+    description_en: A gray dealer on the kabuki grid.
+    hp: 38
+    attack: 3
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 敲了敲晶片托盤。
+    idle_msg_en: Taps a tray of chips.
+  kabuki_dancer_1_0:
+    name_zh: 全息舞者
+    name_en: Holo Dancer
+    room_id: kabuki_1_0
+    description_zh: kabuki 格點上的全息舞者。
+    description_en: A holo dancer on the kabuki grid.
+    hp: 30
+    attack: 1
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 殘影在霓虹裡旋轉。
+    idle_msg_en: A ghost image spins in the neon.
+  kabuki_bouncer_1_3:
+    name_zh: 門禁保鑣
+    name_en: Bouncer
+    room_id: kabuki_1_3
+    description_zh: kabuki 格點上的門禁保鑣。
+    description_en: A bouncer on the kabuki grid.
+    hp: 50
+    attack: 5
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 掃視排隊的人潮。
+    idle_msg_en: Eyes the queue.
+  kabuki_dealer_2_1:
+    name_zh: 灰市攤販
+    name_en: Gray Dealer
+    room_id: kabuki_2_1
+    description_zh: kabuki 格點上的灰市攤販。
+    description_en: A gray dealer on the kabuki grid.
+    hp: 38
+    attack: 3
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 敲了敲晶片托盤。
+    idle_msg_en: Taps a tray of chips.
+  kabuki_dancer_2_3:
+    name_zh: 全息舞者
+    name_en: Holo Dancer
+    room_id: kabuki_2_3
+    description_zh: kabuki 格點上的全息舞者。
+    description_en: A holo dancer on the kabuki grid.
+    hp: 30
+    attack: 1
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 殘影在霓虹裡旋轉。
+    idle_msg_en: A ghost image spins in the neon.
+  kabuki_bouncer_3_1:
+    name_zh: 門禁保鑣
+    name_en: Bouncer
+    room_id: kabuki_3_1
+    description_zh: kabuki 格點上的門禁保鑣。
+    description_en: A bouncer on the kabuki grid.
+    hp: 50
+    attack: 5
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 掃視排隊的人潮。
+    idle_msg_en: Eyes the queue.
+  kabuki_dealer_3_4:
+    name_zh: 灰市攤販
+    name_en: Gray Dealer
+    room_id: kabuki_3_4
+    description_zh: kabuki 格點上的灰市攤販。
+    description_en: A gray dealer on the kabuki grid.
+    hp: 38
+    attack: 3
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 敲了敲晶片托盤。
+    idle_msg_en: Taps a tray of chips.
+  kabuki_dancer_4_2:
+    name_zh: 全息舞者
+    name_en: Holo Dancer
+    room_id: kabuki_4_2
+    description_zh: kabuki 格點上的全息舞者。
+    description_en: A holo dancer on the kabuki grid.
+    hp: 30
+    attack: 1
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 殘影在霓虹裡旋轉。
+    idle_msg_en: A ghost image spins in the neon.
+  undercity_scavenger_0_0:
+    name_zh: 拾荒者
+    name_en: Scavenger
+    room_id: undercity_0_0
+    description_zh: undercity 格點上的拾荒者。
+    description_en: A scavenger on the undercity grid.
+    hp: 32
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 翻找廢墟裡還能賣的零件。
+    idle_msg_en: Digs for parts worth selling in the rubble.
+  undercity_ghost_0_2:
+    name_zh: 地下幽影
+    name_en: Undercity Ghost
+    room_id: undercity_0_2
+    description_zh: undercity 格點上的地下幽影。
+    description_en: A undercity ghost on the undercity grid.
+    hp: 33
+    attack: 4
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 半透明的殘影一閃而過。
+    idle_msg_en: A translucent afterimage flickers past.
+  undercity_rat_1_0:
+    name_zh: 鼠幫浪人
+    name_en: Rat Gang Ronin
+    room_id: undercity_1_0
+    description_zh: undercity 格點上的鼠幫浪人。
+    description_en: A rat gang ronin on the undercity grid.
+    hp: 36
+    attack: 4
+    hostile: true
+    aggro: 6
+    talk_key: grid_thug
+    loot: &id004
+    - rusty_key
+    patrol:
+    - undercity_1_0
+    - undercity_1_1
+  undercity_scavenger_1_3:
+    name_zh: 拾荒者
+    name_en: Scavenger
+    room_id: undercity_1_3
+    description_zh: undercity 格點上的拾荒者。
+    description_en: A scavenger on the undercity grid.
+    hp: 32
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 翻找廢墟裡還能賣的零件。
+    idle_msg_en: Digs for parts worth selling in the rubble.
+  undercity_ghost_2_1:
+    name_zh: 地下幽影
+    name_en: Undercity Ghost
+    room_id: undercity_2_1
+    description_zh: undercity 格點上的地下幽影。
+    description_en: A undercity ghost on the undercity grid.
+    hp: 33
+    attack: 4
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 半透明的殘影一閃而過。
+    idle_msg_en: A translucent afterimage flickers past.
+  undercity_rat_2_3:
+    name_zh: 鼠幫浪人
+    name_en: Rat Gang Ronin
+    room_id: undercity_2_3
+    description_zh: undercity 格點上的鼠幫浪人。
+    description_en: A rat gang ronin on the undercity grid.
+    hp: 36
+    attack: 4
+    hostile: true
+    aggro: 6
+    talk_key: grid_thug
+    loot: *id004
+    patrol:
+    - undercity_2_3
+    - undercity_2_2
+  undercity_scavenger_3_1:
+    name_zh: 拾荒者
+    name_en: Scavenger
+    room_id: undercity_3_1
+    description_zh: undercity 格點上的拾荒者。
+    description_en: A scavenger on the undercity grid.
+    hp: 32
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 翻找廢墟裡還能賣的零件。
+    idle_msg_en: Digs for parts worth selling in the rubble.
+  undercity_ghost_3_4:
+    name_zh: 地下幽影
+    name_en: Undercity Ghost
+    room_id: undercity_3_4
+    description_zh: undercity 格點上的地下幽影。
+    description_en: A undercity ghost on the undercity grid.
+    hp: 33
+    attack: 4
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 半透明的殘影一閃而過。
+    idle_msg_en: A translucent afterimage flickers past.
+  undercity_rat_4_2:
+    name_zh: 鼠幫浪人
+    name_en: Rat Gang Ronin
+    room_id: undercity_4_2
+    description_zh: undercity 格點上的鼠幫浪人。
+    description_en: A rat gang ronin on the undercity grid.
+    hp: 36
+    attack: 4
+    hostile: true
+    aggro: 6
+    talk_key: grid_thug
+    loot: *id004
+    patrol:
+    - undercity_4_2
+    - undercity_4_1
+  docks_docker_0_0:
+    name_zh: 碼頭工人
+    name_en: Dock Worker
+    room_id: docks_0_0
+    description_zh: docks 格點上的碼頭工人。
+    description_en: A dock worker on the docks grid.
+    hp: 40
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 拖著貨櫃吊鉤匆匆走過。
+    idle_msg_en: Hauls a container hook past you.
+  docks_smuggler_0_2:
+    name_zh: 走私客
+    name_en: Smuggler
+    room_id: docks_0_2
+    description_zh: docks 格點上的走私客。
+    description_en: A smuggler on the docks grid.
+    hp: 38
+    attack: 3
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 別問貨從哪來。
+    idle_msg_en: Do not ask where the cargo came from.
+  docks_thug_1_0:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: docks_1_0
+    description_zh: docks 格點上的街頭暴徒。
+    description_en: A street thug on the docks grid.
+    hp: 42
+    attack: 5
+    hostile: true
+    aggro: 6
+    faction: maelstrom
+    talk_key: grid_thug
+    idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
+    idle_msg_en: Blades on a cyber-arm catch the neon glare.
+    loot: *id001
+    patrol:
+    - docks_1_0
+    - docks_1_1
+  docks_docker_1_2:
+    name_zh: 碼頭工人
+    name_en: Dock Worker
+    room_id: docks_1_2
+    description_zh: docks 格點上的碼頭工人。
+    description_en: A dock worker on the docks grid.
+    hp: 40
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 拖著貨櫃吊鉤匆匆走過。
+    idle_msg_en: Hauls a container hook past you.
+  docks_smuggler_2_0:
+    name_zh: 走私客
+    name_en: Smuggler
+    room_id: docks_2_0
+    description_zh: docks 格點上的走私客。
+    description_en: A smuggler on the docks grid.
+    hp: 38
+    attack: 3
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 別問貨從哪來。
+    idle_msg_en: Do not ask where the cargo came from.
+  docks_thug_2_2:
+    name_zh: 街頭暴徒
+    name_en: Street Thug
+    room_id: docks_2_2
+    description_zh: docks 格點上的街頭暴徒。
+    description_en: A street thug on the docks grid.
+    hp: 42
+    attack: 5
+    hostile: true
+    aggro: 6
+    faction: maelstrom
+    talk_key: grid_thug
+    idle_msg_zh: 義體手臂上的刀刃在霓虹下反光。
+    idle_msg_en: Blades on a cyber-arm catch the neon glare.
+    loot: *id001
+    patrol:
+    - docks_2_2
+    - docks_2_1
+  docks_docker_3_0:
+    name_zh: 碼頭工人
+    name_en: Dock Worker
+    room_id: docks_3_0
+    description_zh: docks 格點上的碼頭工人。
+    description_en: A dock worker on the docks grid.
+    hp: 40
+    attack: 3
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 拖著貨櫃吊鉤匆匆走過。
+    idle_msg_en: Hauls a container hook past you.
+  docks_smuggler_3_2:
+    name_zh: 走私客
+    name_en: Smuggler
+    room_id: docks_3_2
+    description_zh: docks 格點上的走私客。
+    description_en: A smuggler on the docks grid.
+    hp: 38
+    attack: 3
+    hostile: false
+    talk_key: grid_fixer
+    idle_msg_zh: 別問貨從哪來。
+    idle_msg_en: Do not ask where the cargo came from.
+  corpo_corp_guard_0_0:
+    name_zh: 企業保全
+    name_en: Corpo Guard
+    room_id: corpo_0_0
+    description_zh: corpo 格點上的企業保全。
+    description_en: A corpo guard on the corpo grid.
+    hp: 65
+    attack: 6
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 掃描證件與武器。
+    idle_msg_en: Scans IDs and weapons.
+  corpo_exec_0_2:
+    name_zh: 企業主管
+    name_en: Corpo Exec
+    room_id: corpo_0_2
+    description_zh: corpo 格點上的企業主管。
+    description_en: A corpo exec on the corpo grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 對著全息會議點頭。
+    idle_msg_en: Nods at a holo conference.
+  corpo_scout_1_0:
+    name_zh: 企業偵察員
+    name_en: Corpo Scout
+    room_id: corpo_1_0
+    description_zh: corpo 格點上的企業偵察員。
+    description_en: A corpo scout on the corpo grid.
+    hp: 48
+    attack: 4
+    hostile: false
+    faction: militech
+    talk_key: grid_corpo
+    idle_msg_zh: 義眼不停掃描路人識別碼。
+    idle_msg_en: Cyber eyes scan every passerby.
+  corpo_corp_guard_1_2:
+    name_zh: 企業保全
+    name_en: Corpo Guard
+    room_id: corpo_1_2
+    description_zh: corpo 格點上的企業保全。
+    description_en: A corpo guard on the corpo grid.
+    hp: 65
+    attack: 6
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 掃描證件與武器。
+    idle_msg_en: Scans IDs and weapons.
+  corpo_exec_2_0:
+    name_zh: 企業主管
+    name_en: Corpo Exec
+    room_id: corpo_2_0
+    description_zh: corpo 格點上的企業主管。
+    description_en: A corpo exec on the corpo grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 對著全息會議點頭。
+    idle_msg_en: Nods at a holo conference.
+  corpo_scout_2_2:
+    name_zh: 企業偵察員
+    name_en: Corpo Scout
+    room_id: corpo_2_2
+    description_zh: corpo 格點上的企業偵察員。
+    description_en: A corpo scout on the corpo grid.
+    hp: 48
+    attack: 4
+    hostile: false
+    faction: militech
+    talk_key: grid_corpo
+    idle_msg_zh: 義眼不停掃描路人識別碼。
+    idle_msg_en: Cyber eyes scan every passerby.
+  corpo_corp_guard_3_0:
+    name_zh: 企業保全
+    name_en: Corpo Guard
+    room_id: corpo_3_0
+    description_zh: corpo 格點上的企業保全。
+    description_en: A corpo guard on the corpo grid.
+    hp: 65
+    attack: 6
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 掃描證件與武器。
+    idle_msg_en: Scans IDs and weapons.
+  corpo_exec_3_2:
+    name_zh: 企業主管
+    name_en: Corpo Exec
+    room_id: corpo_3_2
+    description_zh: corpo 格點上的企業主管。
+    description_en: A corpo exec on the corpo grid.
+    hp: 40
+    attack: 2
+    hostile: false
+    faction: arasaka
+    talk_key: grid_corpo
+    idle_msg_zh: 對著全息會議點頭。
+    idle_msg_en: Nods at a holo conference.
+  little_china_vendor_0_0:
+    name_zh: 路邊攤販
+    name_en: Street Vendor
+    room_id: little_china_0_0
+    description_zh: little_china 格點上的路邊攤販。
+    description_en: A street vendor on the little_china grid.
+    hp: 34
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 攪拌著冒熱氣的麵湯。
+    idle_msg_en: Stirs steaming noodle broth.
+  little_china_monk_0_1:
+    name_zh: 神社行者
+    name_en: Shrine Walker
+    room_id: little_china_0_1
+    description_zh: little_china 格點上的神社行者。
+    description_en: A shrine walker on the little_china grid.
+    hp: 36
+    attack: 1
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低聲念誦，手持香爐。
+    idle_msg_en: Murmurs a prayer, incense in hand.
+  little_china_triad_0_3:
+    name_zh: 幫會打手
+    name_en: Triad Enforcer
+    room_id: little_china_0_3
+    description_zh: little_china 格點上的幫會打手。
+    description_en: A triad enforcer on the little_china grid.
+    hp: 45
+    attack: 5
+    hostile: true
+    aggro: 5
+    talk_key: grid_thug
+    equipment: &id005
+      weapon_primary: knife
+    patrol:
+    - little_china_0_3
+    - little_china_0_2
+  little_china_vendor_1_1:
+    name_zh: 路邊攤販
+    name_en: Street Vendor
+    room_id: little_china_1_1
+    description_zh: little_china 格點上的路邊攤販。
+    description_en: A street vendor on the little_china grid.
+    hp: 34
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 攪拌著冒熱氣的麵湯。
+    idle_msg_en: Stirs steaming noodle broth.
+  little_china_monk_1_3:
+    name_zh: 神社行者
+    name_en: Shrine Walker
+    room_id: little_china_1_3
+    description_zh: little_china 格點上的神社行者。
+    description_en: A shrine walker on the little_china grid.
+    hp: 36
+    attack: 1
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低聲念誦，手持香爐。
+    idle_msg_en: Murmurs a prayer, incense in hand.
+  little_china_triad_2_0:
+    name_zh: 幫會打手
+    name_en: Triad Enforcer
+    room_id: little_china_2_0
+    description_zh: little_china 格點上的幫會打手。
+    description_en: A triad enforcer on the little_china grid.
+    hp: 45
+    attack: 5
+    hostile: true
+    aggro: 5
+    talk_key: grid_thug
+    equipment: *id005
+    patrol:
+    - little_china_2_0
+    - little_china_2_1
+  little_china_vendor_2_2:
+    name_zh: 路邊攤販
+    name_en: Street Vendor
+    room_id: little_china_2_2
+    description_zh: little_china 格點上的路邊攤販。
+    description_en: A street vendor on the little_china grid.
+    hp: 34
+    attack: 2
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 攪拌著冒熱氣的麵湯。
+    idle_msg_en: Stirs steaming noodle broth.
+  little_china_monk_3_0:
+    name_zh: 神社行者
+    name_en: Shrine Walker
+    room_id: little_china_3_0
+    description_zh: little_china 格點上的神社行者。
+    description_en: A shrine walker on the little_china grid.
+    hp: 36
+    attack: 1
+    hostile: false
+    talk_key: grid_civilian
+    idle_msg_zh: 低聲念誦，手持香爐。
+    idle_msg_en: Murmurs a prayer, incense in hand.
+  little_china_triad_3_2:
+    name_zh: 幫會打手
+    name_en: Triad Enforcer
+    room_id: little_china_3_2
+    description_zh: little_china 格點上的幫會打手。
+    description_en: A triad enforcer on the little_china grid.
+    hp: 45
+    attack: 5
+    hostile: true
+    aggro: 5
+    talk_key: grid_thug
+    equipment: *id005
+    patrol:
+    - little_china_3_2
+    - little_china_3_1
+room_items:
+  watson_0_0:
+  - gutter_blade
+  watson_2_0:
+  - street_stim
+  watson_4_0:
+  - corpo_token
+  watson_6_0:
+  - smuggler_pack
+  tyrell_0_0:
+  - combat_scrap
+  tyrell_1_3:
+  - neon_patch
+  tyrell_3_0:
+  - grid_ration
+  tyrell_4_3:
+  - black_ice_shard
+  combat_zone_0_0:
+  - tyrell_sample
+  combat_zone_1_3:
+  - dock_manifest
+  combat_zone_3_0:
+  - kabuki_token
+  combat_zone_4_3:
+  - china_incense
+  kabuki_0_0:
+  - undercity_filament

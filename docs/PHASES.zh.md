@@ -192,6 +192,7 @@
 | 世界擴充 W.3、W.6、W.7（2026-06） | `data/districts.yaml` 安全／氛圍；`look` 敘事；巡邏／aggro／天氣權重；`help tutorial`；`tyrell_intel`＋派系商店／對話／區域門檻；`tests/test_districts.py`、`tests/test_help_tutorial.py`、`tests/test_factions.py` |
 | 世界擴充 W.8–W.10（2026-06） | `data/schedule.yaml` 商店營業＋時段巡邏倍率；NPC schedule（`bazaar_fixer`、`dock_smuggler`、`corp_guard`）；`docks_gray` 灰市＋`gray_market` 任務（`give_npc`）；企業／街頭 `appraise`；`give <物品> <NPC>`；`go` 觸發 `presence.enter`／`leave`；`say`／`give` 廣播排除發送者；`tests/test_schedule.py`、`tests/test_black_market.py`、`tests/test_multiplayer.py` |
 | 世界擴充 W.12–W.13（2026-06） | `poison` tick＋`antidote` 消耗品；玩家 `overheat` debuff（快速破解反噬）；`world/reactions.py` 聲望變動（宣誓／駭入／戰鬥）；經紀人聲望／通緝對話；tick `ambient_tick`＋`trauma_tick` 廣播；`tests/test_status_effects.py`、`tests/test_world_reactions.py` |
+| 世界擴充 W.14（2026-06） | `tools/expand_world_population.py`＋`data/world_population.yaml` 覆蓋層；**109 NPC**、**45 物品**（263 房格點）；loader 合併；`tests/test_world_scale.py` |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 
 ## 多 session 開發（必做）
@@ -246,7 +247,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 ### 世界擴充（[WORLD.md](WORLD.md)）
 
-**現況（2026-06）：** **263 房**、**23 NPC**、**32 物品**；區域 `safety`／`atmosphere`；`help tutorial`；派系深度；作息＋灰市；中毒／過熱狀態＋動態世界回饋（`world/reactions.py`）。**尚待：** ~109 NPC、~45 物品；W.14 規模推進。
+**現況（2026-06）：** **263 房**、**109 NPC**、**45 物品**——已達 WORLD.md 規模目標；區域 `safety`／`atmosphere`；`help tutorial`；派系深度；作息＋灰市；中毒／過熱＋動態世界回饋。**世界擴充 W.1–W.14 已交付**。
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
@@ -263,7 +264,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | W.11 | NETRUN 主線節點 | `data_vault`／`crypt` 實體房對應 net 節點；`hack core terminal` 任務步驟；擴充 `data/net_nodes.yaml`；`tests/test_net_story.py` |
 | ~~W.12~~ | ~~延伸狀態效果~~ | ✅ `poison` tick＋`antidote`（`cures_status`）；玩家 `overheat` debuff（快速破解反噬，≠ NPC `burn`）；戰鬥傷害懲罰；`tests/test_status_effects.py` |
 | ~~W.13~~ | ~~動態世界回饋~~ | ✅ `world/reactions.py` 聲望變動（宣誓／NETRUN 駭入／戰鬥／快速破解）；經紀人聲望／通緝對話；tick `ambient_tick`；`trauma_tick` client 廣播；`tests/test_world_reactions.py` |
-| W.14 | 世界規模里程碑 | 朝 ~200 房／~109 NPC／~45 物品成長（生成器＋手寫樞紐）；`admin.sh validate` 統計；達標後更新 WORLD.md 數字 |
+| ~~W.14~~ | ~~世界規模里程碑~~ | ✅ **263 房**、**109 NPC**、**45 物品**；`tools/expand_world_population.py`；`data/world_population.yaml` loader 覆蓋；`tests/test_world_scale.py` |
 
 **建議順序：** W.4 → W.5 → W.11（主線錨點）→ W.1 → W.2 → W.3（地理規模）→ W.6 → W.7 → W.8 → W.9 → W.10 → W.12 → W.13 → W.14。
 
