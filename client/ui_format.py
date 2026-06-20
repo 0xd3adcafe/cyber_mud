@@ -18,6 +18,7 @@ _PANEL_HEADERS: dict[str, tuple[str, str, str]] = {
     "help": ("F3", "? 說明", "指令清單"),
     "map": ("F4", "◎ 地圖", "探索視圖"),
     "equipment": ("F5", "⛶ 裝備", "義體與裝備"),
+    "gigs": ("F7", "◆ 委託", "任務追蹤"),
 }
 
 
@@ -97,6 +98,7 @@ def format_hotkey_bar() -> str:
         "  [green]F4[/]地圖"
         "  [yellow]F5[/]裝備"
         "  F6收合"
+        "  [yellow]F7[/]委託"
         "  [dim]│[/]  [yellow]/reconnect[/]"
         "  [dim]│[/]  ↑↓歷史"
     )
@@ -194,7 +196,7 @@ def format_stacked_sidebar(state: ClientViewState) -> str:
         content = format_panel_content(panel, panel_id=panel_id)
         if content:
             blocks.append(content)
-    return "\n\n".join(blocks) if blocks else "[dim]（側欄空白 · F2–F5 開啟面板）[/]"
+    return "\n\n".join(blocks) if blocks else "[dim]（側欄空白 · F2–F5／F7 開啟面板）[/]"
 
 
 def format_sidebar_markup(state: ClientViewState) -> str:

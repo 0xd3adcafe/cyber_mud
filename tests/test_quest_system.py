@@ -72,8 +72,9 @@ def test_gigs_journal_lists_active():
     state = make_state()
 
     result = dispatch("gigs journal", player, state, [], [])
+    assert result.panel == "gigs"
     text = "\n".join(result.lines)
-    assert "委託日誌" in text
+    assert "進行中" in text
     assert "經紀人的傳聞" in text
 
 

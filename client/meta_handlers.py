@@ -6,11 +6,11 @@ from dataclasses import dataclass, field
 from shared.completion import parse_csv_meta
 from shared.protocol import META_PREFIX, PANEL_PREFIX, UI_PREFIX
 
-SIDEBAR_PANEL_ORDER: tuple[str, ...] = ("pda", "map", "equipment")
-SIDEBAR_PANEL_IDS: frozenset[str] = frozenset(SIDEBAR_PANEL_ORDER + ("status", "help"))
+SIDEBAR_PANEL_ORDER: tuple[str, ...] = ("pda", "gigs", "map", "equipment")
+SIDEBAR_PANEL_IDS: frozenset[str] = frozenset(SIDEBAR_PANEL_ORDER + ("status", "help", "journal"))
 HELP_OVERLAY_PANEL = "help"
 _SIDEBAR_AUTO_REFRESH_ON_MOVE = frozenset({"map"})
-_SIDEBAR_REFRESH_ON_EQUIP = frozenset({"pda", "equipment"})
+_SIDEBAR_REFRESH_ON_EQUIP = frozenset({"pda", "equipment", "gigs"})
 
 
 @dataclass
@@ -84,6 +84,8 @@ def resolve_panel_command(line: str) -> str | None:
     cmd = DEFAULT_ALIASES.get(cmd, cmd)
     if cmd == "status":
         cmd = "pda"
+    if cmd in {"gig", "journal"}:
+        cmd = "gigs"
     if cmd in SIDEBAR_PANEL_IDS:
         return cmd
     return None

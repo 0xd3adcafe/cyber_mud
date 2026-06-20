@@ -99,6 +99,8 @@ def test_sidebar_stack_pda_and_map():
     handle_ui_json(state, '{"panel":"map","sections":[{"kind":"text","lines":["[@] square"]}]}')
     apply_meta(state, "ui_panel_end", "1")
     assert ordered_sidebar_stack(state.sidebar_stack) == ["pda", "map"]
+    state.sidebar_stack = ["map", "gigs", "pda"]
+    assert ordered_sidebar_stack(state.sidebar_stack) == ["pda", "gigs", "map"]
     text = format_sidebar_content(state)
     assert "100/100" in text
     assert "square" in text or "[@]" in text
@@ -111,6 +113,8 @@ def test_resolve_panel_command_aliases():
     assert resolve_panel_command("h") == "help"
     assert resolve_panel_command("eq") == "equipment"
     assert resolve_panel_command("st") == "pda"
+    assert resolve_panel_command("gigs") == "gigs"
+    assert resolve_panel_command("journal") == "gigs"
     assert resolve_panel_command("look") is None
 
 

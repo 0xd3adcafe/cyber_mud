@@ -91,7 +91,7 @@ class CyberMudApp(App):
         Binding("f4", "panel_map", "地圖", show=True),
         Binding("f5", "panel_equipment", "裝備", show=True),
         Binding("f6", "toggle_sidebar", "收合側欄", show=True),
-        Binding("f7", "clear_credentials", "清除記憶", show=False),
+        Binding("f7", "panel_gigs", "委託", show=True),
         Binding("escape", "close_help_overlay", "關閉說明", show=False),
     ]
 
@@ -802,6 +802,8 @@ class CyberMudApp(App):
                 self._render_sidebar()
             if self._panel_fetch_event is not None:
                 self._panel_fetch_event.set()
+        if key in ("quest", "hint") and self.view.sidebar_open and "gigs" in self.view.sidebar_stack:
+            asyncio.create_task(self._refresh_sidebar_panels(["gigs"]))
         if key == "refresh_sidebar" and value == "1" and self.view.sidebar_open:
             asyncio.create_task(self._refresh_sidebar_panels(panels_to_refresh_on_equip(self.view)))
 
@@ -865,6 +867,12 @@ class CyberMudApp(App):
 
     async def action_panel_equipment(self) -> None:
         self._send_panel_command("equipment")
+
+    async def action_panel_gigs(self) -> None:
+        if not self.view.authenticated:
+            self.action_clear_credentials()
+            return
+        self._send_panel_command("gigs")
 
     async def action_toggle_sidebar(self) -> None:
         if not self.view.authenticated:

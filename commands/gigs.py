@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from commands.registry import CommandContext, ok, player_meta, register
+from commands.gigs_helpers import build_gigs_ui, format_gigs_panel, status_label
+from commands.registry import CommandContext, ok, ok_panel, player_meta, register
 from shared.i18n import t
+from shared.locale_content import item_label
 from world.quests import (
     abandon_quest,
     accept_quest,
-    format_journal_lines,
     quest_available,
     quest_is_done,
     quest_status,
@@ -19,19 +20,13 @@ def _quest_name(quest, locale: str) -> str:
     return quest.name_zh or quest.id
 
 
-def _status_label(ctx: CommandContext, quest_id: str) -> str:
-    locale = ctx.player.locale
-    quest = ctx.state.world.quest(quest_id)
-    if quest_is_done(ctx.player, quest_id):
-        return t(locale, "gigs.status.done")
-    if ctx.player.active_quest == quest_id:
-        status = quest_status(ctx.player, quest_id)
-        if status == "ready":
-            return t(locale, "gigs.status.ready")
-        return t(locale, "gigs.status.active")
-    if quest is not None and not quest_available(ctx.player, quest):
-        return t(locale, "gigs.status.locked")
-    return t(locale, "gigs.status.available")
+def _gigs_panel(ctx: CommandContext):
+    return ok_panel(
+        format_gigs_panel(ctx),
+        panel="gigs",
+        ui_json=build_gigs_ui(ctx),
+        meta=player_meta(ctx),
+    )
 
 
 def _list_gigs(ctx: CommandContext):
@@ -53,8 +48,6 @@ def _list_gigs(ctx: CommandContext):
         for item_id in quest.reward_items:
             item = ctx.state.world.item(item_id)
             if item:
-                from shared.locale_content import item_label
-
                 reward_parts.append(item_label(item, locale))
         reward = "、".join(reward_parts) if reward_parts else "—"
         req = ""
@@ -69,7 +62,7 @@ def _list_gigs(ctx: CommandContext):
                 locale,
                 "gigs.line",
                 name=_quest_name(quest, locale),
-                status=_status_label(ctx, quest.id),
+                status=status_label(ctx, quest.id),
                 reward=reward,
                 desc=desc or "",
             )
@@ -85,28 +78,31 @@ def handle(ctx: CommandContext):
     args = ctx.args.strip()
     locale = ctx.player.locale
     if not args:
-        return _list_gigs(ctx)
+        return _gigs_panel(ctx)
 
     verb, _, rest = args.partition(" ")
     verb = verb.lower()
+
+    if verb in {"journal", "log"}:
+        return _gigs_panel(ctx)
 
     if verb == "accept":
         quest_id = rest.strip()
         if not quest_id:
             return ok([t(locale, "gigs.accept_usage")])
         lines = accept_quest(ctx.player, ctx.state, quest_id, locale)
-        return ok(lines, meta=player_meta(ctx), world_changed=True)
+        return ok(lines, meta=player_meta(ctx), world_changed=True, refresh_sidebar=True)
 
     if verb == "abandon":
         lines = abandon_quest(ctx.player, ctx.state, locale)
-        return ok(lines, meta=player_meta(ctx), world_changed=True)
+        return ok(lines, meta=player_meta(ctx), world_changed=True, refresh_sidebar=True)
 
-    if verb in {"journal", "log"}:
-        lines = format_journal_lines(ctx.player, ctx.state, locale)
-        return ok(lines, meta=player_meta(ctx))
+    if verb == "list":
+        return _list_gigs(ctx)
 
     return _list_gigs(ctx)
 
 
 register("gigs", handle)
 register("gig", handle)
+register("journal", handle)

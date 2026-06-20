@@ -14,6 +14,8 @@ from client.ui_format import (
 def test_panel_header_labels():
     assert "PDA" in panel_header("pda")
     assert "F4" in panel_header("map")
+    assert "委託" in panel_header("gigs")
+    assert "F7" in panel_header("gigs")
 
 
 def test_format_hotkey_bar():
@@ -22,6 +24,7 @@ def test_format_hotkey_bar():
     assert "↑↓" in text
     assert "F2" in text
     assert "F6" in text
+    assert "F7" in text
     assert "/reconnect" in text
 
 
