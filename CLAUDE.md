@@ -249,6 +249,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Content depth** | D.1–D.10 shipped (spotlight NPCs, district quests, grid look flavor); see PHASES **Content depth** |
 | **Security (ASVS L1)** | ASVS.1–6 shipped (PBKDF2, unified login errors, save validation, input bounds, rate limit, connection/idle limits); ASVS.7–14 backlog; see [`docs/SECURITY.md`](docs/SECURITY.md) |
 | **Architecture (incremental)** | ARCH.1–2 shipped (YAML lock predicates; scheduler on `tick_count`); see PHASES **Architecture (incremental)** |
+| **Surveillance hacking (Watch Dogs homage)** | WD.1–WD.10 backlog — profiler intel, ctOS infrastructure hacks, footprint heat, DedSec; see PHASES **Surveillance hacking** |
 
 
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.17 shipped — see PHASES **Mature / NSFW content** table.

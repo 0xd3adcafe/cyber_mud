@@ -166,6 +166,42 @@ _THEME_SPECS: dict[str, dict[str, str | bool]] = {
         "panel": "#1c1c1c",
         "foreground": "#e5e5e5",
     },
+    "ctos": {
+        "label": "City OS (Watch Dogs)",
+        "primary": "#cfd8dc",
+        "accent": "#00d9ff",
+        "warning": "#ffb74d",
+        "error": "#ff5252",
+        "success": "#69f0ae",
+        "background": "#0c0e12",
+        "surface": "#141820",
+        "panel": "#1c2230",
+        "foreground": "#eceff1",
+    },
+    "dedsec": {
+        "label": "DedSec (Watch Dogs)",
+        "primary": "#ff2d95",
+        "accent": "#00f0ff",
+        "warning": "#fcee21",
+        "error": "#ff3366",
+        "success": "#39ff14",
+        "background": "#120818",
+        "surface": "#1a0f24",
+        "panel": "#241533",
+        "foreground": "#f5f0ff",
+    },
+    "profiler": {
+        "label": "Profiler (Watch Dogs)",
+        "primary": "#ffc107",
+        "accent": "#00e5ff",
+        "warning": "#ffab40",
+        "error": "#ff5252",
+        "success": "#64ffda",
+        "background": "#0a0f14",
+        "surface": "#101820",
+        "panel": "#162028",
+        "foreground": "#e3f2fd",
+    },
 }
 
 
@@ -186,6 +222,9 @@ _THEME_FOCUS_ICONS: dict[str, dict[str, str]] = {
     "ready_player_one": {"quest": "★", "combat": "⚔"},
     "tron": {"quest": "◆", "combat": "⊹"},
     "grok_night": {"quest": "◆", "combat": "⚔"},
+    "ctos": {"quest": "◎", "combat": "⎈"},
+    "dedsec": {"quest": "★", "combat": "✸"},
+    "profiler": {"quest": "◉", "combat": "⌖"},
 }
 
 

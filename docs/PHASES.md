@@ -252,6 +252,42 @@ Not yet implemented or only partially implemented.
 
 **Suggested order:** ARCH.1–2 shipped. **Deferred** (replaces removed `TODO.md` Phase 1.2–1.3 scope).
 
+### Surveillance hacking (Watch Dogs homage)
+
+**Policy:** Original homage to **connected-city surveillance fantasy** (ctOS-style OS, profiler intel, infrastructure hacks)—not Ubisoft IP, characters, or Chicago geography. Night City stays Blade Runner + CP2077 flavored; borrow **systems and tone**, not lore canon.
+
+**Watch Dogs analysis (what to steal):**
+
+| Layer | Watch Dogs (Ubisoft) | Night City today | Gap |
+|-------|----------------------|------------------|-----|
+| **World** | Smart city run by Blume **ctOS**; traffic, bridges, steam, cameras on one network; **DedSec** vs corps | Districts, corpo tags, `data_vault`, Tyrell surveillance tone | No city-wide OS layer; hacks are node/combat-centric |
+| **Profiler** | Scan civilians → job, income, traits, criminal record; unlocks social/combat hacks | `scan` lists room entities; `look <npc>` shows stats | No persistent **intel profile** or trait-gated actions |
+| **Hacking** | Context hacks on **connected objects** (blackout, traffic, distract, bridge); smartphone hub | NETRUN `hack`/`probe` on `net_nodes`; combat `quickhack` | Little **room infrastructure** interaction outside NETRUN shell |
+| **Economy / gigs** | **Fixers** hand contracts; privacy invasions; convoy takedowns | `gigs`/`journal`, multi-stage quests, street cred | Few objectives tied to **scan-then-act** loops |
+| **Heat** | Police notoriety from crimes + failed hacks | `wanted_level` tick decay (NCPD) | No **digital footprint** from surveillance districts |
+| **Progression** | Skill tree: hacking / combat / driving | Skills, talents, proficiencies, implants | No hacking branch for **environment control** |
+
+**Goal:** Text MUD expressions of profiler intel + infrastructure hacks + surveillance heat—reusing NETRUN, `scan`, `wanted`, gigs, ARCH.1 locks, ARCH.2 scheduler.
+
+**Client (shipped 2026-06):** `/theme` + login dropdown — `ctos` (City OS surveillance cyan), `dedsec` (hacktivist magenta/teal), `profiler` (intel amber/cyan); `client/themes.py`, `login_art.py` scene bias; `tests/test_themes.py`.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| WD.1 | Profiler data model | `data/profiler.yaml` NPC `profile:` (occupation, income_band, traits[], vulnerability); `Player.profiled_npcs`; `scan <npc>` reveals cached intel; locale `profiler.*`; `tests/test_profiler.py` |
+| WD.2 | Infrastructure room tags | Room tags `power_grid`, `traffic`, `surveillance`, `steam`; `look`/`scan` shows ctOS-connected objects; `data/locale` flavor lines |
+| WD.3 | Environment hacks (NETRUN) | `commands/net_shell.py` or `hack <infra>` on tagged rooms: `blackout`, `jam_signals`, `overload` (period/weather/district modifiers via `world/modifiers.py`); RAM + street cred cost; `tests/test_ctos_hacks.py` |
+| WD.4 | Digital footprint & surveillance heat | `Player.footprint` 0–100 from hacks/failed locks; corpo-district `scan`/`hack` raises footprint; high footprint buffs `wanted` gain / corp NPC aggro; tick decay; PDA row; `tests/test_footprint.py` |
+| WD.5 | Profiler-gated social engineering | `talk <npc>` branches when `profiled` + trait match (`gambling_debt`, `corp_access`); optional bribe item; quest flag hooks; `tests/test_profiler_talk.py` |
+| WD.6 | Fixer profiler contracts | Extend `data/quests.yaml`: objectives `scan_npc`, `profile_trait`, `hack_infra`; broker/fixer turn-in; F7 gigs sidebar progress; `tests/test_profiler_gigs.py` |
+| WD.7 | Jam / distract patrol NPCs | NETRUN or combat `jam`/`distract <npc>`: skip patrol tick or lower aggro 1–2 ticks; profiler trait `security_detail` resistance; `world/npc_ai.py`; `tests/test_ctos_distract.py` |
+| WD.8 | ctOS node connection map | `data/net_nodes.yaml` `links:` between district nodes; `probe` / sidebar map shows discovered mesh; ARCH.1 locks on cross-district hops; `tests/test_ctos_mesh.py` |
+| WD.9 | Scheduled city events | ARCH.2 scheduler: district `blackout` / `traffic_lock` intervals from hacked `power_grid`; broadcast `scheduler.ctos_*`; restore on tick; `tests/test_ctos_events.py` |
+| WD.10 | DedSec faction & tutorial beat | Faction `dedsec` (`pledge`); oppose corpo surveillance rep; tutorial NETRUN room profiler lesson + `help` category **City OS**; `tests/test_dedsec.py` |
+
+**Suggested order:** WD.1 → WD.2 → WD.3 → WD.4 (systems core) → WD.8 → WD.5 → WD.6 → WD.7 → WD.9 → WD.10 (content).
+
+**Deferred (out of scope for text MUD):** open-world driving, physical parkour, smartphone UI clone, real-time multiplayer ctOS invasion.
+
 ### Mature / NSFW content (18+)
 
 **Policy:** Original homage-style cyberpunk fiction; not official IP. All mature content is **opt-in** (`content_rating` / `mature_enabled` on player save), gated at login and command layer, with copy in **separate locale files** (`data/locale/mature_en.yaml`, `mature_zh.yaml`)—never mixed into default help/MOTD.

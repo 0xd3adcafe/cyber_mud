@@ -23,6 +23,9 @@ def test_theme_ids_include_backlog_set():
         "ready_player_one",
         "tron",
         "grok_night",
+        "ctos",
+        "dedsec",
+        "profiler",
     }
     assert expected.issubset(set(theme_ids()))
 
@@ -30,6 +33,9 @@ def test_theme_ids_include_backlog_set():
 def test_resolve_theme_id_aliases():
     assert resolve_theme_id("matrix") == "matrix"
     assert resolve_theme_id("TRON") == "tron"
+    assert resolve_theme_id("ctos") == "ctos"
+    assert resolve_theme_id("dedsec") == "dedsec"
+    assert resolve_theme_id("profiler") == "profiler"
     assert resolve_theme_id("unknown-theme") is None
 
 

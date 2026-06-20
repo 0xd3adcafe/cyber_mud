@@ -248,6 +248,42 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 **建議順序：** ARCH.1–2 已交付。**延後實作**（承接已刪除 `TODO.md` 的 Phase 1.2–1.3 範圍）。
 
+### 監控駭客（Watch Dogs 致敬）
+
+**原則：** 致敬 **全連網城市監控** 玩法（ctOS 式城市 OS、Profiler 情報、基礎設施入侵）——非 Ubisoft IP、角色或芝加哥地理。夜城維持 Blade Runner + CP2077 調性；借 **系統與氛圍**，不搬劇情正典。
+
+**Watch Dogs 分析（可借鏡項）：**
+
+| 層次 | Watch Dogs（育碧） | 夜城現況 | 缺口 |
+|------|-------------------|----------|------|
+| **世界** | Blume **ctOS** 統管交通、橋樑、蒸汽、監視；**DedSec** 對抗企業 | 區域、企業 tag、`data_vault`、泰瑞監控氛圍 | 缺少城市級 OS 層；駭客仍以節點／戰鬥為主 |
+| **Profiler** | 掃描路人→職業、收入、特質、前科；解鎖社交／戰鬥駭入 | `scan` 列實體；`look <npc>` 看數值 | 無持久 **情報檔** 與特質閘門 |
+| **駭入** | 對 **連網物件** 情境駭入（斷電、交通、干擾、橋樑） | NETRUN `hack`/`probe`；戰鬥 `quickhack` | 房間 **基礎設施** 互動少 |
+| **經濟／委託** | **Fixer** 合約、隱私入侵、車隊 | `gigs`／多階段任務、街頭聲望 | 少 **先掃描再行動** 目標 |
+| **熱度** | 犯罪與駭入失敗引警方 | `wanted_level`（NCPD） | 監控區無 **數位足跡** |
+| **成長** | 駭客／戰鬥／駕駛技能樹 | 技能、天賦、專精、義體 | 缺 **環境控制** 駭客枝 |
+
+**目標：** 以文字 MUD 呈現 Profiler 情報、基礎設施駭入、監控熱度——複用 NETRUN、`scan`、`wanted`、gigs、ARCH.1 鎖、ARCH.2 排程。
+
+**Client（2026-06 已交付）：** `/theme` 與登入下拉 — `ctos`（城市 OS 監控青）、`dedsec`（駭客行動洋紅／青）、`profiler`（情報琥珀／青）；`client/themes.py`、`login_art.py`；`tests/test_themes.py`。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| WD.1 | Profiler 資料模型 | `data/profiler.yaml` NPC `profile:`；`Player.profiled_npcs`；`scan <npc>` 快取情報；`profiler.*` locale；`tests/test_profiler.py` |
+| WD.2 | 基礎設施房間 tag | `power_grid`、`traffic`、`surveillance`、`steam`；`look`/`scan` 顯示 ctOS 連線物件 |
+| WD.3 | 環境駭入（NETRUN） | `blackout`、`jam_signals`、`overload` 等；`world/modifiers.py` 時段／天氣；RAM＋聲望消耗；`tests/test_ctos_hacks.py` |
+| WD.4 | 數位足跡與監控熱度 | `Player.footprint`；企業區駭入累積；拉高通緝／企業 NPC 敵意；PDA 列；`tests/test_footprint.py` |
+| WD.5 | Profiler 社交工程 | `talk` 依已掃描特質分支；賄賂物品；任務 flag；`tests/test_profiler_talk.py` |
+| WD.6 | Fixer Profiler 合約 | `scan_npc`、`profile_trait`、`hack_infra` 目標；`tests/test_profiler_gigs.py` |
+| WD.7 | 干擾巡邏 NPC | `jam`/`distract` 跳過巡邏或降敵意；`tests/test_ctos_distract.py` |
+| WD.8 | ctOS 節點連線圖 | `net_nodes.yaml` `links:`；`probe`／側欄顯示已發現網路；`tests/test_ctos_mesh.py` |
+| WD.9 | 排程城市事件 | ARCH.2 觸發區域斷電／交通鎖；`scheduler.ctos_*` 廣播；`tests/test_ctos_events.py` |
+| WD.10 | DedSec 派系與教學 | `dedsec` `pledge`；教程 Profiler 關卡；help **City OS**；`tests/test_dedsec.py` |
+
+**建議順序：** WD.1 → WD.2 → WD.3 → WD.4（系統核心）→ WD.8 → WD.5 → WD.6 → WD.7 → WD.9 → WD.10（內容）。
+
+**延後（文字 MUD 不適合）：** 開放世界駕駛、跑酷、手機 UI 複製、即時多人 ctOS 入侵。
+
 ### 成人／NSFW 內容（18+）
 
 **原則：** 原創致敬風賽博龐克；所有成熟內容 **預設關閉、玩家 opt-in**（`content_rating`／`mature_enabled`），登入與指令層閘門；文案放 **`data/locale/mature_en.yaml`、`mature_zh.yaml`**，不混入預設 MOTD／help。

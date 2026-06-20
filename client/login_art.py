@@ -53,6 +53,9 @@ _THEME_SCENE_BIAS: dict[str, tuple[str, ...]] = {
     "hackernet": ("neural_web", "hex_stream", "node_map"),
     "ready_player_one": ("pixel_coin", "neon_gate", "skyline"),
     "tron": ("tron_grid", "circuit_run"),
+    "ctos": ("neural_web", "node_map", "hex_stream"),
+    "dedsec": ("neon_gate", "skyline", "hex_stream"),
+    "profiler": ("node_map", "neural_web", "terminal_eye"),
 }
 
 
