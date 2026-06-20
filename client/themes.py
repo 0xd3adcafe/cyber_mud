@@ -335,19 +335,28 @@ def settings_path() -> Path:
     return Path.home() / ".config" / "cyber_mud" / "settings.json"
 
 
-def load_theme_id() -> str:
+def _load_settings_dict() -> dict:
     path = settings_path()
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError, TypeError):
-        return DEFAULT_THEME_ID
-    raw = data.get("theme", DEFAULT_THEME_ID)
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _write_settings_dict(payload: dict) -> None:
+    path = settings_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def load_theme_id() -> str:
+    raw = _load_settings_dict().get("theme", DEFAULT_THEME_ID)
     return resolve_theme_id(str(raw)) or DEFAULT_THEME_ID
 
 
 def save_theme_id(theme_id: str) -> None:
     resolved = resolve_theme_id(theme_id) or DEFAULT_THEME_ID
-    path = settings_path()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = {"theme": resolved}
-    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    payload = _load_settings_dict()
+    payload["theme"] = resolved
+    _write_settings_dict(payload)

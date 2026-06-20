@@ -146,6 +146,7 @@ def test_combat_hint_priority():
 def test_local_commands():
     assert is_local_command("/reconnect")
     assert is_local_command("/clear")
+    assert is_local_command("/log compact on")
     assert is_local_command("/prompt set %n>")
     assert is_local_command("/theme matrix")
     assert not is_local_command("look")

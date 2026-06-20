@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from client.cd_display import format_cooldown_line, parse_cooldown_line
 from client.env_format import format_environment_line, reset_environment_state
 from client.log_classifier import classify_log_line
+from client.log_settings import LogDisplaySettings
 from client.log_styles import format_log_line
 from client.themes import DEFAULT_THEME_ID, resolve_theme_id
 
@@ -34,10 +35,14 @@ class AnimatedLogBuffer:
     entries: list[LogEntry] = field(default_factory=list)
     frame: int = 0
     theme_id: str = DEFAULT_THEME_ID
+    display: LogDisplaySettings = field(default_factory=LogDisplaySettings)
     _env_state: dict[str, str] = field(default_factory=dict)
 
     def set_theme_id(self, theme_id: str) -> None:
         self.theme_id = resolve_theme_id(theme_id) or DEFAULT_THEME_ID
+
+    def set_display(self, display: LogDisplaySettings) -> None:
+        self.display = display
 
     def clear(self) -> None:
         self.entries.clear()
@@ -112,6 +117,7 @@ class AnimatedLogBuffer:
             frame=self.frame,
             animate=entry.pending,
             theme_id=self.theme_id,
+            compact=self.display.compact,
         )
 
     def render_entry(self, index: int = -1) -> str | None:
@@ -123,15 +129,40 @@ class AnimatedLogBuffer:
         lines: list[str] = []
         prev: LogEntry | None = None
         for entry in self.entries:
-            if _needs_block_separator(prev, entry):
+            if self.display.is_hidden(entry.kind):
+                continue
+            if _needs_block_separator(prev, entry, compact=self.display.compact):
                 lines.append(_BLOCK_SEPARATOR)
             lines.append(self._format_entry(entry))
             prev = entry
         return lines
 
+    def plain_lines(self) -> list[str]:
+        from client.cd_display import format_cooldown_line
+        from client.log_settings import strip_rich_markup
 
-def _needs_block_separator(prev: LogEntry | None, entry: LogEntry) -> bool:
-    if prev is None:
+        lines: list[str] = []
+        for entry in self.entries:
+            if self.display.is_hidden(entry.kind):
+                continue
+            text = strip_rich_markup(entry.text)
+            if entry.has_cooldown:
+                remaining = _cd_remaining(entry)
+                if remaining > 0:
+                    text = format_cooldown_line(entry.cd_prefix, remaining)
+                else:
+                    text = format_cooldown_line(entry.cd_prefix, 0)
+            lines.append(text)
+        return lines
+
+
+def _needs_block_separator(
+    prev: LogEntry | None,
+    entry: LogEntry,
+    *,
+    compact: bool = False,
+) -> bool:
+    if compact or prev is None:
         return False
     text = entry.text.strip()
     if entry.kind == "env" and text.startswith(_ENV_HEADER_MARK):

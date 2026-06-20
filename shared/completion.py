@@ -69,7 +69,7 @@ COMMAND_VERBS: tuple[str, ...] = (
     "interact",
 )
 
-LOCAL_COMMAND_VERBS: tuple[str, ...] = ("clear", "prompt", "quit", "reconnect", "theme")
+LOCAL_COMMAND_VERBS: tuple[str, ...] = ("clear", "log", "prompt", "quit", "reconnect", "theme")
 
 ITEM_TARGET_COMMANDS = frozenset(
     {"take", "drop", "equip", "unequip", "give", "appraise", "buy", "sell", "install", "mod"}

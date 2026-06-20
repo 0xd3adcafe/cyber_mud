@@ -70,9 +70,15 @@ Textual TUI · cyber_mud 正式介面
 | `/prompt set\|template\|show\|reset` | 本機提示符預覽 |
 | `/reconnect` | 手動重連 |
 | `/clear` | 清除 log |
+| `/log` | 顯示 log 設定 |
+| `/log compact on\|off` | 精簡模式（統一 `›` 前綴、無區塊分隔線） |
+| `/log hide <頻道>` | 隱藏頻道（如 `ambient`、`social`、`combat`） |
+| `/log show <頻道>` | 顯示已隱藏頻道 |
+| `/log show all` | 顯示所有頻道 |
+| `/log export [路徑]` | 匯出可見 log 為文字檔 |
 | `/quit` | 結束 client 程式 |
 
-Tab 可補全 `/clear`、`/theme` 等。
+Tab 可補全 `/clear`、`/log`、`/theme` 等。
 
 ## 登入畫面
 
@@ -112,7 +118,7 @@ Tab 可補全 `/clear`、`/theme` 等。
 | `⚙` | 系統 | 連線、本機指令、NETRUN 提示 |
 | `✗` | 錯誤 | 指令被拒、斷線 |
 
-新 `look` 區塊與戰鬥回合前會有淡色 `───` 分隔。太吵時用 `/clear`。
+新 `look` 區塊與戰鬥回合前會有淡色 `───` 分隔。太吵時可用 `/log hide ambient` 或 `/log compact on`；`/clear` 會清空緩衝區。
 
 ## 小抄
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import time
+from pathlib import Path
 
 from textual import on
 from textual.app import App, ComposeResult
@@ -51,6 +52,16 @@ from client.history import CommandHistory
 from client.link_status import format_link_status_bar, make_link_snapshot
 from client.reconnect import reconnect_status_message, should_resend_auth
 from client.log_classifier import classify_log_line
+from client.log_settings import (
+    LogDisplaySettings,
+    default_export_path,
+    export_log_text,
+    hideable_kinds_label,
+    load_log_settings,
+    parse_log_command,
+    resolve_hideable_kind,
+    save_log_settings,
+)
 from client.output_prefix import spinner_char
 from client.tui_styles import APP_CSS
 from client.ui_format import format_hotkey_bar, format_info_bar, format_sidebar_header
@@ -116,6 +127,8 @@ class CyberMudApp(App):
         self._auth_pending = False
         self._theme_id = DEFAULT_THEME_ID
         self._log_buffer = AnimatedLogBuffer()
+        self._log_display = load_log_settings()
+        self._log_buffer.set_display(self._log_display)
         self._focus_tracker = FocusTracker()
         self._command_history = CommandHistory.load()
         self._pending_credential_save: tuple[str, str, str, str] | None = None
@@ -606,6 +619,7 @@ class CyberMudApp(App):
         self.view = ClientViewState()
         self._log_buffer = AnimatedLogBuffer()
         self._log_buffer.set_theme_id(self._theme_id)
+        self._log_buffer.set_display(self._log_display)
         log = self.query_one("#log", RichLog)
         log.clear()
         self._set_auth_ui(False)
@@ -1343,6 +1357,82 @@ class CyberMudApp(App):
     async def on_login_password_submitted(self, event: Input.Submitted) -> None:
         await self._submit_login()
 
+    def _apply_log_display(self, settings: LogDisplaySettings, log: RichLog) -> None:
+        self._log_display = settings
+        self._log_buffer.set_display(settings)
+        save_log_settings(settings)
+        self._refresh_log_display(log, preserve_scroll=True)
+
+    def _format_log_status(self) -> str:
+        locale = self._client_locale()
+        hidden = ", ".join(sorted(self._log_display.hidden_kinds)) or t(locale, "client.log.hidden_none")
+        return t(
+            locale,
+            "client.log.status",
+            compact=t(locale, "client.log.compact_on" if self._log_display.compact else "client.log.compact_off"),
+            hidden=hidden,
+        )
+
+    async def _handle_log_command(self, args: str, log: RichLog) -> None:
+        locale = self._client_locale()
+        action, value = parse_log_command(args)
+        if action == "status":
+            self._append_log(log, self._format_log_status(), kind="sys")
+            self._append_log(log, t(locale, "client.log.usage"), kind="text")
+            return
+        if action == "compact_toggle":
+            self._apply_log_display(self._log_display.set_compact(not self._log_display.compact), log)
+            key = "client.log.compact_on_msg" if self._log_display.compact else "client.log.compact_off_msg"
+            self._append_log(log, t(locale, key), kind="sys")
+            return
+        if action == "compact_on":
+            self._apply_log_display(self._log_display.set_compact(True), log)
+            self._append_log(log, t(locale, "client.log.compact_on_msg"), kind="sys")
+            return
+        if action == "compact_off":
+            self._apply_log_display(self._log_display.set_compact(False), log)
+            self._append_log(log, t(locale, "client.log.compact_off_msg"), kind="sys")
+            return
+        if action == "hide" and value:
+            resolved = resolve_hideable_kind(value)
+            if resolved is None:
+                self._append_log(
+                    log,
+                    t(locale, "client.log.unknown_kind", kind=value, kinds=hideable_kinds_label()),
+                    kind="err",
+                )
+                return
+            self._apply_log_display(self._log_display.hide_kind(resolved), log)
+            self._append_log(log, t(locale, "client.log.hide", kind=resolved), kind="sys")
+            return
+        if action == "show" and value:
+            resolved = resolve_hideable_kind(value)
+            if resolved is None:
+                self._append_log(
+                    log,
+                    t(locale, "client.log.unknown_kind", kind=value, kinds=hideable_kinds_label()),
+                    kind="err",
+                )
+                return
+            self._apply_log_display(self._log_display.show_kind(resolved), log)
+            self._append_log(log, t(locale, "client.log.show", kind=resolved), kind="sys")
+            return
+        if action == "show_all":
+            self._apply_log_display(self._log_display.show_all_kinds(), log)
+            self._append_log(log, t(locale, "client.log.show_all"), kind="sys")
+            return
+        if action == "export":
+            path = default_export_path() if not value else Path(value).expanduser()
+            try:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(export_log_text(self._log_buffer.plain_lines()), encoding="utf-8")
+            except OSError as exc:
+                self._append_log(log, t(locale, "client.log.export_fail", err=str(exc)), kind="err")
+                return
+            self._append_log(log, t(locale, "client.log.export_ok", path=str(path)), kind="sys")
+            return
+        self._append_log(log, t(locale, "client.log.usage"), kind="text")
+
     async def _handle_local_command(self, text: str, log: RichLog) -> bool:
         if not is_client_slash_input(text):
             return False
@@ -1408,6 +1498,9 @@ class CyberMudApp(App):
                 self._append_log(log, f"主題：{theme_label(theme_id)} ({theme_id})", kind="text")
             else:
                 self._append_log(log, f"用法：/theme <id> | /theme list\n{format_theme_list()}", kind="text")
+            return True
+        if verb == "log":
+            await self._handle_log_command(args, log)
             return True
         return False
 

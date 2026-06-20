@@ -334,10 +334,11 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~CL.6~~ | ~~成長與委託 feed~~ | ✅ XP／升級／聲望／熟練度＋`◈` 委託行 → `progression`／`quest` |
 | ~~CL.7~~ | ~~環境 tick 與世界回饋~~ | ✅ `ambient` 淡化斜體 |
 | ~~CL.8~~ | ~~測試與文件~~ | ✅ `tests/test_log_classifier.py`；`CLIENT_UI_DEBUG.md`；`docs/player/CLIENT.md` 圖例；client UI 測試修復 |
+| ~~CL.9~~ | ~~精簡顯示模式~~ | ✅ `/log compact on|off`；統一 `›` 前綴；無 `───` 分隔；`settings.json` |
+| ~~CL.10~~ | ~~頻道開關~~ | ✅ `/log hide`／`show`／`show all`；渲染時過濾 ambient／social／combat 等 |
+| ~~CL.11~~ | ~~匯出與測試~~ | ✅ `/log export [path]`；`plain_lines()`；`tests/test_log_settings.py` |
 
-**可選後續（不在 CL.1–CL.8）：** `/log compact` 或分類開關（隱藏 ambient）；log 匯出檔案。
-
-**建議順序：** CL.1 → CL.2 → CL.3＋CL.4（可並行）→ CL.5＋CL.6 → CL.7 → CL.8。**全階段已交付（2026-06）。**
+**建議順序：** CL.1 → CL.2 → CL.3＋CL.4 → CL.5＋CL.6 → CL.7 → CL.8 → CL.9 → CL.10 → CL.11。**全階段已交付（2026-06）。**
 
 ---
 

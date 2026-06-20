@@ -1155,8 +1155,22 @@ client:
     cleared_credentials: 已清除儲存帳號。
     pin_error: "{err}"
   local_command:
-    usage: "本機指令：/clear /reconnect /prompt /theme /quit — Tab 可補全。"
+    usage: "本機指令：/clear /log /reconnect /prompt /theme /quit — Tab 可補全。"
     unknown: "未知本機指令：/{cmd}（不會送到伺服器）。"
+  log:
+    status: "Log：精簡={compact}；隱藏：{hidden}"
+    hidden_none: "（無）"
+    compact_on: "開"
+    compact_off: "關"
+    compact_on_msg: "Log 精簡模式已開啟（統一 › 前綴，無區塊分隔線）。"
+    compact_off_msg: "Log 精簡模式已關閉（恢復頻道圖示）。"
+    hide: "已隱藏 {kind} 頻道。"
+    show: "已顯示 {kind} 頻道。"
+    show_all: "已顯示所有 log 頻道。"
+    export_ok: "Log 已匯出至 {path}"
+    export_fail: "匯出失敗：{err}"
+    unknown_kind: "未知頻道：{kind}。可隱藏：{kinds}"
+    usage: "用法：/log | /log compact on|off | /log hide <頻道> | /log show <頻道>|all | /log export [路徑]"
   credentials:
     pin_digits: PIN 僅能為數字。
     pin_length: "PIN 需為 {min}–{max} 位數字。"

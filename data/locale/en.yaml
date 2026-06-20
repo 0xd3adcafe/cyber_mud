@@ -1155,8 +1155,22 @@ client:
     cleared_credentials: "Stored account cleared."
     pin_error: "{err}"
   local_command:
-    usage: "Client commands: /clear /reconnect /prompt /theme /quit — Tab to complete."
+    usage: "Client commands: /clear /log /reconnect /prompt /theme /quit — Tab to complete."
     unknown: "Unknown client command: /{cmd} (not sent to server)."
+  log:
+    status: "Log: compact={compact}; hidden: {hidden}"
+    hidden_none: "(none)"
+    compact_on: "on"
+    compact_off: "off"
+    compact_on_msg: "Log compact mode on (plain › prefix, no block rules)."
+    compact_off_msg: "Log compact mode off (channel glyphs restored)."
+    hide: "Hiding {kind} lines."
+    show: "Showing {kind} lines."
+    show_all: "Showing all log channels."
+    export_ok: "Log exported to {path}"
+    export_fail: "Export failed: {err}"
+    unknown_kind: "Unknown channel: {kind}. Hideable: {kinds}"
+    usage: "Usage: /log | /log compact on|off | /log hide <kind> | /log show <kind>|all | /log export [path]"
   credentials:
     pin_digits: "PIN must be digits only."
     pin_length: "PIN must be {min}–{max} digits."

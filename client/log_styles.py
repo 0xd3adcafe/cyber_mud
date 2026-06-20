@@ -18,12 +18,16 @@ def format_log_line(
     frame: int = 0,
     animate: bool = False,
     theme_id: str = DEFAULT_THEME_ID,
+    compact: bool = False,
 ) -> str:
     if kind not in LOG_KINDS:
         kind = "text"
     palette = log_palette_for_theme(theme_id)
     style = palette.for_kind(kind)
-    prefix = spinner_char(frame) if animate else style.glyph
+    if compact and kind not in ("echo", "err"):
+        prefix = spinner_char(frame) if animate else STATIC_PREFIX
+    else:
+        prefix = spinner_char(frame) if animate else style.glyph
 
     if kind == "echo":
         if animate:
@@ -39,6 +43,6 @@ def format_log_line(
     elif style.color:
         body = f"[{style.color}]{line}[/]"
 
-    if style.dim_prefix:
+    if compact or style.dim_prefix:
         return f"[dim]{prefix}[/] {body}"
     return f"[bold {style.color or palette.default_color}]{prefix}[/] {body}"

@@ -431,6 +431,41 @@ def test_clear_command_clears_log():
     asyncio.run(_run())
 
 
+def test_log_compact_and_hide_ambient():
+    async def _run() -> None:
+        from textual.widgets import Input, RichLog
+
+        from client.meta_handlers import apply_meta
+
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(100, 40)) as pilot:
+            apply_meta(app.view, "auth", "1")
+            apply_meta(app.view, "locale", "en")
+            app._set_auth_ui(True)
+            await settle_layout(pilot)
+            log = app.query_one("#log", RichLog)
+            app._append_log(log, "Distant gunfire stutters.", kind="text")
+            app._append_log(log, "You punch thug for 5 damage (enemy HP 10).", kind="text")
+
+            prompt = app.query_one("#prompt", Input)
+            prompt.value = "/log hide ambient"
+            await pilot.press("enter")
+            await settle_layout(pilot)
+            assert app._log_display.is_hidden("ambient")
+            rendered = "\n".join(app._log_buffer.render())
+            assert "gunfire" not in rendered
+            assert "punch" in rendered
+
+            prompt.value = "/log compact on"
+            await pilot.press("enter")
+            await settle_layout(pilot)
+            assert app._log_display.compact is True
+            rendered = "\n".join(app._log_buffer.render())
+            assert "›" in rendered
+
+    asyncio.run(_run())
+
+
 def test_typed_map_command_opens_sidebar():
     async def _run() -> None:
         from textual.containers import Vertical

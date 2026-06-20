@@ -198,6 +198,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Content depth D.7–D.10 (2026-06) | 8 district spotlight NPCs; `district.grid.*` look flavor; 4 district quest chains; full `world.ambient.*`; `tests/test_content_depth.py` |
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 | Client log UX CL.1–CL.8 (2026-06) | `log_classifier.py`/`log_styles.py`/`LogPalette`; combat/env/social/progression channels; block separators; `tests/test_log_classifier.py`; `docs/player/CLIENT.md` legend |
+| Client log UX CL.9–CL.11 (2026-06) | `/log compact`; `/log hide`/`show` channel toggles; `/log export`; `log_settings.py`; `tests/test_log_settings.py`; settings.json persistence |
 
 ## Multi-session development (mandatory)
 
@@ -337,10 +338,11 @@ Not yet implemented or only partially implemented.
 | ~~CL.6~~ | ~~Progression & gigs feed~~ | ✅ XP/level/street cred/proficiency + `◈` quest lines → `progression`/`quest` |
 | ~~CL.7~~ | ~~Ambient & world tick~~ | ✅ `ambient` kind dim italic via `LogPalette` |
 | ~~CL.8~~ | ~~Tests & docs~~ | ✅ `tests/test_log_classifier.py`; `tests/test_output_prefix.py`; `CLIENT_UI_DEBUG.md`; `docs/player/CLIENT.md` legend; client UI test fixes |
+| ~~CL.9~~ | ~~Compact display mode~~ | ✅ `/log compact on|off`; plain `›` prefix; no `───` separators; `settings.json` |
+| ~~CL.10~~ | ~~Channel toggles~~ | ✅ `/log hide`/`show`/`show all`; filter ambient/social/combat/env/quest/progression/text at render |
+| ~~CL.11~~ | ~~Export & tests~~ | ✅ `/log export [path]`; `plain_lines()`; `tests/test_log_settings.py`; `tests/test_client_app.py` |
 
-**Optional follow-up (not in CL.1–CL.8):** `/log compact` or category toggles (hide ambient); log export to file.
-
-**Suggested order:** CL.1 → CL.2 → CL.3 + CL.4 (parallel) → CL.5 + CL.6 → CL.7 → CL.8. **All phases shipped (2026-06).**
+**Suggested order:** CL.1 → CL.2 → CL.3 + CL.4 → CL.5 + CL.6 → CL.7 → CL.8 → CL.9 → CL.10 → CL.11. **All phases shipped (2026-06).**
 
 ---
 

@@ -76,9 +76,15 @@ Processed by the client only—not sent to the server.
 | `/prompt reset` | Use server template again |
 | `/reconnect` | Reconnect TCP + resend auth |
 | `/clear` | Clear scrollback log |
+| `/log` | Show log display settings |
+| `/log compact on\|off` | Toggle compact mode (plain `›` prefix, no block rules) |
+| `/log hide <kind>` | Hide a channel (e.g. `ambient`, `social`, `combat`) |
+| `/log show <kind>` | Show a hidden channel |
+| `/log show all` | Show all channels |
+| `/log export [path]` | Export visible log to a text file |
 | `/quit` | Exit the client application |
 
-Tab completes `/clear`, `/theme`, `/prompt`, `/reconnect`.
+Tab completes `/clear`, `/log`, `/theme`, `/prompt`, `/reconnect`.
 
 ## Login screen
 
@@ -143,7 +149,7 @@ The scrollback prefixes help you scan output at a glance:
 | `⚙` | System | Connection, client commands, NETRUN hints |
 | `✗` | Error | Refused commands, disconnect |
 
-A faint `───` rule separates new look blocks and combat rounds. Use `/clear` if the log gets noisy.
+A faint `───` rule separates new look blocks and combat rounds. Use `/log hide ambient` or `/log compact on` if the log gets noisy; `/clear` wipes the buffer.
 
 ## Tips
 
