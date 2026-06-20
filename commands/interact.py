@@ -31,6 +31,12 @@ def handle(ctx: CommandContext):
     if obj is None:
         return ok([t(locale, "interact.missing", name=target)])
 
+    from commands.lock_helpers import check_entity_lock
+
+    lock_denial = check_entity_lock(ctx, obj, "interact")
+    if lock_denial is not None:
+        return ok(lock_denial)
+
     lines = perform_interact(ctx.player, ctx.state, obj, locale)
     return ok(lines, meta=player_meta(ctx), world_changed=True)
 

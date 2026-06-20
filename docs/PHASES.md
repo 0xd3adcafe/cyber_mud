@@ -247,10 +247,10 @@ Not yet implemented or only partially implemented.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
-| ARCH.1 | Lock simplified (YAML predicates) | `world/locks.py` or `shared/locks.py`; room/item/interactable `locks:` in YAML (`street_cred >= 30`, `has_item(corpo_token)`); `check_locks()` in `go` / `use` / `hack` / `interact`; locale errors; `tests/test_locks.py` |
-| ARCH.2 | Scheduler thin layer | `world/scheduler.py`; `delay_at_tick` / `interval` hooks on `tick_count`; cancel + save restore; first use case: implant side-effect countdown; `tests/test_scheduler.py` |
+| ~~ARCH.1~~ | ~~Lock simplified (YAML predicates)~~ | ✅ `shared/locks.py`; `commands/lock_helpers.py`; room/item/net node/interactable `locks:` in YAML; `go` / `use` / `hack` / `interact`; `data_vault` + `vault_core` examples; `tests/test_locks.py` |
+| ~~ARCH.2~~ | ~~Scheduler thin layer~~ | ✅ `world/scheduler.py`; `tick_count` once/interval + cancel; `world_state.json` restore; implant `side_effect_minutes` on install; `tests/test_scheduler.py` |
 
-**Suggested order:** ARCH.1 → ARCH.2. **Deferred** (replaces removed `TODO.md` Phase 1.2–1.3 scope).
+**Suggested order:** ARCH.1–2 shipped. **Deferred** (replaces removed `TODO.md` Phase 1.2–1.3 scope).
 
 ### Mature / NSFW content (18+)
 
@@ -382,7 +382,7 @@ Not yet implemented or only partially implemented.
 | ~~ASVS.3~~ | ~~Save path validation~~ | ✅ Reject `..`, `/`, `\`, control chars; `shared/security.py`, `persistence/save.py` |
 | ~~ASVS.4~~ | ~~Input bounds~~ | ✅ Name/password length; `maxsplit=1` passwords with spaces; 4 KiB line cap; `shared/protocol.py`, `server/main.py` |
 | ~~ASVS.5~~ | ~~Auth rate limiting~~ | ✅ Per-connection 5 fails / 60s → 5 min block; `server/rate_limit.py`, `server/game.py` |
-| ASVS.6 | Idle / connection limits | Max connections per IP; guest session timeout |
+| ~~ASVS.6~~ | ~~Idle / connection limits~~ | ✅ `server/connection_limits.py`; per-IP cap + guest/auth idle prune; `auth.too_many_connections` / `auth.idle_disconnect`; `tests/test_security_auth.py` |
 | ASVS.7 | Save file permissions | ✅ `chmod 0o600` on write (partial — no directory hardening yet) |
 | ASVS.8 | Transport encryption | TLS wrapper or documented VPN-only deployment |
 | ASVS.9 | Reconnect without password replay | Token-based session resume |
@@ -392,7 +392,7 @@ Not yet implemented or only partially implemented.
 | ASVS.13 | Client credential hygiene | Optional PIN-only unlock; no raw password storage |
 | ASVS.14 | Security regression suite | Rate-limit integration + protocol edge cases in `tests/test_security_auth.py` |
 
-**Suggested order:** ASVS.1–5 (shipped) → ASVS.6 → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14.
+**Suggested order:** ASVS.1–6 (shipped) → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14.
 
 ### Tutorial zone (onboarding depth)
 

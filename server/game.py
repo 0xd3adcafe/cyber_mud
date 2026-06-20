@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import time
 from dataclasses import dataclass, field
 
 from commands import register_builtin_commands
@@ -26,6 +27,8 @@ register_builtin_commands()
 class ClientSession:
     writer: object
     player: Player
+    peer_ip: str = "unknown"
+    last_activity_at: float = field(default_factory=time.monotonic)
     auth_rate_limit: AuthRateLimiter = field(default_factory=AuthRateLimiter)
 
     async def send(self, text: str) -> None:
@@ -164,6 +167,7 @@ class Game:
     async def handle_command(self, session: ClientSession, line: str) -> bool:
         from commands.registry import dispatch, player_meta
 
+        session.last_activity_at = time.monotonic()
         verb = line.strip().split(maxsplit=1)[0].lower() if line.strip() else ""
         if verb == "login" and session.auth_rate_limit.is_blocked():
             await session.send(t(session.player.locale, "auth.rate_limited"))
@@ -388,6 +392,23 @@ class Game:
                         await target.send(text)
                     if event.kind == "trauma_tick" and "hp" in event.message_kwargs:
                         await target.send_meta({"hp": event.message_kwargs["hp"]})
+            elif event.kind == "scheduler_msg":
+                for target in self.sessions:
+                    if target.player.name != event.player_name:
+                        continue
+                    locale = target.player.locale
+                    msg_key = event.message_key
+                    kwargs = dict(event.message_kwargs)
+                    implant_id = kwargs.get("implant_id", "")
+                    if implant_id and "label" not in kwargs:
+                        implant = self.state.world.implant(implant_id)
+                        if implant is not None:
+                            kwargs["label"] = (
+                                implant.name_zh
+                                if locale == "zh"
+                                else (implant.name_en or implant.name_zh)
+                            )
+                    await target.send(t(locale, msg_key, **kwargs))
             elif event.kind == "hp_regen":
                 for target in self.sessions:
                     if target.player.name != event.player_name:
@@ -470,11 +491,24 @@ class Game:
         except asyncio.CancelledError:
             raise
 
+    async def prune_idle_sessions(self) -> None:
+        from server.connection_limits import is_idle
+
+        idle = [session for session in list(self.sessions) if is_idle(session)]
+        for session in idle:
+            await session.send(t(session.player.locale, "auth.idle_disconnect"))
+            writer = session.writer
+            self.remove_session(session)
+            close = getattr(writer, "close", None)
+            if callable(close):
+                close()
+
     async def tick_loop(self) -> None:
         interval = self.state.time_config.tick_interval_seconds
         try:
             while True:
                 await asyncio.sleep(interval)
+                await self.prune_idle_sessions()
                 result = process_tick(
                     self.state,
                     self.state.time_config,

@@ -13,6 +13,7 @@ from world.corpses import process_corpse_decay
 from world.npc_ai import process_npc_ai
 from world.npc_respawn import process_npc_respawns
 from world.schedule import npc_scheduled_room
+from world.scheduler import ScheduledTask
 from world.state import WorldState
 from world.tick_events import TickEvent, move_npc
 from world.vitals import apply_hp_regen, apply_ram_regen
@@ -248,6 +249,20 @@ def _process_ambient_reactions(
     return events
 
 
+def _scheduler_events(state: WorldState, fired: list[ScheduledTask]) -> list[TickEvent]:
+    events: list[TickEvent] = []
+    for task in fired:
+        events.append(
+            TickEvent(
+                kind="scheduler_msg",
+                player_name=task.player_name,
+                message_key=f"scheduler.{task.kind}",
+                message_kwargs=dict(task.payload),
+            )
+        )
+    return events
+
+
 def _process_wanted_decay(players: list[Player]) -> list[TickEvent]:
     events: list[TickEvent] = []
     for player in players:
@@ -282,6 +297,9 @@ def process_tick(
 
     state.tick_count += 1
     events: list[TickEvent] = []
+
+    fired = state.scheduler.process(state.tick_count)
+    events.extend(_scheduler_events(state, fired))
 
     wcfg = weather_config or load_weather_config()
     for district in maybe_tick_weather(state, wcfg):

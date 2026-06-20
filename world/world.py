@@ -40,6 +40,7 @@ class Room:
     tags: list[str] = field(default_factory=list)
     shop_id: str = ""
     exits: dict[str, str] = field(default_factory=dict)
+    locks: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass

@@ -457,6 +457,18 @@ auth:
   rate_limited: "登入失敗次數過多，請稍後再試。"
   line_too_long: "輸入行過長。"
   login_ok: "歡迎回來，{name}。"
+  too_many_connections: "此位址連線數已達上限。"
+  idle_disconnect: "閒置逾時，連線已中斷。"
+
+lock:
+  denied: "條件不符，無法進行。"
+  denied_go: "權限不足，無法進入此區。"
+  denied_hack: "防火牆拒絕入侵——缺少憑證。"
+  denied_use: "目前無法使用該物品。"
+  denied_interact: "目前無法與其互動。"
+
+scheduler:
+  implant_side_effect: "義體後遺症發作——{label} 神經回饋急升。"
 
 take:
   usage: "用法：take <物品> [from <屍體>]"

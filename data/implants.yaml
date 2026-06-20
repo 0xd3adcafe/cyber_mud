@@ -37,6 +37,7 @@ implants:
     reflex: 2
     humanity_cost: 10
     ripperdoc_only: true
+    side_effect_minutes: 30
     description_zh: 神經加速系統，反應大幅提升。
     description_en: Neural accelerator—reflexes spike under pressure.
   biomon:

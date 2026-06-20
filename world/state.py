@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 
 from entities.corpse import Corpse
 from world.clock import TimeConfig, WorldClock
+from world.scheduler import Scheduler
 from world.world import World
 
 
@@ -20,6 +21,7 @@ class WorldState:
     npc_vitals: dict[str, int] = field(default_factory=dict)
     weather: dict[str, str] = field(default_factory=dict)
     tick_count: int = 0
+    scheduler: Scheduler = field(default_factory=Scheduler)
 
     def items_in_room(self, room_id: str) -> list[str]:
         return list(self.room_items.get(room_id, []))

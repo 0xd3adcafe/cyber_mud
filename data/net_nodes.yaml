@@ -29,6 +29,8 @@ net_nodes:
     name_zh: 資料庫核心
     name_en: Vault Core
     hackable: true
+    locks:
+      hack: has_item(corpo_token)
   watson_grid_node:
     room_id: watson_1_0
     name_zh: 沃森格點節點

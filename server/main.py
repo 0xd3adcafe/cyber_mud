@@ -5,17 +5,31 @@ import asyncio
 import time
 
 from entities.player import Player
+from server.connection_limits import can_accept_connection, peer_ip
 from server.game import ClientSession, Game, create_game
 from server.heartbeat import heartbeat_loop, log_server_event
 from shared.i18n import t
-from shared.protocol import DEFAULT_HOST, DEFAULT_PORT, ENCODING, MAX_LINE_BYTES
+from shared.protocol import DEFAULT_HOST, DEFAULT_PORT, ENCODING, MAX_LINE_BYTES, SYS_PREFIX
 from shared.server_locale import server_locale
 
 
 async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter, game: Game) -> None:
+    client_ip = peer_ip(writer)
+    if not can_accept_connection(game, client_ip):
+        loc = server_locale()
+        writer.write(f"{SYS_PREFIX}{t(loc, 'auth.too_many_connections')}\n".encode(ENCODING))
+        await writer.drain()
+        writer.close()
+        try:
+            await writer.wait_closed()
+        except Exception:
+            pass
+        return
+
     session = ClientSession(
         writer=writer,
         player=Player(room_id=game.state.world.start_room),
+        peer_ip=client_ip,
     )
     await game.add_session(session)
     loc = server_locale()

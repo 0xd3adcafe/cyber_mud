@@ -31,7 +31,7 @@
 
 | ID | 項目 | 說明 |
 |----|------|------|
-| ASVS.6 | 閒置／連線上限 | 每 IP 最大連線數；訪客逾時 |
+| ~~ASVS.6~~ | ~~閒置／連線上限~~ | ✅ `server/connection_limits.py`；每 IP 上限（預設 3）；訪客 600s／已登入 1800s 閒置斷線；`tests/test_security_auth.py` |
 | ASVS.8 | 傳輸加密 | TLS 包裝或僅 VPN 部署文件 |
 | ASVS.9 | 重連不重送密碼 | 以 token 恢復工作階段 |
 | ASVS.10 | `changepass` 指令 | 已登入變更密碼並重新雜湊 |
@@ -40,7 +40,7 @@
 | ASVS.13 | 客戶端憑證衛生 | 選用：不儲存明文密碼；僅 PIN 解鎖伺服器 token |
 | ASVS.14 | 迴歸測試擴充 | 速率限制整合與協定邊界案例 |
 
-**建議順序：** ASVS.6 → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14。
+**建議順序：** ASVS.6 已交付 → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14。
 
 ## 開發者檢查清單
 

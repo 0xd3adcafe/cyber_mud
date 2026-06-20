@@ -54,6 +54,21 @@ def handle(ctx: CommandContext):
     ctx.player.inventory.remove(item_id)
     install_implant(ctx.player, implant)
     label = implant_label(implant, ctx.player.locale)
+
+    if implant.side_effect_minutes > 0 and ctx.player.named:
+        from world.scheduler import minutes_to_ticks
+
+        delay = minutes_to_ticks(
+            implant.side_effect_minutes,
+            minutes_per_tick=ctx.state.time_config.minutes_per_tick,
+        )
+        ctx.state.scheduler.cancel_kind("implant_side_effect", player_name=ctx.player.name)
+        ctx.state.scheduler.schedule_once(
+            ctx.state.tick_count + delay,
+            "implant_side_effect",
+            player_name=ctx.player.name,
+            payload={"implant_id": implant.id, "label": label},
+        )
     slot_name = slot_label(implant.slot, ctx.player.locale)
     return ok(
         [

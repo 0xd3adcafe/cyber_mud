@@ -247,8 +247,8 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Client log UX** | CL.1–CL.11 shipped — log channels, `LogPalette`, `/log compact` & hide/show toggles, export; see PHASES **Client log UX** |
 | **World expansion (WORLD.md)** | W.1–W.14 shipped (263 rooms / 121 NPCs / 45 items); see PHASES **World expansion** |
 | **Content depth** | D.1–D.10 shipped (spotlight NPCs, district quests, grid look flavor); see PHASES **Content depth** |
-| **Security (ASVS L1)** | ASVS.1–5 shipped (PBKDF2, unified login errors, save validation, input bounds, rate limit); ASVS.6–14 backlog; see [`docs/SECURITY.md`](docs/SECURITY.md) |
-| **Architecture (incremental)** | ARCH.1 Lock YAML predicates; ARCH.2 Scheduler thin layer on `tick_count`; see PHASES **Architecture (incremental)** |
+| **Security (ASVS L1)** | ASVS.1–6 shipped (PBKDF2, unified login errors, save validation, input bounds, rate limit, connection/idle limits); ASVS.7–14 backlog; see [`docs/SECURITY.md`](docs/SECURITY.md) |
+| **Architecture (incremental)** | ARCH.1–2 shipped (YAML lock predicates; scheduler on `tick_count`); see PHASES **Architecture (incremental)** |
 
 
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.17 shipped — see PHASES **Mature / NSFW content** table.

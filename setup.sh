@@ -36,6 +36,14 @@ else
   PYTHON="$ROOT/.venv/bin/python"
 fi
 
+if ! "$PYTHON" -m pip --version >/dev/null 2>&1; then
+  echo "Bootstrapping pip (ensurepip unavailable in this Python build)..."
+  GET_PIP="$(mktemp)"
+  curl -fsSL https://bootstrap.pypa.io/get-pip.py -o "$GET_PIP"
+  "$PYTHON" "$GET_PIP"
+  rm -f "$GET_PIP"
+fi
+
 "$PYTHON" -m pip install --upgrade pip
 "$PYTHON" -m pip install -r requirements.txt
 echo "✓ cyber_mud 環境就緒。執行 ./run.sh 或 ./run.sh --client"

@@ -59,6 +59,12 @@ def _handle_hack(ctx: CommandContext) -> CommandResult:
     if node is None:
         return ok([t(ctx.player.locale, "net.no_node")], meta=net_meta(ctx))
 
+    from commands.lock_helpers import check_entity_lock
+
+    lock_denial = check_entity_lock(ctx, node, "hack")
+    if lock_denial is not None:
+        return ok(lock_denial, meta=net_meta(ctx))
+
     if ctx.player.ram < 1:
         return ok([t(ctx.player.locale, "net.no_ram")], meta=net_meta(ctx))
 

@@ -243,10 +243,10 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
-| ARCH.1 | Lock 簡化版（YAML 條件） | `world/locks.py` 或 `shared/locks.py`；房間／物品／互動物 `locks:`（`street_cred >= 30`、`has_item(corpo_token)`）；`go`／`use`／`hack`／`interact` 呼叫 `check_locks()`；locale；`tests/test_locks.py` |
-| ARCH.2 | Scheduler 薄層 | `world/scheduler.py`；`tick_count` 上 `delay_at_tick`／`interval`；可取消＋存檔恢復；首個案例：義體副作用倒數；`tests/test_scheduler.py` |
+| ~~ARCH.1~~ | ~~Lock 簡化版（YAML 條件）~~ | ✅ `shared/locks.py`；`commands/lock_helpers.py`；房間／物品／節點／互動物 `locks:`；`go`／`use`／`hack`／`interact`；`data_vault`＋`vault_core` 範例；`tests/test_locks.py` |
+| ~~ARCH.2~~ | ~~Scheduler 薄層~~ | ✅ `world/scheduler.py`；`tick_count` 單次／間隔＋取消；`world_state.json` 恢復；安裝義體 `side_effect_minutes`；`tests/test_scheduler.py` |
 
-**建議順序：** ARCH.1 → ARCH.2。**延後實作**（承接已刪除 `TODO.md` 的 Phase 1.2–1.3 範圍）。
+**建議順序：** ARCH.1–2 已交付。**延後實作**（承接已刪除 `TODO.md` 的 Phase 1.2–1.3 範圍）。
 
 ### 成人／NSFW 內容（18+）
 
@@ -378,7 +378,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~ASVS.3~~ | ~~存檔路徑驗證~~ | ✅ 拒絕 `..`、`/`、`\`、控制字元；`shared/security.py`、`persistence/save.py` |
 | ~~ASVS.4~~ | ~~輸入邊界~~ | ✅ 名稱／密碼長度；`maxsplit=1` 支援含空格密碼；單行 4 KiB 上限 |
 | ~~ASVS.5~~ | ~~認證速率限制~~ | ✅ 每連線 60 秒內 5 次失敗→封鎖 5 分鐘；`server/rate_limit.py` |
-| ASVS.6 | 閒置／連線上限 | 每 IP 最大連線；訪客逾時 |
+| ~~ASVS.6~~ | ~~閒置／連線上限~~ | ✅ `server/connection_limits.py`；每 IP 連線上限＋訪客／已登入閒置斷線；`tests/test_security_auth.py` |
 | ASVS.7 | 存檔檔案權限 | ✅ 寫入 `chmod 0o600`（部分——目錄強化待做） |
 | ASVS.8 | 傳輸加密 | TLS 包裝或 VPN 部署文件 |
 | ASVS.9 | 重連不重送密碼 | Token 恢復工作階段 |
@@ -388,7 +388,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ASVS.13 | 客戶端憑證衛生 | 選用 PIN 解鎖；不儲存明文密碼 |
 | ASVS.14 | 安全迴歸測試 | 速率限制整合與協定邊界；`tests/test_security_auth.py` |
 
-**建議順序：** ASVS.1–5（已交付）→ ASVS.6 → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14。
+**建議順序：** ASVS.1–6（已交付）→ ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14。
 
 ### 新手教學區（入門深度）
 

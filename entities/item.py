@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -23,3 +23,4 @@ class Item:
     hp_restore: int = 0
     ram_restore: int = 0
     cures_status: str = ""
+    locks: dict[str, str] = field(default_factory=dict)

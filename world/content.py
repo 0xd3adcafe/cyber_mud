@@ -5,6 +5,8 @@ from pathlib import Path
 
 import yaml
 
+from shared.locks import parse_locks
+
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 SKILLS_PATH = DATA_DIR / "skills.yaml"
@@ -172,6 +174,7 @@ class NetNode:
     name_zh: str = ""
     name_en: str = ""
     hackable: bool = True
+    locks: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -191,6 +194,7 @@ class Interactable:
     braindance_id: str = ""
     kind: str = ""
     life_profile: str = ""
+    locks: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -500,6 +504,7 @@ def load_net_nodes(path: Path | None = None) -> dict[str, NetNode]:
             name_zh=str(data.get("name_zh", "")),
             name_en=str(data.get("name_en", "")),
             hackable=bool(data.get("hackable", True)),
+            locks=parse_locks(data.get("locks")),
         )
         for nid, data in (raw.get("net_nodes") or {}).items()
     }
@@ -524,6 +529,7 @@ def load_interactables(path: Path | None = None) -> dict[str, Interactable]:
             braindance_id=str(data.get("braindance_id", "")),
             kind=str(data.get("kind", "")),
             life_profile=str(data.get("life_profile", "")),
+            locks=parse_locks(data.get("locks")),
         )
         for iid, data in (raw.get("interactables") or {}).items()
     }

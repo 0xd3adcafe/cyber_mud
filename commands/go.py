@@ -20,6 +20,13 @@ def handle(ctx: CommandContext):
 
     dest_id = room.exits[direction]
     dest = ctx.state.world.room(dest_id)
+
+    from commands.lock_helpers import check_entity_lock
+
+    lock_denial = check_entity_lock(ctx, dest, "go")
+    if lock_denial is not None:
+        return ok(lock_denial)
+
     from world.mature import gate_room_entry
 
     refusal = gate_room_entry(ctx.player, dest, ctx.player.locale)

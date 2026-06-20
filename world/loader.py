@@ -7,6 +7,7 @@ import yaml
 from entities.implant import Implant
 from entities.item import Item
 from shared.equipment import WEAPON_ITEM_SLOT, normalize_equipment, resolve_slot_id
+from shared.locks import parse_locks
 from entities.npc import NPC
 from world.content import (
     load_all_braindances,
@@ -107,6 +108,7 @@ def _load_implants(path: Path | None = None) -> dict[str, Implant]:
             ripperdoc_only=bool(data.get("ripperdoc_only", False)),
             description_zh=str(data.get("description_zh", "")),
             description_en=str(data.get("description_en", "")),
+            side_effect_minutes=int(data.get("side_effect_minutes", 0)),
         )
         for iid, data in (raw.get("implants") or {}).items()
     }
@@ -141,6 +143,7 @@ def _build_world(path: Path | None) -> World:
             tags=[str(tag) for tag in (data.get("tags") or [])],
             shop_id=str(data.get("shop_id", "")),
             exits={str(k): str(v) for k, v in (data.get("exits") or {}).items()},
+            locks=parse_locks(data.get("locks")),
         )
         for rid, data in (raw.get("rooms") or {}).items()
     }
@@ -169,6 +172,7 @@ def _build_world(path: Path | None) -> World:
             hp_restore=int(data.get("hp_restore", 0)),
             ram_restore=int(data.get("ram_restore", 0)),
             cures_status=str(data.get("cures_status", "")),
+            locks=parse_locks(data.get("locks")),
         )
         for iid, data in (raw.get("items") or {}).items()
     }

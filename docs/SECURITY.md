@@ -31,7 +31,7 @@ This document tracks **OWASP Application Security Verification Standard (ASVS)**
 
 | ID | Item | Notes |
 |----|------|-------|
-| ASVS.6 | Idle / connection limits | Max connections per IP; guest session timeout |
+| ~~ASVS.6~~ | ~~Idle / connection limits~~ | ✅ `server/connection_limits.py`; `CYBER_MUD_MAX_CONNECTIONS_PER_IP` (default 3); guest 600s / auth 1800s idle; `tests/test_security_auth.py` |
 | ASVS.8 | Transport encryption | TLS wrapper or documented VPN-only deployment |
 | ASVS.9 | Reconnect without password replay | Token-based session resume instead of resending password |
 | ASVS.10 | `changepass` command | Authenticated password change + rehash |
@@ -40,7 +40,7 @@ This document tracks **OWASP Application Security Verification Standard (ASVS)**
 | ASVS.13 | Client credential hygiene | Optional: never store raw password; PIN-only unlock of server token |
 | ASVS.14 | Regression suite | Expand `tests/test_security_auth.py` for rate-limit integration and protocol edge cases |
 
-**Suggested order:** ASVS.6 → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14.
+**Suggested order:** ASVS.6 shipped → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14.
 
 ## Developer checklist
 

@@ -457,6 +457,18 @@ auth:
   rate_limited: "Too many failed logins. Try again in a few minutes."
   line_too_long: "Input line too long."
   login_ok: "Welcome back, {name}."
+  too_many_connections: "Too many connections from your address."
+  idle_disconnect: "Disconnected due to inactivity."
+
+lock:
+  denied: "You do not meet the requirements."
+  denied_go: "Access denied—you lack clearance for this area."
+  denied_hack: "Firewall rejects your breach—missing credentials."
+  denied_use: "You cannot use that yet."
+  denied_interact: "You cannot interact with that yet."
+
+scheduler:
+  implant_side_effect: "Chrome aftershock hits—{label} neural feedback spikes."
 
 take:
   usage: "Usage: take <item> [from <corpse>]"

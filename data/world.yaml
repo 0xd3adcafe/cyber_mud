@@ -258,6 +258,8 @@ rooms:
     - undercity
     - net
     - vault
+    locks:
+      go: street_cred >= 20
     exits:
       south: crypt
   square_rooftop:

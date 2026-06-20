@@ -21,3 +21,4 @@ class Implant:
     ripperdoc_only: bool = False
     description_zh: str = ""
     description_en: str = ""
+    side_effect_minutes: int = 0

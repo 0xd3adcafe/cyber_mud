@@ -29,6 +29,13 @@ def _handle_consumable(ctx: CommandContext, *, required_type: str | None = None)
 
     item_id = result.value
     item = ctx.state.world.item(item_id)
+
+    from commands.lock_helpers import check_entity_lock
+
+    lock_denial = check_entity_lock(ctx, item, "use")
+    if lock_denial is not None:
+        return ok(lock_denial)
+
     if not is_consumable(item):
         return ok([t(locale, "use.not_consumable")])
 

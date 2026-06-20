@@ -6,6 +6,7 @@ from pathlib import Path
 from entities.corpse import Corpse
 from world.clock import TimeConfig, WorldClock, default_clock
 from world.loader import default_room_items
+from world.scheduler import Scheduler
 from world.state import WorldState
 from world.weather import default_weather, load_weather_config
 from world.world import World
@@ -34,6 +35,7 @@ def save_world_state(state: WorldState) -> Path:
         "npc_vitals": {str(k): int(v) for k, v in state.npc_vitals.items()},
         "weather": dict(state.weather),
         "tick_count": state.tick_count,
+        "scheduler": state.scheduler.to_list(),
     }
     WORLD_STATE_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     return WORLD_STATE_PATH
@@ -63,6 +65,7 @@ def load_world_state(world: World, config: TimeConfig) -> WorldState:
     npc_vitals = {str(k): int(v) for k, v in (data.get("npc_vitals") or {}).items()}
     weather = {str(k): str(v) for k, v in (data.get("weather") or default_weather(weather_config)).items()}
     tick_count = int(data.get("tick_count", 0))
+    scheduler = Scheduler.from_list(data.get("scheduler"))
     return WorldState(
         world=world,
         clock=clock,
@@ -74,4 +77,5 @@ def load_world_state(world: World, config: TimeConfig) -> WorldState:
         npc_vitals=npc_vitals,
         weather=weather,
         tick_count=tick_count,
+        scheduler=scheduler,
     )
