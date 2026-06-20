@@ -146,6 +146,20 @@ Select {
     height: auto;
 }
 
+#prompt_preview {
+    width: 100%;
+    height: auto;
+    min-height: 1;
+    background: $surface;
+    color: $text-muted;
+    padding: 0 2;
+    border-top: solid $surface;
+    overflow: hidden;
+}
+.preview-hidden {
+    display: none;
+}
+
 #hotkey_bar {
     width: 100%;
     height: auto;

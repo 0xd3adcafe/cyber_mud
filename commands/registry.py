@@ -117,6 +117,7 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
         if weather_type:
             weather = weather_label(weather_type, ctx.player.locale)
     from shared.prompt_tokens import effective_prompt, expand_prompt
+    from world.progression import xp_to_next_level
 
     meta = {
         "name": ctx.player.name if ctx.player.named else "",
@@ -136,6 +137,8 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
         "wanted": str(ctx.player.wanted_level),
         "level": str(ctx.player.level),
         "faction": faction_label(ctx.state.world, ctx.player.faction, ctx.player.locale),
+        "xp": f"{ctx.player.xp}/{xp_to_next_level(ctx.player.level)}",
+        "prompt_template": effective_prompt(ctx.player),
         "prompt_mud": expand_prompt(effective_prompt(ctx.player), ctx.player, ctx.state),
     }
     if ctx.player.in_combat:

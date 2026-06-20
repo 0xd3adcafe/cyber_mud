@@ -39,6 +39,14 @@ class ClientViewState:
     combat_npc_cd: int = 0
     combat_cd_synced_at: float = 0.0
     prompt_mud: str = "> "
+    prompt_template: str = ""
+    player_name: str = ""
+    locale: str = "zh"
+    level: str = "1"
+    street_cred: str = "0"
+    wanted: str = "0"
+    faction: str = ""
+    xp: str = ""
     net_shell: bool = False
     net_prompt: str = "ghost@netrun-kali> "
     sidebar_open: bool = False
@@ -132,6 +140,22 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         state.in_combat = True
     elif key == "prompt_mud":
         state.prompt_mud = value
+    elif key == "prompt_template":
+        state.prompt_template = value
+    elif key == "name":
+        state.player_name = value
+    elif key == "locale":
+        state.locale = value or "zh"
+    elif key == "level":
+        state.level = value
+    elif key == "street_cred":
+        state.street_cred = value
+    elif key == "wanted":
+        state.wanted = value
+    elif key == "faction":
+        state.faction = value
+    elif key == "xp":
+        state.xp = value
     elif key == "net_shell":
         state.net_shell = value == "1"
     elif key == "net_prompt":
@@ -283,8 +307,10 @@ NETRUN_EXIT_COMMANDS = frozenset({"exit", "quit", "disconnect", "logout"})
 
 
 def active_prompt(state: ClientViewState, *, local_override: str = "") -> str:
+    from client.prompt_preview import expand_prompt_from_view
+
     if local_override:
-        return local_override
+        return expand_prompt_from_view(local_override, state)
     if state.net_shell:
         prompt = state.net_prompt
         return prompt if prompt.strip() else "ghost@netrun-kali> "

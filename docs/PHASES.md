@@ -162,6 +162,7 @@
 | 腦舞 | `braindance`／`bd`；`data/braindances.yaml`；`world/braindance.py`；艙體互動 |
 | NPC 派系動機 AI | `faction`／`motivation`；`data/npc_ai.yaml`；`world/npc_ai.py` 同房交戰／社交／追獵；`tests/test_npc_ai.py` |
 | 登入 banner MOTD 動態展示 | `client/login_motd.py`；`motd.tips` locale；`#login_title` 輪播提示＋spinner；MOTD 不再覆寫 `#login_status`；`tests/test_login_motd.py` |
+| Prompt 完整版（client 即時預覽） | `client/prompt_preview.py`；`#prompt_preview` 輸入時展開 token；`/prompt template`／`show`／`reset`；meta `prompt_template`／`xp`；`tests/test_prompt_preview.py` |
 
 ## Backlog 維護慣例
 
@@ -177,7 +178,6 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 尚未實作或僅部分實作，新專案可選做：
 
-- Prompt 完整版（client 即時預覽 UI）
 - NPC 任務編排工具（進階多 NPC 劇本編輯）
 - 文件 GitHub 風格 + TOC（Phase E.4）
 - pyenv 原生編譯 Python（環境設定，非遊戲功能）

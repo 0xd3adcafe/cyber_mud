@@ -74,6 +74,32 @@ def test_login_banner_rotates_tips():
     asyncio.run(_run())
 
 
+def test_prompt_preview_shows_while_editing():
+    async def _run() -> None:
+        from textual.widgets import Input, Static
+
+        from client.meta_handlers import apply_meta
+
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(100, 40)) as pilot:
+            apply_meta(app.view, "auth", "1")
+            apply_meta(app.view, "hp", "80/100")
+            apply_meta(app.view, "name", "V")
+            app._set_auth_ui(True)
+            await pilot.pause()
+            prompt = app.query_one("#prompt", Input)
+            preview = app.query_one("#prompt_preview", Static)
+            assert "preview-hidden" in preview.classes
+            prompt.value = "/prompt set [%h] %n>"
+            app._update_prompt_preview(prompt.value)
+            assert "preview-hidden" not in preview.classes
+            rendered = str(preview.render())
+            assert "80/100" in rendered
+            assert "V>" in rendered
+
+    asyncio.run(_run())
+
+
 def test_login_inputs_visible_on_small_terminal():
     async def _run() -> None:
         from textual.widgets import Input

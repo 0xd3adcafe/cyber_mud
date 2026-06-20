@@ -21,7 +21,14 @@ from client.credentials import (
 from client.connection import ServerConnection
 from client.login_art import render_login_art
 from client.login_motd import banner_text, default_tips, parse_motd_line
+from client.prompt_preview import (
+    detect_prompt_edit,
+    expand_prompt_from_view,
+    format_prompt_preview,
+    format_prompt_show_lines,
+)
 from shared.i18n import t
+from shared.prompt_tokens import CP2077_TEMPLATES
 from client.themes import (
     DEFAULT_THEME_ID,
     build_textual_theme,
@@ -208,6 +215,7 @@ class CyberMudApp(App):
                             id="prompt",
                             suggester=MudSuggester(lambda: self.view),
                         )
+                yield Static("", id="prompt_preview", classes="preview-hidden")
                 yield Static(format_hotkey_bar(), id="hotkey_bar")
 
         yield Footer()
@@ -332,6 +340,22 @@ class CyberMudApp(App):
 
     def _prompt_prefix(self) -> str:
         return active_prompt(self.view, local_override=self._local_prompt_override)
+
+    def _update_prompt_preview(self, text: str) -> None:
+        preview = self.query_one("#prompt_preview", Static)
+        ctx = detect_prompt_edit(text)
+        if ctx is None:
+            preview.add_class("preview-hidden")
+            preview.update("")
+            return
+        expanded = expand_prompt_from_view(ctx.template, self.view)
+        preview.remove_class("preview-hidden")
+        preview.update(format_prompt_preview(ctx.template, expanded))
+
+    def _clear_prompt_preview(self) -> None:
+        preview = self.query_one("#prompt_preview", Static)
+        preview.add_class("preview-hidden")
+        preview.update("")
 
     def _login_art_rows(self) -> int:
         try:
@@ -804,6 +828,7 @@ class CyberMudApp(App):
             "#login_title",
             "#login_hint",
             "#login_status",
+            "#prompt_preview",
             "#info_bar",
             "#chrome_bar",
             "#hotkey_bar",
@@ -1108,11 +1133,33 @@ class CyberMudApp(App):
             if args.startswith("set "):
                 self._local_prompt_override = args[4:]
                 self._update_status()
-                self._append_log(log, f"本機提示符：{self._local_prompt_override}", kind="text")
+                expanded = expand_prompt_from_view(self._local_prompt_override, self.view)
+                self._append_log(log, f"本機提示符：{expanded}", kind="text")
+            elif args.startswith("template "):
+                name = args[9:].strip()
+                template = CP2077_TEMPLATES.get(name)
+                if template is None:
+                    names = ", ".join(sorted(CP2077_TEMPLATES))
+                    self._append_log(log, f"未知範本：{name}。可用：{names}", kind="text")
+                else:
+                    self._local_prompt_override = template
+                    self._update_status()
+                    expanded = expand_prompt_from_view(template, self.view)
+                    self._append_log(log, f"已套用範本 {name}：{expanded}", kind="text")
+            elif args == "reset":
+                self._local_prompt_override = ""
+                self._update_status()
+                self._append_log(log, "本機提示符已重設（使用伺服器範本）。", kind="text")
             elif args == "show":
-                self._append_log(log, f"本機提示符：{self._local_prompt_override or '(伺服器)'}", kind="text")
+                for line in format_prompt_show_lines(self.view, local_override=self._local_prompt_override):
+                    self._append_log(log, line, kind="text")
             else:
-                self._append_log(log, "用法：/prompt set <範本> | /prompt show", kind="text")
+                self._append_log(
+                    log,
+                    "用法：/prompt set <範本> | /prompt template <名稱> | /prompt show | /prompt reset",
+                    kind="text",
+                )
+            self._clear_prompt_preview()
             return True
         if verb == "theme":
             action, theme_id = parse_theme_command(args)
@@ -1126,12 +1173,19 @@ class CyberMudApp(App):
             return True
         return False
 
+    @on(Input.Changed, "#prompt")
+    def on_prompt_changed(self, event: Input.Changed) -> None:
+        if not self.view.authenticated:
+            return
+        self._update_prompt_preview(event.value)
+
     @on(Input.Submitted, "#prompt")
     async def on_game_input(self, event: Input.Submitted) -> None:
         if not self.view.authenticated:
             return
         text = event.value.strip()
         event.input.value = ""
+        self._clear_prompt_preview()
         self._command_history.reset_browse()
         if not text:
             return

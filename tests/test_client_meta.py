@@ -50,6 +50,20 @@ def test_apply_meta_completion_fields():
     assert state.complete_inventory == ["jacket"]
 
 
+def test_apply_meta_prompt_fields():
+    state = ClientViewState()
+    apply_meta(state, "name", "V")
+    apply_meta(state, "prompt_template", "[%h] %n>")
+    apply_meta(state, "level", "5")
+    apply_meta(state, "xp", "10/200")
+    apply_meta(state, "faction", "荒坂公司")
+    assert state.player_name == "V"
+    assert state.prompt_template == "[%h] %n>"
+    assert state.level == "5"
+    assert state.xp == "10/200"
+    assert state.faction == "荒坂公司"
+
+
 def test_apply_meta_auth():
     state = ClientViewState()
     apply_meta(state, "auth", "1")
@@ -191,6 +205,11 @@ def test_sidebar_prefers_ui_json_over_panel_lines():
     )
     text = format_sidebar_content(state)
     assert text.count("100/100") == 1
+
+
+def test_active_prompt_expands_local_override():
+    state = ClientViewState(hp="50/100", player_name="V")
+    assert active_prompt(state, local_override="[%h] %n>") == "[50/100] V>"
 
 
 def test_netrun_prompt_and_blocking():
