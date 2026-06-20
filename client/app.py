@@ -63,7 +63,9 @@ from client.meta_handlers import (
     format_sidebar_content,
     handle_panel_line,
     handle_ui_json,
+    is_client_slash_input,
     is_local_command,
+    local_command_body,
     prepare_netrun_outbound,
     panels_to_refresh_on_equip,
     panels_to_refresh_on_move,
@@ -1340,9 +1342,18 @@ class CyberMudApp(App):
         await self._submit_login()
 
     async def _handle_local_command(self, text: str, log: RichLog) -> bool:
-        if not is_local_command(text):
+        if not is_client_slash_input(text):
             return False
+        locale = self._client_locale()
+        if not local_command_body(text):
+            self._append_log(log, t(locale, "client.local_command.usage"), kind="text")
+            return True
         verb, args = parse_local_command(text)
+        if verb == "exit":
+            return False
+        if not is_local_command(text):
+            self._append_log(log, t(locale, "client.local_command.unknown", cmd=verb), kind="text")
+            return True
         if verb == "quit":
             await self.action_quit()
             return True

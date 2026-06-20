@@ -1023,6 +1023,9 @@ client:
     no_stored_account: 沒有已儲存的帳號。
     cleared_credentials: 已清除儲存帳號。
     pin_error: "{err}"
+  local_command:
+    usage: "本機指令：/clear /reconnect /prompt /theme /quit — Tab 可補全。"
+    unknown: "未知本機指令：/{cmd}（不會送到伺服器）。"
   credentials:
     pin_digits: PIN 僅能為數字。
     pin_length: "PIN 需為 {min}–{max} 位數字。"

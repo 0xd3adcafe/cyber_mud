@@ -101,6 +101,28 @@ def test_prompt_preview_shows_while_editing():
     asyncio.run(_run())
 
 
+def test_bare_slash_shows_local_usage_not_crash():
+    async def _run() -> None:
+        from textual.widgets import Input, RichLog
+
+        from client.meta_handlers import apply_meta
+
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(100, 40)) as pilot:
+            apply_meta(app.view, "auth", "1")
+            app._set_auth_ui(True)
+            await pilot.pause()
+            log = app.query_one("#log", RichLog)
+            prompt = app.query_one("#prompt", Input)
+            prompt.value = "/"
+            await pilot.press("enter")
+            await pilot.pause()
+            text = " ".join(entry.text for entry in app._log_buffer.entries)
+            assert "/clear" in text or "clear" in text
+
+    asyncio.run(_run())
+
+
 def test_login_inputs_visible_on_small_terminal():
     async def _run() -> None:
         from textual.widgets import Input

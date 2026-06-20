@@ -186,6 +186,7 @@
 | Kabuki 與區域擴充（2026-06） | `kabuki_vip`、`kabuki_bazaar`、小中國街、企業區樞紐；`velvet_job`；`tests/test_world_districts.py` |
 | Client 版面測試 helper | `tests/client_ui_helpers.py`；`test_client_app.py` 側欄／help overlay 穩定斷言 |
 | 生活指令 L.1–L.8（2026-06） | `sit`／`stand`／`lie`／`rest`／`sleep`／`wake`；`world/life.py`、`data/life.yaml`；互動休息錨點；生命徵象／RAM 回復；移動／說話／戰鬥喚醒；PDA＋`%posture`；help 分類 **生活與生命徵象**；`tests/test_life_commands.py` |
+| Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 
 ## 多 session 開發（必做）
 

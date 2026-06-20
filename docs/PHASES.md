@@ -186,6 +186,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Kabuki & district expansion (2026-06) | `kabuki_vip`, `kabuki_bazaar`, Little China, Corpo hubs; `velvet_job`; `tests/test_world_districts.py` |
 | Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions in `test_client_app.py` |
 | Life commands L.1–L.8 (2026-06) | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable rest anchors; vitals/RAM regen; wake on move/say/talk/combat; PDA + `%posture`; help category **Life & vitals**; `tests/test_life_commands.py` |
+| Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 
 ## Multi-session development (mandatory)
 

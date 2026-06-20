@@ -150,6 +150,10 @@ def test_local_commands():
     assert is_local_command("/theme matrix")
     assert not is_local_command("look")
     assert not is_local_command("clear")
+    assert not is_local_command("/")
+    assert not is_local_command("/   ")
+    parse_local_command("/")
+    parse_local_command("/   ")
     assert parse_local_command("/prompt set %h>") == ("prompt", "set %h>")
     assert parse_local_command("/theme tron") == ("theme", "tron")
 

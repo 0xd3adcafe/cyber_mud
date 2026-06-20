@@ -394,19 +394,30 @@ def prepare_netrun_outbound(text: str) -> tuple[str, bool]:
     return outbound, False
 
 
+def local_command_body(text: str) -> str:
+    return text[1:].strip() if text.startswith("/") else ""
+
+
+def is_client_slash_input(text: str) -> bool:
+    return text.startswith("/")
+
+
 def is_local_command(text: str) -> bool:
-    if not text.startswith("/"):
+    if not is_client_slash_input(text):
         return False
-    verb = text[1:].split()[0].lower()
+    body = local_command_body(text)
+    if not body:
+        return False
+    verb = body.split(maxsplit=1)[0].lower()
     if verb == "exit":
         return False
     return verb in LOCAL_COMMANDS
 
 
 def parse_local_command(text: str) -> tuple[str, str]:
-    body = text[1:].strip()
+    body = local_command_body(text)
     parts = body.split(maxsplit=1)
-    verb = parts[0].lower()
+    verb = parts[0].lower() if parts else ""
     args = parts[1] if len(parts) > 1 else ""
     return verb, args
 

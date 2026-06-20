@@ -1023,6 +1023,9 @@ client:
     no_stored_account: "No stored account."
     cleared_credentials: "Stored account cleared."
     pin_error: "{err}"
+  local_command:
+    usage: "Client commands: /clear /reconnect /prompt /theme /quit — Tab to complete."
+    unknown: "Unknown client command: /{cmd} (not sent to server)."
   credentials:
     pin_digits: "PIN must be digits only."
     pin_length: "PIN must be {min}–{max} digits."
