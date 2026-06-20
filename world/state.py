@@ -17,6 +17,7 @@ class WorldState:
     npc_rooms: dict[str, str] = field(default_factory=dict)
     corpses: dict[str, Corpse] = field(default_factory=dict)
     npc_respawns: dict[str, int] = field(default_factory=dict)
+    npc_vitals: dict[str, int] = field(default_factory=dict)
     weather: dict[str, str] = field(default_factory=dict)
     tick_count: int = 0
 

@@ -210,6 +210,42 @@ class Game:
                         else (event.npc_name_en or event.npc_name_zh)
                     )
                     await target.send(t(target.player.locale, key, name=name))
+            elif event.kind in {"npc_ai_fight", "npc_ai_social", "npc_ai_defeat", "npc_ai_hunt"}:
+                for target in self.sessions:
+                    if target.player.room_id != event.room_id:
+                        continue
+                    locale = target.player.locale
+                    kwargs = dict(event.message_kwargs)
+                    if locale == "zh":
+                        for key in ("attacker", "defender", "winner", "loser", "speaker", "target", "name"):
+                            en_key = f"{key}_en"
+                            zh_key = f"{key}_zh"
+                            if zh_key in kwargs:
+                                kwargs[key] = kwargs[zh_key]
+                    else:
+                        for key in ("attacker", "defender", "winner", "loser", "speaker", "target", "name"):
+                            en_key = f"{key}_en"
+                            zh_key = f"{key}_zh"
+                            if en_key in kwargs:
+                                kwargs[key] = kwargs[en_key]
+                            elif zh_key in kwargs:
+                                kwargs[key] = kwargs[zh_key]
+                    msg_key = event.message_key
+                    if event.kind == "npc_ai_social":
+                        base = t(locale, msg_key)
+                        if base == msg_key:
+                            base = t(locale, "npc.ai.msg.socialize")
+                        await target.send(
+                            t(
+                                locale,
+                                "npc.ai.social",
+                                speaker=kwargs.get("speaker", ""),
+                                target=kwargs.get("target", ""),
+                                msg=base,
+                            )
+                        )
+                    else:
+                        await target.send(t(locale, msg_key, **kwargs))
             elif event.kind == "npc_idle":
                 for target in self.sessions:
                     if target.player.room_id != event.room_id:

@@ -31,6 +31,7 @@ def save_world_state(state: WorldState) -> Path:
         "npc_rooms": dict(state.npc_rooms),
         "corpses": {cid: corpse.to_dict() for cid, corpse in state.corpses.items()},
         "npc_respawns": {str(k): int(v) for k, v in state.npc_respawns.items()},
+        "npc_vitals": {str(k): int(v) for k, v in state.npc_vitals.items()},
         "weather": dict(state.weather),
         "tick_count": state.tick_count,
     }
@@ -59,6 +60,7 @@ def load_world_state(world: World, config: TimeConfig) -> WorldState:
         for cid, cdata in (data.get("corpses") or {}).items()
     }
     npc_respawns = {str(k): int(v) for k, v in (data.get("npc_respawns") or {}).items()}
+    npc_vitals = {str(k): int(v) for k, v in (data.get("npc_vitals") or {}).items()}
     weather = {str(k): str(v) for k, v in (data.get("weather") or default_weather(weather_config)).items()}
     tick_count = int(data.get("tick_count", 0))
     return WorldState(
@@ -69,6 +71,7 @@ def load_world_state(world: World, config: TimeConfig) -> WorldState:
         npc_rooms=npc_rooms,
         corpses=corpses,
         npc_respawns=npc_respawns,
+        npc_vitals=npc_vitals,
         weather=weather,
         tick_count=tick_count,
     )

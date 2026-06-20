@@ -160,6 +160,7 @@
 | 多載具車庫 | `world/vehicles_player.py`；`vehicles buy/select`；`vehicles[]` 存檔 |
 | 製作／拆解 | `craft`／`disassemble`；`data/recipes.yaml`；`world/craft.py` |
 | 腦舞 | `braindance`／`bd`；`data/braindances.yaml`；`world/braindance.py`；艙體互動 |
+| NPC 派系動機 AI | `faction`／`motivation`；`data/npc_ai.yaml`；`world/npc_ai.py` 同房交戰／社交／追獵；`tests/test_npc_ai.py` |
 
 ## Backlog 維護慣例
 
@@ -176,7 +177,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 尚未實作或僅部分實作，新專案可選做：
 
 - Prompt 完整版（client 即時預覽 UI）
-- NPC 任務驅動 AI（進階追蹤、任務編排工具）
+- NPC 任務編排工具（進階多 NPC 劇本編輯）
 - 文件 GitHub 風格 + TOC（Phase E.4）
 - pyenv 原生編譯 Python（環境設定，非遊戲功能）
 

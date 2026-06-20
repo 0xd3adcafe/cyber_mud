@@ -106,6 +106,17 @@ npc:
   enter: "{name} enters."
   leave: "{name} leaves."
   idle: "{name}: {msg}"
+  ai:
+    fight: "{attacker} clashes with {defender} for {damage} damage (HP {hp})."
+    defeat: "{winner} takes down {loser}."
+    social: "{speaker} tells {target}: {msg}"
+    hunt: "{name} seems to be hunting rival faction tracks."
+    msg:
+      trade: "Tonight's prices are for regulars only."
+      socialize: "Street business—keep it between us."
+      guard: "I'm watching this block—don't start trouble."
+      patrol: "Patrol route clear—moving on."
+      hunt_rival: "You better keep your mouth shut."
 
 corpse:
   label: "{name}'s corpse"

@@ -428,6 +428,7 @@ npcs:
     name_zh: 情報經紀人
     name_en: Info Broker
     room_id: square
+    motivation: trade
     description_zh: 半張臉藏在全息面具後，低聲兜售傳聞與座標。
     description_en: Half a face hides behind a holo-mask, whispering rumors and coordinates.
     hp: 50
@@ -445,6 +446,8 @@ npcs:
     name_zh: 街頭暴徒
     name_en: Street Thug
     room_id: alley
+    faction: maelstrom
+    motivation: hunt_rival
     description_zh: 義體手臂上的刀刃在霓虹下反光。
     description_en: Blades on a cyber-arm catch the neon glare.
     hp: 30
@@ -456,6 +459,21 @@ npcs:
     equipment:
       weapon_secondary: knife
     loot: [mod_chip]
+  corp_scout:
+    name_zh: 企業偵察員
+    name_en: Corpo Scout
+    room_id: square
+    description_zh: 荒坂外包偵察員，義眼不停掃描路人識別碼。
+    description_en: An Arasaka contractor—cyber eyes scanning every passerby.
+    faction: arasaka
+    motivation: guard
+    hp: 35
+    max_hp: 35
+    attack: 5
+    hostile: false
+    patrol: [square, alley]
+    idle_msg_zh: 低聲回報巡邏座標給中控。
+    idle_msg_en: Murmurs patrol coordinates to central dispatch.
   instructor:
     name_zh: 訓練教官
     name_en: Drill Instructor

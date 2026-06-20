@@ -106,6 +106,17 @@ npc:
   enter: "{name} 走進了這裡。"
   leave: "{name} 離開了這裡。"
   idle: "{name}：{msg}"
+  ai:
+    fight: "{attacker} 與 {defender} 激烈交手，造成 {damage} 傷害（敵 HP {hp}）。"
+    defeat: "{winner} 擊倒了 {loser}。"
+    social: "{speaker} 對 {target} 說：{msg}"
+    hunt: "{name} 似乎在搜尋敵對派系的蹤跡。"
+    msg:
+      trade: "今晚的價碼只對熟人開口。"
+      socialize: "街頭的事，自己心裡有數就好。"
+      guard: "這片區域由我盯著，別惹事。"
+      patrol: "巡邏路線沒問題，繼續走。"
+      hunt_rival: "你最好別多嘴。"
 
 corpse:
   label: "{name}的屍體"

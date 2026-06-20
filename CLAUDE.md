@@ -249,7 +249,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 
 - Prompt 完整版（client 即時預覽 UI）
 - Phase E.4 文件 GitHub 風格 + TOC
-- NPC 任務驅動 AI（進階追蹤、編排工具）
+- NPC 任務編排工具（進階多 NPC 劇本）
 
 ### 近期完成（2026-06 backlog 批次）
 
@@ -265,6 +265,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | NCPD 通緝 | `world/wanted.py`、tick 衰減 |
 | 載具車庫 | `vehicles buy/select`、`vehicles[]` |
 | 製作拆解腦舞 | `craft`／`disassemble`／`braindance`、`tests/test_backlog_features.py` |
+| NPC 派系動機 AI | `world/npc_ai.py`、`corp_scout`／`thug` 派系衝突、`tests/test_npc_ai.py` |
 
 世界觀與區域擴充見 [`docs/WORLD.md`](docs/WORLD.md)。
 

@@ -61,6 +61,9 @@ def process_npc_respawns(state: WorldState) -> list[tuple[str, str, str, str]]:
             ready.append(npc_id)
             continue
         state.npc_rooms[npc_id] = room_id
+        from world.npc_ai import reset_npc_hp
+
+        reset_npc_hp(state, npc_id)
         events.append((room_id, npc_id, npc.name_zh, npc.name_en))
         ready.append(npc_id)
     for npc_id in ready:

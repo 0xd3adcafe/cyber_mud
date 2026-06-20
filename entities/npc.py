@@ -27,3 +27,5 @@ class NPC:
     tier: str = ""
     respawn_minutes: int | None = None
     xp_reward: int = 0
+    faction: str = ""
+    motivation: str = ""

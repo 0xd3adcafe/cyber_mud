@@ -141,6 +141,8 @@ def load_world(path: Path | None = None) -> World:
             tier=str(data.get("tier", "")),
             respawn_minutes=int(data["respawn_minutes"]) if "respawn_minutes" in data else None,
             xp_reward=int(data.get("xp_reward", 0)),
+            faction=str(data.get("faction", "")),
+            motivation=str(data.get("motivation", "")),
         )
         for nid, data in (raw.get("npcs") or {}).items()
     }

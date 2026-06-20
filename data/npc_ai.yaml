@@ -1,0 +1,19 @@
+faction_rivals:
+  maelstrom: [arasaka, militech]
+  arasaka: [maelstrom]
+  militech: [maelstrom]
+  tyrell: [maelstrom]
+
+motivation_fight_chance:
+  hunt_rival: 0.85
+  guard: 0.55
+  patrol: 0.2
+  trade: 0.05
+  socialize: 0.08
+
+motivation_social_chance:
+  trade: 0.5
+  socialize: 0.45
+  guard: 0.15
+  patrol: 0.1
+  hunt_rival: 0.05
