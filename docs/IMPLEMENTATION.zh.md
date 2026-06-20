@@ -127,6 +127,7 @@ dispatch(line, player, state, peers, all_players)
 - `prompt_mud`, `prompt_netrun`
 - `combat`, `combat_log`, `combat_cd`（戰鬥中）
 - `comp_*`（自動完成用）
+- `posture`, `fatigue`（生活／休息狀態）
 - `net_shell`, `net_prompt`（駭入模式）
 
 ### 已實作指令分類（原專案）
@@ -136,6 +137,7 @@ dispatch(line, player, state, peers, all_players)
 **戰鬥**：`attack`, `quickhack`, `defend`, `flee`  
 **義體／模組**：`install`, `mod`, `learn`  
 **社交**：`say`, `tell`, `talk`  
+**生活與生命徵象**：`sit`, `stand`, `lie`, `rest`, `sleep`, `wake`（`commands/life.py`, `world/life.py`）  
 **系統**：`help`, `pda`/`status`, `equipment`, `time`, `save`, `quit`, `prompt`, `lang`, `alias`  
 **駭入**：`net` shell（`net_shell` 子系統）  
 **認證**：`login` / `register`（未命名玩家 gate）
@@ -159,6 +161,7 @@ dispatch(line, player, state, peers, all_players)
 | 背包／裝備 | `inventory[]`, `equipment{slot: item_id}` |
 | 義體 | `implants[]`（或等價結構） |
 | 戰鬥 | `in_combat`, `status_effects[]` |
+| 生活 | `posture`, `fatigue`, `life_anchor` |
 | 自訂 | `prompt_mud`, `prompt_netrun`, `custom_aliases` |
 
 ### Item / NPC
@@ -184,6 +187,7 @@ data/
   implants.yaml
   weather.yaml
   time.yaml
+  life.yaml       # 休息／睡眠配置、錨點、環境倍率
 ```
 
 ### 房間

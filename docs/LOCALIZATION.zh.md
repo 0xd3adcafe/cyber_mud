@@ -62,11 +62,16 @@ lang zh    # 繁體中文
 3. Client 用 `t(locale, "client.…")`。
 4. 邏輯層避免硬編碼單語字串。
 
+範例（生活指令）：`life.sit_ok`、`life.sleep_ok`、`help_cmds.sit`、`pda.life` 須**同時**寫入兩份 YAML；玩家文件同步 [COMMANDS.md](player/COMMANDS.md) 與 [COMMANDS.zh.md](player/COMMANDS.zh.md)。
+
 ## Commit 格式
 
 ```
 feat: add lang command for locale switching / 新增 lang 語系切換指令
+feat: add life commands sit/rest/sleep / 新增生活指令 sit/rest/sleep
 docs: split EN/ZH markdown docs / 中英文文件分離
 ```
+
+交付遊戲功能時，**英文與中文文件須一併更新**：`PHASES.md`＋`PHASES.zh.md`、玩家指南、`en.yaml`＋`zh.yaml`。
 
 主述用英文；需要時以 ` / ` 接繁中簡述。

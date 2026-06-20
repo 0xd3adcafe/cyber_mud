@@ -132,6 +132,7 @@ Client updates status bar, hint_bar, prompt token sources.
 - [x] Real-time combat encounter (`combat_cd` second-level meta, client countdown)
 - [x] NETRUN sub-shell (server `net` + client `net_shell` meta)
 - [x] PDA / map / help / equipment sidebar
+- [x] Life commands — `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; posture & fatigue (`world/life.py`, `data/life.yaml`)
 - [x] Custom prompt (server + client override)
 - [x] Dev hot-reload (`data/*.yaml` + code `reload_application_code`), client auto-reconnect and `/reconnect`
 - [x] Sidebar equipment auto-refresh

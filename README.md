@@ -21,7 +21,7 @@
 
 Cyberpunk text MUD set in **Night City**. Forked from the original **mud** project with a full MVP codebase and implementation docs.
 
-Built-in **Textual TUI client** is the primary player interface (`look` / `go` / `help` / `quit` + starter world).
+Built-in **Textual TUI client** is the primary player interface (`look` / `go` / `sit` / `rest` / `help` / `quit` + starter world).
 
 **Default locale: English.** Use `lang zh` in-game for Traditional Chinese. See [docs/LOCALIZATION.md](docs/LOCALIZATION.md).
 

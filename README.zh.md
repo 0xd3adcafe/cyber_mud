@@ -12,7 +12,7 @@
 
 賽博龐克文字 MUD，背景為**夜城**。由原 **mud** 專案 fork，含 MVP 程式骨架與完整實作文件。
 
-內建 **Textual TUI client** 為正式玩家介面（`look`／`go`／`help`／`quit` 與起始世界）。
+內建 **Textual TUI client** 為正式玩家介面（`look`／`go`／`sit`／`rest`／`help`／`quit` 與起始世界）。
 
 **預設語系為英文**；遊戲內輸入 `lang zh` 可切換繁體中文。雙語慣例見 [docs/LOCALIZATION.zh.md](docs/LOCALIZATION.zh.md)。
 

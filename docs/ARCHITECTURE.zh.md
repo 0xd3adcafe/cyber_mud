@@ -132,6 +132,7 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 - [x] 即時戰鬥 encounter（`combat_cd` 秒級 meta、client 即時倒數）
 - [x] NETRUN 子 shell（server `net` + client `net_shell` meta）
 - [x] PDA／地圖／說明／裝備側欄
+- [x] 生活指令 — `sit`／`stand`／`lie`／`rest`／`sleep`／`wake`；姿態與疲勞（`world/life.py`、`data/life.yaml`）
 - [x] Prompt 自訂（server + client 覆寫）
 - [x] 開發熱重載（`data/*.yaml` + 程式碼 `reload_application_code`）、client 自動重連與 `/reconnect`
 - [x] 側欄裝備自動刷新

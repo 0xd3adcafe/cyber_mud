@@ -127,6 +127,7 @@ Almost every successful command attaches `meta=player_meta(ctx)`, with fields in
 - `prompt_mud`, `prompt_netrun`
 - `combat`, `combat_log`, `combat_cd` (during combat)
 - `comp_*` (for autocomplete)
+- `posture`, `fatigue` (life / rest state)
 - `net_shell`, `net_prompt` (netrunning mode)
 
 ### Implemented Command Categories (Original Project)
@@ -136,6 +137,7 @@ Almost every successful command attaches `meta=player_meta(ctx)`, with fields in
 **Combat**: `attack`, `quickhack`, `defend`, `flee`  
 **Cyberware / mods**: `install`, `mod`, `learn`  
 **Social**: `say`, `tell`, `talk`  
+**Life & vitals**: `sit`, `stand`, `lie`, `rest`, `sleep`, `wake` (`commands/life.py`, `world/life.py`)  
 **System**: `help`, `pda`/`status`, `equipment`, `time`, `save`, `quit`, `prompt`, `lang`, `alias`  
 **Netrunning**: `net` shell (`net_shell` subsystem)  
 **Authentication**: `login` / `register` (unnamed player gate)
@@ -159,6 +161,7 @@ Core fields:
 | Inventory / equipment | `inventory[]`, `equipment{slot: item_id}` |
 | Cyberware | `implants[]` (or equivalent structure) |
 | Combat | `in_combat`, `status_effects[]` |
+| Life | `posture`, `fatigue`, `life_anchor` |
 | Custom | `prompt_mud`, `prompt_netrun`, `custom_aliases` |
 
 ### Item / NPC
@@ -184,6 +187,7 @@ data/
   implants.yaml
   weather.yaml
   time.yaml
+  life.yaml       # rest/sleep profiles, anchors, environment multipliers
 ```
 
 ### Rooms

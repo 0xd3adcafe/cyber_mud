@@ -62,10 +62,15 @@ lang zh    # Traditional Chinese
 3. Use `t(locale, "client.section.key")` in the client.
 4. Never hardcode user-visible Chinese or English in logic when a locale key exists.
 
+Example (life commands): add `life.sit_ok`, `life.sleep_ok`, `help_cmds.sit`, `pda.life` to **both** YAML files; mirror player docs in [COMMANDS.md](player/COMMANDS.md) and [COMMANDS.zh.md](player/COMMANDS.zh.md).
+
 ## Commit message format
 
 ```
 feat: add lang command for locale switching / 新增 lang 語系切換指令
+feat: add life commands sit/rest/sleep / 新增生活指令 sit/rest/sleep
 test: default locale en in fixtures / 測試預設改為 en
 docs: split EN/ZH markdown docs / 中英文文件分離
 ```
+
+When shipping gameplay features, update **English and Chinese** docs together: `PHASES.md` + `PHASES.zh.md`, player guides, and `en.yaml` + `zh.yaml`.
