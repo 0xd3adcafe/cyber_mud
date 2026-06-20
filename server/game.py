@@ -134,11 +134,29 @@ class Game:
             if target.player.room_id == room_id and target is not exclude:
                 await target.send_lines(lines)
 
-    async def broadcast_localized(self, room_id: str, key: str, *, exclude: ClientSession | None = None, **kwargs: str) -> None:
+    async def broadcast_localized(
+        self,
+        room_id: str,
+        key: str,
+        *,
+        exclude: ClientSession | None = None,
+        mature_key: str = "",
+        mature_fallback_key: str = "",
+        **kwargs: str,
+    ) -> None:
+        from world.mature_social import localized_broadcast_line
+
         for target in self.sessions:
             if target.player.room_id != room_id or target is exclude:
                 continue
-            await target.send(t(target.player.locale, key, **kwargs))
+            line = localized_broadcast_line(
+                target.player,
+                key,
+                mature_key=mature_key,
+                mature_fallback_key=mature_fallback_key,
+                **kwargs,
+            )
+            await target.send(line)
 
     async def handle_oversized_line(self, session: ClientSession) -> None:
         await session.send(t(session.player.locale, "auth.line_too_long"))
@@ -185,16 +203,30 @@ class Game:
             save_player(session.player)
 
         if result.moved and result.presence_from_room and session.player.named:
+            from world.mature_social import MATURE_PRESENCE_ROOMS, mature_presence_broadcast_keys
+
+            leave_mature, leave_fallback = mature_presence_broadcast_keys(
+                result.presence_from_room,
+                "leave",
+            )
+            enter_mature, enter_fallback = mature_presence_broadcast_keys(
+                session.player.room_id,
+                "enter",
+            )
             await self.broadcast_localized(
                 result.presence_from_room,
                 "presence.leave",
                 exclude=session,
+                mature_key=leave_mature if result.presence_from_room in MATURE_PRESENCE_ROOMS else "",
+                mature_fallback_key=leave_fallback,
                 name=session.player.name,
             )
             await self.broadcast_localized(
                 session.player.room_id,
                 "presence.enter",
                 exclude=session,
+                mature_key=enter_mature if session.player.room_id in MATURE_PRESENCE_ROOMS else "",
+                mature_fallback_key=enter_fallback,
                 name=session.player.name,
             )
 
@@ -203,6 +235,8 @@ class Game:
                 result.broadcast_room_id or session.player.room_id,
                 result.broadcast_key,
                 exclude=session,
+                mature_key=result.broadcast_mature_key,
+                mature_fallback_key=result.broadcast_mature_fallback_key,
                 **result.broadcast_kwargs,
             )
 
@@ -412,6 +446,7 @@ class Game:
                 await self.broadcast_localized(
                     combat_result.broadcast_room_id or player.room_id,
                     combat_result.broadcast_key,
+                    mature_key=combat_result.broadcast_mature_key,
                     **(combat_result.broadcast_kwargs or {}),
                 )
             if combat_result.ended or combat_result.lines:

@@ -37,6 +37,8 @@ class CommandResult:
     auth_event: bool = False
     auth_failure: bool = False
     broadcast_key: str = ""
+    broadcast_mature_key: str = ""
+    broadcast_mature_fallback_key: str = ""
     broadcast_kwargs: dict[str, str] = field(default_factory=dict)
     broadcast_room_id: str = ""
     presence_from_room: str = ""
@@ -60,6 +62,8 @@ def ok(
     auth_failure: bool = False,
     refresh_sidebar: bool = False,
     broadcast_key: str = "",
+    broadcast_mature_key: str = "",
+    broadcast_mature_fallback_key: str = "",
     broadcast_kwargs: dict[str, str] | None = None,
     broadcast_room_id: str = "",
     presence_from_room: str = "",
@@ -74,6 +78,8 @@ def ok(
         auth_failure=auth_failure,
         refresh_sidebar=refresh_sidebar,
         broadcast_key=broadcast_key,
+        broadcast_mature_key=broadcast_mature_key,
+        broadcast_mature_fallback_key=broadcast_mature_fallback_key,
         broadcast_kwargs=broadcast_kwargs or {},
         broadcast_room_id=broadcast_room_id,
         presence_from_room=presence_from_room,
@@ -223,6 +229,8 @@ def _merge_repeat_results(
         world_changed=any(r.world_changed for r in results),
         auth_event=any(r.auth_event for r in results),
         broadcast_key=last.broadcast_key,
+        broadcast_mature_key=last.broadcast_mature_key,
+        broadcast_mature_fallback_key=last.broadcast_mature_fallback_key,
         broadcast_kwargs=last.broadcast_kwargs,
         broadcast_room_id=last.broadcast_room_id,
         presence_from_room=next((r.presence_from_room for r in results if r.presence_from_room), ""),
@@ -385,5 +393,7 @@ def register_builtin_commands() -> None:
         braindance,
         settings_cmd,
         flirt,
+        taunt,
+        finish_cmd,
         life,
     )

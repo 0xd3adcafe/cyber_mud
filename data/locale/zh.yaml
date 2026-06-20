@@ -271,6 +271,8 @@ help_cmds:
   settings: "玩家設定（settings mature on|off）"
   flirt: "調情（18+，flirt <NPC>）"
   spend_time: "私密相處（18+，spend_time <NPC>）"
+  taunt: "戰鬥嘲諷（18+，taunt <NPC>）"
+  finish: "終結弱敵（18+，finish）"
   take: "撿起地上物品"
   drop: "丟下背包物品"
   inventory: "查看背包"
@@ -797,6 +799,13 @@ combat:
   flee_broadcast: "{name} 從與 {target} 的戰鬥中逃脫。"
   victory_broadcast: "{name} 擊倒了 {target}！"
   defeat_broadcast: "{name} 被 {target} 擊倒了。"
+  finish: "你對 {target} 補上殘忍一擊。"
+  finish_too_strong: "{target} 還太強，無法使用終結技。"
+
+taunt:
+  usage: "用法：taunt <npc>"
+  missing: "這裡沒有 NPC {name}。"
+  not_in_combat: "你沒有與 {target} 交戰。"
 
 pledge:
   usage: "用法：pledge <派系>"

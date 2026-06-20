@@ -116,3 +116,89 @@ def test_chrome_pull_hidden_from_teen():
     player = make_player(locale="en", content_rating="teen", street_cred=10)
     result = dispatch("gigs list", player, state, [], [player])
     assert "Chrome Pull" not in "\n".join(result.lines)
+
+
+def test_mature_say_in_lounge():
+    state = make_state()
+    player = make_player(locale="en", room_id="kabuki_lounge", content_rating="mature", name="Vy")
+    result = dispatch("say hello", player, state, [], [player])
+    joined = "\n".join(result.lines)
+    assert "murmur" in joined.lower() or "privacy" in joined.lower()
+    assert result.broadcast_mature_key == "social.say_broadcast.kabuki_lounge"
+
+
+def test_romance_gift_to_host():
+    state = make_state()
+    player = make_player(
+        locale="en",
+        room_id="kabuki_lounge",
+        content_rating="mature",
+        inventory=["synth_coffee"],
+    )
+    state.npc_rooms["kabuki_host"] = "kabuki_lounge"
+    result = dispatch("give synth_coffee kabuki_host", player, state, [], [player])
+    joined = "\n".join(result.lines)
+    assert "synth_coffee" not in player.inventory
+    assert "scanner" in joined.lower() or "smile" in joined.lower()
+    assert result.broadcast_mature_key == "give.broadcast"
+
+
+def test_taunt_and_finish_in_combat():
+    from combat.encounter import encounter_for_player, start_encounter
+
+    state = make_state()
+    player = make_player(locale="en", room_id="alley", content_rating="mature")
+    state.npc_rooms["thug"] = "alley"
+    start_encounter(state, player, "thug")
+    taunt = dispatch("taunt thug", player, state, [], [player])
+    assert any("taunt" in line.lower() or "chrome" in line.lower() or "challenge" in line.lower() for line in taunt.lines)
+
+    encounter = encounter_for_player(state, player)
+    assert encounter is not None
+    encounter.npc_hp = 10
+    too_early = dispatch("finish", player, state, [], [player])
+    assert any("too strong" in line.lower() for line in too_early.lines) or encounter.npc_hp == 10
+
+    encounter.npc_hp = 8
+    finish = dispatch("finish", player, state, [], [player])
+    joined = "\n".join(finish.lines).lower()
+    assert not player.in_combat
+    assert any(
+        word in joined
+        for word in ("finish", "coup", "mercy", "brutal", "blood", "smear", "wet", "crunch", "unmistakable")
+    )
+    assert finish.broadcast_mature_key.startswith("combat.victory_broadcast_")
+
+
+def test_teen_cannot_taunt_or_finish():
+    from combat.encounter import start_encounter
+
+    state = make_state()
+    player = make_player(locale="en", room_id="alley", content_rating="teen")
+    state.npc_rooms["thug"] = "alley"
+    start_encounter(state, player, "thug")
+    assert any("18+" in line or "mature" in line.lower() for line in dispatch("taunt thug", player, state, [], []).lines)
+    assert any("18+" in line or "mature" in line.lower() for line in dispatch("finish", player, state, [], []).lines)
+
+
+def test_mature_combat_broadcast_line_for_observer():
+    from world.mature_social import localized_broadcast_line
+
+    mature = make_player(locale="en", content_rating="mature")
+    teen = make_player(locale="en", content_rating="teen")
+    mature_line = localized_broadcast_line(
+        mature,
+        "combat.victory_broadcast",
+        mature_key="combat.victory_broadcast_1",
+        name="Vy",
+        target="Thug",
+    )
+    teen_line = localized_broadcast_line(
+        teen,
+        "combat.victory_broadcast",
+        mature_key="combat.victory_broadcast_1",
+        name="Vy",
+        target="Thug",
+    )
+    assert "smear" in mature_line.lower() or "blood" in mature_line.lower()
+    assert "dropped" in teen_line.lower()

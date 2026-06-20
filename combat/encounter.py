@@ -26,6 +26,8 @@ COMBAT_ALLOWED_COMMANDS = frozenset(
         "backstab",
         "defend",
         "flee",
+        "finish",
+        "taunt",
         "quickhack",
         "look",
         "use",

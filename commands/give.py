@@ -5,6 +5,8 @@ from commands.helpers import find_item_id, find_npc_id
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
 from shared.locale_content import item_label
+from world.mature import is_mature
+from world.mature_give import romance_gift_line
 
 
 def _remove_item(ctx: CommandContext, item_id: str) -> None:
@@ -48,10 +50,23 @@ def handle(ctx: CommandContext):
     if npc is None:
         return ok([t(ctx.player.locale, "give.missing_target", name=target_name)])
 
+    name = npc.name_zh if ctx.player.locale == "zh" else (npc.name_en or npc.name_zh)
+    gift_line = romance_gift_line(ctx.player, npc_id, item_id, ctx.player.locale)
+    if gift_line:
+        _remove_item(ctx, item_id)
+        broadcast_mature = "give.broadcast" if is_mature(ctx.player) else ""
+        return ok(
+            [t(ctx.player.locale, "give.npc_ok", label=label, name=name), gift_line],
+            meta=player_meta(ctx),
+            world_changed=True,
+            broadcast_key="give.broadcast",
+            broadcast_mature_key=broadcast_mature,
+            broadcast_kwargs={"name": ctx.player.name, "target": name, "label": label},
+        )
+
     from world.quests import advance_quest_on_give
 
     quest_lines = advance_quest_on_give(ctx.player, ctx.state, npc_id, item_id, ctx.player.locale)
-    name = npc.name_zh if ctx.player.locale == "zh" else (npc.name_en or npc.name_zh)
     if not quest_lines:
         return ok([t(ctx.player.locale, "give.npc_refused", name=name)])
 

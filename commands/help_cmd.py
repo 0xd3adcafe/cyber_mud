@@ -24,7 +24,7 @@ HELP_CATEGORIES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("growth", ("stats", "talents", "improve")),
     ("panels", ("pda", "prompt")),
     ("media", ("braindance",)),
-    ("mature", ("settings", "flirt", "spend_time")),
+    ("mature", ("settings", "flirt", "spend_time", "taunt", "finish")),
 )
 
 _MATURE_CATEGORY = "mature"

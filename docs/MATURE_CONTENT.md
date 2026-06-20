@@ -48,6 +48,19 @@ Staged lines use suffixes `_2` and `_3` on the base key (e.g. `kabuki_flirt_2`).
 
 Only players with `content_rating=mature` in mature-tagged rooms/NPCs see these lines.
 
+## Mature social & combat (M.13–M.17)
+
+| Feature | Commands | Module / locale |
+|---------|----------|-----------------|
+| Room `say` flavor | `say <message>` in mature rooms | `commands/say.py`; `mature.social.say_ok/say_broadcast.<room>` |
+| Presence flavor | `go` enter/leave mature rooms | `server/game.py`; `mature.social.presence_enter/leave.<room>` |
+| Romance gifts | `give <item> <npc>` to romance NPC | `world/mature_give.py`; `mature.give.<npc_id>.<item>` or `.default` |
+| Gore broadcasts | combat victory/defeat (observers) | `broadcast_mature_key`; `mature.combat.victory/defeat_broadcast_*` |
+| Taunt | `taunt <npc>` (in combat, 18+) | `commands/taunt.py`; `mature.combat.taunt_*` |
+| Finish | `finish` when enemy ≤30% HP (18+) | `combat/finish.py`; `mature.combat.finish_*` |
+
+Peer broadcasts use `localized_broadcast_line()` — mature observers see mature copy; teen observers keep default locale lines.
+
 ## Validation
 
 ```bash

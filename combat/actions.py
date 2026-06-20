@@ -27,6 +27,7 @@ class CombatActionResult:
     ended: bool = False
     moved: bool = False
     broadcast_key: str = ""
+    broadcast_mature_key: str = ""
     broadcast_kwargs: dict[str, str] | None = None
     broadcast_room_id: str = ""
 
@@ -279,12 +280,17 @@ def _finish_defeat(
         lines.append(t(locale, "combat.respawn", room=room_name(respawn, locale)))
     else:
         player.hp = max(1, player.max_hp // 4)
+    from world.mature import is_mature
+    from world.mature_social import random_mature_combat_broadcast
+
+    mature_broadcast = random_mature_combat_broadcast("defeat") if is_mature(player) else ""
     return CombatActionResult(
         lines,
         world_changed=True,
         ended=True,
         moved=moved,
         broadcast_key="combat.defeat_broadcast",
+        broadcast_mature_key=mature_broadcast,
         broadcast_kwargs={"name": player.name, "target": npc_label},
         broadcast_room_id=death_room,
     )
@@ -337,11 +343,16 @@ def _finish_victory(
 
     lines.extend(advance_quest_on_defeat(player, state, encounter.npc_id, locale))
     lines.extend(shift_reputation(player, reputation_from_combat_victory(npc), locale))
+    from world.mature import is_mature
+    from world.mature_social import random_mature_combat_broadcast
+
+    mature_broadcast = random_mature_combat_broadcast("victory") if is_mature(player) else ""
     return CombatActionResult(
         lines,
         world_changed=True,
         ended=True,
         broadcast_key="combat.victory_broadcast",
+        broadcast_mature_key=mature_broadcast,
         broadcast_kwargs={"name": player.name, "target": label},
     )
 

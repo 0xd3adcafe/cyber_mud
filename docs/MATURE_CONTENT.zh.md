@@ -48,6 +48,19 @@
 
 僅 `content_rating=mature` 且在成熟標記房間／NPC 時顯示。
 
+## 成熟社交與戰鬥（M.13–M.17）
+
+| 功能 | 指令 | 模組／語系 |
+|------|------|-----------|
+| 房間 `say` 氛圍 | 成熟房間 `say <訊息>` | `commands/say.py`；`mature.social.say_ok/say_broadcast.<room>` |
+| 進出氛圍 | 成熟房間 `go` | `server/game.py`；`mature.social.presence_enter/leave.<room>` |
+| 浪漫送禮 | `give <物品> <NPC>`（浪漫檔） | `world/mature_give.py`；`mature.give.<npc>.<item>` |
+| 血腥廣播 | 戰鬥勝敗（同房觀察者） | `broadcast_mature_key`；`mature.combat.victory/defeat_broadcast_*` |
+| 嘲諷 | `taunt <npc>`（戰鬥中、18+） | `commands/taunt.py`；`mature.combat.taunt_*` |
+| 終結 | `finish`（敵人 ≤30% HP、18+） | `combat/finish.py`；`mature.combat.finish_*` |
+
+同房廣播依觀察者分級：mature 看成熟文案，teen 看預設語系。
+
 ## 驗證
 
 ```bash

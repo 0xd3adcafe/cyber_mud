@@ -12,6 +12,7 @@ def handle(ctx: CommandContext):
         meta=meta,
         world_changed=result.world_changed,
         broadcast_key=result.broadcast_key,
+        broadcast_mature_key=result.broadcast_mature_key,
         broadcast_kwargs=result.broadcast_kwargs,
     )
 

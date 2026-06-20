@@ -271,6 +271,8 @@ help_cmds:
   settings: "Player settings (settings mature on|off)"
   flirt: "Flirt with an NPC (18+, flirt <npc>)"
   spend_time: "Spend private time (18+, spend_time <npc>)"
+  taunt: "Taunt enemy in combat (18+, taunt <npc>)"
+  finish: "Coup de grace on weak enemy (18+, finish)"
   take: "Pick up an item"
   drop: "Drop an item"
   inventory: "Show inventory"
@@ -797,6 +799,13 @@ combat:
   flee_broadcast: "{name} fled from combat with {target}."
   victory_broadcast: "{name} dropped {target}!"
   defeat_broadcast: "{name} was dropped by {target}."
+  finish: "You deliver a brutal finish to {target}."
+  finish_too_strong: "{target} is still too strong for a finish move."
+
+taunt:
+  usage: "Usage: taunt <npc>"
+  missing: "No NPC {name} here."
+  not_in_combat: "You are not fighting {target}."
 
 pledge:
   usage: "Usage: pledge <faction>"
