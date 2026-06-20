@@ -141,3 +141,89 @@ quests:
         objective_target: tyrell_liaison
       - objective_type: talk_npc
         objective_target: broker
+  watson_pulse:
+    name_zh: 沃森脈動
+    name_en: Watson Pulse
+    npc_id: broker
+    description_zh: 經紀人要你向沃森線人打聽診所南邊的 cred 流向，再回報他。
+    description_en: The broker wants Watson cred-flow intel from the spotter south of the clinic.
+    hint_zh: 在 watson_3_2 與沃森線人交談，前往 watson_0_0，再 talk broker。
+    hint_en: Talk to the Watson spotter, visit watson_0_0, then check in with the broker.
+    complete_npc_id: broker
+    requires_quest: broker_rumor
+    street_cred_req: 3
+    reward_gold: 55
+    reward_xp: 28
+    reward_street_cred: 5
+    stages:
+      - objective_type: talk_npc
+        objective_target: watson_spotter
+      - objective_type: visit_room
+        objective_target: watson_0_0
+      - objective_type: talk_npc
+        objective_target: broker
+  docks_courier:
+    name_zh: 碼頭快遞
+    name_en: Docks Courier
+    npc_id: broker
+    description_zh: 經紀人要碼頭跑腿的灰市貨單——帶 dock_manifest 回報。
+    description_en: The broker wants a gray-market manifest from the docks runner.
+    hint_zh: 到 docks_1_1 找碼頭跑腿，取得 dock_manifest，再 talk broker。
+    hint_en: Visit docks_1_1, talk to the runner, obtain dock_manifest, then see the broker.
+    complete_npc_id: broker
+    requires_quest: hub_briefing
+    street_cred_req: 4
+    reward_gold: 70
+    reward_xp: 32
+    reward_street_cred: 6
+    stages:
+      - objective_type: visit_room
+        objective_target: docks_1_1
+      - objective_type: talk_npc
+        objective_target: docks_runner
+      - objective_type: have_item
+        objective_target: dock_manifest
+      - objective_type: talk_npc
+        objective_target: broker
+  kabuki_whisper:
+    name_zh: 歌舞伎耳語
+    name_en: Kabuki Whisper
+    npc_id: broker
+    description_zh: 經紀人要歌舞伎線人確認 VIP 與密艙片段的流向。
+    description_en: The broker wants the Kabuki spotter to confirm VIP and den clip traffic.
+    hint_zh: 前往 kabuki_2_1 與歌舞伎線人交談，再 talk broker。
+    hint_en: Visit kabuki_2_1, talk to the spotter, then report to the broker.
+    complete_npc_id: broker
+    requires_quest: broker_rumor
+    street_cred_req: 4
+    reward_gold: 65
+    reward_xp: 30
+    reward_street_cred: 7
+    stages:
+      - objective_type: visit_room
+        objective_target: kabuki_2_1
+      - objective_type: talk_npc
+        objective_target: kabuki_spotter
+      - objective_type: talk_npc
+        objective_target: broker
+  zone_sweep:
+    name_zh: 戰區掃描
+    name_en: Zone Sweep
+    npc_id: broker
+    description_zh: 經紀人要野戰醫回報戰鬥區界碑的穿越紀錄。
+    description_en: The broker wants the zone medic's crossing log from the Combat Zone gate.
+    hint_zh: 與戰區野戰醫交談，前往 combat_zone_gate，再 talk broker。
+    hint_en: Talk to the zone medic, visit combat_zone_gate, then check in with the broker.
+    complete_npc_id: broker
+    requires_quest: hub_briefing
+    street_cred_req: 5
+    reward_gold: 90
+    reward_xp: 40
+    reward_street_cred: 8
+    stages:
+      - objective_type: talk_npc
+        objective_target: zone_medic
+      - objective_type: visit_room
+        objective_target: combat_zone_gate
+      - objective_type: talk_npc
+        objective_target: broker

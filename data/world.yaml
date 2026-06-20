@@ -4381,3 +4381,93 @@ npcs:
     talk_key: gate_herbalist
     idle_msg_zh: 攪拌著冒熱氣的藥湯。
     idle_msg_en: Stirs steaming herbal broth.
+  watson_spotter:
+    name_zh: 沃森線人
+    name_en: Watson Spotter
+    room_id: watson_3_2
+    description_zh: 在義體診所南邊格點放風的線人，專賣街頭傳聞。
+    description_en: A street spotter south of the ripper clinic—sells rumors by the block.
+    hp: 38
+    hostile: false
+    talk_key: watson_spotter
+    idle_msg_zh: 盯著南北向的 cred 流向。
+    idle_msg_en: Watches cred flow north and south.
+  tyrell_courier:
+    name_zh: 泰瑞快遞員
+    name_en: Tyrell Courier
+    room_id: tyrell_2_2
+    faction: tyrell
+    description_zh: 抱著樣本箱的快遞員，熟悉泰瑞格點的巡邏空檔。
+    description_en: A courier with a sample case—knows patrol gaps on the Tyrell grid.
+    hp: 40
+    hostile: false
+    talk_key: tyrell_courier
+    idle_msg_zh: 核對樣本車時刻表。
+    idle_msg_en: Checks sample convoy schedules.
+  zone_medic:
+    name_zh: 戰區野戰醫
+    name_en: Zone Medic
+    room_id: combat_zone_2_1
+    description_zh: 在戰鬥區格點巡走的野戰醫，收購繃帶與彈殼情報。
+    description_en: A combat-zone medic patching walk-ins—buys bandages and brass intel.
+    hp: 44
+    hostile: false
+    talk_key: zone_medic
+    idle_msg_zh: 整理沾血的繃帶捲。
+    idle_msg_en: Rolls blood-stained gauze.
+  kabuki_spotter:
+    name_zh: 歌舞伎線人
+    name_en: Kabuki Spotter
+    room_id: kabuki_2_1
+    description_zh: 在霓虹巷口塗鴉記號的線人，盯著 VIP 與密艙動向。
+    description_en: A spotter tagging neon alleys—tracks VIP and den clip traffic.
+    hp: 36
+    hostile: false
+    talk_key: kabuki_spotter
+    idle_msg_zh: 用螢光漆標記巷口。
+    idle_msg_en: Marks alleys with glow paint.
+  china_vendor:
+    name_zh: 格點麵販
+    name_en: Grid Noodle Vendor
+    room_id: little_china_1_1
+    description_zh: 小中國格點上的麵攤老闆，幫會與廟口消息都聽得到。
+    description_en: A noodle vendor on the Little China grid—hears triad and shrine gossip.
+    hp: 34
+    hostile: false
+    talk_key: china_vendor
+    idle_msg_zh: 攪著大鍋麵湯。
+    idle_msg_en: Stirs a wok of broth.
+  corpo_analyst:
+    name_zh: 企業分析員
+    name_en: Corpo Analyst
+    room_id: corpo_2_0
+    faction: arasaka
+    description_zh: 在企業格點角落刷資料的分析員，賣通行曲線情報。
+    description_en: A corpo analyst scraping feeds in a grid corner—sells route cover stories.
+    hp: 42
+    hostile: false
+    talk_key: corpo_analyst
+    idle_msg_zh: 對著加密平板點頭。
+    idle_msg_en: Nods at an encrypted slate.
+  docks_runner:
+    name_zh: 碼頭跑腿
+    name_en: Docks Runner
+    room_id: docks_1_1
+    description_zh: 在碼頭格點穿梭的跑腿，手上有灰市貨單影本。
+    description_en: A docks runner weaving the grid—carries gray-market manifest copies.
+    hp: 38
+    hostile: false
+    talk_key: docks_runner
+    idle_msg_zh: 把貨單塞進防水袋。
+    idle_msg_en: Tucks manifests into a waterproof pouch.
+  undercity_whisper:
+    name_zh: 地下低語者
+    name_en: Undercity Whisper
+    room_id: undercity_2_0
+    description_zh: 在積水巷口低語的 informant，兜售光纖與墓穴傳聞。
+    description_en: An informant whispering at a flooded corner—sells filament and crypt rumors.
+    hp: 33
+    hostile: false
+    talk_key: undercity_whisper
+    idle_msg_zh: 半張臉藏在全息殘影裡。
+    idle_msg_en: Half a face hides in holo static.

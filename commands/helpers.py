@@ -441,11 +441,14 @@ def format_look(ctx: CommandContext) -> list[str]:
         "",
         room_description(room, ctx.player.locale),
     ]
-    from world.districts import atmosphere_line
+    from world.districts import atmosphere_line, grid_flavor_line
 
     atmosphere = atmosphere_line(room, ctx.player.locale)
     if atmosphere:
         lines.append(atmosphere)
+    grid_flavor = grid_flavor_line(room, ctx.player.locale)
+    if grid_flavor:
+        lines.append(grid_flavor)
     if room.district:
         weather_type = ctx.state.weather.get(room.district, "")
         if weather_type:

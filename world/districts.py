@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -7,6 +8,8 @@ import yaml
 
 from shared.i18n import t
 from world.world import Room
+
+GRID_ROOM_RE = re.compile(r"^([a-z_]+)_(\d+)_(\d+)$")
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "districts.yaml"
 
@@ -55,6 +58,12 @@ def district_safety(room: Room | None) -> int:
     return district_profile(room.district).safety
 
 
+def is_grid_cell(room: Room | None) -> bool:
+    if room is None:
+        return False
+    return bool(GRID_ROOM_RE.match(room.id))
+
+
 def atmosphere_line(room: Room | None, locale: str) -> str | None:
     if room is None or not room.district:
         return None
@@ -62,6 +71,14 @@ def atmosphere_line(room: Room | None, locale: str) -> str | None:
     if not atmosphere:
         return None
     key = f"district.atmosphere.{atmosphere}"
+    line = t(locale, key)
+    return line if line != key else None
+
+
+def grid_flavor_line(room: Room | None, locale: str) -> str | None:
+    if not is_grid_cell(room) or not room.district:
+        return None
+    key = f"district.grid.{room.district}"
     line = t(locale, key)
     return line if line != key else None
 

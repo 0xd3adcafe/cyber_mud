@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+from unittest.mock import patch
+
 from commands.registry import dispatch
 from tests.conftest import make_player, make_state
+from world.districts import grid_flavor_line, is_grid_cell
 from world.loader import load_world
 from world.quest_author import validate_quests
 from world.quests import accept_quest, advance_quest_on_visit, quest_is_done
+from world.reactions import ambient_tick_line
 
 
 def test_quest_author_no_warnings():
@@ -67,6 +71,63 @@ def test_grid_loot_recipes_and_shop_stock():
     docks = world.shop("docks_gray")
     assert "neon_patch" in kabuki.sells
     assert "smuggler_pack" in docks.sells
+
+
+def test_grid_flavor_on_procedural_cells():
+    world = load_world()
+    room = world.room("watson_0_0")
+    assert room is not None
+    assert is_grid_cell(room)
+    assert grid_flavor_line(room, "en")
+    hub = world.room("tyrell_plaza")
+    assert hub is not None
+    assert not is_grid_cell(hub)
+    assert grid_flavor_line(hub, "en") is None
+
+
+def test_look_includes_grid_flavor():
+    player = make_player(room_id="watson_0_0", locale="en")
+    state = make_state()
+    result = dispatch("look", player, state, [], [])
+    assert any("Rain-slick" in line or "fixers" in line for line in result.lines)
+
+
+def test_district_spotlight_npcs():
+    world = load_world()
+    for npc_id in (
+        "watson_spotter",
+        "tyrell_courier",
+        "zone_medic",
+        "kabuki_spotter",
+        "china_vendor",
+        "corpo_analyst",
+        "docks_runner",
+        "undercity_whisper",
+    ):
+        npc = world.npc(npc_id)
+        assert npc is not None, npc_id
+        assert npc.talk_key == npc_id
+
+
+def test_ambient_covers_all_districts():
+    state = make_state()
+    player = make_player(locale="en")
+    with patch("world.reactions.random.random", return_value=0.0):
+        for district, room_id in (
+            ("tyrell", "tyrell_2_2"),
+            ("little_china", "little_china_1_1"),
+            ("undercity", "undercity_2_0"),
+            ("combat_zone", "combat_zone_2_1"),
+        ):
+            player.room_id = room_id
+            line = ambient_tick_line(player, state, "night", "en")
+            assert line, district
+
+
+def test_district_quests_validate():
+    world = load_world()
+    for qid in ("watson_pulse", "docks_courier", "kabuki_whisper", "zone_sweep"):
+        assert world.quest(qid) is not None
 
 
 def test_hub_briefing_quest_flow():

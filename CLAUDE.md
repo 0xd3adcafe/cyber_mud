@@ -243,8 +243,8 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | Area | Items |
 |------|--------|
 | Environment | pyenv native Python build |
-| **World expansion (WORLD.md)** | W.1–W.14 shipped (263 rooms / 109 NPCs / 45 items); see PHASES **World expansion** |
-| **Content depth** | D.1–D.6 shipped (113 NPCs, archetype talk, hub NPCs, grid net/interactables); see PHASES **Content depth** |
+| **World expansion (WORLD.md)** | W.1–W.14 shipped (263 rooms / 121 NPCs / 45 items); see PHASES **World expansion** |
+| **Content depth** | D.1–D.10 shipped (spotlight NPCs, district quests, grid look flavor); see PHASES **Content depth** |
 
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.7 shipped — see PHASES **Mature / NSFW content** table.
 
@@ -339,6 +339,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | World expansion W.12–W.13 | `poison`/`antidote`; player `overheat`; `world/reactions.py` rep + ambient tick; `tests/test_status_effects.py`, `tests/test_world_reactions.py` |
 | World expansion W.14 | `tools/expand_world_population.py`; `world_population.yaml`; 109 NPCs / 45 items; `tests/test_world_scale.py` |
 | Content depth D.1–D.6 | Archetype `talk.*`; quest WARN fixes + `hub_briefing`; hub NPCs; grid craft/shops; 8 net nodes + interactables; `tests/test_content_depth.py` |
+| Content depth D.7–D.10 | 8 spotlight NPCs; `district.grid.*` look flavor; 4 district quests; `world.ambient.*` all districts; `tests/test_content_depth.py` |
 | Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions |
 | Life commands L.1–L.8 | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable anchors; vitals/RAM regen; PDA + `%posture`; `tests/test_life_commands.py` |
 
