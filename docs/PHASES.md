@@ -173,6 +173,7 @@
 | 雙語英文預設 | 預設 `locale=en`；`lang` 指令；`server.*`／`client.*` locale；`docs/LOCALIZATION.md`；commit 英文主述；`tests/test_lang.py` |
 | Client chrome 語系 | `client/ui_format.py` 側欄標題／快捷鍵列；`lang` meta 刷新 chrome；`client.ui.*` locale；`tests/test_ui_format.py` |
 | Prompt 輸入提示語系 | `#prompt` placeholder `client.ui.prompt_placeholder`；`_refresh_prompt_placeholder` |
+| Client clear 清除 log | `/clear` 本機指令；`AnimatedLogBuffer.clear()`；Tab 補全；`tests/test_client_app.py` |
 
 ## Backlog 維護慣例
 

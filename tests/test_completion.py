@@ -125,3 +125,7 @@ def test_complete_input_go_up():
 
 def test_complete_input_local_theme():
     assert complete_input("/th", room_items=(), room_npcs=(), room_exits=(), inventory=()) == "/theme"
+
+
+def test_complete_input_local_clear():
+    assert complete_input("/cl", room_items=(), room_npcs=(), room_exits=(), inventory=()) == "/clear"

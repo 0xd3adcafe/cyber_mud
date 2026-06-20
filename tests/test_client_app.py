@@ -345,6 +345,35 @@ def test_game_layout_fills_terminal_after_auth():
     asyncio.run(_run())
 
 
+def test_clear_command_clears_log():
+    async def _run() -> None:
+        from textual.widgets import Input, RichLog
+
+        from client.meta_handlers import apply_meta
+
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(100, 40)) as pilot:
+            apply_meta(app.view, "auth", "1")
+            app._set_auth_ui(True)
+            await pilot.pause()
+            log = app.query_one("#log", RichLog)
+            app._append_log(log, "old line", kind="text")
+            app._append_log(log, "more noise", kind="text")
+            assert len(app._log_buffer.entries) == 2
+
+            prompt = app.query_one("#prompt", Input)
+            prompt.value = "/clear"
+            await pilot.press("enter")
+            await pilot.pause()
+
+            assert not app._log_buffer.entries
+            rendered = str(log.render())
+            assert "old line" not in rendered
+            assert "more noise" not in rendered
+
+    asyncio.run(_run())
+
+
 def test_typed_map_command_opens_sidebar():
     async def _run() -> None:
         from textual.containers import Vertical

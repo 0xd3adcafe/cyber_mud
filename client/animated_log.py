@@ -36,6 +36,11 @@ class AnimatedLogBuffer:
     def set_theme_id(self, theme_id: str) -> None:
         self.theme_id = resolve_theme_id(theme_id) or DEFAULT_THEME_ID
 
+    def clear(self) -> None:
+        self.entries.clear()
+        self._env_state.clear()
+        self.frame = 0
+
     def append(self, text: str, *, kind: str) -> None:
         if kind == "echo":
             reset_environment_state(self._env_state)

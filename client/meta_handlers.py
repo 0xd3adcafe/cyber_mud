@@ -306,7 +306,7 @@ def hint_text(state: ClientViewState) -> str:
     return format_hint_markup(state)
 
 
-LOCAL_COMMANDS = frozenset({"reconnect", "prompt", "quit", "theme"})
+LOCAL_COMMANDS = frozenset({"clear", "reconnect", "prompt", "quit", "theme"})
 NETRUN_ALLOWED_COMMANDS = frozenset(
     {"hack", "probe", "status", "look", "scan", "search", "talk", "say", "exit", "help", "quit"}
 )

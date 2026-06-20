@@ -1327,6 +1327,11 @@ class CyberMudApp(App):
         if verb == "reconnect":
             await self._perform_reconnect(log, reset_attempts=True)
             return True
+        if verb == "clear":
+            self._log_buffer.clear()
+            log.clear()
+            self._update_spinner_accent()
+            return True
         if verb == "prompt":
             if args.startswith("set "):
                 self._local_prompt_override = args[4:]
