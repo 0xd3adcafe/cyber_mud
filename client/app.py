@@ -55,6 +55,7 @@ from client.tui_styles import APP_CSS
 from client.ui_format import format_hotkey_bar, format_info_bar, format_sidebar_header
 from client.meta_handlers import (
     HELP_OVERLAY_PANEL,
+    META_SKIP_STATUS_REFRESH,
     ClientViewState,
     active_prompt,
     apply_meta,
@@ -127,6 +128,7 @@ class CyberMudApp(App):
         self._help_fetch_generation = 0
         self._cmd_sent_at = 0.0
         self._last_recv_at = 0.0
+        self._status_update_scheduled = False
         self._completion_cycle_key = ""
         self._completion_cycle_index = 0
         self._last_rtt_ms: float | None = None
@@ -665,6 +667,16 @@ class CyberMudApp(App):
         self._refresh_prompt_placeholder()
         self._update_chrome_bar()
 
+    def _schedule_status_update(self) -> None:
+        if self._status_update_scheduled:
+            return
+        self._status_update_scheduled = True
+        self.call_after_refresh(self._flush_scheduled_status)
+
+    def _flush_scheduled_status(self) -> None:
+        self._status_update_scheduled = False
+        self._update_status()
+
     def _configure_game_focus_targets(self) -> None:
         log = self.query_one("#log", RichLog)
         log.can_focus = False
@@ -873,8 +885,8 @@ class CyberMudApp(App):
             self._render_sidebar()
             if self._help_panel_active():
                 self._render_help_overlay()
-        else:
-            self._update_status()
+        elif key not in META_SKIP_STATUS_REFRESH and key != "auth":
+            self._schedule_status_update()
         if key == "ui_panel_end":
             if self._help_panel_active():
                 if HELP_OVERLAY_PANEL in self.view.sidebar_stack:
@@ -1210,18 +1222,10 @@ class CyberMudApp(App):
                     continue
                 if kind == "panel":
                     handle_panel_line(self.view, line[len(PANEL_PREFIX):])
-                    if self._help_panel_active():
-                        self._render_help_overlay()
-                    else:
-                        self._render_sidebar()
                     self._complete_command_if_pending(log)
                     continue
                 if kind == "ui":
                     handle_ui_json(self.view, line[len(UI_PREFIX):])
-                    if self._help_panel_active():
-                        self._render_help_overlay()
-                    else:
-                        self._render_sidebar()
                     self._complete_command_if_pending(log)
                     continue
                 if self._pending_logout and self.view.authenticated:

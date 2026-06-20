@@ -136,6 +136,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Connection status bar visibility | `#link_status_bar` brightened, `連線` prefix, refresh after login; `tests/test_client_app.py` |
 | Hotkey bar visibility | `#top_dock`/`#bottom_dock` dock stack; chrome/hotkey `min-height:1`; F keys non-blocking fetch; typing `map`/`pda` auto-opens sidebar; loading F2 again cancels; cases in [`CLIENT_UI_DEBUG.md`](CLIENT_UI_DEBUG.md) |
 | Info bar visibility | `#info_bar` `min-height:1`; remove `max-height:1` (Textual `size.height=0` blank in terminal); `tests/test_client_app.py` asserts `info.size.height` |
+| Map sidebar performance | Defer `_render_sidebar` until `ui_panel_end`; coalesce meta status refresh; `map` sends `@ui` only (no duplicate `@panel` lines); `tests/test_client_app.py` `test_panel_stream_defers_sidebar_render_until_end` |
 | NPC worn equipment | `entities/npc.py` `equipment`; `look` shows worn gear; on knockout goes to corpse with `loot`; `tests/test_npc_equipment.py` |
 | Natural HP regen | `world/vitals.py` regen by `body`/`cool`/time period tick; non-combat pushes meta+message; `tests/test_vitals.py` |
 | NPC respawn | `world/npc_respawn.py` knockout schedule, tick revive broadcast enter room; `respawn_minutes`/`tier: boss` (default 10 min, boss 60 min); `tests/test_npc_respawn.py` |

@@ -238,6 +238,38 @@ def test_f6_closes_sidebar_and_ignores_late_panel_end():
     asyncio.run(_run())
 
 
+def test_panel_stream_defers_sidebar_render_until_end():
+    async def _run() -> None:
+        from client.meta_handlers import apply_meta, handle_panel_line, handle_ui_json
+
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(120, 30)) as pilot:
+            apply_meta(app.view, "auth", "1")
+            app._set_auth_ui(True)
+            await settle_layout(pilot)
+            render_count = 0
+            original = app._render_sidebar
+
+            def counting_render() -> None:
+                nonlocal render_count
+                render_count += 1
+                original()
+
+            app._render_sidebar = counting_render
+            apply_meta(app.view, "ui_panel", "map")
+            handle_ui_json(
+                app.view,
+                '{"panel":"map","sections":[{"kind":"text","lines":["[@] square"," ■ "]}]}',
+            )
+            for _ in range(12):
+                handle_panel_line(app.view, " ■ ")
+            assert render_count == 0
+            app._apply_meta("ui_panel_end=1")
+            assert render_count == 1
+
+    asyncio.run(_run())
+
+
 def test_chrome_bar_link_status_after_auth():
     async def _run() -> None:
         from textual.widgets import Static

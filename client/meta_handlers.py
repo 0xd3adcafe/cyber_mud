@@ -11,6 +11,24 @@ SIDEBAR_PANEL_IDS: frozenset[str] = frozenset(SIDEBAR_PANEL_ORDER + ("status", "
 HELP_OVERLAY_PANEL = "help"
 _SIDEBAR_AUTO_REFRESH_ON_MOVE = frozenset({"map"})
 _SIDEBAR_REFRESH_ON_EQUIP = frozenset({"pda", "equipment", "gigs"})
+META_SKIP_STATUS_REFRESH: frozenset[str] = frozenset(
+    {
+        "ui_panel",
+        "ui_panel_end",
+        "refresh_sidebar",
+        "complete_room_items",
+        "complete_npcs",
+        "complete_corpses",
+        "complete_exits",
+        "complete_inventory",
+        "complete_equipped",
+        "complete_shop_items",
+        "complete_net_nodes",
+        "complete_interactables",
+        "complete_recipes",
+        "complete_braindances",
+    }
+)
 
 
 @dataclass

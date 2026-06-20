@@ -66,8 +66,9 @@ def _map_ui(ctx: CommandContext) -> str:
 
 
 def handle(ctx: CommandContext):
+    # Sidebar renders from @ui JSON; skip duplicate @panel lines (client perf).
     return ok_panel(
-        format_map(ctx),
+        [],
         panel="map",
         ui_json=_map_ui(ctx),
         meta=player_meta(ctx),

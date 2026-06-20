@@ -136,6 +136,7 @@
 | 連線狀態列可見性 | `#link_status_bar` 加亮、`連線` 前綴、登入後刷新；`tests/test_client_app.py` |
 | 快捷鍵列可見性 | `#top_dock`／`#bottom_dock` dock 堆疊；chrome／hotkey `min-height:1`；F 鍵非阻塞 fetch；輸入 `map`／`pda` 等自動開側欄；載入中 F2 再按取消；案例見 [`CLIENT_UI_DEBUG.md`](CLIENT_UI_DEBUG.md) |
 | 遊戲狀態列可見性 | `#info_bar` `min-height:1`；移除 `max-height:1`（Textual `size.height=0` 終端空白）；`tests/test_client_app.py` 斷言 `info.size.height` |
+| 地圖側欄效能 | `_render_sidebar` 延遲至 `ui_panel_end`；meta 狀態列合併刷新；`map` 僅送 `@ui`（不重複 `@panel` 行）；`test_panel_stream_defers_sidebar_render_until_end` |
 | NPC 穿戴裝備 | `entities/npc.py` `equipment`；`look` 顯示穿戴；擊倒後與 `loot` 一併進屍體；`tests/test_npc_equipment.py` |
 | 自然回血 | `world/vitals.py` 依 `body`／`cool`／時段 tick 回復；非戰鬥中推送 meta＋訊息；`tests/test_vitals.py` |
 | NPC 重生 | `world/npc_respawn.py` 擊倒排程、tick 復活並廣播進房；`respawn_minutes`／`tier: boss`（預設 10 分、boss 60 分）；`tests/test_npc_respawn.py` |

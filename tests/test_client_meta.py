@@ -167,6 +167,14 @@ def test_reconnect_backoff():
     assert reconnect_delay(5) == 16.0
 
 
+def test_meta_skip_status_refresh_keys():
+    from client.meta_handlers import META_SKIP_STATUS_REFRESH
+
+    assert "complete_npcs" in META_SKIP_STATUS_REFRESH
+    assert "ui_panel_end" in META_SKIP_STATUS_REFRESH
+    assert "room" not in META_SKIP_STATUS_REFRESH
+
+
 def test_should_refresh_map_sidebar_on_room_change():
     state = ClientViewState(sidebar_open=True, sidebar_stack=["map"], room_id="square")
     assert should_refresh_sidebar_on_room_change(
