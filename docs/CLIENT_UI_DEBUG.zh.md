@@ -8,7 +8,7 @@
 
 | 現象 | 使用者觀察 | 實際根因 |
 |------|------------|----------|
-| 連線列／快捷鍵列消失 | `info_bar` 可見，chrome／hotkey 不可見 | `Static` 固定 `height:1` → `region.height=1` 但 `size.height=0`，真實終端不繪製 |
+| 連線列／快捷鍵列／遊戲狀態列消失 | 頂底 `Static` 在終端空白 | 未設 `min-height:1` → `region.height≥1` 但 `size.height=0`，真實終端不繪製 |
 | 輸入 `map`／`pda` 不開側欄 | F2–F5 可開（修復前後行為不一致） | Prompt 路徑未設 `sidebar_open`；`ui_panel_end` 需 `sidebar_open` 才入 stack |
 | Stack 後狂按 F 鍵卡死 | UI 像當掉數十秒 | `action_*` 內 `await _fetch_panel()`（最多 15s）阻塞主迴圈 |
 | F6 後側欄又彈回（舊問題） | 關閉後晚到 meta 重開 | `ui_panel_end` 無條件 append（已用 `sidebar_open` 閘門修復） |
@@ -21,12 +21,12 @@
 Headless `run_test` 常見：
 
 ```text
-#chrome_bar: region.height=1  size.height=0  → 測試以為有高度，終端卻空白
-#info_bar:   region.height=2  size.height=1  → height:auto 正常繪製
+#info_bar:   region.height=1  size.height=0  → 測試以為有高度，終端卻空白
+#chrome_bar: region.height=1  size.height=0  → 同上
 ```
 
 **錯誤修法**：只調 `dock`、搬家、改 `region` 斷言。  
-**有效修法**：`#chrome_bar`／`#hotkey_bar` 使用 `height: auto; min-height: 1`（見 `client/tui_styles.py`）。
+**有效修法**：`#info_bar`／`#chrome_bar`／`#hotkey_bar` 使用 `height: auto; min-height: 1`；`#info_bar` 勿設 `max-height: 1`（見 `client/tui_styles.py`）。
 
 Probe 範例（改動 client 後建議跑）：
 
@@ -42,7 +42,7 @@ async def main():
         apply_meta(app.view, 'auth', '1')
         app._set_auth_ui(True)
         await pilot.pause()
-        for wid in ('#chrome_bar', '#hotkey_bar'):
+        for wid in ('#info_bar', '#chrome_bar', '#hotkey_bar'):
             w = app.query_one(wid)
             print(wid, 'region', w.region.height, 'size', w.size.height)
 

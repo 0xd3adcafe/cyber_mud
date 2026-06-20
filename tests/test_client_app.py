@@ -297,6 +297,10 @@ def test_hotkey_bar_below_prompt_after_auth():
             hotkey = app.query_one("#hotkey_bar", Static)
             chrome = app.query_one("#chrome_bar", Static)
             main = app.query_one("#main_row")
+            assert info.region.height >= 1
+            assert info.size.height >= 1
+            rendered_info = str(info.render())
+            assert "HP" in rendered_info
             assert chrome.region.width > 0
             assert chrome.region.height >= 1
             assert chrome.size.height >= 1

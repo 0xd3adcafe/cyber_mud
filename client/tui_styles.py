@@ -121,11 +121,12 @@ Select {
 #info_bar {
     width: 100%;
     height: auto;
-    max-height: 1;
+    min-height: 1;
     background: $surface;
     color: $foreground;
     padding: 0 2;
     border-bottom: solid $surface;
+    text-style: bold;
     overflow: hidden;
 }
 

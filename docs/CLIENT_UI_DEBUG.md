@@ -8,7 +8,7 @@ This document records **June 2026** Textual client layout/sidebar issues that we
 
 | Symptom | User observation | Actual root cause |
 |---------|------------------|-------------------|
-| Link / hotkey bars missing | `info_bar` visible, chrome/hotkey not | `Static` fixed `height:1` → `region.height=1` but `size.height=0`; real terminal draws nothing |
+| Link / hotkey / info bars missing | Any top/bottom `Static` blank in terminal | `Static` without `min-height:1` → `region.height≥1` but `size.height=0`; real terminal draws nothing |
 | Typing `map`/`pda` does not open sidebar | F2–F5 works | Prompt path never set `sidebar_open`; `ui_panel_end` only stacks when `sidebar_open` |
 | Spamming F keys freezes UI | UI stuck for tens of seconds | `action_*` did `await _fetch_panel()` (up to 15s) on main loop |
 | Sidebar reopens after F6 (old bug) | Late meta after close | `ui_panel_end` unconditionally appended (fixed with `sidebar_open` gate) |
@@ -21,12 +21,12 @@ This document records **June 2026** Textual client layout/sidebar issues that we
 Headless `run_test` often shows:
 
 ```text
-#chrome_bar: region.height=1  size.height=0  → test passes, terminal blank
-#info_bar:   region.height=2  size.height=1  → height:auto renders
+#info_bar:   region.height=1  size.height=0  → test passes, terminal blank
+#chrome_bar: region.height=1  size.height=0  → same
 ```
 
 **Wrong fix**: only tweak `dock`, move widgets, assert `region`.  
-**Right fix**: `#chrome_bar` / `#hotkey_bar` use `height: auto; min-height: 1` (see `client/tui_styles.py`).
+**Right fix**: `#info_bar` / `#chrome_bar` / `#hotkey_bar` use `height: auto; min-height: 1`; do not set `max-height: 1` on `#info_bar` (see `client/tui_styles.py`).
 
 Probe (run after client changes):
 
@@ -42,7 +42,7 @@ async def main():
         apply_meta(app.view, 'auth', '1')
         app._set_auth_ui(True)
         await pilot.pause()
-        for wid in ('#chrome_bar', '#hotkey_bar'):
+        for wid in ('#info_bar', '#chrome_bar', '#hotkey_bar'):
             w = app.query_one(wid)
             print(wid, 'region', w.region.height, 'size', w.size.height)
 
