@@ -187,6 +187,12 @@ chase:
   follow: "{target} 正在逼近！"
   restart: "你甩不掉 {target}——戰鬥重新開始！"
 
+focus:
+  quest_status: "追蹤中"
+  combat_status: "交戰中"
+  command_status: "執行中"
+  combat_default: "交戰中"
+
 help:
   header: "◈ 可用指令"
   line: "  {name} — {desc}"

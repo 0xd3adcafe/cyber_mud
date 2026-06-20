@@ -11,6 +11,18 @@ DEFAULT_THEME_ID = "night_city"
 
 
 @dataclass(frozen=True)
+class FocusPalette:
+    quest_icon: str
+    combat_icon: str
+    quest_color: str
+    combat_color: str
+    command_color: str
+    gradient: tuple[str, ...]
+    status_color: str
+    status_muted: str
+
+
+@dataclass(frozen=True)
 class EnvPalette:
     header: str
     scan: str
@@ -133,6 +145,47 @@ def _muted_hex(hex_color: str, factor: float = 0.72) -> str:
         return hex_color
     r, g, b = int(raw[0:2], 16), int(raw[2:4], 16), int(raw[4:6], 16)
     return f"#{int(r * factor):02x}{int(g * factor):02x}{int(b * factor):02x}"
+
+
+_THEME_FOCUS_ICONS: dict[str, dict[str, str]] = {
+    "night_city": {"quest": "◆", "combat": "⚔"},
+    "blade_runner": {"quest": "◆", "combat": "⚔"},
+    "matrix": {"quest": "◈", "combat": "⌗"},
+    "mr_robot": {"quest": "▸", "combat": "⚡"},
+    "hackernet": {"quest": "◆", "combat": "⚔"},
+    "ready_player_one": {"quest": "★", "combat": "⚔"},
+    "tron": {"quest": "◆", "combat": "⊹"},
+    "grok_night": {"quest": "◆", "combat": "⚔"},
+}
+
+
+def focus_palette_for_theme(theme_id: str) -> FocusPalette:
+    resolved = resolve_theme_id(theme_id) or DEFAULT_THEME_ID
+    spec = _THEME_SPECS[resolved]
+    accent = str(spec["accent"])
+    primary = str(spec["primary"])
+    warning = str(spec["warning"])
+    error = str(spec["error"])
+    surface = str(spec["surface"])
+    panel = str(spec["panel"])
+    icons = _THEME_FOCUS_ICONS.get(resolved, _THEME_FOCUS_ICONS["night_city"])
+    return FocusPalette(
+        quest_icon=icons["quest"],
+        combat_icon=icons["combat"],
+        quest_color=warning,
+        combat_color=error,
+        command_color=accent,
+        gradient=(
+            surface,
+            panel,
+            _muted_hex(accent, 0.42),
+            _muted_hex(accent, 0.68),
+            accent,
+            primary,
+        ),
+        status_color=accent,
+        status_muted=_muted_hex(str(spec["foreground"]), 0.55),
+    )
 
 
 def env_palette_for_theme(theme_id: str) -> EnvPalette:

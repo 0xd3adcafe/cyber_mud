@@ -187,6 +187,12 @@ chase:
   follow: "{target} is closing in!"
   restart: "You cannot shake {target}—combat resumes!"
 
+focus:
+  quest_status: "Tracking"
+  combat_status: "In combat"
+  command_status: "Running"
+  combat_default: "In combat"
+
 help:
   header: "◈ Commands"
   line: "  {name} — {desc}"

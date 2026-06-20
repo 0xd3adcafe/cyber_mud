@@ -121,7 +121,7 @@ Select {
 #info_bar {
     width: 100%;
     height: auto;
-    max-height: 2;
+    max-height: 1;
     background: $surface;
     color: $foreground;
     padding: 0 2;
@@ -144,6 +144,48 @@ Select {
     dock: bottom;
     width: 100%;
     height: auto;
+}
+
+#focus_block {
+    width: 100%;
+    height: auto;
+    min-height: 1;
+    layout: horizontal;
+    background: $panel;
+    border-top: solid $accent 35%;
+    padding: 0 0 0 0;
+}
+.focus-hidden {
+    display: none;
+}
+
+#focus_accent {
+    width: 1;
+    min-width: 1;
+    height: auto;
+    padding: 0;
+    content-align: center top;
+}
+
+#focus_body {
+    width: 1fr;
+    height: auto;
+    padding: 0 2 0 1;
+}
+
+#focus_content {
+    width: 1fr;
+    height: auto;
+    min-height: 1;
+    padding: 0 0 0 0;
+}
+
+#focus_status {
+    width: 1fr;
+    height: auto;
+    min-height: 1;
+    color: $text-muted;
+    padding: 0 0 0 0;
 }
 
 #prompt_preview {

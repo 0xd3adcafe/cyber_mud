@@ -43,11 +43,11 @@ def test_format_hint_combat_priority():
     assert "任務" in text
 
 
-def test_format_info_bar_shows_hint_when_active():
+def test_format_info_bar_omits_hint_rows():
     state = ClientViewState(hint="任務中", room="廣場")
     text = format_info_bar(state, host="127.0.0.1", port=4000)
     assert "廣場" in text
-    assert "任務中" in text
+    assert "任務中" not in text
 
 
 def test_format_sidebar_row_markup():

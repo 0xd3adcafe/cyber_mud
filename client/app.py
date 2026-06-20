@@ -43,6 +43,7 @@ from client.themes import (
     theme_label,
 )
 from client.animated_log import AnimatedLogBuffer
+from client.focus_block import FocusTracker, render_focus_block
 from commands.aliases import DEFAULT_ALIASES
 from client.status_indicators import status_needs_animation
 from client.completion import MudPrompt, MudSuggester, complete_cycle_from_view, complete_from_view
@@ -111,6 +112,7 @@ class CyberMudApp(App):
         self._auth_pending = False
         self._theme_id = DEFAULT_THEME_ID
         self._log_buffer = AnimatedLogBuffer()
+        self._focus_tracker = FocusTracker()
         self._command_history = CommandHistory.load()
         self._pending_credential_save: tuple[str, str, str, str] | None = None
         self._startup_hint = ""
@@ -217,6 +219,11 @@ class CyberMudApp(App):
                         id="sidebar",
                     )
             with Vertical(id="bottom_dock"):
+                with Horizontal(id="focus_block", classes="focus-hidden"):
+                    yield Static("", id="focus_accent")
+                    with Vertical(id="focus_body"):
+                        yield Static("", id="focus_content")
+                        yield Static("", id="focus_status")
                 with Horizontal(id="prompt_dock"):
                     yield Static("❙", id="prompt_accent")
                     with Horizontal(id="prompt_row"):
@@ -323,6 +330,32 @@ class CyberMudApp(App):
             self._refresh_log_display(log, preserve_scroll=True)
             self._update_spinner_accent()
             self._update_link_status_bar()
+            self._update_focus_block()
+
+    def _update_focus_block(self) -> None:
+        if not self.view.authenticated:
+            return
+        try:
+            block = self.query_one("#focus_block", Horizontal)
+            rendered = render_focus_block(
+                self.view,
+                theme_id=self._theme_id,
+                locale=self.view.locale,
+                frame=self._log_buffer.frame,
+                buffer=self._log_buffer,
+                tracker=self._focus_tracker,
+            )
+            if rendered is None:
+                block.add_class("focus-hidden")
+                self._focus_tracker.sync("")
+                return
+            block.remove_class("focus-hidden")
+            accent, content, status = rendered
+            self.query_one("#focus_accent", Static).update(accent)
+            self.query_one("#focus_content", Static).update(content)
+            self.query_one("#focus_status", Static).update(status)
+        except Exception:
+            pass
 
     def _advance_ui_frame(self) -> None:
         self._log_buffer.frame += 1
@@ -333,6 +366,7 @@ class CyberMudApp(App):
         if self._needs_ui_animation():
             self._advance_ui_frame()
         self._update_spinner_accent()
+        self._update_focus_block()
         if status_needs_animation(self.view) and self._log_buffer.frame % 2 == 0:
             try:
                 self.query_one("#info_bar", Static).update(self._info_bar())
@@ -348,6 +382,7 @@ class CyberMudApp(App):
             self._refresh_log_display(self.query_one("#log", RichLog), preserve_scroll=True)
         if self.view.in_combat or status_needs_animation(self.view):
             self.query_one("#info_bar", Static).update(self._info_bar())
+        self._update_focus_block()
 
     def _prompt_prefix(self) -> str:
         return active_prompt(self.view, local_override=self._local_prompt_override)
@@ -406,6 +441,7 @@ class CyberMudApp(App):
                 self._refresh_log_display(log, preserve_scroll=True)
             except Exception:
                 pass
+            self._update_focus_block()
 
     def _refresh_login_art(self) -> None:
         art = render_login_art(
@@ -802,6 +838,8 @@ class CyberMudApp(App):
                 self._render_sidebar()
             if self._panel_fetch_event is not None:
                 self._panel_fetch_event.set()
+        if key in ("quest", "hint", "combat", "combat_log", "combat_target", "combat_cd"):
+            self._update_focus_block()
         if key in ("quest", "hint") and self.view.sidebar_open and "gigs" in self.view.sidebar_stack:
             asyncio.create_task(self._refresh_sidebar_panels(["gigs"]))
         if key == "refresh_sidebar" and value == "1" and self.view.sidebar_open:
@@ -1350,6 +1388,7 @@ class CyberMudApp(App):
         self._log_buffer.mark_last_pending()
         self._update_spinner_accent()
         self._refresh_log_display(log, preserve_scroll=True)
+        self._update_focus_block()
         try:
             self._note_outbound()
             await self.conn.send_line(text)

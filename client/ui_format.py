@@ -45,18 +45,14 @@ def format_info_bar(
     reconnecting: bool = False,
     spinner_frame: int = 0,
 ) -> str:
-    """Grok-style compact status strip; hint overlays when active."""
-    status = format_status_markup(
+    """Compact status strip; quest/combat hints live in #focus_block above prompt."""
+    return format_status_markup(
         state,
         host=host,
         port=port,
         reconnecting=reconnecting,
         spinner_frame=spinner_frame,
     )
-    hints = format_hint_rows(state, spinner_frame=spinner_frame)
-    if hints:
-        return f"{status}\n{hints}"
-    return status
 
 
 def format_status_markup(
