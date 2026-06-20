@@ -267,6 +267,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | NPC 派系動機 AI | `world/npc_ai.py`、`corp_scout`／`thug` 派系衝突、`tests/test_npc_ai.py` |
 | 登入 banner MOTD 動態展示 | `client/login_motd.py`、`motd.tips` 輪播、`tests/test_login_motd.py` |
 | Prompt 完整版（client 即時預覽） | `client/prompt_preview.py`、`#prompt_preview`、`tests/test_prompt_preview.py` |
+| NPC 任務編排工具 | `world/quest_author.py`、`./admin.sh quests`、`tests/test_quest_author.py` |
 
 世界觀與區域擴充見 [`docs/WORLD.md`](docs/WORLD.md)。
 
