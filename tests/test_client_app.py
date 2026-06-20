@@ -262,6 +262,26 @@ def test_chrome_bar_link_status_after_auth():
     asyncio.run(_run())
 
 
+def test_prompt_placeholder_follows_locale():
+    async def _run() -> None:
+        from client.completion import MudPrompt
+        from client.meta_handlers import apply_meta
+
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(100, 30)) as pilot:
+            apply_meta(app.view, "auth", "1")
+            app._set_auth_ui(True)
+            await pilot.pause()
+            prompt = app.query_one("#prompt", MudPrompt)
+            assert "command" in prompt.placeholder
+            apply_meta(app.view, "locale", "zh")
+            app._apply_meta("locale=zh")
+            await pilot.pause()
+            assert "指令" in prompt.placeholder
+
+    asyncio.run(_run())
+
+
 def test_hotkey_bar_below_prompt_after_auth():
     async def _run() -> None:
         from textual.widgets import Static

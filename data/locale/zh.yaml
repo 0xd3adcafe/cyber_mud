@@ -980,6 +980,7 @@ client:
       empty_hint: （側欄空白 · F2–F5／F7 開啟面板）
     status:
       reconnecting: 重連中…
+    prompt_placeholder: "指令 · Tab 補全 · ↑↓ 歷史 · Esc 還原 · Enter 送出"
     hint:
       explore: "▸  探索夜城 · look · go · help"
     help_overlay:

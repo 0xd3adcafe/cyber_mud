@@ -980,6 +980,7 @@ client:
       empty_hint: "(sidebar empty · F2–F5 / F7 to open panels)"
     status:
       reconnecting: Reconnecting…
+    prompt_placeholder: "command · Tab complete · ↑↓ history · Esc restore · Enter send"
     hint:
       explore: "▸  Explore Night City · look · go · help"
     help_overlay:

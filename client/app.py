@@ -226,7 +226,7 @@ class CyberMudApp(App):
                     with Horizontal(id="prompt_row"):
                         yield Static(self._prompt_prefix(), id="prompt_prefix")
                         yield MudPrompt(
-                            placeholder="指令 · Tab 補全 · ↑↓ 歷史 · Esc 還原 · Enter 送出",
+                            placeholder="command · Tab complete · ↑↓ history · Esc restore · Enter send",
                             id="prompt",
                             suggester=MudSuggester(lambda: self.view),
                         )
@@ -639,12 +639,18 @@ class CyberMudApp(App):
             self._refresh_credential_ui()
             self._focus_login_entry()
 
+    def _refresh_prompt_placeholder(self) -> None:
+        if not self.view.authenticated:
+            return
+        self.query_one("#prompt", MudPrompt).placeholder = self._ui("client.ui.prompt_placeholder")
+
     def _update_status(self) -> None:
         if not self.view.authenticated:
             return
         self.query_one("#info_bar", Static).update(self._info_bar())
         self.query_one("#hotkey_bar", Static).update(format_hotkey_bar(locale=self._client_locale()))
         self.query_one("#prompt_prefix", Static).update(self._prompt_prefix())
+        self._refresh_prompt_placeholder()
         self._update_chrome_bar()
 
     def _configure_game_focus_targets(self) -> None:

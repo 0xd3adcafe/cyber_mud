@@ -172,6 +172,7 @@
 | Focus 追蹤區塊 | `client/focus_block.py` prompt 上方；委託／戰鬥／執行中；漸層 accent＋計時；`focus_palette_for_theme`；`tests/test_focus_block.py` |
 | 雙語英文預設 | 預設 `locale=en`；`lang` 指令；`server.*`／`client.*` locale；`docs/LOCALIZATION.md`；commit 英文主述；`tests/test_lang.py` |
 | Client chrome 語系 | `client/ui_format.py` 側欄標題／快捷鍵列；`lang` meta 刷新 chrome；`client.ui.*` locale；`tests/test_ui_format.py` |
+| Prompt 輸入提示語系 | `#prompt` placeholder `client.ui.prompt_placeholder`；`_refresh_prompt_placeholder` |
 
 ## Backlog 維護慣例
 
