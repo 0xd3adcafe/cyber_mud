@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from commands.registry import CommandContext, ok, player_meta, register
 from shared.i18n import t
+from world.proficiencies import format_proficiency_stats
 from world.progression import skill_label, talent_label, xp_to_next_level
 from world.street_cred import street_cred_rank
 
@@ -44,8 +45,10 @@ def handle(ctx: CommandContext):
             intelligence=str(player.intelligence),
         ),
         "",
-        t(locale, "stats.skills_header"),
     ]
+    lines.extend(format_proficiency_stats(player, ctx.state.world.proficiencies, locale))
+    lines.append("")
+    lines.append(t(locale, "stats.skills_header"))
     if player.skills:
         for skill_id in player.skills:
             skill = ctx.state.world.skill(skill_id)

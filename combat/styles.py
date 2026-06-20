@@ -154,18 +154,20 @@ def calc_strike_damage(
     bonus_damage: int,
     backstab_hit: bool,
     room_modifier,
+    proficiency_bonus: int = 0,
 ) -> int:
     body = player.body
+    prof = proficiency_bonus
     if style_id == STYLE_PUNCH:
-        raw = body + bonus_damage + player.cool // 2
+        raw = body + bonus_damage + prof + player.cool // 2
     elif style_id == STYLE_SHOOT:
-        raw = body + weapon_damage + bonus_damage + player.reflex // 2
+        raw = body + weapon_damage + bonus_damage + prof + player.reflex // 2
     elif style_id == STYLE_BASH:
-        raw = int((body + weapon_damage + bonus_damage) * 1.15)
+        raw = int((body + weapon_damage + bonus_damage + prof) * 1.15)
     elif style_id == STYLE_BACKSTAB and backstab_hit:
-        raw = int((body + weapon_damage + bonus_damage) * 2.0) + player.cool
+        raw = int((body + weapon_damage + bonus_damage + prof) * 2.0) + player.cool
     elif style_id == STYLE_BACKSTAB:
-        raw = body + weapon_damage + bonus_damage
+        raw = body + weapon_damage + bonus_damage + prof
     else:
-        raw = body + weapon_damage + bonus_damage
+        raw = body + weapon_damage + bonus_damage + prof
     return room_modifier(raw)

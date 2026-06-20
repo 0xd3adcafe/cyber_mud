@@ -17,6 +17,7 @@ from world.content import (
     Quickhack,
     Recipe,
     Shop,
+    Proficiency,
     Skill,
     Talent,
     TransitRoute,
@@ -52,6 +53,7 @@ class World:
     factions: dict[str, str]
     skills: dict[str, Skill] = field(default_factory=dict)
     talents: dict[str, Talent] = field(default_factory=dict)
+    proficiencies: dict[str, Proficiency] = field(default_factory=dict)
     mods: dict[str, Mod] = field(default_factory=dict)
     quests: dict[str, Quest] = field(default_factory=dict)
     quickhacks: dict[str, Quickhack] = field(default_factory=dict)
@@ -83,6 +85,9 @@ class World:
 
     def talent(self, talent_id: str) -> Talent | None:
         return self.talents.get(talent_id)
+
+    def proficiency(self, proficiency_id: str) -> Proficiency | None:
+        return self.proficiencies.get(proficiency_id)
 
     def mod(self, mod_id: str) -> Mod | None:
         return self.mods.get(mod_id)

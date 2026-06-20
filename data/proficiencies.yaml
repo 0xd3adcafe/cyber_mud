@@ -1,0 +1,50 @@
+# CP2077-style proficiencies — level 1–60 through use; tied to core attributes.
+proficiencies:
+  athletics:
+    attribute: body
+    name_en: Athletics
+    name_zh: 運動
+  annihilation:
+    attribute: body
+    name_en: Annihilation
+    name_zh: 殲滅
+  street_brawler:
+    attribute: body
+    name_en: Street Brawler
+    name_zh: 街頭搏擊
+  assault:
+    attribute: reflex
+    name_en: Assault
+    name_zh: 突擊
+  handguns:
+    attribute: reflex
+    name_en: Handguns
+    name_zh: 手槍
+  blades:
+    attribute: reflex
+    name_en: Blades
+    name_zh: 刀劍
+  crafting:
+    attribute: tech
+    name_en: Crafting
+    name_zh: 製作
+  engineering:
+    attribute: tech
+    name_en: Engineering
+    name_zh: 工程
+  breach_protocol:
+    attribute: intelligence
+    name_en: Breach Protocol
+    name_zh: 入侵協定
+  quickhacking:
+    attribute: intelligence
+    name_en: Quickhacking
+    name_zh: 快速破解
+  stealth:
+    attribute: cool
+    name_en: Stealth
+    name_zh: 潛行
+  cold_blood:
+    attribute: cool
+    name_en: Cold Blood
+    name_zh: 冷血

@@ -147,6 +147,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | NETRUN environment/NPC interaction | `look`/`scan`/`talk`/`say` allowed in NETRUN; `look`/`scan` show nodes; client sync passthrough; `tests/test_net.py` |
 | Weapon hold modes | `weapon_primary`/`weapon_secondary`; `weapon_mode` primary/secondary/two-hand/dual-wield; `training_carbine`; `tests/test_equip.py` |
 | Level/skills/talents | `world/progression.py` XP level-up, attribute/talent points; `stats`/`talents`/`improve`/`learn` level gates; `data/talents.yaml`; knockout NPC/hack success grants XP; `tests/test_progression.py` |
+| CP2077 proficiency skills (2026-06) | `data/proficiencies.yaml`; `world/proficiencies.py` use-based level 1–60 (Body/Reflex/Tech/INT/Cool); combat/net/craft/move XP; damage/quickhack bonuses; `stats` proficiency panel; `tests/test_proficiencies.py` |
 | Street cred & gigs | `street_cred`; `gigs` Fixer job board; `world/quests.py` gig objectives/turn-in/rewards; `broker_rumor` full flow; `tests/test_gigs.py` |
 | CP2077 quickhacks | `data/quickhacks.yaml` overheat/short circuit/optical reboot/synapse burn; `quickhack <name>`; status effects burn/short/blind; `tests/test_quickhacks.py` |
 | Cyberware psychosis | `world/cyberpsychosis.py` humanity ≤25 outputs -15% |

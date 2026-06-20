@@ -9,6 +9,7 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 SKILLS_PATH = DATA_DIR / "skills.yaml"
 TALENTS_PATH = DATA_DIR / "talents.yaml"
+PROFICIENCIES_PATH = DATA_DIR / "proficiencies.yaml"
 MODS_PATH = DATA_DIR / "mods.yaml"
 QUESTS_PATH = DATA_DIR / "quests.yaml"
 QUICKHACKS_PATH = DATA_DIR / "quickhacks.yaml"
@@ -51,6 +52,14 @@ class Talent:
     description_zh: str = ""
     description_en: str = ""
     stat_bonus: dict[str, int] = field(default_factory=dict)
+
+
+@dataclass
+class Proficiency:
+    id: str
+    name_zh: str = ""
+    name_en: str = ""
+    attribute: str = ""
 
 
 @dataclass
@@ -274,6 +283,19 @@ def load_talents(path: Path | None = None) -> dict[str, Talent]:
             stat_bonus={str(k): int(v) for k, v in (data.get("stat_bonus") or {}).items()},
         )
         for tid, data in (raw.get("talents") or {}).items()
+    }
+
+
+def load_proficiencies(path: Path | None = None) -> dict[str, Proficiency]:
+    raw = _load_yaml(path or PROFICIENCIES_PATH)
+    return {
+        pid: Proficiency(
+            id=pid,
+            name_zh=str(data.get("name_zh", "")),
+            name_en=str(data.get("name_en", "")),
+            attribute=str(data.get("attribute", "")),
+        )
+        for pid, data in (raw.get("proficiencies") or {}).items()
     }
 
 

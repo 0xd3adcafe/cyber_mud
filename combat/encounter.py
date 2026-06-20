@@ -117,12 +117,14 @@ class Encounter:
             return 0
         from world.wanted import wanted_damage_penalty
 
+        from world.proficiencies import proficiency_quickhack_multiplier
         from world.status_effects import player_overheat_damage_multiplier
 
         raw = int(
             player.intelligence
             * 2
             * quickhack_damage_multiplier(player, state)
+            * proficiency_quickhack_multiplier(player)
             * damage_mult
             * player_damage_multiplier(player)
             * wanted_damage_penalty(player)

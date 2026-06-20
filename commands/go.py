@@ -58,7 +58,17 @@ def handle(ctx: CommandContext):
 
     quest_lines = advance_quest_on_visit(ctx.player, ctx.state, dest_id, ctx.player.locale)
     trauma_lines = treat_trauma_at_ripperdoc(ctx.player, dest, ctx.player.locale)
+    from world.proficiencies import award_proficiency_xp
+
+    athletics_lines = award_proficiency_xp(
+        ctx.player,
+        "athletics",
+        4,
+        ctx.player.locale,
+        proficiencies=ctx.state.world.proficiencies,
+    )
     lines = [t(ctx.player.locale, "go.ok", direction=direction), ""]
+    lines.extend(athletics_lines)
     lines.extend(life_lines)
     lines.extend(quest_lines)
     lines.extend(trauma_lines)

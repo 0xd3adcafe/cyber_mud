@@ -147,6 +147,7 @@
 | NETRUN 環境／NPC 互動 | `look`／`scan`／`talk`／`say` 於 NETRUN 放行；`look`／`scan` 顯示節點；client 同步放行；`tests/test_net.py` |
 | 武器持握模式 | `weapon_primary`／`weapon_secondary`；`weapon_mode` 主要／次要／雙手／雙持；`training_carbine`；`tests/test_equip.py` |
 | 等級／技能／天賦 | `world/progression.py` XP 升級、屬性點／天賦點；`stats`／`talents`／`improve`／`learn` 等級前置；`data/talents.yaml`；擊倒 NPC／駭入成功給 XP；`tests/test_progression.py` |
+| CP2077 熟練度（2026-06） | `data/proficiencies.yaml`；`world/proficiencies.py` 使用升級 1–60（五屬性樹）；戰鬥／駭入／製作／移動給 XP；傷害／快速破解加成；`stats` 熟練度面板；`tests/test_proficiencies.py` |
 | 街頭聲望與委託 | `street_cred`；`gigs` Fixer 委託板；`world/quests.py` 委託目標／交件／獎勵；`broker_rumor` 完整流程；`tests/test_gigs.py` |
 | CP2077 快速破解 | `data/quickhacks.yaml` 過熱／短路／光學重啟／突觸燒毀；`quickhack <名稱>`；狀態效果灼燒／短路／致盲；`tests/test_quickhacks.py` |
 | 義體幻痛 | `world/cyberpsychosis.py` 人性 ≤25 時輸出 -15% |

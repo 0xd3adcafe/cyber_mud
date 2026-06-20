@@ -176,6 +176,17 @@ def resolve_quickhack(state: WorldState, player: Player, quickhack_id: str = "")
     from world.reactions import reputation_from_quickhack, shift_reputation
 
     lines.extend(shift_reputation(player, reputation_from_quickhack(), locale))
+    from world.proficiencies import award_proficiency_xp
+
+    lines.extend(
+        award_proficiency_xp(
+            player,
+            "quickhacking",
+            12,
+            locale,
+            proficiencies=state.world.proficiencies,
+        )
+    )
 
     if encounter.npc_hp <= 0:
         return _finish_victory(state, player, encounter, lines)
@@ -304,6 +315,17 @@ def _finish_victory(
     from world.progression import award_xp, npc_xp_reward
 
     lines.extend(award_xp(player, npc_xp_reward(npc), locale, state=state))
+    from world.proficiencies import award_proficiency_xp
+
+    lines.extend(
+        award_proficiency_xp(
+            player,
+            "cold_blood",
+            15,
+            locale,
+            proficiencies=state.world.proficiencies,
+        )
+    )
     from world.street_cred import STREET_CRED_PER_NPC, award_street_cred
 
     lines.extend(award_street_cred(player, STREET_CRED_PER_NPC, locale))

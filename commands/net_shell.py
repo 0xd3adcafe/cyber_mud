@@ -73,6 +73,17 @@ def _handle_hack(ctx: CommandContext) -> CommandResult:
 
     lines = [t(ctx.player.locale, "net.hack_ok", target=label)]
     lines.extend(award_xp(ctx.player, 15, ctx.player.locale))
+    from world.proficiencies import award_proficiency_xp
+
+    lines.extend(
+        award_proficiency_xp(
+            ctx.player,
+            "breach_protocol",
+            18,
+            ctx.player.locale,
+            proficiencies=ctx.state.world.proficiencies,
+        )
+    )
     from world.street_cred import STREET_CRED_PER_HACK, award_street_cred
 
     lines.extend(award_street_cred(ctx.player, STREET_CRED_PER_HACK, ctx.player.locale))

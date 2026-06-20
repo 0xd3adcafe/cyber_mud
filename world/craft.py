@@ -39,8 +39,20 @@ def perform_craft(player: Player, state: WorldState, recipe: Recipe, locale: str
     for _ in range(recipe.output_count):
         player.inventory.append(recipe.output)
 
+    from world.proficiencies import award_proficiency_xp
+
     label = recipe.name_zh if locale == "zh" else (recipe.name_en or recipe.name_zh)
-    return [t(locale, "craft.ok", name=label or recipe.id)]
+    lines = [t(locale, "craft.ok", name=label or recipe.id)]
+    lines.extend(
+        award_proficiency_xp(
+            player,
+            "crafting",
+            25,
+            locale,
+            proficiencies=state.world.proficiencies,
+        )
+    )
+    return lines
 
 
 def perform_disassemble(player: Player, state: WorldState, item_id: str, locale: str) -> list[str]:
@@ -57,6 +69,18 @@ def perform_disassemble(player: Player, state: WorldState, item_id: str, locale:
     if recipe.gold_gain > 0:
         player.gold += recipe.gold_gain
 
+    from world.proficiencies import award_proficiency_xp
+
     item = state.world.item(item_id)
     label = item.name_zh if item and locale == "zh" else (item.name_en if item else item_id)
-    return [t(locale, "disassemble.ok", item=label or item_id, gold=str(recipe.gold_gain))]
+    lines = [t(locale, "disassemble.ok", item=label or item_id, gold=str(recipe.gold_gain))]
+    lines.extend(
+        award_proficiency_xp(
+            player,
+            "engineering",
+            20,
+            locale,
+            proficiencies=state.world.proficiencies,
+        )
+    )
+    return lines

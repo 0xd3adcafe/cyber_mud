@@ -874,6 +874,9 @@ progression:
   xp_gain: "獲得 {amount} 點經驗。"
   level_up: "◈ 升級！等級 {level}（天賦點 {perks}、屬性點 {attrs}）"
 
+proficiency:
+  level_up: "◈ 熟練度提升：{skill} 等級 {level}"
+
 quest:
   objective_done: "◈ 委託目標達成：{quest}"
   stage_done: "◈ 委託進度：{quest}（階段 {stage}）"
@@ -1002,6 +1005,9 @@ stats:
   points: "天賦點  {perks}  │  屬性點  {attrs}"
   street_cred: "街頭聲望  {cred}（{rank}）│  人性  {humanity}"
   attributes: "肉體 {body}  │  反應 {reflex}  │  技術 {tech}  │  冷靜 {cool}  │  智力 {intelligence}"
+  proficiencies_header: "熟練度（使用升級，上限 60）"
+  proficiency_group: "  {attribute}：{skills}"
+  no_proficiencies: "  （尚無——戰鬥、移動、駭入或製作以累積）"
   skills_header: "已學協定"
   no_skills: "  （無）"
   talents_header: "已點天賦"

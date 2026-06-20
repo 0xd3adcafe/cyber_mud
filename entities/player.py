@@ -43,6 +43,8 @@ class Player:
     visited_rooms: list[str] = field(default_factory=list)
     prompt_mud: str = ""
     skills: list[str] = field(default_factory=list)
+    proficiency_levels: dict[str, int] = field(default_factory=dict)
+    proficiency_xp: dict[str, int] = field(default_factory=dict)
     password_hash: str = ""
     in_combat: bool = False
     encounter_id: str = ""

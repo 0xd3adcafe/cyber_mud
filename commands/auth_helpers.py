@@ -64,6 +64,8 @@ def reset_player_to_guest(player, start_room: str) -> None:
     player.visited_rooms = list(fresh.visited_rooms)
     player.prompt_mud = fresh.prompt_mud
     player.skills = list(fresh.skills)
+    player.proficiency_levels = dict(fresh.proficiency_levels)
+    player.proficiency_xp = dict(fresh.proficiency_xp)
     player.password_hash = fresh.password_hash
     player.in_combat = False
     player.encounter_id = ""
@@ -119,6 +121,8 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.visited_rooms = list(loaded.visited_rooms)
     session_player.prompt_mud = loaded.prompt_mud
     session_player.skills = list(loaded.skills)
+    session_player.proficiency_levels = dict(loaded.proficiency_levels)
+    session_player.proficiency_xp = dict(loaded.proficiency_xp)
     session_player.password_hash = loaded.password_hash
     session_player.faction = loaded.faction
     session_player.active_quest = loaded.active_quest

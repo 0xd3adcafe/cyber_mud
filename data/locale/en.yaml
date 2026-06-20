@@ -874,6 +874,9 @@ progression:
   xp_gain: "You gain {amount} XP."
   level_up: "◈ Level up! Level {level} (perk points {perks}, attribute points {attrs})"
 
+proficiency:
+  level_up: "◈ Proficiency up: {skill} level {level}"
+
 quest:
   objective_done: "◈ Objective complete: {quest}"
   stage_done: "◈ Gig progress: {quest} (stage {stage})"
@@ -1002,6 +1005,9 @@ stats:
   points: "Perk points {perks}  │  Attribute points {attrs}"
   street_cred: "Street cred {cred} ({rank}) │ Humanity {humanity}"
   attributes: "Body {body}  │  Reflex {reflex}  │  Tech {tech}  │  Cool {cool}  │  INT {intelligence}"
+  proficiencies_header: "Proficiencies (use to level, max 60)"
+  proficiency_group: "  {attribute}: {skills}"
+  no_proficiencies: "  (none yet — fight, move, hack, or craft)"
   skills_header: "Protocols learned"
   no_skills: "  (none)"
   talents_header: "Talents taken"

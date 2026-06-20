@@ -101,6 +101,13 @@ def resolve_player_strike(
     if style_id == STYLE_BACKSTAB:
         backstab_hit = roll_backstab(player)
 
+    from world.proficiencies import (
+        award_proficiency_xp,
+        proficiency_damage_bonus,
+        proficiency_for_strike,
+    )
+
+    prof_id = proficiency_for_strike(player, state.world, style_id=style_id)
     damage = calc_strike_damage(
         style_id=style_id,
         player=player,
@@ -109,6 +116,7 @@ def resolve_player_strike(
         bonus_damage=bonus_attack_damage(player, state),
         backstab_hit=backstab_hit,
         room_modifier=room_mod,
+        proficiency_bonus=proficiency_damage_bonus(player, prof_id),
     )
 
     encounter.npc_hp -= damage
@@ -150,6 +158,18 @@ def resolve_player_strike(
         )
         if gore_line:
             lines.append(gore_line)
+
+    if prof_id:
+        xp_gain = max(5, min(20, damage // 2))
+        lines.extend(
+            award_proficiency_xp(
+                player,
+                prof_id,
+                xp_gain,
+                locale,
+                proficiencies=state.world.proficiencies,
+            )
+        )
 
     if encounter.npc_hp <= 0:
         return _finish_victory(state, player, encounter, lines)
