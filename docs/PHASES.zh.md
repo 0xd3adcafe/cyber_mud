@@ -220,16 +220,16 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
-| M.0 | 分級與 opt-in | 存檔 `teen`／`mature`；註冊／登入確認；`settings mature`；未開啟拒絕 mature 指令；`tests/test_content_rating.py` |
-| M.1 | 血腥戰鬥 | 重擊／擊殺／屍體 `look` 變體；`combat/gore.py`；`mature.combat.*`；Focus 區可選 gore 色；`tests/test_gore.py` |
-| M.2 | 傷殘與創傷敘事 | 流血狀態、殘廢描述、ripperdoc 後遺症；與 vitals／戰鬥狀態連動 |
-| M.3 | 成人場景與 NPC（骨架） | 娛樂區房間、腦舞艙；`talk` mature 分支；YAML `tags: [mature]` |
-| M.4 | 浪漫與親密機制 | 好感度、`flirt`／`spend_time`、同意閘門；fade-to-black 與 explicit 依分級；`data/romance.yaml` |
-| M.5 | 成人腦舞與委託 | 分級 `bd`、fixer 委託；`braindances_mature.yaml`；teen 玩家 journal 不劇透 |
-| M.6 | Client 警示與 UI | 登入 18+ 確認；未 opt-in 不顯示 mature help；Focus 圖示覆寫 |
-| M.7 | 編寫與管理 | `./admin.sh validate` 掃 mature YAML；`docs/MATURE_CONTENT.md`；CONTRIBUTING 分級說明 |
+| ~~M.0~~ | ~~分級與 opt-in~~ | ✅ `Player.content_rating`；`settings mature on\|off`；註冊 `mature`；`world/mature.py`；`tests/test_content_rating.py` |
+| ~~M.1~~ | ~~血腥戰鬥~~ | ✅ `combat/gore.py`；擊殺／暴擊／屍體描述；Focus gore 色；`tests/test_gore.py` |
+| ~~M.2~~ | ~~傷殘與創傷敘事~~ | ✅ `world/trauma.py`；流血狀態；進診所治療；tick 失血 |
+| ~~M.3~~ | ~~成人場景與 NPC~~ | ✅ `kabuki_lounge`、`bd_den`、`kabuki_host`；`tags: [mature]`；mature `talk` |
+| ~~M.4~~ | ~~浪漫與親密機制~~ | ✅ `data/romance.yaml`；`flirt`／`spend_time`；`romance_flags` 存檔 |
+| ~~M.5~~ | ~~成人腦舞與委託~~ | ✅ `braindances_mature.yaml`、`quests_mature.yaml`；teen 的 `gigs`／`bd` 過濾 |
+| ~~M.6~~ | ~~Client 警示與 UI~~ | ✅ 登入 18+ 勾選；help 隱藏 mature 分類；Focus 血色樣式 |
+| ~~M.7~~ | ~~編寫與管理~~ | ✅ `mature_validate.py`；`docs/MATURE_CONTENT.md`；CONTRIBUTING 說明 |
 
-**建議順序：** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7。
+**建議順序：** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7。**全階段已交付（2026-06）。**
 
 ---
 
