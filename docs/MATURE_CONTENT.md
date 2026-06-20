@@ -36,6 +36,18 @@ Use `shared.mature_i18n.tm(locale, "combat.crit_1")` — keys are auto-prefixed 
 
 `data/romance.yaml` maps NPCs to `flirt` / `spend_time` affinity stages. Copy lives under `mature.romance.*` in mature locale files.
 
+Staged lines use suffixes `_2` and `_3` on the base key (e.g. `kabuki_flirt_2`). `world/mature_flavor.romance_line()` picks the highest tier available and falls back to the base key.
+
+## Mature flavor hooks (look / scan / interact)
+
+| Hook | Module | Locale keys |
+|------|--------|-------------|
+| Room atmosphere on `look` / `scan` | `world/mature_flavor.mature_room_flavor()` | `mature.room.<room_id>` for `kabuki_lounge`, `kabuki_vip`, `bd_den` |
+| NPC detail on `look <npc>` | `world/mature_flavor.mature_npc_detail()` | `mature.npc.<npc_id>` |
+| Interact message override | `world/interactables.perform_interact()` | `mature.interact.<interactable_id>` |
+
+Only players with `content_rating=mature` in mature-tagged rooms/NPCs see these lines.
+
 ## Validation
 
 ```bash

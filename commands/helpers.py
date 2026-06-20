@@ -278,6 +278,10 @@ def format_look_npc(ctx: CommandContext, npc_id: str) -> list[str]:
     locale = ctx.player.locale
     label = npc_label_with_id(npc, locale)
     lines = [t(locale, "look.target_header", name=label), "", npc_description(npc, locale)]
+    from world.mature_flavor import mature_npc_detail
+
+    if detail := mature_npc_detail(npc_id, ctx.player):
+        lines.append(detail)
 
     from combat.encounter import encounter_for_player
 
@@ -449,6 +453,11 @@ def format_look(ctx: CommandContext) -> list[str]:
     grid_flavor = grid_flavor_line(room, ctx.player.locale)
     if grid_flavor:
         lines.append(grid_flavor)
+    from world.mature_flavor import mature_room_flavor
+
+    mature_flavor = mature_room_flavor(room, ctx.player)
+    if mature_flavor:
+        lines.append(mature_flavor)
     if room.district:
         weather_type = ctx.state.weather.get(room.district, "")
         if weather_type:

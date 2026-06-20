@@ -108,6 +108,33 @@ interactables:
     life_profile: booth
     message_zh: 你陷進卡座，合成爵士蓋過了外面的腳步聲。
     message_en: You sink into the booth—synthetic jazz drowns the footfalls outside.
+  lounge_chrome_bar:
+    room_id: kabuki_lounge
+    name_zh: 鍍鉻吧台
+    name_en: Chrome Bar
+    description_zh: 全息酒單在檯面上流動，客人與接待的默契在杯緣交換。
+    description_en: Holo menus ripple on the counter—rapport traded at the rim of every glass.
+    once_key: lounge_chrome_bar
+    message_zh: 吧台投來了然於心的目光。
+    message_en: The bar returns a knowing look.
+  vip_preview_pod:
+    room_id: kabuki_vip
+    name_zh: 腦舞預覽艙
+    name_en: BD Preview Pod
+    description_zh: 打碼縮圖在艙內閃爍，完整播放需另付 cred。
+    description_en: Censored thumbnails strobe inside—full playback costs extra cred.
+    once_key: vip_preview_pod
+    message_zh: 預覽艙嗡鳴著等待插入。
+    message_en: The preview pod hums, waiting.
+  bd_den_archive:
+    room_id: bd_den
+    name_zh: 非法片段封存櫃
+    name_en: Illegal Clip Archive
+    description_zh: 熱插拔晶片櫃貼著癲癇與 18+ 警示標籤。
+    description_en: Hot-swap chip cabinets tagged with seizure and 18+ warnings.
+    once_key: bd_den_archive
+    message_zh: 櫃門嘶嘶滑開一道縫。
+    message_en: A cabinet door hisses ajar.
   tutorial_locker:
     room_id: tutorial_canteen
     name_zh: 學員儲物櫃

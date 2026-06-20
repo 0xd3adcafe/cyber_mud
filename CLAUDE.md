@@ -249,7 +249,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Content depth** | D.1–D.10 shipped (spotlight NPCs, district quests, grid look flavor); see PHASES **Content depth** |
 | **Security (ASVS L1)** | ASVS.1–5 shipped (PBKDF2, unified login errors, save validation, input bounds, rate limit); ASVS.6–14 backlog; see [`docs/SECURITY.md`](docs/SECURITY.md) |
 
-NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.7 shipped — see PHASES **Mature / NSFW content** table.
+NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.12 shipped — see PHASES **Mature / NSFW content** table.
 
 Recent completions (2026-06) summary:
 
@@ -336,7 +336,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | English default locale in project rules | `CLAUDE.md` § Project rules (mandatory); `LOCALIZATION.md`; README core principle #1 |
 | Project licenses | `LICENSE` Apache 2.0; `LICENSE-CONTENT.md` CC BY 4.0; `CONTRIBUTING.md` |
 | Player guides (GitHub) | `docs/player/` — getting started, tutorial, commands, client (ASCII art) |
-| Mature / NSFW content M.0–M.7 | `world/mature.py`, `combat/gore.py`, `settings mature`, `flirt`, mature locale/YAML, client 18+ login |
+| Mature / NSFW content M.0–M.12 | `world/mature_flavor.py`, staged romance, mature look/interact flavor, `bd_den_clerk`, `chrome_mirage` |
 | Kabuki & district expansion | `kabuki_vip`, `kabuki_bazaar`, Little China, Corpo hubs; `velvet_job`; `tests/test_world_districts.py` |
 | World expansion W.8–W.10 | `data/schedule.yaml`; `docks_gray`/`gray_market`; corp/street `appraise`; `give` to NPC; `presence` on `go`; `tests/test_black_market.py`, `tests/test_multiplayer.py` |
 | World expansion W.12–W.13 | `poison`/`antidote`; player `overheat`; `world/reactions.py` rep + ambient tick; `tests/test_status_effects.py`, `tests/test_world_reactions.py` |

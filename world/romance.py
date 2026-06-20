@@ -6,8 +6,8 @@ from pathlib import Path
 import yaml
 
 from entities.player import Player
-from shared.mature_i18n import tm
 from world.mature import is_mature
+from world.mature_flavor import romance_line
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "romance.yaml"
 
@@ -67,11 +67,9 @@ def flirt_with_npc(player: Player, npc_id: str, locale: str, profiles: dict[str,
 
         return [t(locale, "romance.no_profile")]
     affinity = _affinity(player, profile.id)
-    if affinity < profile.flirt_affinity:
-        _set_affinity(player, profile.id, affinity + 1)
-    key = f"romance.{profile.flirt_key}"
-    line = tm(locale, key)
-    return [line] if line != key else []
+    tier = min(affinity + 1, 3)
+    _set_affinity(player, profile.id, tier)
+    return [romance_line(locale, profile.flirt_key, tier)]
 
 
 def spend_time_with_npc(player: Player, npc_id: str, locale: str, profiles: dict[str, RomanceProfile]) -> list[str]:
@@ -89,8 +87,7 @@ def spend_time_with_npc(player: Player, npc_id: str, locale: str, profiles: dict
         from shared.i18n import t
 
         return [t(locale, "romance.need_flirt")]
-    if affinity < profile.spend_affinity:
-        _set_affinity(player, profile.id, affinity + 1)
-    key = f"romance.{profile.spend_key}"
-    line = tm(locale, key)
-    return [line] if line != key else []
+    tier = min(affinity + 1, 3)
+    _set_affinity(player, profile.id, tier)
+    spend_tier = min(max(tier - profile.flirt_affinity + 1, 1), 3)
+    return [romance_line(locale, profile.spend_key, spend_tier)]

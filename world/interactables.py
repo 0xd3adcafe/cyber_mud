@@ -59,6 +59,14 @@ def perform_interact(
 
     lines: list[str] = []
     msg = interactable_message(obj, locale)
+    from world.mature import is_mature
+
+    if is_mature(player):
+        from shared.mature_i18n import tm
+
+        mature_msg = tm(locale, f"interact.{obj.id}")
+        if mature_msg and not mature_msg.startswith("interact."):
+            msg = mature_msg
     if msg:
         lines.append(msg)
 

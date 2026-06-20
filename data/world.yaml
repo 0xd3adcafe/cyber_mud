@@ -4307,6 +4307,21 @@ npcs:
     - mature
     idle_msg_zh: 「想聊聊？flirt 或 spend_time。」
     idle_msg_en: '"Want company? flirt or spend_time."'
+  bd_den_clerk:
+    name_zh: 密艙櫃台
+    name_en: Den Clerk
+    room_id: bd_den
+    description_zh: 沾墨的手指在裂 slate 上數 cred，視線從不離開封存櫃鎖。
+    description_en: Ink-stained fingers count cred on a cracked slate—eyes never leave
+      the archive locks.
+    hp: 30
+    hostile: false
+    talk_key: bd_den_clerk
+    tags:
+    - mature
+    idle_msg_zh: 「封存艙裝著企業埋掉的片段。interact 檔案櫃，撐得住就 braindance chrome_mirage。」
+    idle_msg_en: '"Archive pods hold buried clips. interact the cabinet, then braindance
+      chrome_mirage if your nerves hold."'
   bazaar_fixer:
     name_zh: 灰市中介
     name_en: Bazaar Fixer

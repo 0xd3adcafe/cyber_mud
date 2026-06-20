@@ -183,7 +183,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | English default locale in project rules | `CLAUDE.md` § Project rules (mandatory); `LOCALIZATION.md` § Project rule; README core principle #1 |
 | Project licenses | `LICENSE` Apache 2.0 (code); `LICENSE-CONTENT.md` CC BY 4.0 (world copy); README badges; `CONTRIBUTING.md` |
 | Player guides (GitHub) | `docs/player/` ASCII-art tutorial, commands, client; EN + `*.zh.md`; README player section |
-| Mature / NSFW content M.0–M.7 | `world/mature.py`, `combat/gore.py`, `settings mature`, `flirt`, mature locale/YAML, client 18+ login; `docs/MATURE_CONTENT.md` |
+| Mature / NSFW content M.0–M.12 | `world/mature.py`, `mature_flavor.py`, staged romance, mature interact/look flavor, `bd_den_clerk`, `chrome_mirage`; `docs/MATURE_CONTENT.md` |
 | Kabuki & district expansion (2026-06) | `kabuki_vip`, `kabuki_bazaar`, Little China, Corpo hubs; `velvet_job`; `tests/test_world_districts.py` |
 | Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions in `test_client_app.py` |
 | Life commands L.1–L.8 (2026-06) | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable rest anchors; vitals/RAM regen; wake on move/say/talk/combat; PDA + `%posture`; help category **Life & vitals**; `tests/test_life_commands.py` |
@@ -252,8 +252,13 @@ Not yet implemented or only partially implemented.
 | ~~M.5~~ | ~~Mature braindance & gigs~~ | ✅ `braindances_mature.yaml`, `quests_mature.yaml`; teen `gigs`/`bd` filter |
 | ~~M.6~~ | ~~Client warnings & UI~~ | ✅ Login 18+ checkbox; help hides mature category; Focus gore style |
 | ~~M.7~~ | ~~Authoring & admin~~ | ✅ `mature_validate.py`; `docs/MATURE_CONTENT.md`; CONTRIBUTING note |
+| ~~M.8~~ | ~~Mature look/scan flavor~~ | ✅ `world/mature_flavor.py`; `look`/`scan` room lines; `look <npc>` detail for mature NPCs |
+| ~~M.9~~ | ~~Staged romance lines~~ | ✅ `romance_line()` tier `_2`/`_3`; expanded `mature.romance.*` for host/dancer/clerk |
+| ~~M.10~~ | ~~Mature interact copy~~ | ✅ `world/interactables.py` mature override; `lounge_chrome_bar`, `vip_preview_pod`, `bd_den_archive` |
+| ~~M.11~~ | ~~BD den clerk & chrome_mirage~~ | ✅ `bd_den_clerk` NPC; `chrome_mirage` BD; `chrome_pull` gig; clerk romance profile |
+| ~~M.12~~ | ~~Tests & docs~~ | ✅ `tests/test_mature_content.py` depth cases; `docs/MATURE_CONTENT.md` flavor/romance notes |
 
-**Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7. **All phases shipped (2026-06).**
+**Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7 → M.8–M.12. **All phases shipped (2026-06).**
 
 ### World expansion ([WORLD.md](WORLD.md))
 

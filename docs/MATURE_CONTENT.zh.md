@@ -36,6 +36,18 @@
 
 `data/romance.yaml` 定義 NPC 的 `flirt`／`spend_time` 好感階段；文案在 mature locale 的 `mature.romance.*`。
 
+多階段台詞使用 `_2`、`_3` 後綴（如 `kabuki_flirt_2`）。`world/mature_flavor.romance_line()` 依好感階段選最高可用鍵，否則回退基底鍵。
+
+## 成熟氛圍掛鉤（look／scan／interact）
+
+| 掛鉤 | 模組 | 語系鍵 |
+|------|------|--------|
+| `look`／`scan` 房間氛圍 | `world/mature_flavor.mature_room_flavor()` | `mature.room.<room_id>`（`kabuki_lounge`、`kabuki_vip`、`bd_den`） |
+| `look <npc>` 細節 | `world/mature_flavor.mature_npc_detail()` | `mature.npc.<npc_id>` |
+| 互動訊息覆寫 | `world/interactables.perform_interact()` | `mature.interact.<interactable_id>` |
+
+僅 `content_rating=mature` 且在成熟標記房間／NPC 時顯示。
+
 ## 驗證
 
 ```bash

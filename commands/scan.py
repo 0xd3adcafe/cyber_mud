@@ -22,6 +22,11 @@ def handle(ctx: CommandContext):
         t(ctx.player.locale, "scan.header", name=room_name(room, ctx.player.locale)),
         "",
     ]
+    from world.mature_flavor import mature_room_flavor
+
+    if scan_flavor := mature_room_flavor(room, ctx.player):
+        lines.append(scan_flavor)
+        lines.append("")
 
     if room.exits:
         lines.append(

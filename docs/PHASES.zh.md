@@ -183,7 +183,7 @@
 | 英文預設語系寫入專案規則 | `CLAUDE.zh.md` § 專案規則（強制）；`LOCALIZATION.zh.md` § 專案規則；README 核心原則 #1 |
 | 專案授權 | `LICENSE` Apache 2.0（程式）；`LICENSE-CONTENT.md` CC BY 4.0（文案）；README badge；`CONTRIBUTING.md` |
 | 玩家指南（GitHub） | `docs/player/` ASCII 風格 tutorial／commands／client；中英對照；README 玩家區 |
-| 成人／NSFW 內容 M.0–M.7 | `world/mature.py`、`combat/gore.py`、`settings mature`、`flirt`、mature locale／YAML、client 18+ 登入；`docs/MATURE_CONTENT.md` |
+| 成人／NSFW 內容 M.0–M.12 | `world/mature.py`、`mature_flavor.py`、多階段浪漫、mature look/interact 氛圍、`bd_den_clerk`、`chrome_mirage`；`docs/MATURE_CONTENT.md` |
 | Kabuki 與區域擴充（2026-06） | `kabuki_vip`、`kabuki_bazaar`、小中國街、企業區樞紐；`velvet_job`；`tests/test_world_districts.py` |
 | Client 版面測試 helper | `tests/client_ui_helpers.py`；`test_client_app.py` 側欄／help overlay 穩定斷言 |
 | 生活指令 L.1–L.8（2026-06） | `sit`／`stand`／`lie`／`rest`／`sleep`／`wake`；`world/life.py`、`data/life.yaml`；互動休息錨點；生命徵象／RAM 回復；移動／說話／戰鬥喚醒；PDA＋`%posture`；help 分類 **生活與生命徵象**；`tests/test_life_commands.py` |
@@ -248,8 +248,13 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~M.5~~ | ~~成人腦舞與委託~~ | ✅ `braindances_mature.yaml`、`quests_mature.yaml`；teen 的 `gigs`／`bd` 過濾 |
 | ~~M.6~~ | ~~Client 警示與 UI~~ | ✅ 登入 18+ 勾選；help 隱藏 mature 分類；Focus 血色樣式 |
 | ~~M.7~~ | ~~編寫與管理~~ | ✅ `mature_validate.py`；`docs/MATURE_CONTENT.md`；CONTRIBUTING 說明 |
+| ~~M.8~~ | ~~成熟 look/scan 氛圍~~ | ✅ `world/mature_flavor.py`；`look`/`scan` 房間描述；`look <npc>` 細節 |
+| ~~M.9~~ | ~~多階段浪漫台詞~~ | ✅ `romance_line()` `_2`/`_3` 階；擴充 host/dancer/clerk `mature.romance.*` |
+| ~~M.10~~ | ~~成熟互動文案~~ | ✅ `world/interactables.py` 覆寫；`lounge_chrome_bar`、`vip_preview_pod`、`bd_den_archive` |
+| ~~M.11~~ | ~~密艙櫃台與 chrome_mirage~~ | ✅ `bd_den_clerk` NPC；`chrome_mirage` 腦舞；`chrome_pull` 委託；clerk 浪漫檔 |
+| ~~M.12~~ | ~~測試與文件~~ | ✅ `tests/test_mature_content.py` 深度案例；`docs/MATURE_CONTENT.md` 補充 |
 
-**建議順序：** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7。**全階段已交付（2026-06）。**
+**建議順序：** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7 → M.8–M.12。**全階段已交付（2026-06）。**
 
 ### 世界擴充（[WORLD.md](WORLD.md)）
 
