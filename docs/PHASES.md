@@ -181,6 +181,23 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Project licenses | `LICENSE` Apache 2.0 (code); `LICENSE-CONTENT.md` CC BY 4.0 (world copy); README badges; `CONTRIBUTING.md` |
 | Player guides (GitHub) | `docs/player/` ASCII-art tutorial, commands, client; EN + `*.zh.md`; README player section |
 
+## Multi-session development (mandatory)
+
+When resuming work in a **new chat or parallel session**, sync with the repo **before** editing code:
+
+```bash
+git fetch origin 2>/dev/null || true
+git status -sb
+git log --oneline -15
+git log origin/master..HEAD --oneline 2>/dev/null   # unpushed commits
+pytest tests/ -q --tb=no || true
+./admin.sh validate 2>/dev/null | tail -3 || true
+```
+
+Then read this file **Backlog** and [`CLAUDE.md`](../CLAUDE.md) recent-completions table. Do not re-implement items already in `git log` or “Completed (formerly Backlog)”.
+
+**Before commit:** one major item per commit; update Backlog; English commit subject (`feat: …`).
+
 ## Backlog maintenance convention
 
 **After each fix or feature change**, update this file before merge/commit:
@@ -193,9 +210,28 @@ Agents and collaborators: if you change game or client behavior before delivery,
 
 ## Backlog
 
-Not yet implemented or only partially implemented; optional for new forks:
+Not yet implemented or only partially implemented.
+
+### Environment
 
 - pyenv native Python build (environment setup, not a game feature)
+
+### Mature / NSFW content (18+)
+
+**Policy:** Original homage-style cyberpunk fiction; not official IP. All mature content is **opt-in** (`content_rating` / `mature_enabled` on player save), gated at login and command layer, with copy in **separate locale files** (`data/locale/mature_en.yaml`, `mature_zh.yaml`)—never mixed into default help/MOTD.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| M.0 | Content rating & opt-in | `Player.content_rating` (`teen` / `mature`); register/login prompt; `lang`/`settings mature on\|off`; refuse mature commands when disabled; `tests/test_content_rating.py` |
+| M.1 | Gore & bloody combat | Critical-hit / kill / corpse `look` variants; `combat/gore.py`; locale `mature.combat.*`; optional client Focus block `gore` tint; `tests/test_gore.py` |
+| M.2 | Injury & trauma flavor | Bleed status, cripple lines, ripperdoc aftermath; tie to `world/vitals.py` / combat status; data-driven severity tiers |
+| M.3 | Adult venues & NPCs (non-graphic scaffold) | District rooms (e.g. Kabuki club, BD booth); NPC schedules; `talk` branches rated `mature`; YAML `tags: [mature]` on rooms/NPCs |
+| M.4 | Romance & intimacy mechanics | Affinity flags, consent-gated `flirt` / `spend_time`; fade-to-black vs explicit text per rating; `data/romance.yaml` |
+| M.5 | Mature braindance & gigs | Rating-gated `bd` clips and fixer gigs; separate `data/braindances_mature.yaml`; journal does not spoil teen-rated players |
+| M.6 | Client warnings & UI | Login 18+ acknowledgement; `/theme` unaffected; mature strings never in `#help_dropdown` unless opted in; Focus block icon override |
+| M.7 | Authoring & admin | `./admin.sh validate` scans mature YAML; `docs/MATURE_CONTENT.md` author guide; CONTRIBUTING age-rating note |
+
+**Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7.
 
 ---
 

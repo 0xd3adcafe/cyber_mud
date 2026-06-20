@@ -202,6 +202,18 @@ Major item examples:
 - Expand world data and mechanics
 - Tests filled in and `pytest` all green
 
+### Multi-session sync (before coding)
+
+Parallel agents or a new chat **must** align with the repo first:
+
+```bash
+git fetch origin 2>/dev/null || true
+git status -sb && git log --oneline -15
+pytest tests/ -q --tb=no
+```
+
+Read [`docs/PHASES.md`](docs/PHASES.md) **Backlog** and recent **Completed** rows—do not duplicate work already committed.
+
 Workflow:
 
 1. Finish one major item → run `pytest tests/` or `./admin.sh validate`
@@ -223,7 +235,18 @@ Commit message format: **English subject** `<type>: <EN summary>`, optional Trad
 
 ## Backlog
 
-Master list: [`docs/PHASES.md`](docs/PHASES.md). Recent completions (2026-06) summary:
+Master list: [`docs/PHASES.md`](docs/PHASES.md).
+
+### Pending
+
+| Area | Items |
+|------|--------|
+| Environment | pyenv native Python build |
+| **Mature / NSFW (18+, opt-in)** | M.0 rating gate → M.1 gore combat → M.3 adult venues → M.4 romance → M.5 mature BD/gigs → M.6 client warnings → M.2 trauma → M.7 admin docs |
+
+NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; see PHASES **Mature / NSFW content** table.
+
+Recent completions (2026-06) summary:
 
 | Item | Module / acceptance |
 |------|---------------------|

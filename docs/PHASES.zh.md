@@ -181,6 +181,21 @@
 | 專案授權 | `LICENSE` Apache 2.0（程式）；`LICENSE-CONTENT.md` CC BY 4.0（文案）；README badge；`CONTRIBUTING.md` |
 | 玩家指南（GitHub） | `docs/player/` ASCII 風格 tutorial／commands／client；中英對照；README 玩家區 |
 
+## 多 session 開發（必做）
+
+新對話或平行 session **動手改程式前**先與 repo 對齊：
+
+```bash
+git fetch origin 2>/dev/null || true
+git status -sb
+git log --oneline -15
+git log origin/master..HEAD --oneline 2>/dev/null
+pytest tests/ -q --tb=no || true
+./admin.sh validate 2>/dev/null | tail -3 || true
+```
+
+接著讀本檔 **Backlog** 與 [`CLAUDE.md`](../CLAUDE.md) 近期完成表；`git log` 或「已完成」已有的項目勿重複實作。
+
 ## Backlog 維護慣例
 
 **每次修正或功能變更完成後**，在合併／commit 前更新本檔：
@@ -193,9 +208,28 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 ## Backlog
 
-尚未實作或僅部分實作，新專案可選做：
+尚未實作或僅部分實作。
+
+### 環境
 
 - pyenv 原生編譯 Python（環境設定，非遊戲功能）
+
+### 成人／NSFW 內容（18+）
+
+**原則：** 原創致敬風賽博龐克；所有成熟內容 **預設關閉、玩家 opt-in**（`content_rating`／`mature_enabled`），登入與指令層閘門；文案放 **`data/locale/mature_en.yaml`、`mature_zh.yaml`**，不混入預設 MOTD／help。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| M.0 | 分級與 opt-in | 存檔 `teen`／`mature`；註冊／登入確認；`settings mature`；未開啟拒絕 mature 指令；`tests/test_content_rating.py` |
+| M.1 | 血腥戰鬥 | 重擊／擊殺／屍體 `look` 變體；`combat/gore.py`；`mature.combat.*`；Focus 區可選 gore 色；`tests/test_gore.py` |
+| M.2 | 傷殘與創傷敘事 | 流血狀態、殘廢描述、ripperdoc 後遺症；與 vitals／戰鬥狀態連動 |
+| M.3 | 成人場景與 NPC（骨架） | 娛樂區房間、腦舞艙；`talk` mature 分支；YAML `tags: [mature]` |
+| M.4 | 浪漫與親密機制 | 好感度、`flirt`／`spend_time`、同意閘門；fade-to-black 與 explicit 依分級；`data/romance.yaml` |
+| M.5 | 成人腦舞與委託 | 分級 `bd`、fixer 委託；`braindances_mature.yaml`；teen 玩家 journal 不劇透 |
+| M.6 | Client 警示與 UI | 登入 18+ 確認；未 opt-in 不顯示 mature help；Focus 圖示覆寫 |
+| M.7 | 編寫與管理 | `./admin.sh validate` 掃 mature YAML；`docs/MATURE_CONTENT.md`；CONTRIBUTING 分級說明 |
+
+**建議順序：** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7。
 
 ---
 
