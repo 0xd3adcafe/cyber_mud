@@ -10,6 +10,9 @@ factions:
 room_items:
   square: [glowstick, knife, jacket, cyber_arm_kit, mod_chip, liberty_pistol, pipe, synth_ramen]
   alley: [rusty_key]
+  kabuki_bazaar: [glowstick, synth_coffee]
+  shrine: [lantern]
+  data_crypt: [rusty_key]
   tutorial: [glowstick, field_manual]
   tutorial_briefing: [field_manual]
   tutorial_armory: [trainee_blade, training_sidearm, trainee_undersuit, trainee_vest, trainee_pants, trainee_boots, trainee_helmet, trainee_baton, practice_cyber_kit, mod_chip, med_stim]
@@ -50,6 +53,7 @@ rooms:
       south: square
       down: undercity
       west: kabuki_lounge
+      east: little_china_gate
   kabuki_lounge:
     name_zh: 歌舞伎夜總會
     name_en: Kabuki Lounge
@@ -63,6 +67,78 @@ rooms:
     tags: [mature, club]
     exits:
       east: alley
+      west: kabuki_bazaar
+      north: kabuki_vip
+  kabuki_vip:
+    name_zh: VIP 包廂區
+    name_en: VIP Booth Wing
+    description_zh: |
+      隱私場與腦舞預覽艙被絨簾隔開。保鑣的義眼掃過每一位進場者。
+    description_en: |
+      Privacy fields and BD preview pods sit behind velvet curtains. A bouncer's cyber-eye tracks every entrant.
+    district: kabuki
+    grid_x: 0
+    grid_y: 1
+    tags: [mature, club]
+    exits:
+      south: kabuki_lounge
+  kabuki_bazaar:
+    name_zh: 歌舞伎灰市
+    name_en: Kabuki Gray Bazaar
+    description_zh: |
+      攤販兜售改裝晶片與來路不明的情報。東邊是夜總會，南邊通往小中國街。
+    description_en: |
+      Stalls hawk mod chips and questionable intel. East to the lounge; south to Little China Gate.
+    district: kabuki
+    grid_x: -1
+    grid_y: 0
+    tags: [bazaar, shop]
+    shop_id: kabuki_bazaar
+    exits:
+      east: kabuki_lounge
+      south: little_china_gate
+  little_china_gate:
+    name_zh: 小中國街牌樓
+    name_en: Little China Gate
+    description_zh: |
+      紅色牌樓下香火與合成雨味交織。東邊通往廟宇，西邊回到小巷。
+    description_en: |
+      Incense and synthetic rain mix under a red arch. East to the shrine; west to the alley.
+    district: little_china
+    grid_x: 2
+    grid_y: 0
+    exits:
+      north: kabuki_bazaar
+      east: shrine
+      west: alley
+  shrine:
+    name_zh: 霓虹神社
+    name_en: Neon Shrine
+    description_zh: |
+      全息燭火在傳統木柱間飄動。人性與信仰在義體時代顯得格外脆弱。
+    description_en: |
+      Holo candles drift between wooden pillars—faith feels fragile in the chrome age.
+    district: little_china
+    grid_x: 3
+    grid_y: 0
+    tags: [shrine]
+    exits:
+      west: little_china_gate
+      down: data_crypt
+  data_crypt:
+    name_zh: 資料墓穴
+    name_en: Data Crypt
+    description_zh: |
+      積水的伺服器機櫃閃著錯誤代碼。北邊可回到地下廢墟。
+    description_en: |
+      Flooded server racks blink error codes. North leads back to the undercity ruins.
+    district: undercity
+    grid_x: 3
+    grid_y: -1
+    tags: [undercity, net]
+    exits:
+      up: shrine
+      north: undercity
   square_rooftop:
     name_zh: 廣場屋頂
     name_en: Square Rooftop
@@ -87,6 +163,7 @@ rooms:
       up: alley
       north: docks
       east: bd_den
+      south: data_crypt
   bd_den:
     name_zh: 地下腦舞密艙
     name_en: Underground BD Den
@@ -244,6 +321,33 @@ rooms:
     shop_id: ripperdoc
     exits:
       east: square
+      west: corpo_lobby
+  corpo_lobby:
+    name_zh: 企業大廳
+    name_en: Corporate Lobby
+    description_zh: |
+      冷色大理石與武裝保全。東邊是義體診所，西邊通往企業廣場。
+    description_en: |
+      Cold marble and armed security. East to the ripper clinic; west to the corpo plaza.
+    district: corpo
+    grid_x: -1
+    grid_y: 1
+    exits:
+      east: ripper_clinic
+      west: corpo_plaza
+  corpo_plaza:
+    name_zh: 企業廣場
+    name_en: Corpo Plaza
+    description_zh: |
+      全息企業標誌在酸雨中旋轉。荒坂與軍武的勢力在這裡交錯。
+    description_en: |
+      Holo corporate logos spin in acid rain—Arasaka and Militech influence collides here.
+    district: corpo
+    grid_x: -2
+    grid_y: 1
+    tags: [corpo, transit]
+    exits:
+      east: corpo_lobby
   watson_flat:
     name_zh: 沃森公寓
     name_en: Watson Flat
@@ -260,6 +364,13 @@ rooms:
     exits: {}
 
 items:
+  lantern:
+    name_zh: 紙燈籠
+    name_en: Paper Lantern
+    description_zh: 小中國街常見的紙燈籠，在霓虹下仍顯得溫暖。
+    description_en: A paper lantern—warm against the neon cold of Little China.
+    takeable: true
+    value: 12
   glowstick:
     name_zh: 螢光棒
     name_en: Glowstick
@@ -729,3 +840,63 @@ npcs:
     tags: [mature]
     idle_msg_zh: 「想進 VIP 區？先確認你已開啟 mature 內容。」
     idle_msg_en: '"VIP lounge? Enable mature content first."'
+  kabuki_bouncer:
+    name_zh: VIP 保鑣
+    name_en: VIP Bouncer
+    room_id: kabuki_vip
+    description_zh: 滿臉疤痕的保鑣，義眼記錄著每位客人的評級。
+    description_en: A scarred bouncer—cyber-eyes log every guest's rating.
+    hp: 80
+    attack: 8
+    hostile: false
+    talk_key: kabuki_bouncer
+    tags: [mature]
+    idle_msg_zh: 「北邊包廂區——別惹事。」
+    idle_msg_en: '"Booth wing—do not start trouble."'
+  kabuki_dancer:
+    name_zh: 全息舞者
+    name_en: Holo Dancer
+    room_id: kabuki_vip
+    description_zh: 半透明的舞者殘影在隱私場邊緣徘徊，等待私人邀請。
+    description_en: A translucent dancer ghost lingers by the privacy fields, waiting for an invite.
+    hp: 35
+    hostile: false
+    talk_key: kabuki_dancer
+    tags: [mature]
+    idle_msg_zh: 「想聊聊？flirt 或 spend_time。」
+    idle_msg_en: '"Want company? flirt or spend_time."'
+  bazaar_fixer:
+    name_zh: 灰市中介
+    name_en: Bazaar Fixer
+    room_id: kabuki_bazaar
+    description_zh: 兜售改裝情報的街頭中介，熟悉各區暗號。
+    description_en: A street fixer trading mod intel and district passwords.
+    hp: 45
+    hostile: false
+    talk_key: bazaar_fixer
+    idle_msg_zh: 「要晶片還是座標？shop 或 talk。」
+    idle_msg_en: '"Chips or coordinates? shop or talk."'
+  shrine_keeper:
+    name_zh: 神社司祭
+    name_en: Shrine Keeper
+    room_id: shrine
+    description_zh: 老司祭在全息燭火前低語，談論人性與義體的代價。
+    description_en: An old keeper murmurs before holo candles—humanity versus chrome.
+    hp: 40
+    hostile: false
+    talk_key: shrine_keeper
+    idle_msg_zh: 「人性不是無限的。小心你的 chrome。」
+    idle_msg_en: '"Humanity is not infinite. Mind your chrome."'
+  corp_guard:
+    name_zh: 企業保全
+    name_en: Corpo Guard
+    room_id: corpo_lobby
+    faction: arasaka
+    description_zh: 穿著企業裝甲的保全，掃描證件與武器。
+    description_en: Armored corpo security—scanning IDs and weapons.
+    hp: 70
+    attack: 6
+    hostile: false
+    talk_key: corp_guard
+    idle_msg_zh: 「識別證。企業區禁止攝影。」
+    idle_msg_en: '"ID badge. No recording in the corpo zone."'

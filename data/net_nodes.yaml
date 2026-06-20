@@ -14,3 +14,8 @@ net_nodes:
     name_zh: 訓練用終端
     name_en: Training Terminal
     hackable: true
+  crypt_core:
+    room_id: data_crypt
+    name_zh: 墓穴核心
+    name_en: Crypt Core
+    hackable: true

@@ -332,6 +332,8 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | Project licenses | `LICENSE` Apache 2.0; `LICENSE-CONTENT.md` CC BY 4.0; `CONTRIBUTING.md` |
 | Player guides (GitHub) | `docs/player/` — getting started, tutorial, commands, client (ASCII art) |
 | Mature / NSFW content M.0–M.7 | `world/mature.py`, `combat/gore.py`, `settings mature`, `flirt`, mature locale/YAML, client 18+ login |
+| Kabuki & district expansion | `kabuki_vip`, `kabuki_bazaar`, Little China, Corpo hubs; `velvet_job`; `tests/test_world_districts.py` |
+| Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions |
 
 World setting and district expansion: [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)).
 

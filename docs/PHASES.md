@@ -233,6 +233,14 @@ Not yet implemented or only partially implemented.
 
 **Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7. **All phases shipped (2026-06).**
 
+### World & mature expansion (2026-06)
+
+| Item | Module / acceptance |
+|------|---------------------|
+| Kabuki mature wing | `kabuki_vip`, `kabuki_bouncer`, `kabuki_dancer`; `velvet_job` multi-stage gig; romance dancer |
+| District hubs | `kabuki_bazaar`, `little_china_gate`, `shrine`, `data_crypt`, `corpo_lobby`, `corpo_plaza`; `kabuki_bazaar` shop; `crypt_core` net node |
+| Client test stability | `tests/client_ui_helpers.py`; retry layout assertions in `test_client_app.py` |
+
 ---
 
 Suggested route: **0 → A → D.2/D.7 (playability) → B → C → remaining D → E**; for a social-exploration MUD, consider B before C.

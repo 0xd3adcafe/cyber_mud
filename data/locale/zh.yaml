@@ -716,6 +716,9 @@ talk:
   range_officer: "靶場教官壓低嗓音：「先裝備武器，equipment 看槽位；卡賓槍雙手、手槍副手，智慧槍示範鎖定。記得 look 目標再開火。」"
   clinic_tutor: "示範導師掀開無菌帘：「撿 practice_cyber_kit，install 裝進義體槽；主機 interact console 看說明。拆下用 uninstall。」"
   course_guide: "引導員舉起掃描儀：「scan 看出口與互動點；interact 掃描柱完成基礎課。移動靶 patrol_dummy 可練 punch／flee。」"
+  bazaar_fixer: "中介敲了敲晶片：「灰市價在這——shop 看看。東邊夜總會，南邊小中國街。」"
+  shrine_keeper: "司祭微微鞠躬：「人性有限。每次義體升級都會帶走一部分。升級前先想清楚。」"
+  corp_guard: "保全面罩閃爍：「證件掃描通過。企業區禁止拔槍。」"
 
 say:
   usage: "用法：say <訊息>"

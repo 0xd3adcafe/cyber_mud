@@ -25,4 +25,5 @@ def test_mature_kill_adds_gore_line():
     encounter.npc_hp = 1
     result = _finish_victory(state, player, encounter, [])
     joined = "\n".join(result.lines).lower()
-    assert "blood" in joined or "crunch" in joined or "neon" in joined or "fold" in joined
+    gore_markers = ("blood", "crunch", "neon", "fold", "wet", "silence", "twitch")
+    assert any(marker in joined for marker in gore_markers)

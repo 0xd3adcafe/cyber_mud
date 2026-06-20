@@ -5,6 +5,7 @@ import asyncio
 from textual.widgets import Select
 
 from client.app import CyberMudApp
+from tests.client_ui_helpers import scroll_covers_log, settle_layout, wait_for_class
 
 
 def test_auth_select_mounts_with_login_value():
@@ -220,21 +221,19 @@ def test_f6_closes_sidebar_and_ignores_late_panel_end():
             )
             apply_meta(app.view, "ui_panel_end", "1")
             app._render_sidebar()
-            await pilot.pause()
             wrap = app.query_one("#sidebar_wrap", Vertical)
-            assert "sidebar-visible" in wrap.classes
+            await wait_for_class(wrap, "sidebar-visible", pilot)
 
             await app.action_toggle_sidebar()
-            await pilot.pause()
+            await settle_layout(pilot)
             assert not app.view.sidebar_open
             assert app.view.sidebar_stack == []
             assert "sidebar-hidden" in wrap.classes
 
             apply_meta(app.view, "ui_panel_end", "1")
             app._render_sidebar()
-            await pilot.pause()
+            await wait_for_class(wrap, "sidebar-hidden", pilot)
             assert not app.view.sidebar_open
-            assert "sidebar-hidden" in wrap.classes
 
     asyncio.run(_run())
 
@@ -249,8 +248,7 @@ def test_chrome_bar_link_status_after_auth():
         async with app.run_test(size=(120, 30)) as pilot:
             apply_meta(app.view, "auth", "1")
             app._set_auth_ui(True)
-            await pilot.pause()
-            await pilot.pause()
+            await settle_layout(pilot)
             chrome = app.query_one("#chrome_bar", Static)
             assert chrome.region.height >= 1
             assert chrome.size.height >= 1
@@ -293,8 +291,7 @@ def test_hotkey_bar_below_prompt_after_auth():
             apply_meta(app.view, "auth", "1")
             app._set_auth_ui(True)
             app._refresh_game_layout()
-            await pilot.pause()
-            await pilot.pause()
+            await settle_layout(pilot)
             info = app.query_one("#info_bar", Static)
             prompt = app.query_one("#prompt_dock")
             hotkey = app.query_one("#hotkey_bar", Static)
@@ -388,9 +385,8 @@ def test_typed_map_command_opens_sidebar():
             prepare_sidebar_for_panel(app.view, "map")
             app.view.pending_panel = "map"
             app._render_sidebar()
-            await pilot.pause()
             wrap = app.query_one("#sidebar_wrap", Vertical)
-            assert "sidebar-visible" in wrap.classes
+            await wait_for_class(wrap, "sidebar-visible", pilot)
             apply_meta(app.view, "ui_panel", "map")
             handle_ui_json(
                 app.view,
@@ -398,9 +394,9 @@ def test_typed_map_command_opens_sidebar():
             )
             apply_meta(app.view, "ui_panel_end", "1")
             app._apply_meta("ui_panel_end=1")
-            await pilot.pause()
+            await settle_layout(pilot)
             assert "map" in app.view.sidebar_stack
-            assert "sidebar-visible" in wrap.classes
+            await wait_for_class(wrap, "sidebar-visible", pilot)
 
     asyncio.run(_run())
 
@@ -427,7 +423,7 @@ def test_panel_fetch_actions_do_not_block():
             app._set_auth_ui(True)
             app._schedule_panel_fetch = _capture_schedule
             app._schedule_help_fetch = _capture_help
-            await pilot.pause()
+            await settle_layout(pilot)
             t0 = time.monotonic()
             await app.action_panel_pda()
             await app.action_panel_map()
@@ -469,7 +465,7 @@ def test_help_overlay_covers_log_not_sidebar():
             )
             apply_meta(app.view, "ui_panel_end", "1")
             app._render_help_overlay()
-            await pilot.pause()
+            await settle_layout(pilot)
             content = app.query_one("#help_dropdown_content", Static)
             rendered = str(content.render())
             assert "look" in rendered
@@ -477,6 +473,6 @@ def test_help_overlay_covers_log_not_sidebar():
 
             scroll = app.query_one("#help_dropdown_scroll", VerticalScroll)
             log_wrap = app.query_one("#scrollback_wrap", Container)
-            assert scroll.region.width >= log_wrap.region.width - 6
+            assert scroll_covers_log(scroll, log_wrap)
 
     asyncio.run(_run())

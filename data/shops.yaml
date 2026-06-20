@@ -59,3 +59,18 @@ shops:
       synth_coffee: 8
     buy_items: true
     buy_rate: 0.6
+  kabuki_bazaar:
+    name_zh: 歌舞伎灰市攤
+    name_en: Kabuki Bazaar Stall
+    room_id: kabuki_bazaar
+    npc_id: bazaar_fixer
+    open_hour: 10
+    close_hour: 2
+    sells:
+      glowstick: 10
+      synth_coffee: 8
+      mod_chip: 130
+      energy_drink: 20
+      pipe: 28
+    buy_items: true
+    buy_rate: 0.55

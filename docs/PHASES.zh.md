@@ -231,6 +231,14 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 **建議順序：** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7。**全階段已交付（2026-06）。**
 
+### 世界與成熟區擴充（2026-06）
+
+| 項目 | 模組／驗收 |
+|------|------------|
+| Kabuki VIP 區 | `kabuki_vip`、`kabuki_bouncer`、`kabuki_dancer`；`velvet_job` 多階段委託；舞者浪漫線 |
+| 區域樞紐 | `kabuki_bazaar`、`little_china_gate`、`shrine`、`data_crypt`、`corpo_lobby`、`corpo_plaza`；灰市商店；`crypt_core` 節點 |
+| Client 測試穩定 | `tests/client_ui_helpers.py`；`test_client_app.py` 重試版面斷言 |
+
 ---
 
 建議路線：**0 → A → D.2/D.7（可玩性）→ B → C → D 其餘 → E**；若新 MUD 偏社交探索，可先做 B 再做 C。

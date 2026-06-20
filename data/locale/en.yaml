@@ -716,6 +716,9 @@ talk:
   range_officer: "The range officer mutters: \"Equip first—equipment shows slots; carbine two-handed, pistol secondary, smart gun demos lock-on. look your target before firing.\""
   clinic_tutor: "The tutor opens a sterile booth: \"Take a practice_cyber_kit, install into a cyber slot; interact the console for notes. uninstall when done.\""
   course_guide: "The guide raises a scanner: \"scan for exits and interactables; interact the scan post to finish basics. The patrol dummy practices punch and flee.\""
+  bazaar_fixer: "The fixer taps a mod chip: \"Gray market prices—shop here. East lounge, south Little China Gate.\""
+  shrine_keeper: "The keeper bows slightly: \"Humanity is finite. Every chrome install takes a piece. Reflect before you upgrade.\""
+  corp_guard: "The guard's visor flickers: \"Badge scan clear. No weapons drawn in the corpo zone.\""
 
 say:
   usage: "Usage: say <message>"

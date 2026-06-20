@@ -36,3 +36,23 @@ def test_validate_mature_yaml():
     world = load_world()
     errors = [issue for issue in validate_mature_content(world) if issue.severity == "error"]
     assert not errors
+
+
+def test_mature_vip_and_dancer():
+    state = make_state()
+    player = make_player(locale="en", room_id="kabuki_vip", content_rating="mature")
+    state.npc_rooms["kabuki_dancer"] = "kabuki_vip"
+    teen = make_player(locale="en", room_id="kabuki_lounge", content_rating="teen")
+    blocked = dispatch("go north", teen, state, [], [teen])
+    assert any("18+" in line or "mature" in line.lower() for line in blocked.lines)
+
+    flirt = dispatch("flirt kabuki_dancer", player, state, [], [player])
+    assert flirt.lines
+
+
+def test_velvet_job_hidden_from_teen():
+    state = make_state()
+    player = make_player(locale="en", content_rating="teen")
+    result = dispatch("gigs list", player, state, [], [player])
+    joined = "\n".join(result.lines)
+    assert "Velvet Job" not in joined
