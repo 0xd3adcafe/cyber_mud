@@ -330,6 +330,7 @@ life:
   blocked_netrun: "意識還在網路裡——NETRUN 中無法休息。"
   blocked_chase: "有人追著你——不能在這裡停下。"
   sleep_bleed: "失血讓你無法入睡。"
+  sleep_poison: "毒素在血管裡翻湧，你睡不著。"
   sleep_status: "傷勢與狀態效果讓你睡不著。"
   sleep_unsafe: "這區太危險，無法在戶外睡覺。"
   sleep_nowhere: "沒有安全的地方可睡——找公寓、診所、包廂或休息點（interact 長椅／床）。"

@@ -8,9 +8,15 @@ import yaml
 
 from entities.player import Player
 from shared.i18n import t
-from world.modifiers import period_for_room, weather_for_room
+from world.modifiers import (
+    period_for_room,
+    rest_period_multiplier,
+    rest_unsafe_district_penalty,
+    rest_weather_multiplier,
+    weather_for_room,
+)
 from world.state import WorldState
-from world.status_effects import EFFECT_BLEED
+from world.status_effects import EFFECT_BLEED, EFFECT_POISON
 from world.world import Room
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "life.yaml"
@@ -40,12 +46,17 @@ class LifeAnchor:
 @dataclass
 class LifeConfig:
     fatigue_max: int = 100
+    fatigue_gain: dict[str, int] = field(default_factory=dict)
+    fatigue_tired_threshold: int = 70
+    fatigue_exhausted_threshold: int = 90
     postures: dict[str, PostureProfile] = field(default_factory=dict)
     sleep_room_tags: frozenset[str] = frozenset()
     rest_room_tags: frozenset[str] = frozenset()
     indoor_room_tags: frozenset[str] = frozenset()
     weather_outdoor_mult: dict[str, float] = field(default_factory=dict)
     period_hp_mult: dict[str, float] = field(default_factory=dict)
+    district_safety: dict[str, int] = field(default_factory=dict)
+    sleep_min_outdoor_safety: int = 2
     districts_no_outdoor_sleep: frozenset[str] = frozenset()
     anchors: dict[str, LifeAnchor] = field(default_factory=dict)
 
@@ -74,12 +85,17 @@ def load_life_config(path: Path | None = None) -> LifeConfig:
         )
     cfg = LifeConfig(
         fatigue_max=int(raw.get("fatigue_max", 100)),
+        fatigue_gain={str(k): int(v) for k, v in (raw.get("fatigue_gain") or {}).items()},
+        fatigue_tired_threshold=int(raw.get("fatigue_tired_threshold", 70)),
+        fatigue_exhausted_threshold=int(raw.get("fatigue_exhausted_threshold", 90)),
         postures=postures,
         sleep_room_tags=frozenset(str(x) for x in (raw.get("sleep_room_tags") or [])),
         rest_room_tags=frozenset(str(x) for x in (raw.get("rest_room_tags") or [])),
         indoor_room_tags=frozenset(str(x) for x in (raw.get("indoor_room_tags") or [])),
         weather_outdoor_mult={str(k): float(v) for k, v in (raw.get("weather_outdoor_mult") or {}).items()},
         period_hp_mult={str(k): float(v) for k, v in (raw.get("period_hp_mult") or {}).items()},
+        district_safety={str(k): int(v) for k, v in (raw.get("district_safety") or {}).items()},
+        sleep_min_outdoor_safety=int(raw.get("sleep_min_outdoor_safety", 2)),
         districts_no_outdoor_sleep=frozenset(str(x) for x in (raw.get("districts_no_outdoor_sleep") or [])),
         anchors=anchors,
     )
@@ -90,6 +106,11 @@ def load_life_config(path: Path | None = None) -> LifeConfig:
 
 def _cfg() -> LifeConfig:
     return load_life_config()
+
+
+def reset_life_config() -> None:
+    global _CONFIG
+    _CONFIG = None
 
 
 def is_resting(player: Player) -> bool:
@@ -128,6 +149,41 @@ def clamp_fatigue(player: Player) -> None:
     player.fatigue = max(0, min(_cfg().fatigue_max, player.fatigue))
 
 
+def gain_fatigue(player: Player, source: str) -> int:
+    cfg = _cfg()
+    amount = cfg.fatigue_gain.get(source, 0)
+    if amount <= 0:
+        return 0
+    before = player.fatigue
+    player.fatigue = min(cfg.fatigue_max, player.fatigue + amount)
+    return player.fatigue - before
+
+
+def fatigue_regen_multiplier(player: Player) -> float:
+    cfg = _cfg()
+    if player.fatigue >= cfg.fatigue_exhausted_threshold:
+        return 0.5
+    if player.fatigue >= cfg.fatigue_tired_threshold:
+        return 0.75
+    return 1.0
+
+
+def district_safety_level(room: Room | None, cfg: LifeConfig | None = None) -> int:
+    cfg = cfg or _cfg()
+    if room is None or not room.district:
+        return cfg.sleep_min_outdoor_safety
+    return cfg.district_safety.get(room.district, 2)
+
+
+def outdoor_sleep_unsafe(room: Room | None, cfg: LifeConfig | None = None) -> bool:
+    cfg = cfg or _cfg()
+    if room is None or _is_indoor(room, cfg):
+        return False
+    if room.district in cfg.districts_no_outdoor_sleep:
+        return True
+    return district_safety_level(room, cfg) < cfg.sleep_min_outdoor_safety
+
+
 def _room_tags(room: Room | None) -> set[str]:
     return set(room.tags) if room else set()
 
@@ -159,6 +215,8 @@ def sleep_refusal(player: Player, state: WorldState, locale: str) -> str | None:
     cfg = _cfg()
     if EFFECT_BLEED in player.player_status:
         return t(locale, "life.sleep_bleed")
+    if EFFECT_POISON in player.player_status:
+        return t(locale, "life.sleep_poison")
     if player.player_status:
         return t(locale, "life.sleep_status")
     anchor = _anchor_profile(player, cfg)
@@ -166,7 +224,7 @@ def sleep_refusal(player: Player, state: WorldState, locale: str) -> str | None:
         return None
     if _room_allows_sleep(player, room, cfg):
         return None
-    if room and room.district in cfg.districts_no_outdoor_sleep and not _is_indoor(room, cfg):
+    if outdoor_sleep_unsafe(room, cfg):
         return t(locale, "life.sleep_unsafe")
     return t(locale, "life.sleep_nowhere")
 
@@ -183,14 +241,27 @@ def rest_environment_mult(player: Player, state: WorldState, period_id: str) -> 
     anchor = _anchor_profile(player, cfg)
     if anchor:
         mult *= anchor.hp_mult
-    if room and not _is_indoor(room, cfg):
+    outdoor = room is not None and not _is_indoor(room, cfg)
+    if outdoor and room is not None:
         weather = weather_for_room(state, room.id)
-        mult *= cfg.weather_outdoor_mult.get(weather, 1.0)
-        if room.district in cfg.districts_no_outdoor_sleep:
-            mult *= 0.5
-    mult *= cfg.period_hp_mult.get(period_id, 1.0)
+        mult *= rest_weather_multiplier(
+            weather,
+            outdoor=True,
+            table=cfg.weather_outdoor_mult,
+        )
+        mult *= rest_unsafe_district_penalty(
+            district_safety_level(room, cfg),
+            cfg.sleep_min_outdoor_safety,
+            outdoor=True,
+        )
+    mult *= rest_period_multiplier(
+        period_id,
+        indoor=not outdoor,
+        table=cfg.period_hp_mult,
+    )
     if player.humanity <= 25:
         mult *= 0.85
+    mult *= fatigue_regen_multiplier(player)
     return mult
 
 
@@ -230,7 +301,7 @@ def _maybe_interrupt_sleep(player: Player, state: WorldState, locale: str) -> li
     chance = 0.0
     if player.wanted_level >= 2:
         chance += 0.08 + player.wanted_level * 0.02
-    if room and room.district in cfg.districts_no_outdoor_sleep and not _is_indoor(room, cfg):
+    if outdoor_sleep_unsafe(room, cfg):
         chance += 0.12
     weather = weather_for_room(state, player.room_id) if room else ""
     if weather == "acid_rain" and room and not _is_indoor(room, cfg):

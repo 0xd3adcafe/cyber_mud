@@ -6,6 +6,7 @@ EFFECT_BURN = "burn"
 EFFECT_SHOCK = "shock"
 EFFECT_BLIND = "blind"
 EFFECT_BLEED = "bleed"
+EFFECT_POISON = "poison"
 
 
 @dataclass

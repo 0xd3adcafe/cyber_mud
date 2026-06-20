@@ -65,6 +65,9 @@ def _handle_hack(ctx: CommandContext) -> CommandResult:
         return ok([t(ctx.player.locale, "net.no_ram")], meta=net_meta(ctx))
 
     ctx.player.ram -= 1
+    from world.life import gain_fatigue
+
+    gain_fatigue(ctx.player, "netrun")
     label = net_node_label_with_id(node, ctx.player.locale)
     from world.progression import award_xp
 

@@ -113,6 +113,9 @@ def resolve_player_strike(
 
     encounter.npc_hp -= damage
     encounter.player_cd = style_def.cd_ticks
+    from world.life import gain_fatigue
+
+    gain_fatigue(player, "combat")
     label = npc_label(state, encounter.npc_id, locale)
 
     if style_id == STYLE_BACKSTAB and not backstab_hit:

@@ -186,6 +186,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Kabuki & district expansion (2026-06) | `kabuki_vip`, `kabuki_bazaar`, Little China, Corpo hubs; `velvet_job`; `tests/test_world_districts.py` |
 | Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions in `test_client_app.py` |
 | Life commands L.1–L.8 (2026-06) | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable rest anchors; vitals/RAM regen; wake on move/say/talk/combat; PDA + `%posture`; help category **Life & vitals**; `tests/test_life_commands.py` |
+| Life command follow-ups (2026-06) | Activity fatigue gain (`move`/`combat`/`netrun`); district `safety` outdoor sleep gate; rest period/weather multipliers in `world/modifiers.py`; poison blocks sleep; high-fatigue HP regen penalty; `tests/test_life_commands.py`, `tests/test_modifiers.py` |
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 
 ## Multi-session development (mandatory)
@@ -273,9 +274,9 @@ Not yet implemented or only partially implemented.
 |-------|------|---------------------|
 | ~~L.1~~ | ~~Posture & fatigue model~~ | ✅ `Player.posture`; `fatigue` 0–100; `world/life.py`; `persistence/save.py` |
 | ~~L.2~~ | ~~Core life commands~~ | ✅ `commands/life.py`: `sit`, `stand`, `lie`, `rest`, `sleep`, `wake`; combat/NETRUN/chase blocks; locale `life.*` en/zh |
-| ~~L.3~~ | ~~Environment rest rules~~ | ✅ `data/life.yaml`; room `tags` + district gate `sleep`; period/weather multipliers in `world/life.py` |
+| ~~L.3~~ | ~~Environment rest rules~~ | ✅ `data/life.yaml`; room `tags` + district `safety` gate `sleep`; period/weather multipliers in `world/modifiers.py` + `world/life.py` |
 | ~~L.4~~ | ~~Interactable rest anchors~~ | ✅ `canteen_bench`, `flat_bunk`, `clinic_bed`, `lounge_booth`; `world/interactables.py` |
-| ~~L.5~~ | ~~Vitals & status integration~~ | ✅ `world/vitals.py` HP/RAM regen; fatigue tick; bleed blocks sleep; low `humanity` penalty |
+| ~~L.5~~ | ~~Vitals & status integration~~ | ✅ `world/vitals.py` HP/RAM regen; rest reduces fatigue tick; activity adds fatigue; bleed/poison block sleep; high fatigue slows regen; low `humanity` penalty |
 | ~~L.6~~ | ~~Risk & social presence~~ | ✅ peer posture in `look`/`scan`; sleep interrupt tick; wake on `go`/`say`/`talk`/combat |
 | ~~L.7~~ | ~~Client & PDA~~ | ✅ meta `posture`/`fatigue`; PDA row; `%posture` prompt token |
 | ~~L.8~~ | ~~Tests, help, tutorial~~ | ✅ `tests/test_life_commands.py`; help category **Life & vitals**; canteen bench + instructor line |

@@ -65,3 +65,37 @@ def movement_blocked_by_weather(state: WorldState, room_id: str, *, roll: float)
     weather = weather_for_room(state, room_id)
     period = period_for_room(state)
     return roll < movement_fail_chance(weather, period)
+
+
+def rest_weather_multiplier(
+    weather_type: str,
+    *,
+    outdoor: bool,
+    table: dict[str, float] | None = None,
+) -> float:
+    if not outdoor:
+        return 1.0
+    return (table or {}).get(weather_type, 1.0)
+
+
+def rest_period_multiplier(
+    period_id: str,
+    *,
+    indoor: bool,
+    table: dict[str, float] | None = None,
+) -> float:
+    mult = (table or {}).get(period_id, 1.0)
+    if indoor and period_id == "night":
+        mult *= 1.1
+    return mult
+
+
+def rest_unsafe_district_penalty(
+    district_safety: int,
+    min_safety: int,
+    *,
+    outdoor: bool,
+) -> float:
+    if not outdoor or district_safety >= min_safety:
+        return 1.0
+    return 0.5

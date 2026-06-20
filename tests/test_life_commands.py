@@ -1,16 +1,23 @@
 from __future__ import annotations
 
-from commands.registry import CommandContext, dispatch
+from commands.registry import dispatch
 from tests.conftest import make_player, make_state
-from world.life import POSTURE_SITTING, POSTURE_SLEEPING, POSTURE_STANDING, load_life_config
-from world.status_effects import EFFECT_BLEED
-from world.vitals import apply_hp_regen, calc_hp_regen
+from world.life import (
+    POSTURE_SITTING,
+    POSTURE_SLEEPING,
+    POSTURE_STANDING,
+    load_life_config,
+    reset_life_config,
+    rest_environment_mult,
+)
+from world.modifiers import rest_period_multiplier, rest_weather_multiplier
+from world.status_effects import EFFECT_BLEED, EFFECT_POISON
+from world.vitals import calc_hp_regen
 
 
 def test_sit_and_stand():
     state = make_state()
     player = make_player(locale="en", hp=80)
-    ctx = CommandContext(player, state, "")
 
     result = dispatch("sit", player, state, [], [])
     assert player.posture == POSTURE_SITTING
@@ -96,3 +103,65 @@ def test_say_wakes_from_sleep():
     result = dispatch("say hello", player, state, [], [])
     assert player.posture == POSTURE_STANDING
     assert len(result.lines) >= 2
+
+
+def test_movement_adds_fatigue():
+    reset_life_config()
+    state = make_state()
+    player = make_player(locale="en", room_id="square", fatigue=0)
+    dispatch("go west", player, state, [], [])
+    assert player.fatigue == 2
+
+
+def test_combat_adds_fatigue():
+    reset_life_config()
+    player = make_player(room_id="alley", name="V", fatigue=0)
+    state = make_state()
+    dispatch("attack thug", player, state, [], [])
+    assert player.fatigue == 4
+
+
+def test_sleep_refused_outdoor_low_safety_district():
+    reset_life_config()
+    state = make_state()
+    player = make_player(locale="en", room_id="docks")
+    result = dispatch("sleep", player, state, [], [])
+    assert player.posture != POSTURE_SLEEPING
+    assert any("hostile" in line.lower() or "safe" in line.lower() for line in result.lines)
+
+
+def test_sleep_refused_with_poison():
+    reset_life_config()
+    state = make_state()
+    player = make_player(locale="en", room_id="watson_flat", home_room_id="watson_flat")
+    player.player_status[EFFECT_POISON] = 3
+    result = dispatch("sleep", player, state, [], [])
+    assert player.posture != POSTURE_SLEEPING
+    assert any("toxin" in line.lower() or "poison" in line.lower() for line in result.lines)
+
+
+def test_high_fatigue_reduces_rest_regen():
+    reset_life_config()
+    state = make_state()
+    player = make_player(locale="en", hp=50, max_hp=100, fatigue=75, body=10)
+    player.posture = POSTURE_SITTING
+    player.room_id = "watson_flat"
+    player.home_room_id = "watson_flat"
+    tired = calc_hp_regen(player, "noon", state=state)
+    player.fatigue = 95
+    exhausted = calc_hp_regen(player, "noon", state=state)
+    assert exhausted < tired
+
+
+def test_rest_environment_uses_modifiers():
+    reset_life_config()
+    cfg = load_life_config()
+    assert rest_weather_multiplier("acid_rain", outdoor=True, table=cfg.weather_outdoor_mult) == 0.35
+    assert rest_period_multiplier("night", indoor=True, table=cfg.period_hp_mult) > 1.2
+    state = make_state()
+    player = make_player(locale="en", hp=50, max_hp=100)
+    player.posture = POSTURE_SITTING
+    player.room_id = "docks"
+    state.weather["docks"] = "acid_rain"
+    mult = rest_environment_mult(player, state, "noon")
+    assert mult < 0.5

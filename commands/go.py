@@ -43,6 +43,9 @@ def handle(ctx: CommandContext):
             life_lines.append(t(ctx.player.locale, "life.wake_on_move"))
 
     ctx.player.room_id = dest_id
+    from world.life import gain_fatigue
+
+    gain_fatigue(ctx.player, "move")
     from world.quests import advance_quest_on_visit
     from world.trauma import treat_trauma_at_ripperdoc
 

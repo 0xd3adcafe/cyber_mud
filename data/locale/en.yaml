@@ -330,6 +330,7 @@ life:
   blocked_netrun: "Your mind is jacked in—you cannot rest in NETRUN."
   blocked_chase: "Someone is on your tail—you cannot stop here."
   sleep_bleed: "Blood loss keeps you from sleeping."
+  sleep_poison: "Toxins in your blood keep you from sleeping."
   sleep_status: "Injury and status effects keep you from deep sleep."
   sleep_unsafe: "This district is too hostile to sleep outdoors."
   sleep_nowhere: "Nowhere safe to sleep—find a home, clinic, lounge, or rest spot (interact bench/bed)."

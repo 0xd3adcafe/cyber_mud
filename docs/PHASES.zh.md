@@ -186,6 +186,7 @@
 | Kabuki 與區域擴充（2026-06） | `kabuki_vip`、`kabuki_bazaar`、小中國街、企業區樞紐；`velvet_job`；`tests/test_world_districts.py` |
 | Client 版面測試 helper | `tests/client_ui_helpers.py`；`test_client_app.py` 側欄／help overlay 穩定斷言 |
 | 生活指令 L.1–L.8（2026-06） | `sit`／`stand`／`lie`／`rest`／`sleep`／`wake`；`world/life.py`、`data/life.yaml`；互動休息錨點；生命徵象／RAM 回復；移動／說話／戰鬥喚醒；PDA＋`%posture`；help 分類 **生活與生命徵象**；`tests/test_life_commands.py` |
+| 生活指令後續補齊（2026-06） | 活動累積疲勞（`move`／`combat`／`netrun`）；區域 `safety` 戶外睡眠門檻；休息時段／天氣倍率於 `world/modifiers.py`；毒素禁止睡眠；高疲勞降低回血；`tests/test_life_commands.py`、`tests/test_modifiers.py` |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 
 ## 多 session 開發（必做）
@@ -271,9 +272,9 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 |------|------|------------|
 | ~~L.1~~ | ~~姿態與疲勞模型~~ | ✅ `Player.posture`；`fatigue` 0–100；`world/life.py`；`persistence/save.py` |
 | ~~L.2~~ | ~~核心生活指令~~ | ✅ `commands/life.py`：`sit`、`stand`、`lie`、`rest`、`sleep`、`wake`；戰鬥／NETRUN／追擊禁止；locale `life.*` 中英 |
-| ~~L.3~~ | ~~環境休息規則~~ | ✅ `data/life.yaml`；房間 `tags`＋區域限制 `sleep`；時段／天氣倍率於 `world/life.py` |
+| ~~L.3~~ | ~~環境休息規則~~ | ✅ `data/life.yaml`；房間 `tags`＋區域 `safety` 限制 `sleep`；時段／天氣倍率於 `world/modifiers.py`＋`world/life.py` |
 | ~~L.4~~ | ~~互動物休息錨點~~ | ✅ `canteen_bench`、`flat_bunk`、`clinic_bed`、`lounge_booth`；`world/interactables.py` |
-| ~~L.5~~ | ~~生命徵象與狀態整合~~ | ✅ `world/vitals.py` HP／RAM 回復；疲勞 tick；流血禁止睡眠；低 `humanity` 懲罰 |
+| ~~L.5~~ | ~~生命徵象與狀態整合~~ | ✅ `world/vitals.py` HP／RAM 回復；休息 tick 降疲勞、活動累積疲勞；流血／毒素禁止睡眠；高疲勞減慢回血；低 `humanity` 懲罰 |
 | ~~L.6~~ | ~~風險與社交存在感~~ | ✅ `look`／`scan` 顯示姿態；睡眠打斷 tick；`go`／`say`／`talk`／戰鬥喚醒 |
 | ~~L.7~~ | ~~Client 與 PDA~~ | ✅ meta `posture`／`fatigue`；PDA 列；`%posture` prompt token |
 | ~~L.8~~ | ~~測試、help、教程~~ | ✅ `tests/test_life_commands.py`；help 分類 **生活與生命徵象**；餐廳長椅＋教官示範 |

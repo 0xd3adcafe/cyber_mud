@@ -1,5 +1,25 @@
 fatigue_max: 100
 
+fatigue_gain:
+  move: 2
+  combat: 4
+  netrun: 3
+
+fatigue_tired_threshold: 70
+fatigue_exhausted_threshold: 90
+
+sleep_min_outdoor_safety: 2
+
+district_safety:
+  tutorial: 3
+  watson: 2
+  kabuki: 2
+  little_china: 2
+  corpo: 3
+  docks: 1
+  undercity: 1
+  combat_zone: 0
+
 postures:
   sitting:
     fatigue_delta: -3
