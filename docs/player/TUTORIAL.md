@@ -39,6 +39,7 @@ Life commands (`sit`, `rest`, `sleep`, `wake`) are taught in the **Trainee Cante
 | Exit | Room | Learn |
 |------|------|-------|
 | `up` | Mission Briefing | gigs, stats, factions |
+| `east` (from briefing) | Graduation Checkpoint | rotation quest turn-in |
 | `north` | Combat Drill | attack, defend, flee |
 | `east` | Netrun Sim Bay | `net`, hack, RAM |
 | `south` | Armory | equip, take, inventory |
@@ -69,14 +70,34 @@ Try:
 ```text
 stats
 gigs
+gigs accept tutorial_rotation
 journal
 ```
 
 - **gigs** / **F7** — street job board and tracker  
+- **gigs accept tutorial_rotation** — multi-stage yard drill (gear, combat, NETRUN, graduate stamp)  
 - **stats** — level, XP, attribute points  
 - **recall** — teleport back to Training Yard  
 
-`down` returns to hub.
+`east` → **Graduation Checkpoint** (`tutorial_debrief`). `down` returns to hub.
+
+## 1b. Graduation Checkpoint (`tutorial_debrief`)
+
+```text
++-------------------------------------------------------+
+|  GRAD PAD          |  WARDEN                         |
+|  rotation stamp    |  talk for badge                 |
++-------------------------------------------------------+
+```
+
+After journal shows all rotation stages complete:
+
+```text
+interact tutorial_grad_pad
+talk grad_warden
+```
+
+You receive a **trainee graduate badge** and street cred. `west` → briefing.
 
 ## 2. Armory (`tutorial_armory`)
 
@@ -93,9 +114,12 @@ take trainee_blade
 inventory
 equip trainee_blade
 equipment
+interact tutorial_weapon_rack
+interact tutorial_equip_mirror
+talk armor_tech
 ```
 
-Use **F5** for equipment sidebar. Try `look trainee_blade` for item details.
+Use **F5** for equipment sidebar. Try `look trainee_blade` for item details. The **armor tech** walks through all seven slots.
 
 `north` back to hub. `west` → **Trainee Canteen**.
 
@@ -140,6 +164,11 @@ Also try `eat`, `drink`, and `use med_stim` with the canteen tech NPC. `east` re
 | Mitigate | `defend` |
 | Escape | `flee` |
 | Ranged | `shoot` / `slash` / `bash` (if weapon equipped) |
+
+```text
+talk combat_referee
+interact tutorial_combat_holo
+```
 
 Combat is **real-time** with cooldowns—watch the client status bar and hint line.
 

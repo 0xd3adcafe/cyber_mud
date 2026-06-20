@@ -134,6 +134,79 @@ interactables:
     description_en: A sim-clinic teaching terminal showing cyber slot info.
     message_zh: 螢幕列出九個義體槽與 install／uninstall 流程——此處為安全模擬，不會觸發幻痛。
     message_en: "The screen lists nine cyber slots and install/uninstall steps—safe sim, no psychosis."
+  tutorial_weapon_rack:
+    room_id: tutorial_armory
+    name_zh: 武器示範架
+    name_en: Weapon Demo Rack
+    description_zh: 標示 power／tech／smart／melee 類型的全息武器架。
+    description_en: A holo rack labeling power, tech, smart, and melee weapon types.
+    once_key: tutorial_weapon_rack
+    message_zh: 架子亮起：「刀棍是 melee；手槍可副手；卡賓槍雙手；智慧槍示範鎖定——take 後 equip，再 look 武器看數值。」
+    message_en: 'The rack glows: "Blades are melee; pistols go secondary; carbines two-hand; smartguns demo lock-on—take, equip, then look the weapon."'
+  tutorial_equip_mirror:
+    room_id: tutorial_armory
+    name_zh: 裝備全息鏡
+    name_en: Equipment Holo Mirror
+    description_zh: 投影七個裝備槽與當前穿戴狀態的教學鏡。
+    description_en: A teaching mirror projecting seven equipment slots and your loadout.
+    once_key: tutorial_equip_mirror
+    message_zh: 鏡面浮現：weapon／head／inner_torso／outer_torso／legs／feet／cyber——輸入 equipment 對照，護具技師可講解疊穿順序。
+    message_en: 'The mirror shows: weapon, head, inner_torso, outer_torso, legs, feet, cyber—type equipment; the armor tech explains layering.'
+  tutorial_combat_holo:
+    room_id: tutorial_combat
+    name_zh: 戰鬥戰術全息
+    name_en: Combat Tactics Holo
+    description_zh: 循環播放 defend、flee 與冷卻節奏的戰術投影。
+    description_en: A holo loop of defend, flee, and cooldown pacing.
+    once_key: tutorial_combat_holo
+    message_zh: 投影朗讀：「attack 開戰；defend 減傷；flee 撤退；狀態列顯示冷卻秒數——陪練機械人掉落 med_stim 可練 use。」
+    message_en: 'The holo reads: "attack to engage; defend to mitigate; flee to escape; watch cooldown seconds—sparring drone drops med_stim for use practice."'
+  tutorial_course_gate:
+    room_id: tutorial_course
+    name_zh: 障礙檢查閘
+    name_en: Course Check Gate
+    description_zh: 掃描信標通過後才亮綠燈的互動閘門。
+    description_en: An interact gate that lights green after you scan the beacon post.
+    once_key: tutorial_course_gate
+    message_zh: 閘門開啟：「scan 列出環境；interact 掃描柱後再來此閘——移動靶 patrol_dummy 可練 flee。」
+    message_en: 'The gate opens: "scan the room; interact the scan post first—patrol_dummy at the end for flee drills."'
+  tutorial_range_lane:
+    room_id: tutorial_range
+    name_zh: 射擊標線
+    name_en: Firing Lane Marker
+    description_zh: 標示射擊姿勢與 weapon_mode 的軌道標線。
+    description_en: Rail lane markers for stance and weapon_mode drills.
+    once_key: tutorial_range_lane
+    message_zh: 標線亮起：「裝備 training_sidearm 或 training_tech_pistol；shoot 遠程；training_carbine 需雙手——靶場教官在旁。」
+    message_en: 'Markers glow: "Equip training_sidearm or training_tech_pistol; shoot at targets; training_carbine is two-handed—the range officer can advise."'
+  tutorial_net_jack:
+    room_id: tutorial_net
+    name_zh: 神經接口教學座
+    name_en: Neural Jack Tutorial Seat
+    description_zh: 隔離的訓練用神經接口座，示範 net／probe／hack 流程。
+    description_en: An isolated jack seat demoing net, probe, and hack flow.
+    once_key: tutorial_net_jack
+    message_zh: 座席投影：「net 進入模擬；probe 掃節點；hack tutorial_terminal 完成入侵練習；exit 返回實體層。」
+    message_en: 'The seat projects: "net to enter sim; probe nodes; hack tutorial_terminal; exit back to physical layer."'
+  tutorial_stim_crane:
+    room_id: tutorial_medbay
+    name_zh: 急救吊臂
+    name_en: Trauma Crane Arm
+    description_zh: 模擬診所的單次急救敷料吊臂。
+    description_en: A sim-clinic crane arm with one-time dressings.
+    gives_item: field_bandage
+    once_key: tutorial_stim_crane
+    message_zh: 吊臂降下一份戰場繃帶——受傷時 use field_bandage 或 med_stim。
+    message_en: The crane lowers a field bandage—use field_bandage or med_stim when hurt.
+  tutorial_grad_pad:
+    room_id: tutorial_debrief
+    name_zh: 結業感應台
+    name_en: Graduate Stamp Pad
+    description_zh: 感應學員輪值檢定完成度的全息台。
+    description_en: A holo pad that senses rotation drill completion.
+    once_key: tutorial_grad_pad
+    message_zh: 感應台確認：「完成 instructor 簡介、武器架、陪練擊倒、終端 hack 後，向畢業導師 talk 蓋章。」
+    message_en: 'The pad confirms: "After instructor briefing, weapon rack, sparring knockdown, and terminal hack—talk to the graduation warden."'
   tyrell_plaza_scanner:
     room_id: tyrell_plaza
     name_zh: 樣本掃描台

@@ -206,6 +206,32 @@ quests:
         objective_target: kabuki_spotter
       - objective_type: talk_npc
         objective_target: broker
+  tutorial_rotation:
+    name_zh: 訓練輪值檢定
+    name_en: Training Rotation Drill
+    npc_id: rookie_fixer
+    description_zh: 實習中介要你完成一輪基礎檢定：簡報、裝備、戰鬥、駭入，再到畢業檢定室蓋章。
+    description_en: The rookie fixer wants a full basics rotation—briefing, gear, combat, netrun, then graduate stamp.
+    hint_zh: talk instructor；interact 武器架；擊倒陪練機械人；hack 訓練終端；interact 結業台；talk 畢業導師。
+    hint_en: talk instructor; interact weapon rack; knock down sparring drone; hack training terminal; interact grad pad; talk graduation warden.
+    complete_npc_id: grad_warden
+    reward_gold: 50
+    reward_xp: 40
+    reward_street_cred: 3
+    reward_items: [tutorial_badge]
+    stages:
+      - objective_type: talk_npc
+        objective_target: instructor
+      - objective_type: interact
+        objective_target: tutorial_weapon_rack
+      - objective_type: defeat_npc
+        objective_target: sparring_bot
+      - objective_type: hack_net
+        objective_target: tutorial_terminal
+      - objective_type: interact
+        objective_target: tutorial_grad_pad
+      - objective_type: talk_npc
+        objective_target: grad_warden
   zone_sweep:
     name_zh: 戰區掃描
     name_en: Zone Sweep

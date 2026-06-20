@@ -33,6 +33,9 @@ room_items:
   - field_manual
   tutorial_briefing:
   - field_manual
+  tutorial_debrief:
+  - field_manual
+  - tutorial_badge
   tutorial_armory:
   - trainee_blade
   - training_sidearm
@@ -54,6 +57,8 @@ room_items:
   tutorial_course:
   - field_manual
   - trainee_baton
+  tutorial_combat:
+  - field_bandage
   tutorial_medbay:
   - practice_cyber_kit
   - med_stim
@@ -61,6 +66,7 @@ room_items:
   tutorial_range:
   - training_sidearm
   - training_carbine
+  - training_tech_pistol
   - trainee_helmet
   - training_smartgun
 rooms:
@@ -339,6 +345,25 @@ rooms:
     - social
     exits:
       down: tutorial
+      east: tutorial_debrief
+  tutorial_debrief:
+    name_zh: 畢業檢定室
+    name_en: Graduation Checkpoint
+    description_zh: '全息評分牆與出口閘門並列。完成輪值檢定後，導師會蓋上學員結業章。
+
+      '
+    description_en: 'A holo score wall faces the exit gate—finish your rotation drill
+      and the warden stamps your graduate badge.
+
+      '
+    district: tutorial
+    grid_x: 3
+    grid_y: 2
+    tags:
+    - tutorial
+    - social
+    exits:
+      west: tutorial_briefing
   tutorial_combat:
     name_zh: 戰鬥訓練區
     name_en: Combat Drill Zone
@@ -3929,6 +3954,34 @@ items:
     description_en: A pocket manual from the yard—cover reads "look first, then act."
     takeable: true
     value: 5
+  field_bandage:
+    name_zh: 戰場繃帶
+    name_en: Field Bandage
+    description_zh: 單次止血敷料，訓練場常備的輕量急救品。
+    description_en: A single-use dressing—light trauma care stocked on the yard.
+    takeable: true
+    consumable: medicine
+    hp_restore: 15
+    value: 12
+  training_tech_pistol:
+    name_zh: 訓練用科技手槍
+    name_en: Training Tech Pistol
+    description_zh: 示範科技彈道與充能節奏的教學槍，橡膠彈頭。
+    description_en: A teaching pistol for tech ballistics and charge rhythm—rubber slugs.
+    takeable: true
+    slot: weapon
+    weapon_type: handgun
+    weapon_class: tech
+    weapon_mode: secondary
+    weapon_damage: 8
+    value: 65
+  tutorial_badge:
+    name_zh: 學員結業徽章
+    name_en: Trainee Graduate Badge
+    description_zh: 完成訓練輪值檢定後核發的全息徽章，證明你已準備進入夜城。
+    description_en: A holo badge issued after the rotation drill—proof you're ready for Night City.
+    takeable: true
+    value: 5
   training_smartgun:
     name_zh: 訓練用智慧手槍
     name_en: Training Smart Pistol
@@ -4180,6 +4233,39 @@ npcs:
     talk_key: course_guide
     idle_msg_zh: 「先 scan 看環境，再 interact 閘門。」
     idle_msg_en: '"scan first, then interact the gate."'
+  armor_tech:
+    name_zh: 護具技師
+    name_en: Armor Tech
+    room_id: tutorial_armory
+    description_zh: 在人形模特兒上示範七槽裝備疊穿的技師。
+    description_en: A tech layering armor on a mannequin—walks through all seven slots.
+    hp: 48
+    hostile: false
+    talk_key: armor_tech
+    idle_msg_zh: 「內層、外層、頭盔、腿靴——一件一件 equip。」
+    idle_msg_en: '"Undersuit, vest, helmet, boots—equip one layer at a time."'
+  combat_referee:
+    name_zh: 戰鬥裁判
+    name_en: Combat Referee
+    room_id: tutorial_combat
+    description_zh: 監看陪練回合的裁判，講解 defend、flee 與冷卻節奏。
+    description_en: A referee watching sparring rounds—covers defend, flee, and cooldowns.
+    hp: 52
+    hostile: false
+    talk_key: combat_referee
+    idle_msg_zh: 「撐不住就 defend，想撤就 flee——看狀態列倒數。」
+    idle_msg_en: '"Tough spot? defend. Need out? flee—watch the status countdown."'
+  grad_warden:
+    name_zh: 畢業導師
+    name_en: Graduation Warden
+    room_id: tutorial_debrief
+    description_zh: 核對檢定分數並蓋上結業章的導師，指引新人前往霓虹廣場。
+    description_en: A warden who stamps graduate badges and points rookies to Neon Square.
+    hp: 55
+    hostile: false
+    talk_key: grad_warden
+    idle_msg_zh: 「完成輪值檢定就來蓋章；準備好了，訓練場往西進夜城。」
+    idle_msg_en: '"Finish the rotation for your stamp—when ready, go west from the yard."'
   kabuki_host:
     name_zh: 夜總會接待
     name_en: Lounge Host

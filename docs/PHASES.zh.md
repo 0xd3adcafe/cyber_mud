@@ -199,6 +199,7 @@
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 | Validate 加速（2026-06） | 快取 `load_world`／`default_room_items`／時段與天氣 YAML；`pytest-xdist` 平行 pytest；dev reload 呼叫 `clear_world_cache()`；約 6 分鐘→約 50 秒 |
 | 安全性 ASVS L1 ASVS.1–5（2026-06） | PBKDF2 密碼＋舊版自動升級；統一 `invalid_credentials`；存檔路徑驗證；輸入邊界；每連線認證速率限制；存檔 `0600`；`docs/SECURITY.md`；`tests/test_security_auth.py` |
+| 新手教學區 T.2–T.7（2026-06） | `tutorial_debrief`；3 NPC；8 互動物；3 物品；`tutorial_rotation` 委託；`tests/test_tutorial_zone.py` 13 案例 |
 
 ## 多 session 開發（必做）
 
@@ -364,6 +365,24 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ASVS.14 | 安全迴歸測試 | 速率限制整合與協定邊界；`tests/test_security_auth.py` |
 
 **建議順序：** ASVS.1–5（已交付）→ ASVS.6 → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14。
+
+### 新手教學區（入門深度）
+
+**目標：** 訓練場以 NPC、地面戰利品、互動物與多階段輪值委託，教會移動、裝備、戰鬥、NETRUN、義體、生活指令與 gigs，再進入霓虹廣場。
+
+**基線（2026-06）：** **10 房**、**13 NPC**、**8 互動物**（第三輪擴充）、`tutorial_rotation` 委託；`tests/test_tutorial_zone.py`。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| ~~T.1~~ | ~~前兩輪擴充~~ | ✅ 簡報室／餐廳／靶場／障礙道／模擬診所；10 NPC；4 互動物；`tutorial_supply` |
+| ~~T.2~~ | ~~畢業檢定室~~ | ✅ `tutorial_debrief`；`grad_warden`；簡報室東向 |
+| ~~T.3~~ | ~~裝備與戰鬥 NPC~~ | ✅ `armor_tech`、`combat_referee`；talk en/zh |
+| ~~T.4~~ | ~~情境互動物~~ | ✅ 武器架、全息鏡、戰術全息、檢查閘、射擊標線、神經座、急救吊臂、結業台 |
+| ~~T.5~~ | ~~訓練物品~~ | ✅ `field_bandage`、`training_tech_pistol`、`tutorial_badge` |
+| ~~T.6~~ | ~~輪值委託~~ | ✅ `tutorial_rotation`；`gigs accept`；`grad_warden` 交件 |
+| ~~T.7~~ | ~~測試與玩家指南~~ | ✅ `tests/test_tutorial_zone.py` 13 案例；`docs/player/TUTORIAL.md` |
+
+**建議順序：** T.1 → T.2 → T.3 → T.4 → T.5 → T.6 → T.7。**全階段已交付（2026-06）。**
 
 ---
 

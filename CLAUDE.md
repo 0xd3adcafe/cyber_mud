@@ -346,6 +346,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions |
 | Life commands L.1–L.8 | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable anchors; vitals/RAM regen; PDA + `%posture`; `tests/test_life_commands.py` |
 | Security ASVS L1 ASVS.1–5 | `persistence/passwords.py`, `shared/security.py`, `server/rate_limit.py`; unified `invalid_credentials`; save `0600`; `docs/SECURITY.md`; `tests/test_security_auth.py` |
+| Tutorial zone T.2–T.7 | `tutorial_debrief`, 3 NPCs, 8 interactables, `tutorial_rotation` quest; `tests/test_tutorial_zone.py` |
 
 World setting and district expansion: [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)).
 

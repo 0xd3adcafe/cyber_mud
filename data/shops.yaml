@@ -46,7 +46,13 @@ shops:
     sells:
       trainee_blade: 20
       training_sidearm: 45
+      training_tech_pistol: 55
+      training_carbine: 85
       training_smartgun: 70
+      field_bandage: 10
+      trainee_undersuit: 22
+      trainee_pants: 24
+      trainee_boots: 20
       trainee_vest: 30
       trainee_helmet: 35
       trainee_baton: 15

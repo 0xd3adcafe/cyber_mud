@@ -41,6 +41,7 @@
 | 出口 | 房間 | 學習重點 |
 |------|------|----------|
 | `up` | Mission Briefing | gigs、stats、派系 |
+| `east`（自簡報室） | Graduation Checkpoint | 輪值委託交件 |
 | `north` | Combat Drill | attack、defend、flee |
 | `east` | Netrun Sim | `net`、hack、RAM |
 | `south` | Armory | equip、take、inventory |
@@ -71,14 +72,34 @@ talk <教官>
 ```text
 stats
 gigs
+gigs accept tutorial_rotation
 journal
 ```
 
 - **gigs** / **F7** — 街頭委託與追蹤  
+- **gigs accept tutorial_rotation** — 多階段訓練輪值（裝備、戰鬥、NETRUN、結業蓋章）  
 - **stats** — 等級、XP、屬性點  
 - **recall** — 回訓練場  
 
-`down` 回中樞。
+`east` → **畢業檢定室**（`tutorial_debrief`）。`down` 回中樞。
+
+## 1b. 畢業檢定室 (`tutorial_debrief`)
+
+```text
++-------------------------------------------------------+
+|  結業台          |  畢業導師                         |
+|  輪值感應        |  talk 蓋章                        |
++-------------------------------------------------------+
+```
+
+journal 顯示各階段完成後：
+
+```text
+interact tutorial_grad_pad
+talk grad_warden
+```
+
+取得**學員結業徽章**與街頭聲望。`west` → 簡報室。
 
 ## 2. 軍械庫 (`tutorial_armory`)
 
@@ -93,9 +114,12 @@ take trainee_blade
 inventory
 equip trainee_blade
 equipment
+interact tutorial_weapon_rack
+interact tutorial_equip_mirror
+talk armor_tech
 ```
 
-**F5** 開裝備側欄。`look trainee_blade` 看物品細節。
+**F5** 開裝備側欄。`look trainee_blade` 看物品細節。**護具技師**講解七槽疊穿。
 
 `north` 回中樞。`west` → **學員餐廳**。
 
@@ -140,6 +164,11 @@ wake
 | 防禦 | `defend` |
 | 脫離 | `flee` |
 | 遠程／刀械 | `shoot` / `slash` / `bash`（需裝備） |
+
+```text
+talk combat_referee
+interact tutorial_combat_holo
+```
 
 即時戰鬥有冷卻 — 看狀態列與 hint。
 

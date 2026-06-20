@@ -201,6 +201,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Client log UX CL.9–CL.11 (2026-06) | `/log compact`; `/log hide`/`show` channel toggles; `/log export`; `log_settings.py`; `tests/test_log_settings.py`; settings.json persistence |
 | Validate speedup (2026-06) | Cache `load_world`/`default_room_items`/time+weather YAML; `pytest-xdist` in `./admin.sh validate`; `clear_world_cache()` on dev reload; ~6 min → ~50s |
 | Security ASVS L1 ASVS.1–5 (2026-06) | PBKDF2 passwords + legacy rehash; unified `invalid_credentials`; save path validation; input bounds; per-connection auth rate limit; save `0600`; `docs/SECURITY.md`; `tests/test_security_auth.py` |
+| Tutorial zone T.2–T.7 (2026-06) | `tutorial_debrief`; 3 NPCs; 8 interactables; 3 items; `tutorial_rotation` quest; `tests/test_tutorial_zone.py` 13 cases |
 
 ## Multi-session development (mandatory)
 
@@ -368,6 +369,24 @@ Not yet implemented or only partially implemented.
 | ASVS.14 | Security regression suite | Rate-limit integration + protocol edge cases in `tests/test_security_auth.py` |
 
 **Suggested order:** ASVS.1–5 (shipped) → ASVS.6 → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14.
+
+### Tutorial zone (onboarding depth)
+
+**Goal:** The training yard teaches every core loop—movement, gear, combat, NETRUN, cyberware, life commands, and gigs—via authored NPCs, ground loot, interactables, and a multi-stage rotation quest before Neon Square.
+
+**Baseline (2026-06):** **10 rooms**, **13 NPCs**, **8 interactables** (third expansion), `tutorial_rotation` gig, `field_bandage` / `training_tech_pistol` / `tutorial_badge`; `tests/test_tutorial_zone.py`.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| ~~T.1~~ | ~~Prior expansions~~ | ✅ 9 rooms → briefing/canteen/range/course/medbay; 10 NPCs; 4 interactables; `tutorial_supply` shop |
+| ~~T.2~~ | ~~Graduation checkpoint room~~ | ✅ `tutorial_debrief`; `grad_warden`; east from briefing |
+| ~~T.3~~ | ~~Gear & combat NPCs~~ | ✅ `armor_tech`, `combat_referee`; talk keys en/zh |
+| ~~T.4~~ | ~~Scenario interactables~~ | ✅ weapon rack, equip mirror, combat holo, course gate, range lane, net jack, stim crane, grad pad |
+| ~~T.5~~ | ~~Training items~~ | ✅ `field_bandage`, `training_tech_pistol`, `tutorial_badge`; ground loot + shop stock |
+| ~~T.6~~ | ~~Rotation quest~~ | ✅ `tutorial_rotation` in `data/quests.yaml`; accept via `gigs`; turn-in `grad_warden` |
+| ~~T.7~~ | ~~Tests & player guide~~ | ✅ `tests/test_tutorial_zone.py` 13 cases; `docs/player/TUTORIAL.md` debrief section |
+
+**Suggested order:** T.1 (prior) → T.2 → T.3 → T.4 → T.5 → T.6 → T.7. **All phases shipped (2026-06).**
 
 ---
 
