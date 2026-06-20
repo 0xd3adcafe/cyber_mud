@@ -201,6 +201,7 @@
 | Validate 加速（2026-06） | 快取 `load_world`／`default_room_items`／時段與天氣 YAML；`pytest-xdist` 平行 pytest；dev reload 呼叫 `clear_world_cache()`；約 6 分鐘→約 50 秒 |
 | 安全性 ASVS L1 ASVS.1–5（2026-06） | PBKDF2 密碼＋舊版自動升級；統一 `invalid_credentials`；存檔路徑驗證；輸入邊界；每連線認證速率限制；存檔 `0600`；`docs/SECURITY.md`；`tests/test_security_auth.py` |
 | 新手教學區 T.2–T.7（2026-06） | `tutorial_debrief`；3 NPC；8 互動物；3 物品；`tutorial_rotation` 委託；`tests/test_tutorial_zone.py` 13 案例 |
+| PDA stats／talents 檢視（2026-06） | `pda stats`／`pda talents` 重用 `format_stats_lines`／`format_talents_catalog_lines`；`stats`／`talents` 不變；`tests/test_pda.py` |
 
 ## 多 session 開發（必做）
 
@@ -234,6 +235,17 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 ### 環境
 
 - pyenv 原生編譯 Python（環境設定，非遊戲功能）
+
+### 架構（增量）
+
+**目標：** 借鏡 Evennia 有用模式，不做全面 Entity 遷移——在現有 `world/tick.py` 上疊加 YAML 權限與延遲排程。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| ARCH.1 | Lock 簡化版（YAML 條件） | `world/locks.py` 或 `shared/locks.py`；房間／物品／互動物 `locks:`（`street_cred >= 30`、`has_item(corpo_token)`）；`go`／`use`／`hack`／`interact` 呼叫 `check_locks()`；locale；`tests/test_locks.py` |
+| ARCH.2 | Scheduler 薄層 | `world/scheduler.py`；`tick_count` 上 `delay_at_tick`／`interval`；可取消＋存檔恢復；首個案例：義體副作用倒數；`tests/test_scheduler.py` |
+
+**建議順序：** ARCH.1 → ARCH.2。**延後實作**（承接已刪除 `TODO.md` 的 Phase 1.2–1.3 範圍）。
 
 ### 成人／NSFW 內容（18+）
 

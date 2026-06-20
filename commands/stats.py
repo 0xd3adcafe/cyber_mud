@@ -7,7 +7,7 @@ from world.progression import skill_label, talent_label, xp_to_next_level
 from world.street_cred import street_cred_rank
 
 
-def handle(ctx: CommandContext):
+def format_stats_lines(ctx: CommandContext) -> list[str]:
     locale = ctx.player.locale
     player = ctx.player
     next_xp = xp_to_next_level(player.level)
@@ -65,7 +65,11 @@ def handle(ctx: CommandContext):
             lines.append(f"  • {label}")
     else:
         lines.append(t(locale, "stats.no_talents"))
-    return ok(lines, meta=player_meta(ctx))
+    return lines
+
+
+def handle(ctx: CommandContext):
+    return ok(format_stats_lines(ctx), meta=player_meta(ctx))
 
 
 register("stats", handle)

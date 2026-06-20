@@ -312,7 +312,7 @@ help_cmds:
   shop: "查看商店商品（shop）"
   buy: "購買物品（buy <物品>）"
   sell: "賣出物品（sell <物品>）"
-  pda: "個人終端（vitals，F2）"
+  pda: "個人終端（pda stats / pda talents，F2）"
   time: "查詢世界時間"
   prompt: "自訂提示符（prompt set/show）"
   login: "登入（login <名稱> <密碼>）"
@@ -406,6 +406,7 @@ repeat:
   stopped: "（重複結束 {done}/{total}）"
 
 pda:
+  usage: "用法：pda [stats|talents]  （完整成長：pda stats；天賦目錄：pda talents）"
   header: "◈ PDA — {name}"
   vitals: "生存  HP {hp}  │  ${gold}"
   life: "生活  {posture}  │  疲勞 {fatigue}"

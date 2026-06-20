@@ -312,7 +312,7 @@ help_cmds:
   shop: "List shop wares (shop)"
   buy: "Buy item (buy <item>)"
   sell: "Sell item (sell <item>)"
-  pda: "Personal agent (vitals, F2)"
+  pda: "Personal agent (pda stats / pda talents, F2)"
   time: "Show world time"
   prompt: "Custom prompt (prompt set/show)"
   login: "Log in (login <name> <password>)"
@@ -406,6 +406,7 @@ repeat:
   stopped: "(stopped after {done}/{total})"
 
 pda:
+  usage: "Usage: pda [stats|talents]  (full growth sheet: pda stats; talent catalog: pda talents)"
   header: "◈ PDA — {name}"
   vitals: "Vitals  HP {hp}  │  ${gold}"
   life: "Life  {posture}  │  Fatigue {fatigue}"

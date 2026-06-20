@@ -203,6 +203,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Validate speedup (2026-06) | Cache `load_world`/`default_room_items`/time+weather YAML; `pytest-xdist` in `./admin.sh validate`; `clear_world_cache()` on dev reload; ~6 min → ~50s |
 | Security ASVS L1 ASVS.1–5 (2026-06) | PBKDF2 passwords + legacy rehash; unified `invalid_credentials`; save path validation; input bounds; per-connection auth rate limit; save `0600`; `docs/SECURITY.md`; `tests/test_security_auth.py` |
 | Tutorial zone T.2–T.7 (2026-06) | `tutorial_debrief`; 3 NPCs; 8 interactables; 3 items; `tutorial_rotation` quest; `tests/test_tutorial_zone.py` 13 cases |
+| PDA stats & talents views (2026-06) | `pda stats` / `pda talents` reuse `format_stats_lines` / `format_talents_catalog_lines`; `stats` / `talents` unchanged; `tests/test_pda.py` |
 
 ## Multi-session development (mandatory)
 
@@ -238,6 +239,17 @@ Not yet implemented or only partially implemented.
 ### Environment
 
 - pyenv native Python build (environment setup, not a game feature)
+
+### Architecture (incremental)
+
+**Goal:** Adopt useful Evennia-style patterns without a full entity migration—YAML-driven gates and deferred tick tasks on the existing `world/tick.py` loop.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| ARCH.1 | Lock simplified (YAML predicates) | `world/locks.py` or `shared/locks.py`; room/item/interactable `locks:` in YAML (`street_cred >= 30`, `has_item(corpo_token)`); `check_locks()` in `go` / `use` / `hack` / `interact`; locale errors; `tests/test_locks.py` |
+| ARCH.2 | Scheduler thin layer | `world/scheduler.py`; `delay_at_tick` / `interval` hooks on `tick_count`; cancel + save restore; first use case: implant side-effect countdown; `tests/test_scheduler.py` |
+
+**Suggested order:** ARCH.1 → ARCH.2. **Deferred** (replaces removed `TODO.md` Phase 1.2–1.3 scope).
 
 ### Mature / NSFW content (18+)
 

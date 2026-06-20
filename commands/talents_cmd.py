@@ -23,16 +23,21 @@ def _format_talent_line(ctx: CommandContext, talent) -> str:
     return t(locale, "talent.list_line", name=label, status=status, desc=desc or "")
 
 
+def format_talents_catalog_lines(ctx: CommandContext) -> list[str]:
+    locale = ctx.player.locale
+    lines = [t(locale, "talent.header"), ""]
+    for talent in ctx.state.world.talents.values():
+        lines.append(_format_talent_line(ctx, talent))
+    lines.append("")
+    lines.append(t(locale, "talent.hint"))
+    return lines
+
+
 def handle(ctx: CommandContext):
     locale = ctx.player.locale
     target = ctx.args.strip()
     if not target:
-        lines = [t(locale, "talent.header"), ""]
-        for talent in ctx.state.world.talents.values():
-            lines.append(_format_talent_line(ctx, talent))
-        lines.append("")
-        lines.append(t(locale, "talent.hint"))
-        return ok(lines, meta=player_meta(ctx))
+        return ok(format_talents_catalog_lines(ctx), meta=player_meta(ctx))
 
     talent_id = resolve_talent_id(ctx.state.world, target)
     talent = ctx.state.world.talent(talent_id) if talent_id else None

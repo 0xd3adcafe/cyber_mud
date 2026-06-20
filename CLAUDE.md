@@ -248,6 +248,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **World expansion (WORLD.md)** | W.1–W.14 shipped (263 rooms / 121 NPCs / 45 items); see PHASES **World expansion** |
 | **Content depth** | D.1–D.10 shipped (spotlight NPCs, district quests, grid look flavor); see PHASES **Content depth** |
 | **Security (ASVS L1)** | ASVS.1–5 shipped (PBKDF2, unified login errors, save validation, input bounds, rate limit); ASVS.6–14 backlog; see [`docs/SECURITY.md`](docs/SECURITY.md) |
+| **Architecture (incremental)** | ARCH.1 Lock YAML predicates; ARCH.2 Scheduler thin layer on `tick_count`; see PHASES **Architecture (incremental)** |
 
 
 NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.17 shipped — see PHASES **Mature / NSFW content** table.
@@ -349,6 +350,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | Life commands L.1–L.8 | `sit`/`stand`/`lie`/`rest`/`sleep`/`wake`; `world/life.py`, `data/life.yaml`; interactable anchors; vitals/RAM regen; PDA + `%posture`; `tests/test_life_commands.py` |
 | Security ASVS L1 ASVS.1–5 | `persistence/passwords.py`, `shared/security.py`, `server/rate_limit.py`; unified `invalid_credentials`; save `0600`; `docs/SECURITY.md`; `tests/test_security_auth.py` |
 | Tutorial zone T.2–T.7 | `tutorial_debrief`, 3 NPCs, 8 interactables, `tutorial_rotation` quest; `tests/test_tutorial_zone.py` |
+| PDA stats & talents views | `pda stats` / `pda talents`; shared formatters with `stats` / `talents`; `tests/test_pda.py` |
 
 World setting and district expansion: [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)).
 
