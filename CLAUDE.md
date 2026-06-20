@@ -248,7 +248,6 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 維護規則見 [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)——**之後所有修正或變動都要更新 backlog**。
 
 - Phase E.4 文件 GitHub 風格 + TOC
-- NPC 任務編排工具（進階多 NPC 劇本）
 
 ### 近期完成（2026-06 backlog 批次）
 
