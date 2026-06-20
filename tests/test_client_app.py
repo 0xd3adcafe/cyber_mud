@@ -364,14 +364,20 @@ def test_panel_fetch_actions_do_not_block():
 
         app = CyberMudApp("127.0.0.1", 4000)
         scheduled: list[str] = []
+        help_scheduled = 0
 
         def _capture_schedule(panel_id: str) -> None:
             scheduled.append(panel_id)
+
+        def _capture_help() -> None:
+            nonlocal help_scheduled
+            help_scheduled += 1
 
         async with app.run_test(size=(120, 30)) as pilot:
             apply_meta(app.view, "auth", "1")
             app._set_auth_ui(True)
             app._schedule_panel_fetch = _capture_schedule
+            app._schedule_help_fetch = _capture_help
             await pilot.pause()
             t0 = time.monotonic()
             await app.action_panel_pda()
@@ -379,6 +385,49 @@ def test_panel_fetch_actions_do_not_block():
             await app.action_panel_help()
             elapsed = time.monotonic() - t0
             assert elapsed < 0.5
-            assert scheduled == ["pda", "map", "help"]
+            assert scheduled == ["pda", "map"]
+            assert help_scheduled == 1
+
+    asyncio.run(_run())
+
+
+def test_help_overlay_covers_log_not_sidebar():
+    async def _run() -> None:
+        from textual.containers import Container, Vertical, VerticalScroll
+        from textual.widgets import Static
+
+        from client.meta_handlers import apply_meta, handle_ui_json
+
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(120, 30)) as pilot:
+            apply_meta(app.view, "auth", "1")
+            app._set_auth_ui(True)
+            await pilot.pause()
+            wrap = app.query_one("#sidebar_wrap", Vertical)
+            dropdown = app.query_one("#help_dropdown", Vertical)
+            assert "help-dropdown-hidden" in dropdown.classes
+            assert "sidebar-hidden" in wrap.classes
+
+            app._open_help_overlay()
+            await pilot.pause()
+            assert "help-dropdown-hidden" not in dropdown.classes
+            assert "sidebar-hidden" in wrap.classes
+
+            apply_meta(app.view, "ui_panel", "help")
+            handle_ui_json(
+                app.view,
+                '{"panel":"help","sections":[{"kind":"list","items":["look — 察看","go — 移動"]}]}',
+            )
+            apply_meta(app.view, "ui_panel_end", "1")
+            app._render_help_overlay()
+            await pilot.pause()
+            content = app.query_one("#help_dropdown_content", Static)
+            rendered = str(content.render())
+            assert "look" in rendered
+            assert "help" not in app.view.sidebar_stack
+
+            scroll = app.query_one("#help_dropdown_scroll", VerticalScroll)
+            log_wrap = app.query_one("#scrollback_wrap", Container)
+            assert scroll.region.width >= log_wrap.region.width - 4
 
     asyncio.run(_run())

@@ -6,8 +6,9 @@ from dataclasses import dataclass, field
 from shared.completion import parse_csv_meta
 from shared.protocol import META_PREFIX, PANEL_PREFIX, UI_PREFIX
 
-SIDEBAR_PANEL_ORDER: tuple[str, ...] = ("pda", "map", "equipment", "help")
-SIDEBAR_PANEL_IDS: frozenset[str] = frozenset(SIDEBAR_PANEL_ORDER + ("status",))
+SIDEBAR_PANEL_ORDER: tuple[str, ...] = ("pda", "map", "equipment")
+SIDEBAR_PANEL_IDS: frozenset[str] = frozenset(SIDEBAR_PANEL_ORDER + ("status", "help"))
+HELP_OVERLAY_PANEL = "help"
 _SIDEBAR_AUTO_REFRESH_ON_MOVE = frozenset({"map"})
 _SIDEBAR_REFRESH_ON_EQUIP = frozenset({"pda", "equipment"})
 
@@ -166,7 +167,11 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         panel.lines = []
         panel.ui = None
     elif key == "ui_panel_end":
-        if state.pending_panel and state.sidebar_open:
+        if (
+            state.pending_panel
+            and state.sidebar_open
+            and state.pending_panel != HELP_OVERLAY_PANEL
+        ):
             if state.pending_panel not in state.sidebar_stack:
                 state.sidebar_stack.append(state.pending_panel)
         state.pending_panel = ""

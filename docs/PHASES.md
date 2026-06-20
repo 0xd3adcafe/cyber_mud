@@ -165,6 +165,7 @@
 | Prompt 完整版（client 即時預覽） | `client/prompt_preview.py`；`#prompt_preview` 輸入時展開 token；`/prompt template`／`show`／`reset`；meta `prompt_template`／`xp`；`tests/test_prompt_preview.py` |
 | NPC 任務編排工具 | `world/quest_author.py`；`tools/quest_author.py`；`./admin.sh quests list/show/validate/npc/scaffold`；`tests/test_quest_author.py` |
 | 完整任務系統 | `world/quests.py` `accept`／`abandon`／`requires_quest`／`reward_items`；目標 `defeat_npc`／`have_item`；`gigs accept`／`journal`；`alley_clearance`；`tests/test_quest_system.py` |
+| Help log 區 dropdown | `client/help_overlay.py`；`#help_dropdown` 覆蓋 `#scrollback_wrap`；F3／`help`／Esc 切換；不再進側欄 stack；`tests/test_help_overlay.py` |
 
 ## Backlog 維護慣例
 

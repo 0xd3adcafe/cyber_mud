@@ -20,6 +20,7 @@ from client.credentials import (
 )
 from client.connection import ServerConnection
 from client.login_art import render_login_art
+from client.help_overlay import format_help_overlay_content, help_overlay_header
 from client.login_motd import banner_text, default_tips, parse_motd_line
 from client.prompt_preview import (
     detect_prompt_edit,
@@ -52,6 +53,7 @@ from client.output_prefix import classify_output_line, spinner_char
 from client.tui_styles import APP_CSS
 from client.ui_format import format_hotkey_bar, format_info_bar, format_sidebar_header
 from client.meta_handlers import (
+    HELP_OVERLAY_PANEL,
     ClientViewState,
     active_prompt,
     apply_meta,
@@ -90,6 +92,7 @@ class CyberMudApp(App):
         Binding("f5", "panel_equipment", "裝備", show=True),
         Binding("f6", "toggle_sidebar", "收合側欄", show=True),
         Binding("f7", "clear_credentials", "清除記憶", show=False),
+        Binding("escape", "close_help_overlay", "關閉說明", show=False),
     ]
 
     def __init__(self, host: str, port: int) -> None:
@@ -116,6 +119,10 @@ class CyberMudApp(App):
         self._panel_fetch_event: asyncio.Event | None = None
         self._panel_fetching = False
         self._panel_fetch_generation = 0
+        self._help_overlay_open = False
+        self._help_fetch_event: asyncio.Event | None = None
+        self._help_fetching = False
+        self._help_fetch_generation = 0
         self._cmd_sent_at = 0.0
         self._last_recv_at = 0.0
         self._completion_cycle_key = ""
@@ -199,6 +206,10 @@ class CyberMudApp(App):
             with Horizontal(id="main_row"):
                 with Container(id="scrollback_wrap"):
                     yield RichLog(id="log", highlight=True, markup=True)
+                    with Vertical(id="help_dropdown", classes="help-dropdown-hidden"):
+                        yield Static(help_overlay_header(), id="help_dropdown_header")
+                        with VerticalScroll(id="help_dropdown_scroll"):
+                            yield Static("", id="help_dropdown_content")
                 with Vertical(id="sidebar_wrap", classes="sidebar-hidden"):
                     yield Static("", id="sidebar_header")
                     yield VerticalScroll(
@@ -238,7 +249,7 @@ class CyberMudApp(App):
                 connected=self.conn.connected,
                 reconnecting=self._reconnecting,
                 command_pending=self._log_buffer.has_pending(),
-                panel_fetching=self._panel_fetching,
+                panel_fetching=self._panel_fetching or self._help_fetching,
                 auth_pending=self._auth_pending,
                 last_rtt_ms=self._last_rtt_ms,
                 last_recv_at=self._last_recv_at,
@@ -603,6 +614,86 @@ class CyberMudApp(App):
         wrap.add_class("sidebar-visible")
         self.call_after_refresh(self._focus_game_prompt)
 
+    def _configure_help_overlay_focus(self) -> None:
+        try:
+            self.query_one("#help_dropdown_scroll").can_focus = False
+        except Exception:
+            pass
+
+    def _render_help_overlay(self) -> None:
+        dropdown = self.query_one("#help_dropdown", Vertical)
+        header = self.query_one("#help_dropdown_header", Static)
+        content = self.query_one("#help_dropdown_content", Static)
+        if not self._help_overlay_open:
+            dropdown.add_class("help-dropdown-hidden")
+            content.update("")
+            return
+        dropdown.remove_class("help-dropdown-hidden")
+        header.update(help_overlay_header())
+        panel = self.view.sidebar_panels.get(HELP_OVERLAY_PANEL)
+        content.update(format_help_overlay_content(panel))
+        self.call_after_refresh(self._focus_game_prompt)
+
+    def _cancel_help_fetch(self) -> None:
+        self._help_fetch_generation += 1
+        if self._help_fetch_event is not None:
+            self._help_fetch_event.set()
+        self._help_fetching = False
+        self._help_fetch_event = None
+
+    def _schedule_help_fetch(self) -> None:
+        asyncio.create_task(self._fetch_help())
+
+    async def _fetch_help(self) -> None:
+        generation = self._help_fetch_generation
+        if generation != self._help_fetch_generation or not self.conn.connected:
+            return
+        event = asyncio.Event()
+        self._help_fetch_event = event
+        self._help_fetching = True
+        self._update_link_status_bar()
+        try:
+            apply_meta(self.view, "ui_panel", HELP_OVERLAY_PANEL)
+            self._note_outbound()
+            await self.conn.send_line("help")
+            await asyncio.wait_for(event.wait(), timeout=15.0)
+        except asyncio.TimeoutError:
+            pass
+        finally:
+            if generation != self._help_fetch_generation:
+                return
+            self._help_fetching = False
+            if self._help_fetch_event is event:
+                self._help_fetch_event = None
+            self._update_link_status_bar()
+
+    def _open_help_overlay(self) -> None:
+        if "help" in self.view.sidebar_stack:
+            self.view.sidebar_stack.remove("help")
+        self._help_overlay_open = True
+        apply_meta(self.view, "ui_panel", HELP_OVERLAY_PANEL)
+        self._render_help_overlay()
+        self._schedule_help_fetch()
+
+    def _close_help_overlay(self) -> None:
+        if not self._help_overlay_open:
+            return
+        self._cancel_help_fetch()
+        self._help_overlay_open = False
+        self.view.pending_panel = ""
+        if "help" in self.view.sidebar_stack:
+            self.view.sidebar_stack.remove("help")
+        self._render_help_overlay()
+
+    def _toggle_help_overlay(self) -> None:
+        if self._help_overlay_open:
+            self._close_help_overlay()
+        else:
+            self._open_help_overlay()
+
+    def _help_panel_active(self) -> bool:
+        return self._help_overlay_open or self.view.pending_panel == HELP_OVERLAY_PANEL
+
     def _cancel_panel_fetch(self) -> None:
         self._panel_fetch_generation += 1
         if self._panel_fetch_event is not None:
@@ -638,6 +729,9 @@ class CyberMudApp(App):
 
     def _send_panel_command(self, command: str) -> None:
         if not self.view.authenticated:
+            return
+        if command == HELP_OVERLAY_PANEL:
+            self._toggle_help_overlay()
             return
         if not self.conn.connected:
             self._append_log(
@@ -698,7 +792,14 @@ class CyberMudApp(App):
             self._return_to_login_screen()
         self._update_status()
         if key == "ui_panel_end":
-            self._render_sidebar()
+            if self._help_panel_active():
+                if HELP_OVERLAY_PANEL in self.view.sidebar_stack:
+                    self.view.sidebar_stack.remove(HELP_OVERLAY_PANEL)
+                self._render_help_overlay()
+                if self._help_fetch_event is not None:
+                    self._help_fetch_event.set()
+            else:
+                self._render_sidebar()
             if self._panel_fetch_event is not None:
                 self._panel_fetch_event.set()
         if key == "refresh_sidebar" and value == "1" and self.view.sidebar_open:
@@ -753,7 +854,11 @@ class CyberMudApp(App):
         self._send_panel_command("pda")
 
     async def action_panel_help(self) -> None:
-        self._send_panel_command("help")
+        self._toggle_help_overlay()
+
+    async def action_close_help_overlay(self) -> None:
+        if self.view.authenticated and self._help_overlay_open:
+            self._close_help_overlay()
 
     async def action_panel_map(self) -> None:
         self._send_panel_command("map")
@@ -764,6 +869,7 @@ class CyberMudApp(App):
     async def action_toggle_sidebar(self) -> None:
         if not self.view.authenticated:
             return
+        self._close_help_overlay()
         self._cancel_panel_fetch()
         self.view.sidebar_open = False
         self.view.sidebar_stack.clear()
@@ -829,6 +935,8 @@ class CyberMudApp(App):
             "#login_hint",
             "#login_status",
             "#prompt_preview",
+            "#help_dropdown_header",
+            "#help_dropdown_content",
             "#info_bar",
             "#chrome_bar",
             "#hotkey_bar",
@@ -841,6 +949,7 @@ class CyberMudApp(App):
                 pass
         log = self.query_one("#log", RichLog)
         self._configure_game_focus_targets()
+        self._configure_help_overlay_focus()
         self.set_interval(0.2, self._on_spinner_tick)
         self.set_interval(1.0, self._on_cd_tick)
         self.set_interval(0.5, self._on_login_motd_tick)
@@ -1001,12 +1110,18 @@ class CyberMudApp(App):
                     continue
                 if kind == "panel":
                     handle_panel_line(self.view, line[len(PANEL_PREFIX):])
-                    self._render_sidebar()
+                    if self._help_panel_active():
+                        self._render_help_overlay()
+                    else:
+                        self._render_sidebar()
                     self._complete_command_if_pending(log)
                     continue
                 if kind == "ui":
                     handle_ui_json(self.view, line[len(UI_PREFIX):])
-                    self._render_sidebar()
+                    if self._help_panel_active():
+                        self._render_help_overlay()
+                    else:
+                        self._render_sidebar()
                     self._complete_command_if_pending(log)
                     continue
                 if self._pending_logout and self.view.authenticated:
@@ -1212,6 +1327,14 @@ class CyberMudApp(App):
         if self._is_server_quit_command(text):
             self._pending_logout = True
         panel_id = resolve_panel_command(text)
+        if panel_id == HELP_OVERLAY_PANEL:
+            self._toggle_help_overlay()
+            if self._help_overlay_open:
+                self._log_buffer.mark_last_pending()
+                self._update_spinner_accent()
+                self._refresh_log_display(log, preserve_scroll=True)
+            self._complete_command_if_pending(log)
+            return
         if panel_id:
             prepare_sidebar_for_panel(self.view, panel_id)
             self.view.pending_panel = panel_id

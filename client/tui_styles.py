@@ -194,15 +194,55 @@ Select {
     background: $background;
     padding: 0 1 0 1;
     margin: 0 0 0 1;
+    layers: base dropdown;
 }
 
 #log {
+    layer: base;
     width: 1fr;
     height: 1fr;
     overflow-y: scroll;
     scrollbar-background: $surface;
     scrollbar-color: $accent;
     padding: 0 1;
+}
+
+#help_dropdown {
+    layer: dropdown;
+    dock: top;
+    width: 100%;
+    height: 1fr;
+    background: $background;
+    border: heavy $accent;
+    padding: 0;
+}
+
+#help_dropdown_header {
+    height: 1;
+    min-height: 1;
+    color: $accent;
+    background: $panel;
+    border-bottom: solid $accent 40%;
+    padding: 0 1;
+    text-style: bold;
+}
+
+#help_dropdown_scroll {
+    height: 1fr;
+    padding: 0 1;
+    scrollbar-background: $surface;
+    scrollbar-color: $accent;
+    background: $background;
+}
+
+#help_dropdown_content {
+    width: 1fr;
+    height: auto;
+    padding: 1 0;
+}
+
+.help-dropdown-hidden {
+    display: none;
 }
 
 #sidebar_wrap {
