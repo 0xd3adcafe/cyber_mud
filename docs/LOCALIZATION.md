@@ -24,6 +24,7 @@
 | Client TUI chrome | `client.*` keys; follows `player.locale` / login locale | `en` |
 | Documentation | English `*.md` on GitHub; Chinese `*.zh.md` mirrors | English |
 | Commit messages | `<type>: EN summary` — optional ` / 中文` suffix | English |
+| **Licenses** | Code: [Apache 2.0](../LICENSE); world copy: [CC BY 4.0](../LICENSE-CONTENT.md) | See [CONTRIBUTING.md](../CONTRIBUTING.md) |
 
 ## Documentation layout
 

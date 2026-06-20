@@ -7,6 +7,8 @@
 [![Textual](https://img.shields.io/badge/Client-Textual_TUI-00D4AA)](https://textual.textualize.io/)
 [![Cyberpunk MUD](https://img.shields.io/badge/Genre-Cyberpunk_MUD-FF00FF)](docs/WORLD.zh.md)
 [![Locale](https://img.shields.io/badge/Locale-en+zh-00D4AA)](docs/LOCALIZATION.zh.md)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-2563EB)](LICENSE)
+[![Content: CC BY 4.0](https://img.shields.io/badge/Content-CC_BY_4.0-7C3AED)](LICENSE-CONTENT.md)
 
 賽博龐克文字 MUD，背景為**夜城**。由原 **mud** 專案 fork，含 MVP 程式骨架與完整實作文件。
 
@@ -63,3 +65,12 @@ feat: English summary / 中文簡述（可選）
 ```
 
 變更須同步 [PHASES.zh.md](docs/PHASES.zh.md) backlog。
+
+## 授權
+
+| 層級 | 授權 | 範圍 |
+|------|------|------|
+| **程式碼** | [Apache 2.0](LICENSE) | `server/`、`client/`、`commands/`、測試、腳本 |
+| **世界文案** | [CC BY 4.0](LICENSE-CONTENT.md) | `data/` 敘事、`data/locale/` 文案、世界觀文件 |
+
+貢獻方式：[CONTRIBUTING.md](CONTRIBUTING.md)。歡迎 AI 輔助開發；提交者需審閱並接受上述授權。

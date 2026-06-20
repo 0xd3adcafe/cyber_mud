@@ -15,6 +15,8 @@
 [![Textual](https://img.shields.io/badge/Client-Textual_TUI-00D4AA)](https://textual.textualize.io/)
 [![Cyberpunk MUD](https://img.shields.io/badge/Genre-Cyberpunk_MUD-FF00FF)](docs/WORLD.md)
 [![Locale](https://img.shields.io/badge/Locale-en+zh-00D4AA)](docs/LOCALIZATION.md)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-2563EB)](LICENSE)
+[![Content: CC BY 4.0](https://img.shields.io/badge/Content-CC_BY_4.0-7C3AED)](LICENSE-CONTENT.md)
 [![中文](https://img.shields.io/badge/中文-README.zh.md-red)](README.zh.md)
 
 Cyberpunk text MUD set in **Night City**. Forked from the original **mud** project with a full MVP codebase and implementation docs.
@@ -80,3 +82,12 @@ git commit -m "feat: short English summary / 可選中文簡述"
 ```
 
 Convention: one commit per major feature; update [PHASES.md](docs/PHASES.md) backlog before commit.
+
+## License
+
+| Layer | License | File |
+|-------|---------|------|
+| **Code** | [Apache License 2.0](LICENSE) | `server/`, `client/`, `commands/`, tests, scripts |
+| **World content** | [CC BY 4.0](LICENSE-CONTENT.md) | `data/` narrative, `data/locale/` copy, world lore docs |
+
+Contributions: see [CONTRIBUTING.md](CONTRIBUTING.md). AI-assisted patches welcome; submitter reviews and accepts the licenses above.

@@ -306,6 +306,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 | Client clear log | `/clear` local command; `AnimatedLogBuffer.clear()`; Tab completion; `tests/test_client_app.py` |
 | Split EN/ZH documentation | `*.zh.md` mirrors; English default on GitHub; README ASCII banner |
 | English default locale in project rules | `CLAUDE.md` § Project rules (mandatory); `LOCALIZATION.md`; README core principle #1 |
+| Project licenses | `LICENSE` Apache 2.0; `LICENSE-CONTENT.md` CC BY 4.0; `CONTRIBUTING.md` |
 
 World setting and district expansion: [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)).
 

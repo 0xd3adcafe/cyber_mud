@@ -178,6 +178,7 @@
 | Client clear 清除 log | `/clear` 本機指令；`AnimatedLogBuffer.clear()`；Tab 補全；`tests/test_client_app.py` |
 | 中英文文件分離 | 英文 `*.md` GitHub 預設；中文 `*.zh.md` 對照；README ASCII banner |
 | 英文預設語系寫入專案規則 | `CLAUDE.zh.md` § 專案規則（強制）；`LOCALIZATION.zh.md` § 專案規則；README 核心原則 #1 |
+| 專案授權 | `LICENSE` Apache 2.0（程式）；`LICENSE-CONTENT.md` CC BY 4.0（文案）；README badge；`CONTRIBUTING.md` |
 
 ## Backlog 維護慣例
 
