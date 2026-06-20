@@ -1,5 +1,10 @@
 # cyber_mud
 
+[![GitHub](https://img.shields.io/badge/GitHub-0xd3adcafe%2Fcyber__mud-181717?logo=github)](https://github.com/0xd3adcafe/cyber_mud)
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](.python-version)
+[![Textual](https://img.shields.io/badge/Client-Textual_TUI-00D4AA)](https://textual.textualize.io/)
+[![Cyberpunk MUD](https://img.shields.io/badge/Genre-Cyberpunk_MUD-FF00FF)](docs/WORLD.md)
+
 以原 **mud** 專案為藍本的**實作文件 fork**，用於在本機從零建立新的文字型多人冒險遊戲（MUD）。
 
 已初始化 **MVP 程式骨架**（`look`／`go`／`help`／`quit` + 夜城起點世界），並保留完整實作文件。
