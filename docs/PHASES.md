@@ -180,6 +180,9 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | English default locale in project rules | `CLAUDE.md` § Project rules (mandatory); `LOCALIZATION.md` § Project rule; README core principle #1 |
 | Project licenses | `LICENSE` Apache 2.0 (code); `LICENSE-CONTENT.md` CC BY 4.0 (world copy); README badges; `CONTRIBUTING.md` |
 | Player guides (GitHub) | `docs/player/` ASCII-art tutorial, commands, client; EN + `*.zh.md`; README player section |
+| Mature / NSFW content M.0–M.7 | `world/mature.py`, `combat/gore.py`, `settings mature`, `flirt`, mature locale/YAML, client 18+ login; `docs/MATURE_CONTENT.md` |
+| Kabuki & district expansion (2026-06) | `kabuki_vip`, `kabuki_bazaar`, Little China, Corpo hubs; `velvet_job`; `tests/test_world_districts.py` |
+| Client layout test helpers | `tests/client_ui_helpers.py`; stable sidebar/help overlay assertions in `test_client_app.py` |
 
 ## Multi-session development (mandatory)
 
@@ -233,13 +236,28 @@ Not yet implemented or only partially implemented.
 
 **Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7. **All phases shipped (2026-06).**
 
-### World & mature expansion (2026-06)
+### World expansion ([WORLD.md](WORLD.md))
 
-| Item | Module / acceptance |
-|------|---------------------|
-| Kabuki mature wing | `kabuki_vip`, `kabuki_bouncer`, `kabuki_dancer`; `velvet_job` multi-stage gig; romance dancer |
-| District hubs | `kabuki_bazaar`, `little_china_gate`, `shrine`, `data_crypt`, `corpo_lobby`, `corpo_plaza`; `kabuki_bazaar` shop; `crypt_core` net node |
-| Client test stability | `tests/client_ui_helpers.py`; retry layout assertions in `test_client_app.py` |
+**Baseline (2026-06):** ~25 hand-authored rooms, ~19 NPCs, hub graph for Watson / Kabuki / Little China / Corpo / Docks / Undercity / tutorial. **Targets** from original mud: ~200 rooms, ~109 NPCs, ~45 item defs via `tools/generate_world.py` plus story anchors.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| W.1 | Procedural district grids | Merge `python -m tools.generate_world <district> <rows> <cols>` YAML into `data/world.yaml`; district-prefixed room IDs (e.g. `watson_03_06`); every public room has `district` + optional `grid_x`/`grid_y`; hub rooms connect to grid edges; `tests/test_world_scale.py` |
+| W.2 | Eight-district room clusters | Full clusters for **Tyrell** and **Combat Zone**; expand partial **Watson**, **Kabuki**, **Little China**, **Corpo**, **Docks**, **Undercity** per WORLD geography table; `map` shows explored grid; locale `*_en`/`*_zh` on all new rooms |
+| W.3 | District safety & atmosphere | `safety` / `atmosphere` metadata per district drives `look` flavor, NPC patrol density, aggro modifiers, and tick weather bias; `world/npc_ai.py`, `world/modifiers.py`, `world/weather.py` |
+| W.4 | Story core rooms | Add **`crypt`** and **`data_vault`** anchors (alongside `square`, `alley`, `shrine`); wire exits from `data_crypt` / Undercity hub graph; onboarding path: `take glowstick` → `talk broker` → `pledge` → `hack` terminal |
+| W.5 | Story anchor NPCs & loot | NPCs **`guard`**, **`priest`**, **`rat`** in core areas; in-room **`terminal`** object; ground items **`rusty_key`**, **`glowstick`** per WORLD table; `tests/test_story_anchors.py` |
+| W.6 | `help tutorial` onboarding | Auto-generate tutorial text from `tutorial_*` rooms + command registry (`help tutorial`); locale keys; complements existing three-zone training ground; `tests/test_help_tutorial.py` |
+| W.7 | Faction gameplay depth | **`pledge tyrell`** quests and talk branches; faction affects **dialogue**, **quest hints**, **area hostility**, **shop buy/sell rates** (`world/trade.py`, `data/shops.yaml`); reputation thresholds; `tests/test_factions.py` |
+| W.8 | District weather & schedules | Per-district weather palette (acid rain, fog, smog, neon glare, dry heat) in `data/weather.yaml`; expanded NPC **schedules** by time band (shops open/close, patrol routes); `world/schedule.py` |
+| W.9 | Society & black market | Kabuki / Docks gray-market shops, `appraise` / `give` trade flows; info-broker intel chains beyond `broker_rumor`; corp vs street pricing; `tests/test_black_market.py` |
+| W.10 | Multiplayer presence | Polish player enter/leave broadcasts; same-room `look` lists other players; room-scoped `say` visibility; `tests/test_multiplayer.py` |
+| W.11 | NETRUN story nodes | `data_vault` / `crypt` net nodes tied to physical rooms; `hack core terminal` quest step; expand `data/net_nodes.yaml`; `tests/test_net_story.py` |
+| W.12 | Extended status effects | **`poison`** tick damage and antidote consumables; **`cyberware overheat`** debuff (separate from quickhack burn); `world/status_effects.py`; locale combat lines |
+| W.13 | Live world reactions | Faction pledge, hacking success, and combat outcomes visibly shift **reputation** / wanted / broker dialogue; tick pushes ambient world lines; aligns with WORLD “world is not a static backdrop” |
+| W.14 | World scale targets | Grow toward ~200 rooms / ~109 NPCs / ~45 items via generator + hand hubs; `admin.sh validate` reports counts; update WORLD.md stats when milestone hit |
+
+**Suggested order:** W.4 → W.5 → W.11 (story anchors) → W.1 → W.2 → W.3 (geography scale) → W.6 → W.7 → W.8 → W.9 → W.10 → W.12 → W.13 → W.14.
 
 ---
 

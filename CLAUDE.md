@@ -242,9 +242,9 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | Area | Items |
 |------|--------|
 | Environment | pyenv native Python build |
-| **Mature / NSFW (18+, opt-in)** | ✅ Shipped M.0–M.7 — see PHASES **Mature / NSFW content** |
+| **World expansion (WORLD.md)** | W.1–W.14 — procedural grids, eight districts, story anchors (`crypt`, `data_vault`, guard/priest/rat), `help tutorial`, faction depth, weather/schedules, black market, multiplayer presence, NETRUN story nodes, poison/overheat, live world reactions; see PHASES **World expansion** |
 
-NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; see PHASES **Mature / NSFW content** table.
+NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.7 shipped — see PHASES **Mature / NSFW content** table.
 
 Recent completions (2026-06) summary:
 

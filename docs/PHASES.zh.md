@@ -180,6 +180,9 @@
 | 英文預設語系寫入專案規則 | `CLAUDE.zh.md` § 專案規則（強制）；`LOCALIZATION.zh.md` § 專案規則；README 核心原則 #1 |
 | 專案授權 | `LICENSE` Apache 2.0（程式）；`LICENSE-CONTENT.md` CC BY 4.0（文案）；README badge；`CONTRIBUTING.md` |
 | 玩家指南（GitHub） | `docs/player/` ASCII 風格 tutorial／commands／client；中英對照；README 玩家區 |
+| 成人／NSFW 內容 M.0–M.7 | `world/mature.py`、`combat/gore.py`、`settings mature`、`flirt`、mature locale／YAML、client 18+ 登入；`docs/MATURE_CONTENT.md` |
+| Kabuki 與區域擴充（2026-06） | `kabuki_vip`、`kabuki_bazaar`、小中國街、企業區樞紐；`velvet_job`；`tests/test_world_districts.py` |
+| Client 版面測試 helper | `tests/client_ui_helpers.py`；`test_client_app.py` 側欄／help overlay 穩定斷言 |
 
 ## 多 session 開發（必做）
 
@@ -231,13 +234,28 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 **建議順序：** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7。**全階段已交付（2026-06）。**
 
-### 世界與成熟區擴充（2026-06）
+### 世界擴充（[WORLD.md](WORLD.md)）
 
-| 項目 | 模組／驗收 |
-|------|------------|
-| Kabuki VIP 區 | `kabuki_vip`、`kabuki_bouncer`、`kabuki_dancer`；`velvet_job` 多階段委託；舞者浪漫線 |
-| 區域樞紐 | `kabuki_bazaar`、`little_china_gate`、`shrine`、`data_crypt`、`corpo_lobby`、`corpo_plaza`；灰市商店；`crypt_core` 節點 |
-| Client 測試穩定 | `tests/client_ui_helpers.py`；`test_client_app.py` 重試版面斷言 |
+**現況（2026-06）：** 約 25 間手寫房間、約 19 名 NPC，樞紐涵蓋 Watson／Kabuki／小中國街／企業區／碼頭／地下城／訓練場。**目標**（原 mud）：`tools/generate_world.py` 搭配主線錨點，約 200 房、109 NPC、45 物品定義。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| W.1 | 程序生成區域格點 | 將 `python -m tools.generate_world <district> <rows> <cols>` 產出併入 `data/world.yaml`；房間 ID 含區域前綴（如 `watson_03_06`）；公開房皆有 `district` 與可選 `grid_x`/`grid_y`；樞紐房連接格點邊界；`tests/test_world_scale.py` |
+| W.2 | 八區房間群 | **泰瑞（Tyrell）**、**戰鬥區（Combat Zone）** 完整群集；擴充部分完成的 Watson／Kabuki／小中國街／企業區／碼頭／地下城；`map` 顯示已探索格點；新房間 locale `*_en`/`*_zh` |
+| W.3 | 區域安全與氛圍 | 各區 `safety`／`atmosphere` 影響 `look` 敘事、NPC 巡邏密度、敵意修正、tick 天氣傾向；`world/npc_ai.py`、`world/modifiers.py`、`world/weather.py` |
+| W.4 | 主線核心房間 | 新增 **`crypt`**、**`data_vault`**（與 `square`、`alley`、`shrine` 並列）；自 `data_crypt`／地下城樞紐串接出口；新手路徑：`take glowstick` → `talk broker` → `pledge` → `hack` terminal |
+| W.5 | 主線錨點 NPC 與戰利品 | 核心區 NPC **`guard`**、**`priest`**、**`rat`**；房內 **`terminal`** 物件；地上 **`rusty_key`**、**`glowstick`** 依 WORLD 表配置；`tests/test_story_anchors.py` |
+| W.6 | `help tutorial` 新手引導 | 依 `tutorial_*` 房間與指令註冊表自動產生教學（`help tutorial`）；locale 鍵；補強既有三區訓練場；`tests/test_help_tutorial.py` |
+| W.7 | 派系玩法深度 | **`pledge tyrell`** 任務與 talk 分支；派系影響**對話**、**任務提示**、**區域敵意**、**商店買賣比率**（`world/trade.py`、`data/shops.yaml`）；聲望門檻；`tests/test_factions.py` |
+| W.8 | 區域天氣與作息 | 各區天氣池（酸雨、霧、煙霾、霓虹眩光、乾熱等）於 `data/weather.yaml`；依時段擴充 NPC **schedule**（商店營業、巡邏路線）；`world/schedule.py` |
+| W.9 | 社會與黑市 | Kabuki／碼頭灰市商店、`appraise`／`give` 交易；情報經紀人任務鏈超越 `broker_rumor`；企業／街頭價差；`tests/test_black_market.py` |
+| W.10 | 多人同屏存在感 | 玩家進出房間廣播優化；同室 `look` 列出其他玩家；`say` 房間範圍可見性；`tests/test_multiplayer.py` |
+| W.11 | NETRUN 主線節點 | `data_vault`／`crypt` 實體房對應 net 節點；`hack core terminal` 任務步驟；擴充 `data/net_nodes.yaml`；`tests/test_net_story.py` |
+| W.12 | 延伸狀態效果 | **`poison`** tick 傷害與解毒消耗品；**`cyberware overheat`** debuff（與 quickhack 燃燒分開）；`world/status_effects.py`；戰鬥 locale 文案 |
+| W.13 | 動態世界回饋 | 派系宣誓、駭入成功、戰鬥結果可見影響**聲望**／通緝／經紀人對話；tick 推送環境敘事；對應 WORLD「世界非靜態背景」 |
+| W.14 | 世界規模里程碑 | 朝 ~200 房／~109 NPC／~45 物品成長（生成器＋手寫樞紐）；`admin.sh validate` 統計；達標後更新 WORLD.md 數字 |
+
+**建議順序：** W.4 → W.5 → W.11（主線錨點）→ W.1 → W.2 → W.3（地理規模）→ W.6 → W.7 → W.8 → W.9 → W.10 → W.12 → W.13 → W.14。
 
 ---
 
