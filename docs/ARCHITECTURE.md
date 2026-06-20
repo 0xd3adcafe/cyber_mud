@@ -1,30 +1,32 @@
-# 架構說明
+# Architecture
 
-> cyber_mud 文件 fork。描述原 mud 專案之系統架構（已實作 + 規劃）。
+> **中文：** [ARCHITECTURE.zh.md](ARCHITECTURE.zh.md)
 
-## 目錄
+> cyber_mud documentation fork. Describes the system architecture of the original **mud** project (implemented + planned).
 
-- [世界觀](#世界觀)
-- [總覽](#總覽)
-- [執行時架構](#執行時架構)
-- [資料流](#資料流)
-- [模組依賴](#模組依賴)
-- [已實作功能](#已實作功能)
-- [規劃中](#規劃中)
+## Table of contents
 
-## 世界觀
+- [World setting](#world-setting)
+- [Overview](#overview)
+- [Runtime architecture](#runtime-architecture)
+- [Data flow](#data-flow)
+- [Module dependencies](#module-dependencies)
+- [Implemented features](#implemented-features)
+- [Planned](#planned)
 
-原 **mud** 設定為賽博龐克**夜城**：企業、幫派、義體與黑市並存；玩家經**神經連結**進入，並可在 **NETRUN** 駭入層與實體街頭間切換。完整設定見 **[WORLD.md](WORLD.md)**。
+## World setting
 
-## 總覽
+The original **mud** setting is cyberpunk **Night City**: corporations, gangs, cyberware, and black markets. Players enter via a **neural link** and switch between the **NETRUN** hack layer and the physical streets. Full lore: **[WORLD.md](WORLD.md)**.
+
+## Overview
 
 ```text
                     ┌─────────────┐
-                    │ Textual TUI │  client/（正式介面）
+                    │ Textual TUI │  client/ (primary UI)
                     └──────┬──────┘
-                           │ TCP 換行文字
+                           │ TCP newline text
                     ┌──────▼──────┐
-                    │ server/     │  asyncio、Session、Game
+                    │ server/     │  asyncio, Session, Game
                     │  game.py    │
                     └──────┬──────┘
            ┌───────────────┼───────────────┐
@@ -37,56 +39,56 @@
           ▼               ▼
     ┌────────────┐  ┌────────────┐
     │ entities/  │  │ data/      │
-    │ Player…    │  │ YAML 世界  │
+    │ Player…    │  │ YAML world │
     └────────────┘  └────────────┘
           │
           ▼
     ┌────────────┐
-    │persistence/│  saves/、world_state.json
+    │persistence/│  saves/, world_state.json
     └────────────┘
 ```
 
-## 執行時架構
+## Runtime architecture
 
-### 連線模型
+### Connection model
 
-- 一玩家一 `ClientSession`（含 `StreamWriter`、`Player`、分頁狀態）
-- `server/main.py`：`readline` → `handle_command`（**阻塞至處理完**）
-- 背景 `tick_loop`：週期性 `process_tick`，與指令處理共用 `WorldState`（需注意並發／鎖或單執行緒 asyncio）
+- One player per `ClientSession` (includes `StreamWriter`, `Player`, panel state)
+- `server/main.py`: `readline` → `handle_command` (**blocks until done**)
+- Background `tick_loop`: periodic `process_tick`, shares `WorldState` with command handling (watch asyncio concurrency / locks)
 
-### Game 職責
+### Game responsibilities
 
-- 維護 `sessions` 列表
-- `dispatch` 玩家指令
-- `broadcast_localized` 同房／全服訊息
-- `tick_loop` 驅動世界
-- `reload_world`（dev 模式）
-- 優雅關閉：存檔、通知離線
+- Maintain `sessions` list
+- `dispatch` player commands
+- `broadcast_localized` room / global messages
+- `tick_loop` drives the world
+- `reload_world` (dev mode)
+- Graceful shutdown: save, notify offline
 
-## 資料流
+## Data flow
 
-### 指令下行（Client → Server）
+### Commands (Client → Server)
 
 ```text
-玩家輸入 "equip blade"
-  → client 送 "equip blade\n"
+Player types "equip blade"
+  → client sends "equip blade\n"
   → server dispatch
-  → 修改 Player.equipment
-  → 回傳文字行 + @meta 多行
-  → （若側欄開著）client 再送 "equipment" 刷新
+  → updates Player.equipment
+  → returns text lines + @meta lines
+  → (if sidebar open) client may send "equipment" to refresh
 ```
 
-### Meta 下行（狀態同步）
+### Meta (state sync)
 
 ```text
 @meta hp=80/100
-@meta hint=▸ 任務提示…
+@meta hint=▸ quest hint…
 @meta combat=1
 ```
 
-Client 更新狀態列、hint_bar、prompt token 來源。
+Client updates status bar, hint_bar, prompt token sources.
 
-### 面板下行
+### Panel stream
 
 ```text
 @meta ui_panel=pda
@@ -94,64 +96,64 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 @meta ui_panel_end=1
 ```
 
-## 模組依賴
+## Module dependencies
 
-| 模組 | 依賴 | 不可依賴 |
-|------|------|----------|
-| `shared/` | 標準庫 | server、client |
-| `entities/` | shared | commands、server |
-| `world/` | entities、data 載入 | client |
-| `commands/` | world、entities、combat | client |
-| `server/` | commands、world、persistence | client |
-| `client/` | shared | server、commands |
-| `combat/` | entities、world | client |
+| Module | Depends on | Must not depend on |
+|--------|------------|-------------------|
+| `shared/` | stdlib | server, client |
+| `entities/` | shared | commands, server |
+| `world/` | entities, data loaders | client |
+| `commands/` | world, entities, combat | client |
+| `server/` | commands, world, persistence | client |
+| `client/` | shared | server, commands |
+| `combat/` | entities, world | client |
 
-## 已實作功能
+## Implemented features
 
-### 核心
+### Core
 
-- [x] 多人 TCP 伺服器
-- [x] 指令註冊制與別名
-- [x] 世界 YAML 載入與驗證
-- [x] 玩家存檔與 world_state
-- [x] Textual client（log、狀態、側欄、Tab 補全、快捷鍵列、即時旋轉 spinner、主題）
-- [x] i18n（zh/en）
-- [x] 分頁長文（look、help 等）
+- [x] Multi-player TCP server
+- [x] Command registry and aliases
+- [x] World YAML load and validation
+- [x] Player saves and world_state
+- [x] Textual client (log, status, sidebar, Tab completion, hotkey bar, spinner, themes)
+- [x] i18n (zh/en)
+- [x] Paginated long output (look, help, etc.)
 
-### 遊戲系統
+### Game systems
 
-- [x] 物品 take/drop/equip/unequip（含 all）
-- [x] 裝備槽與武器模組
-- [x] 義體 install、技能 learn
-- [x] 世界時鐘與 tick
-- [x] CP2077 風格屬性欄位
-- [x] 天氣（區域）
-- [x] NPC tick 移動／閒置
-- [x] 即時戰鬥 encounter（`combat_cd` 秒級 meta、client 即時倒數）
-- [x] NETRUN 子 shell（server `net` + client `net_shell` meta）
-- [x] PDA／地圖／說明／裝備側欄
-- [x] Prompt 自訂（server + client 覆寫）
-- [x] 開發熱重載（`data/*.yaml` + 程式碼 `reload_application_code`）、client 自動重連與 `/reconnect`
-- [x] 側欄裝備自動刷新
+- [x] Items take/drop/equip/unequip (incl. all)
+- [x] Equipment slots and weapon mods
+- [x] Cyberware install, skill learn
+- [x] World clock and tick
+- [x] CP2077-style attribute fields
+- [x] Regional weather
+- [x] NPC tick movement / idle
+- [x] Real-time combat encounter (`combat_cd` second-level meta, client countdown)
+- [x] NETRUN sub-shell (server `net` + client `net_shell` meta)
+- [x] PDA / map / help / equipment sidebar
+- [x] Custom prompt (server + client override)
+- [x] Dev hot-reload (`data/*.yaml` + code `reload_application_code`), client auto-reconnect and `/reconnect`
+- [x] Sidebar equipment auto-refresh
 
-### 工具
+### Tools
 
 - [x] `admin.sh validate` / `saves` / `delete-save`
-- [x] `tools/generate_world.py`（程序生成房間格點）
+- [x] `tools/generate_world.py` (procedural room grid)
 - [x] pytest
 
-## 規劃中
+## Planned
 
-變更紀錄與待辦以 [PHASES.md — Backlog](PHASES.md#backlog) 為準；**每次交付前須更新**（見 [Backlog 維護慣例](PHASES.md#backlog-維護慣例)）。
+Changelog and todos: [PHASES.md — Backlog](PHASES.md#backlog). **Update before every delivery** ([backlog convention](PHASES.md#backlog-maintenance)).
 
-節錄：
+Excerpt:
 
-- 天氣／時段對玩法數值修正
-- 完整被動技能與義體觸發
-- NPC 任務驅動 AI
-- NPC 任務驅動追擊與 flee 進階行為
-- 店鋪作息、任務編排工具
+- Weather / period gameplay modifiers
+- Full passive skills and cyberware triggers
+- NPC quest-driven AI
+- Advanced NPC chase and flee
+- Shop hours, quest authoring tools
 
 ---
 
-細部實作步驟見 [IMPLEMENTATION.md](IMPLEMENTATION.md)；新專案啟動見 [BOOTSTRAP.md](BOOTSTRAP.md)。
+Implementation steps: [IMPLEMENTATION.md](IMPLEMENTATION.md). New project bootstrap: [BOOTSTRAP.md](BOOTSTRAP.md).

@@ -1,285 +1,292 @@
+> **中文：** [CLAUDE.zh.md](CLAUDE.zh.md)
+
 # CLAUDE.md
 
-本檔為 Claude Code、Cursor 與 Grok 在本 repo 協作時的行為指引。  
-**行為準則**參考 [Andrej Karpathy Skills](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md)（上層目錄 `andrej-karpathy-skills.md` 為連結）；以下合併 **cyber_mud** 專案專屬說明。
+This file guides Claude Code, Cursor, and Grok when collaborating in this repo.  
+**Behavior guidelines** follow [Andrej Karpathy Skills](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md) (parent-directory link: `andrej-karpathy-skills.md`); below merges **cyber_mud** project-specific notes.
 
-**取捨：** 準則偏向謹慎而非速度；瑣碎任務可自行判斷。
+**Trade-off:** Guidelines favor caution over speed; trivial tasks may use judgment.
 
-## 目錄
+## Table of contents
 
-- [Claude 協作準則](#claude-協作準則)
-  - [1. 先思考再動手](#1-先思考再動手)
-  - [2. 簡單優先](#2-簡單優先)
-  - [3. 手術式修改](#3-手術式修改)
-  - [4. 目標導向執行](#4-目標導向執行)
-- [專案說明](#專案說明)
-- [安裝與執行](#安裝與執行)
-- [架構說明](#架構說明)
-- [開發慣例](#開發慣例)
-- [版本控制](#版本控制)
-- [管理工具](#管理工具)
+- [Claude collaboration guidelines](#claude-collaboration-guidelines)
+  - [1. Think before acting](#1-think-before-acting)
+  - [2. Simplicity first](#2-simplicity-first)
+  - [3. Surgical edits](#3-surgical-edits)
+  - [4. Goal-driven execution](#4-goal-driven-execution)
+- [Project overview](#project-overview)
+- [Install and run](#install-and-run)
+- [Architecture](#architecture)
+- [Development conventions](#development-conventions)
+- [Version control](#version-control)
+- [Admin tools](#admin-tools)
 - [Backlog](#backlog)
-- [注意事項](#注意事項)
+- [Notes](#notes)
 
-## Claude 協作準則
+## Claude collaboration guidelines
 
-### 1. 先思考再動手
+### 1. Think before acting
 
-**不假設、不隱藏疑惑、主動點出取捨。**
+**Do not assume, do not hide uncertainty, and surface trade-offs proactively.**
 
-實作前：
+Before implementing:
 
-- 明確說明假設；若不確定，直接發問。
-- 若存在多種解讀，全部列出，不要靜默選擇。
-- 若有更簡單的做法，說出來；必要時提出反駁。
-- 若有不清楚的地方，停下來，說明哪裡不清楚，再發問。
+- State assumptions explicitly; if unsure, ask.
+- If multiple interpretations exist, list them all—do not silently pick one.
+- If a simpler approach exists, say so; push back when warranted.
+- If anything is unclear, stop, explain what is unclear, then ask.
 
-### 2. 簡單優先
+### 2. Simplicity first
 
-**最少的程式碼解決問題，不做任何推測性實作。**
+**Solve the problem with the least code; no speculative implementation.**
 
-- 不實作未被要求的功能。
-- 單次使用的程式碼不抽象化。
-- 不加入未被要求的「彈性」或「可設定性」。
-- 不對不可能發生的情況加錯誤處理。
-- 若寫了 200 行但 50 行就夠，重寫。
+- Do not implement features that were not requested.
+- Do not abstract one-off code.
+- Do not add unrequested “flexibility” or “configurability.”
+- Do not add error handling for impossible cases.
+- If you wrote 200 lines but 50 would do, rewrite.
 
-自問：「資深工程師會說這過度複雜嗎？」如果是，就簡化。
+Ask yourself: “Would a senior engineer call this over-engineered?” If yes, simplify.
 
-### 3. 手術式修改
+### 3. Surgical edits
 
-**只動必須動的部分，只清理自己製造的亂。**
+**Change only what must change; clean up only mess you created.**
 
-修改現有程式碼時：
+When editing existing code:
 
-- 不「順便改善」鄰近程式碼、註解或格式。
-- 不重構沒有損壞的東西。
-- 沿用現有風格，即使你會用不同方式寫。
-- 發現無關的死碼時，提出來，不要自行刪除。
+- Do not “while I’m here” improvements to nearby code, comments, or formatting.
+- Do not refactor things that are not broken.
+- Match existing style even if you would write it differently.
+- If you find unrelated dead code, call it out—do not delete it on your own.
 
-當你的修改產生孤兒：
+When your change creates orphans:
 
-- 移除**因你的修改**而變成未使用的 import / 變數 / 函式。
-- 不移除原本就存在的死碼，除非被要求。
+- Remove imports / variables / functions made unused **by your change**.
+- Do not remove pre-existing dead code unless asked.
 
-檢驗標準：每一行修改都能直接追溯至使用者的需求。
+Litmus test: every changed line should trace directly to the user’s request.
 
-### 4. 目標導向執行
+### 4. Goal-driven execution
 
-**定義成功標準，循環直到驗證完成。**
+**Define success criteria and loop until verified.**
 
-將任務轉化為可驗證的目標：
+Turn tasks into verifiable goals:
 
-- 「新增驗證」→「為無效輸入寫測試，再讓測試通過」
-- 「修復 bug」→「寫出能重現 bug 的測試，再讓它通過」
-- 「重構 X」→「確保重構前後測試均通過」
+- “Add validation” → “Write tests for invalid input, then make them pass”
+- “Fix bug” → “Write a test that reproduces the bug, then make it pass”
+- “Refactor X” → “Ensure tests pass before and after refactor”
 
-多步驟任務應先陳述簡短計畫：
+For multi-step work, state a short plan first:
 
 ```text
-1. [步驟] → 驗證：[檢查點]
-2. [步驟] → 驗證：[檢查點]
-3. [步驟] → 驗證：[檢查點]
-4. 更新 backlog → 驗證：PHASES.md「已完成」或「Backlog」已反映變更
+1. [step] → verify: [checkpoint]
+2. [step] → verify: [checkpoint]
+3. [step] → verify: [checkpoint]
+4. Update backlog → verify: PHASES.md “Completed” or “Backlog” reflects the change
 ```
 
 ---
 
-**這些準則有效時：** diff 中不必要變更少、因過度設計而重寫的次數少、釐清問題發生在實作前而非做錯之後。
+**When these guidelines work:** fewer unnecessary diffs, fewer rewrites from over-design, and clarification happens before implementation—not after mistakes.
 
-## 專案說明
+## Project overview
 
-**cyber_mud** 是文字型多人冒險遊戲（MUD），世界背景為賽博龐克**夜城**（致敬 Blade Runner + Cyberpunk 2077 氛圍的原創敘事）。玩家透過文字指令探索、與 NPC 互動、解謎與戰鬥。
+**cyber_mud** is a text-based multiplayer adventure game (MUD) set in cyberpunk **Night City** (original narrative inspired by Blade Runner + Cyberpunk 2077 atmosphere). Players explore, interact with NPCs, solve puzzles, and fight via text commands.
 
-本 repo 由原 **mud** 專案 fork 而來：含 MVP 程式骨架與完整實作文件（見 `docs/`）。
+This repo was forked from the original **mud** project: MVP code skeleton plus full implementation docs (see `docs/`).
 
-**核心原則：內建 client，不依賴外部 MUD 客戶端。**
+**Core principle: built-in client—no reliance on external MUD clients.**
 
-- 主要玩家介面是本 repo 的 `client/`（Textual TUI）。
-- 不使用 MUDlet、TinTin++、`nc` 等作為正式遊玩方式。
-- 伺服器保留 TCP 換行文字協定供除錯；產品體驗以內建 client 為準。
+- The primary player interface is this repo’s `client/` (Textual TUI).
+- MUDlet, TinTin++, `nc`, etc. are not the official way to play.
+- The server keeps a TCP newline text protocol for debugging; product experience is defined by the built-in client.
 
-**目前已具備：** 登入存檔、物品、戰鬥、NETRUN、tick、側欄（PDA／地圖／裝備）、Tab 補全、自動重連、`--dev` 熱重載等——完整清單見 [`docs/PHASES.md`](docs/PHASES.md)「已完成」。  
-**待擴充：** Phase E.4 文件格式等——見 [`docs/PHASES.md`](docs/PHASES.md#backlog)。
+**Already shipped:** login/saves, items, combat, NETRUN, tick, sidebar (PDA / map / equipment), Tab completion, auto-reconnect, `--dev` hot-reload, and more—full list in [`docs/PHASES.md`](docs/PHASES.md) “Completed (from Backlog)”.  
+**Still to expand:** see [`docs/PHASES.md`](docs/PHASES.md#backlog).
 
-## 安裝與執行
+## Install and run
 
-環境：Python **3.13**；優先 **pyenv** virtualenv `cyber-mud-3.13.12`（見 `.python-version`），否則 `setup.sh` 會嘗試建立 `.venv`。
+Environment: Python **3.13**; prefer **pyenv** virtualenv `cyber-mud-3.13.12` (see `.python-version`), otherwise `setup.sh` will try to create `.venv`.
 
 ```bash
-# 首次設定
+# First-time setup
 ./setup.sh
 
-# 啟動伺服器
+# Start server
 ./run.sh
 
-# 內建 TUI client（另開終端）
+# Built-in TUI client (separate terminal)
 ./run.sh --client
 
-# 開發模式（data + 程式碼熱重載）
+# Dev mode (data + code hot-reload)
 ./run.sh --dev
 ```
 
-## 架構說明
+## Architecture
 
-| 模組 | 職責 |
-|------|------|
-| `server/` | 連線管理、指令解析、遊戲迴圈 |
-| `client/` | Textual TUI 客戶端（主要玩家介面） |
-| `shared/` | client/server 共用協定與常數 |
-| `world/` | 地圖、房間、時鐘、天氣、tick（部分規劃中） |
-| `entities/` | 玩家、NPC、物品 |
-| `commands/` | 指令處理（look、go、take、say 等） |
-| `data/` | 世界定義（YAML）與 `locale/` 文案 |
-| `combat/` | 即時戰鬥（規劃中） |
-| `persistence/` | 存檔（規劃中） |
+| Module | Responsibility |
+|--------|----------------|
+| `server/` | Connection management, command parsing, game loop |
+| `client/` | Textual TUI client (primary player interface) |
+| `shared/` | Client/server shared protocol and constants |
+| `world/` | Map, rooms, clock, weather, tick (partially planned) |
+| `entities/` | Players, NPCs, items |
+| `commands/` | Command handlers (`look`, `go`, `take`, `say`, etc.) |
+| `data/` | World definitions (YAML) and `locale/` copy |
+| `combat/` | Real-time combat (planned) |
+| `persistence/` | Saves (planned) |
 
-完整文件索引：
+**Documentation policy:** Project docs use split English / Traditional Chinese markdown files. **English `.md` files are canonical on GitHub** and for agents; Chinese mirrors live alongside as `*.zh.md`. When adding or updating docs, maintain both files and link to the English default.
 
-| 文件 | 用途 |
-|------|------|
-| [`docs/WORLD.md`](docs/WORLD.md) | 世界觀、區域、派系 |
-| [`docs/IMPLEMENTATION.md`](docs/IMPLEMENTATION.md) | 實作藍圖 |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | 系統架構 |
-| [`docs/BOOTSTRAP.md`](docs/BOOTSTRAP.md) | MVP 啟動步驟 |
-| [`docs/PHASES.md`](docs/PHASES.md) | 分階段實作清單 |
-| [`docs/CLIENT_UI_DEBUG.md`](docs/CLIENT_UI_DEBUG.md) | Client 版面／側欄除錯案例與交付 checklist |
+Full doc index (English default; `*.zh.md` mirrors where listed):
 
-## 開發慣例
+| Doc | Purpose |
+|-----|---------|
+| [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)) | World setting, districts, factions |
+| [`docs/IMPLEMENTATION.md`](docs/IMPLEMENTATION.md) ([`IMPLEMENTATION.zh.md`](docs/IMPLEMENTATION.zh.md)) | Implementation blueprint |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) ([`ARCHITECTURE.zh.md`](docs/ARCHITECTURE.zh.md)) | System architecture |
+| [`docs/BOOTSTRAP.md`](docs/BOOTSTRAP.md) ([`BOOTSTRAP.zh.md`](docs/BOOTSTRAP.zh.md)) | MVP bootstrap steps |
+| [`docs/PHASES.md`](docs/PHASES.md) ([`PHASES.zh.md`](docs/PHASES.zh.md)) | Phased delivery checklist |
+| [`docs/CLIENT_UI_DEBUG.md`](docs/CLIENT_UI_DEBUG.md) ([`CLIENT_UI_DEBUG.zh.md`](docs/CLIENT_UI_DEBUG.zh.md)) | Client layout / sidebar debug cases and delivery checklist |
+| [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md) ([`LOCALIZATION.zh.md`](docs/LOCALIZATION.zh.md)) | Bilingual policy (English primary + zh) |
 
-- 語言：Python 3.13（virtualenv `cyber-mud-3.13.12` 或 `.venv`）
-- UI：Textual + Rich（`client/`）
-- 通訊：TCP 換行文字協定（`shared/protocol.py`）
-- 世界資料與程式碼分離；新增房間優先改 `data/`，不硬編在程式裡
-- 指令處理採註冊制；每個指令一個模組，放在 `commands/`
-- **雙語慣例**：英文為預設；遊戲文案同時維護 `data/locale/en.yaml` 與 `zh.yaml`（見 [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md)）
-- 測試：`pytest tests/`；修改指令或世界邏輯後必跑相關測試
-- 執行時：`PYTHONPATH` 指向 repo 根目錄（`run.sh`／`admin.sh` 已處理）
+## Development conventions
 
-## 版本控制
+- Language: Python 3.13 (virtualenv `cyber-mud-3.13.12` or `.venv`)
+- UI: Textual + Rich (`client/`)
+- Transport: TCP newline text protocol (`shared/protocol.py`)
+- World data separate from code; add rooms in `data/` first, not hardcoded in logic
+- Command handling is registry-based; one module per command under `commands/`
+- **Bilingual convention:** English is default; maintain game copy in both `data/locale/en.yaml` and `zh.yaml` (see [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md))
+- **Documentation:** split `*.md` (English, canonical) + `*.zh.md` (mirror); update both when changing project docs
+- Tests: `pytest tests/`; after changing commands or world logic, run related tests
+- Runtime: `PYTHONPATH` points at repo root (`run.sh` / `admin.sh` handle this)
 
-本專案使用 git（本機 repo；可自訂 remote）。
+## Version control
 
-### Commit 慣例
+This project uses git (local repo; remote is configurable).
 
-**一個大項目完成就 commit 一次**——不要把多個獨立功能混在同一個 commit。
+### Commit convention
 
-大項目範例：
+**One commit per major item**—do not mix unrelated features in a single commit.
 
-- 完成 Phase 0 某一子項（如登入存檔）
-- 新增一組指令（如 `take` / `drop` / `inventory`）
-- 完成 client TUI 功能（側欄、自動完成）
-- 擴充世界資料與機制
-- 測試補齊且 `pytest` 全過
+Major item examples:
 
-流程：
+- Finish one Phase 0 sub-item (e.g. login/saves)
+- Add a command group (e.g. `take` / `drop` / `inventory`)
+- Finish a client TUI feature (sidebar, autocomplete)
+- Expand world data and mechanics
+- Tests filled in and `pytest` all green
 
-1. 完成一個大項目 → 跑 `pytest tests/` 或 `./admin.sh validate`
-2. **更新 backlog** → [`docs/PHASES.md`](docs/PHASES.md)「已完成」或「Backlog」；本檔 Backlog 摘要表同步
-3. 通過後 `git add` 相關檔案 → `git commit`
-4. 需要時 `git push`
+Workflow:
 
-Commit message 格式：**英文主述** `<type>: <EN summary>`，可選繁中後綴 ` / <中文簡述>`（如 `feat: add item system / 新增物品系統`）。
+1. Finish one major item → run `pytest tests/` or `./admin.sh validate`
+2. **Update backlog** → [`docs/PHASES.md`](docs/PHASES.md) “Completed” or “Backlog”; sync this file’s Backlog summary tables
+3. On pass, `git add` relevant files → `git commit`
+4. `git push` when needed
 
-**Backlog 為必做步驟**：任何修正、client／server 行為變更，交付前都要寫入 PHASES，不得只改程式。
+Commit message format: **English subject** `<type>: <EN summary>`, optional Traditional Chinese suffix ` / <中文簡述>` (e.g. `feat: add item system / 新增物品系統`).
 
-## 管理工具
+**Backlog is mandatory:** any fix or client/server behavior change must be recorded in PHASES before delivery—not code-only changes.
+
+## Admin tools
 
 ```bash
-./admin.sh validate      # 驗證世界資料 + 跑測試
+./admin.sh validate      # validate world data + run tests
 ```
 
-（原 mud 的 `saves`／`delete-save` 等待 persistence 實作後補上。）
+(Original mud `saves` / `delete-save` commands await persistence implementation.)
 
 ## Backlog
 
-主清單在 [`docs/PHASES.md`](docs/PHASES.md)。近期已完成（2026-06）摘要：
+Master list: [`docs/PHASES.md`](docs/PHASES.md). Recent completions (2026-06) summary:
 
-| 項目 | 模組／驗收 |
-|------|------------|
-| Client 主介面現代化 | `client/tui_styles.py`、`client/ui_format.py` |
-| 登入／版面修正 | 輸入框可見、art 高度、RichLog 不搶焦點 |
-| 側欄修正 | `room_id` 刷新 map、優先 `@ui` JSON |
-| 物品／NPC 英文後綴 | `shared/locale_content.py` → `look`／`scan`／`inventory` |
-| Tab 自動補全 | `shared/completion.py`、`client/completion.py`、`@meta complete_*` |
-| 快捷鍵列 | `#hotkey_bar`（Tab、F2–F6、`/reconnect`）；chrome／hotkey `min-height:1`；輸入 panel 指令自動開側欄；F 鍵非阻塞 fetch |
-| 輸出動畫前綴 | `client/output_prefix.py`（Braille spinner） |
-| Client 重新連線 | `client/reconnect.py`、斷線退避、`/reconnect`、重送 auth |
-| Server 程式碼熱重載 | `server/code_reload.py`、`server/dev_reload.py`、`./run.sh --dev` |
-| Client spinner 執行中指示 | 僅執行中指令列動畫；完成後停止 |
-| Client 狀態動畫指示 | 戰鬥／任務／低 HP／NETRUN 進行中時狀態列圖示旋轉 |
-| 戰鬥 CD 秒數倒數 | `client/cd_display.py`、`combat_cd` 秒級 meta、hint／log 即時倒數 |
-| NPC 離房結束戰鬥 | `npc_in_player_room`、`resolve_npc_departed`；敵人巡邏離開時結束 encounter |
-| Tab 補全修正 | `MudPrompt` 攔截 Tab、`_apply_prompt_completion` 同步 fallback |
-| 戰鬥節奏加速 | `combat_tick_loop` 每 3s；攻擊 CD 3s、NPC 反擊 6s |
-| 效能優化 | 靜默 CD tick、精簡戰鬥 meta、client spinner 降頻 |
-| 側欄 stack | `sidebar_stack` 同時顯示 PDA＋地圖；F2–F5 切換疊加 |
-| 啟動狀態 | `StartupReport` 載入耗時；server 終端＋client hint |
-| Client 輸入歷史 | ↑↓ 指令歷史、Esc 還原、`command_history.json` 持久化 |
-| Client 記憶帳密／PIN | `client/credentials.py` 加密儲存、PIN 快速登入、F7 清除記憶 |
-| look 目標察看 | `look <目標>` 察看物品／NPC／裝備狀態與數值 |
-| NPC 屍體與搜刮 | `world/corpses.py` 擊倒留屍、loot、腐化掉落 |
-| 屍體英文後綴 | `corpse_label` 顯示 `(English)`／`(corpse)` 方便指令 |
-| 新手區擴充 | 訓練場 9 房、10 NPC、4 互動點；簡報室／餐廳／障礙道／模擬診所；`tests/test_tutorial_zone.py` |
-| 商店與交易 | `shop`／`buy`／`sell`；`data/shops.yaml`；註冊送起始金錢 |
-| 環境輸出著色 | `client/env_format.py` look／scan 分色顯示 |
-| 環境色隨主題 | `client/themes.py` `EnvPalette`；`/theme` 切換同步環境色 |
-| 消耗品系統 | `use`／`eat`／`drink`；食物／飲料／藥品；`world/consumables.py` |
-| NETRUN 指令放行 | client 不再攔截 `hack`／`probe`／`status` |
-| NPC 穿戴裝備 | `entities/npc.py` `equipment`；`look` 顯示；擊倒掉落 |
-| 自然回血 | `world/vitals.py` 依 body／cool／時段 tick 回復 |
-| NPC 重生 | `world/npc_respawn.py` 擊倒排程；`respawn_minutes`／`tier: boss` |
-| 指令重複 | `10 punch`／`punch.10` 多次執行 |
-| Server heartbeat | `server/heartbeat.py` 終端定期刷新運行狀態；dev 重載 log |
-| CP2077 裝備槽與武器種類 | `shared/equipment.py` 七槽；CP2077 遠程武器種類＋power／tech／smart／melee；`armor` 存檔遷移 |
-| NETRUN 英文後綴 | `net_node_label_with_id`；NETRUN 節點／地上物品 `(English)`；`hack` Tab 補全 |
-| NETRUN 環境／NPC 互動 | NETRUN 中 `look`／`scan`／`talk`／`say` 放行；環境顯示可駭入節點 |
-| 武器持握模式 | `weapon_primary`／`weapon_secondary`；`weapon_mode` 主要／次要／雙手／雙持 |
-| 等級／技能／天賦 | `world/progression.py`；`stats`／`talents`／`improve`；`data/talents.yaml`；擊倒／駭入 XP |
-| 街頭聲望與委託 | `street_cred`；`gigs`；`world/quests.py`；`broker_rumor` 交件獎勵 |
-| CP2077 快速破解 | `data/quickhacks.yaml`；過熱／短路／光學重啟／突觸燒毀；戰鬥狀態效果 |
-| 義體幻痛 | `world/cyberpsychosis.py` 低人性傷害懲罰 |
-| CP2077 義體槽位 | 九槽 cyberware／install／uninstall；`data/implants.yaml` |
-| 住宅與儲物 | `rent`／`home`／`stash`；`watson_flat` |
-| 交通與載具 | `transit`；`vehicles buy`／`drive` |
+| Item | Module / acceptance |
+|------|---------------------|
+| Client main UI modernization | `client/tui_styles.py`, `client/ui_format.py` |
+| Login / layout fixes | Input field visible, art height, RichLog does not steal focus |
+| Sidebar fixes | `room_id` refreshes map, prefer `@ui` JSON |
+| Item / NPC English suffix | `shared/locale_content.py` → `look` / `scan` / `inventory` |
+| Tab auto-completion | `shared/completion.py`, `client/completion.py`, `@meta complete_*` |
+| Hotkey bar | `#hotkey_bar` (Tab, F2–F6, `/reconnect`); chrome / hotkey `min-height:1`; input-panel commands auto-open sidebar; non-blocking F-key fetch |
+| Output animation prefix | `client/output_prefix.py` (Braille spinner) |
+| Client reconnect | `client/reconnect.py`, disconnect backoff, `/reconnect`, resend auth |
+| Server code hot-reload | `server/code_reload.py`, `server/dev_reload.py`, `./run.sh --dev` |
+| Client spinner in-progress indicator | Animate only the in-flight command line; stop when done |
+| Client status animation indicator | Status-bar icons spin during combat / gigs / low HP / NETRUN |
+| Combat CD countdown (seconds) | `client/cd_display.py`, second-level `combat_cd` meta, live hint / log countdown |
+| Combat ends when NPC leaves room | `npc_in_player_room`, `resolve_npc_departed`; end encounter when patrolling enemy exits |
+| Tab completion fix | `MudPrompt` intercepts Tab, `_apply_prompt_completion` sync fallback |
+| Combat pacing speed-up | `combat_tick_loop` every 3s; attack CD 3s, NPC counter 6s |
+| Performance optimizations | Silent CD tick, lean combat meta, lower client spinner frequency |
+| Sidebar stack | `sidebar_stack` shows PDA + map together; F2–F5 toggle overlay |
+| Startup status | `StartupReport` load timing; server terminal + client hint |
+| Client input history | ↑↓ command history, Esc restore, `command_history.json` persistence |
+| Client saved credentials / PIN | `client/credentials.py` encrypted storage, PIN quick login, F7 clear memory |
+| `look` target inspection | `look <target>` shows item / NPC / equipment state and stats |
+| NPC corpses and looting | `world/corpses.py` knockdown leaves corpse, loot, decay drops |
+| Corpse English suffix | `corpse_label` shows `(English)` / `(corpse)` for command entry |
+| Tutorial zone expansion | Training ground 9 rooms, 10 NPCs, 4 interactables; briefing / cafeteria / obstacle course / sim clinic; `tests/test_tutorial_zone.py` |
+| Shop and trading | `shop` / `buy` / `sell`; `data/shops.yaml`; starting cash on register |
+| Environment output coloring | `client/env_format.py` colorized `look` / `scan` |
+| Environment colors follow theme | `client/themes.py` `EnvPalette`; `/theme` syncs environment colors |
+| Consumables system | `use` / `eat` / `drink`; food / drink / meds; `world/consumables.py` |
+| NETRUN command passthrough | Client no longer blocks `hack` / `probe` / `status` |
+| NPC equipped gear | `entities/npc.py` `equipment`; shown in `look`; drops on knockdown |
+| Natural HP recovery | `world/vitals.py` regen by body / cool / time period tick |
+| NPC respawn | `world/npc_respawn.py` knockdown schedule; `respawn_minutes` / `tier: boss` |
+| Command repeat | `10 punch` / `punch.10` multi-execution |
+| Server heartbeat | `server/heartbeat.py` periodic terminal status refresh; dev reload log |
+| CP2077 equipment slots and weapon types | `shared/equipment.py` seven slots; CP2077 ranged types + power / tech / smart / melee; `armor` save migration |
+| NETRUN English suffix | `net_node_label_with_id`; NETRUN nodes / ground items `(English)`; `hack` Tab completion |
+| NETRUN environment / NPC interaction | `look` / `scan` / `talk` / `say` allowed during NETRUN; environment shows hackable nodes |
+| Weapon hold modes | `weapon_primary` / `weapon_secondary`; `weapon_mode` primary / secondary / two-hand / dual-wield |
+| Level / skills / talents | `world/progression.py`; `stats` / `talents` / `improve`; `data/talents.yaml`; knockdown / hack XP |
+| Street cred and gigs | `street_cred`; `gigs`; `world/quests.py`; `broker_rumor` turn-in rewards |
+| CP2077 quickhacks | `data/quickhacks.yaml`; overheat / short circuit / reboot optics / synapse burn; combat status effects |
+| Cyberware psychosis | `world/cyberpsychosis.py` low humanity damage penalty |
+| CP2077 cyberware slots | Nine slots cyberware / install / uninstall; `data/implants.yaml` |
+| Housing and stash | `rent` / `home` / `stash`; `watson_flat` |
+| Transit and vehicles | `transit`; `vehicles buy` / `drive` |
 
-### 待做（節錄）
+### To do (excerpt)
 
-維護規則見 [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)——**之後所有修正或變動都要更新 backlog**。
+Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**update backlog for every fix or change going forward**.
 
-- Phase E.4 文件 GitHub 風格 + TOC
 
-### 近期完成（2026-06 backlog 批次）
 
-| 項目 | 模組／驗收 |
-|------|------------|
-| Tab 多候選輪替 | `complete_input_cycle`、`client/app.py` |
-| 環境互動 | `interact`、`data/interactables.yaml`、`look`／`scan` |
-| 上下移動 | `go up/down`、`u`/`d`、屋頂／地下區 |
-| Prompt token | `%l` `%c` `%v` `%x`、`prompt template ncpd` |
-| 多階段委託 | `dock_watch`、`world/quests.py` stages |
-| 時段平衡 | `world/modifiers.py` period 修正 |
-| 義體連鎖 | `passive_chains.yaml`、`combat/passives.py` |
-| NCPD 通緝 | `world/wanted.py`、tick 衰減 |
-| 載具車庫 | `vehicles buy/select`、`vehicles[]` |
-| 製作拆解腦舞 | `craft`／`disassemble`／`braindance`、`tests/test_backlog_features.py` |
-| NPC 派系動機 AI | `world/npc_ai.py`、`corp_scout`／`thug` 派系衝突、`tests/test_npc_ai.py` |
-| 登入 banner MOTD 動態展示 | `client/login_motd.py`、`motd.tips` 輪播、`tests/test_login_motd.py` |
-| Prompt 完整版（client 即時預覽） | `client/prompt_preview.py`、`#prompt_preview`、`tests/test_prompt_preview.py` |
-| NPC 任務編排工具 | `world/quest_author.py`、`./admin.sh quests`、`tests/test_quest_author.py` |
-| 完整任務系統 | `gigs accept`／`journal`、`defeat_npc`／`have_item`、`alley_clearance`、`tests/test_quest_system.py` |
-| Help log 區 dropdown | `client/help_overlay.py`、`#help_dropdown` 覆蓋 log、`tests/test_help_overlay.py` |
-| 新手區二次擴充 | 4 新房、6 教學 NPC、`patrol_dummy`、4 互動點、補給站新商品；`tests/test_tutorial_zone.py` |
-| Gigs 側邊欄追蹤 | `gigs`／`journal` 側欄面板、F7 快捷鍵、任務進度自動刷新；`tests/test_gigs.py` |
-| Help 指令分類 | `HELP_CATEGORIES` 15 類；F3 overlay 分類標題；`tests/test_help_cmd.py` |
-| Focus 追蹤區塊 | prompt 上方 Grok 風漸層區塊；委託／戰鬥／指令執行；主題色＋圖示；`tests/test_focus_block.py` |
-| Client clear 清除 log | `/clear` 本機指令；`AnimatedLogBuffer.clear()`；Tab 補全；`tests/test_client_app.py` |
+### Recently completed (2026-06 backlog batch)
 
-世界觀與區域擴充見 [`docs/WORLD.md`](docs/WORLD.md)。
+| Item | Module / acceptance |
+|------|---------------------|
+| Tab multi-candidate cycling | `complete_input_cycle`, `client/app.py` |
+| Environment interactables | `interact`, `data/interactables.yaml`, `look` / `scan` |
+| Vertical movement (up/down) | `go up/down`, `u`/`d`, rooftop / underground areas |
+| Prompt tokens | `%l` `%c` `%v` `%x`, `prompt template ncpd` |
+| Multi-stage gigs | `dock_watch`, `world/quests.py` stages |
+| Time-period balance | `world/modifiers.py` period modifiers |
+| Cyberware passive chains | `passive_chains.yaml`, `combat/passives.py` |
+| NCPD wanted level | `world/wanted.py`, tick decay |
+| Vehicle garage | `vehicles buy/select`, `vehicles[]` |
+| Craft / disassemble / braindance | `craft` / `disassemble` / `braindance`, `tests/test_backlog_features.py` |
+| NPC faction motive AI | `world/npc_ai.py`, `corp_scout` / `thug` faction conflict, `tests/test_npc_ai.py` |
+| Login banner dynamic MOTD | `client/login_motd.py`, `motd.tips` rotation, `tests/test_login_motd.py` |
+| Full prompt (client live preview) | `client/prompt_preview.py`, `#prompt_preview`, `tests/test_prompt_preview.py` |
+| NPC quest authoring tool | `world/quest_author.py`, `./admin.sh quests`, `tests/test_quest_author.py` |
+| Full quest system | `gigs accept` / `journal`, `defeat_npc` / `have_item`, `alley_clearance`, `tests/test_quest_system.py` |
+| Help log-area dropdown | `client/help_overlay.py`, `#help_dropdown` overlays log, `tests/test_help_overlay.py` |
+| Tutorial zone second expansion | 4 new rooms, 6 tutorial NPCs, `patrol_dummy`, 4 interactables, supply depot new stock; `tests/test_tutorial_zone.py` |
+| Gigs sidebar tracking | `gigs` / `journal` sidebar panel, F7 hotkey, auto-refresh quest progress; `tests/test_gigs.py` |
+| Help command categories | `HELP_CATEGORIES` 15 categories; F3 overlay category headers; `tests/test_help_cmd.py` |
+| Focus tracking block | Grok-style gradient block above prompt; gigs / combat / command execution; theme color + icons; `tests/test_focus_block.py` |
+| Client clear log | `/clear` local command; `AnimatedLogBuffer.clear()`; Tab completion; `tests/test_client_app.py` |
+| Split EN/ZH documentation | `*.zh.md` mirrors; English default on GitHub; README ASCII banner |
 
-## 注意事項
+World setting and district expansion: [`docs/WORLD.md`](docs/WORLD.md) ([`WORLD.zh.md`](docs/WORLD.zh.md)).
 
-- 世界觀為致敬風格之原創內容，非官方 Cyberpunk／Blade Runner 劇情。
-- 擴充功能前先看 `docs/PHASES.md` 與 `docs/IMPLEMENTATION.md`，避免與既有協定衝突。
-- 改 `client/` 版面或側欄前先看 [`docs/CLIENT_UI_DEBUG.md`](docs/CLIENT_UI_DEBUG.md)；可搭配專案 skill `.grok/skills/cyber-mud-client-ui/`。
-- 新增可重複流程時，可封裝為 skill（`.grok/skills/` 或 `.claude/skills/`），格式可參考 [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)。
+## Notes
+
+- World lore is original homage-style content, not official Cyberpunk / Blade Runner canon.
+- Before extending features, read `docs/PHASES.md` and `docs/IMPLEMENTATION.md` to avoid conflicting with existing protocol.
+- Before changing `client/` layout or sidebar, read [`docs/CLIENT_UI_DEBUG.md`](docs/CLIENT_UI_DEBUG.md) ([`CLIENT_UI_DEBUG.zh.md`](docs/CLIENT_UI_DEBUG.zh.md)); pair with project skill `.grok/skills/cyber-mud-client-ui/`.
+- For repeatable workflows, encapsulate as a skill (`.grok/skills/` or `.claude/skills/`); format reference: [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills).

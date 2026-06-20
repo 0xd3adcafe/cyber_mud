@@ -1,203 +1,205 @@
-# 世界觀（World）/ Night City Setting
+# World Setting — Night City
 
-> **Language / 語言:** English-primary policy in [LOCALIZATION.md](LOCALIZATION.md). Lore below is **zh**; play in English via `lang en` and `*_en` world fields.
+> **中文：** [WORLD.zh.md](WORLD.zh.md)
 
-> 整理自原 **mud** 專案設定與 `data/` 世界資料脈絡（約 commit `34d5525`）。
-> 風格致敬 **Blade Runner** 與 **Cyberpunk 2077**，為原創 MUD 敘事，非官方授權劇情。
+> English-primary documentation. See [LOCALIZATION.md](LOCALIZATION.md). Play in Chinese via `lang zh` and localized world fields.
 
-## 目錄
+> Compiled from the original **mud** project settings and `data/` world data context (around commit `34d5525`).
+> Style pays homage to **Blade Runner** and **Cyberpunk 2077**; this is original MUD narrative, not officially licensed storyline.
 
-- [一句話](#一句話)
-- [時代氛圍](#時代氛圍)
-- [夜城地理](#夜城地理)
-- [劇情核心區](#劇情核心區)
-- [新手訓練場](#新手訓練場)
-- [派系與陣營](#派系與陣營)
-- [角色與改造](#角色與改造)
-- [夜城與 NETRUN](#夜城與-netrun)
-- [天氣與時間](#天氣與時間)
-- [社會與經濟](#社會與經濟)
-- [玩法錨點](#玩法錨點)
-- [世界規模與資料](#世界規模與資料)
-- [Fork 時改世界觀](#fork-時改世界觀)
+## Table of Contents
 
-## 一句話
+- [In One Sentence](#in-one-sentence)
+- [Era & Atmosphere](#era--atmosphere)
+- [Night City Geography](#night-city-geography)
+- [Story Core Areas](#story-core-areas)
+- [New Player Training Ground](#new-player-training-ground)
+- [Factions & Allegiances](#factions--allegiances)
+- [Characters & Augmentation](#characters--augmentation)
+- [Night City & NETRUN](#night-city--netrun)
+- [Weather & Time](#weather--time)
+- [Society & Economy](#society--economy)
+- [Gameplay Anchors](#gameplay-anchors)
+- [World Scale & Data](#world-scale--data)
+- [Reskinning the World When Forking](#reskinning-the-world-when-forking)
 
-玩家透過**神經連結**進入霓虹籠罩的**夜城**，在企業、幫派與黑市之間求生，以義體、槍械與駭客協定改寫自己的命運。
+## In One Sentence
 
-## 時代氛圍
+Players jack in through a **neural link** to neon-drenched **Night City**, surviving among corporations, gangs, and the black market—rewriting their fate with cyberware, firearms, and netrunner protocols.
 
-| 元素 | 設定 |
+## Era & Atmosphere
+
+| Element | Setting |
 |------|------|
-| 基調 | 賽博龐克：高密度都市、霓虹廣告、監控無孔不入 |
-| 視覺參考 | 雨夜反光、煙霧與全息看板（Blade Runner 氣質） |
-| 社會參考 | 巨企壟斷、街頭幫派、義體普及、RAM 與人性代價（CP2077 氣質） |
-| 玩家身份 | 初連線為匿名**旅人**，註冊登入後成為夜城中的獨立邊緣人 |
-| 介面隱喻 | Client 橫幅／MOTD 為「建立神經連結」；斷線為「神經連結中斷」 |
+| Tone | Cyberpunk: high-density urban sprawl, neon ads, pervasive surveillance |
+| Visual reference | Rain-slick reflections, smoke, and holographic billboards (Blade Runner vibe) |
+| Social reference | Megacorp monopolies, street gangs, widespread cyberware, RAM and the cost of humanity (CP2077 vibe) |
+| Player identity | First connection is an anonymous **traveler**; after registration, an independent **edgerunner** in Night City |
+| Interface metaphor | Client banner / MOTD is “establishing neural link”; disconnect is “neural link severed” |
 
-世界不是靜態背景：server **tick** 推進時段與天氣，NPC 會移動、閒置、交戰；玩家行為（派系、駭入、戰鬥）會改變個人狀態與聲望。
+The world is not a static backdrop: server **tick** advances time-of-day and weather; NPCs move, idle, and fight; player actions (factions, hacking, combat) change personal state and reputation.
 
-## 夜城地理
+## Night City Geography
 
-世界以 **grid 網格** 組織，`map` 指令可俯瞰已探索區域。程序生成時劃分 **8 個區域（district）**，各有安全等級與氛圍，驅動 NPC 巡邏、天氣與 `look` 描述。
+The world is organized on a **grid**; the `map` command gives a bird’s-eye view of explored areas. Procedural generation divides the city into **8 districts**, each with safety level and atmosphere that drive NPC patrols, weather, and `look` descriptions.
 
-| 區域 | 氛圍定位 |
+| District | Atmosphere |
 |------|----------|
-| **Watson** | 混亂街區、夜市、診所與地下交易；新手 outward 探索起點之一 |
-| **Kabuki** | 霓虹娛樂、市集、情報與灰色服務 |
-| **Corpo** | 企業塔、保全、高監控；荒坂／軍武勢力影響力強 |
-| **Tyrell** | 高塔、實驗室、精英與禁忌科技（致敬銀翼殺手企業美學） |
-| **Little China** | 唐人街巷弄、廟宇、地攤與幫派地盤 |
-| **Docks** | 貨櫃、走私、酸雨與霧氣；黑市與戰鬥頻繁 |
-| **Combat Zone** | 高敵意、槍火與幫派戰；戰鬥與拾荒主戰場 |
-| **Undercity** | 下水道、廢墟、資料墓穴；解謎與駭入入口 |
+| **Watson** | Chaotic streets, night markets, clinics, and underground deals; one starting point for outward exploration |
+| **Kabuki** | Neon entertainment, bazaars, intel, and gray-market services |
+| **Corpo** | Corporate towers, security, heavy surveillance; strong Arasaka / Militech influence |
+| **Tyrell** | High-rises, labs, elites, and forbidden tech (homage to Blade Runner corporate aesthetics) |
+| **Little China** | Chinatown alleys, temples, street stalls, and gang turf |
+| **Docks** | Containers, smuggling, acid rain and fog; black market and frequent combat |
+| **Combat Zone** | High hostility, gunfire and gang wars; main battlefield for combat and scavenging |
+| **Undercity** | Sewers, ruins, data crypts; puzzle and hacking entry points |
 
-房間 ID 慣例含區域前綴（例如 `watson_03_06`），`district` 欄位供 tick／天氣／NPC AI 使用。
+Room ID convention includes a district prefix (e.g. `watson_03_06`); the `district` field is used by tick / weather / NPC AI.
 
-## 劇情核心區
+## Story Core Areas
 
-世界重生成時**刻意保留**一組主線錨點，作為解謎、駭入與派系玩法的樞紐：
+On world regeneration, a set of main-story anchors is **deliberately preserved** as hubs for puzzles, hacking, and faction play:
 
-| 房間 ID | 敘事角色 |
+| Room ID | Narrative role |
 |---------|----------|
-| `square` | **霓虹廣場**——城市交會與情報流通的公共樞紐 |
-| `alley` | 窄巷、伏擊與黑市引線 |
-| `shrine` | 廟宇／祭祀空間，人性與信仰對照科技 |
-| `crypt` | 地下墓穴、危險與祕密 |
-| `data_vault` | 資料金庫，企業機密與駭入目標 |
+| `square` | **Neon Plaza** — public hub where the city meets and intel circulates |
+| `alley` | Narrow alleys, ambushes, and black-market leads |
+| `shrine` | Shrine / ritual space; humanity and faith contrasted with technology |
+| `crypt` | Underground crypt; danger and secrets |
+| `data_vault` | Data vault; corporate secrets and hacking targets |
 
-常見關聯 NPC／物件（測試與教程亦引用）：
+Common associated NPCs / objects (also referenced in tests and tutorials):
 
-- NPC：`guard`、`priest`、`rat`、`terminal`；街頭有**情報經紀人**
-- 物品：`lantern`、`rusty_key`、`glowstick` 等
+- NPCs: `guard`, `priest`, `rat`, `terminal`; street **info broker**
+- Items: `lantern`, `rusty_key`, `glowstick`, etc.
 
-典型玩家路徑範例：`take glowstick` → `talk 情報經紀人` → `pledge 荒坂` → `hack 核心終端`（實際房間名以 `data/` 為準）。
+Example player path: `take glowstick` → `talk info broker` → `pledge arasaka` → `hack core terminal` (actual room names per `data/`).
 
-## 新手訓練場
+## New Player Training Ground
 
-`recall` 指令預設傳送回 **`tutorial` 新手訓練場**（與公開夜城隔離的安全區）。
+The `recall` command defaults to **`tutorial`** — the new-player training ground (a safe zone isolated from public Night City).
 
-訓練場分 **三區**，對應核心玩法教學：
+The training ground has **three zones**, each teaching core gameplay:
 
-| 分區 | 教學重點 |
+| Zone | Teaching focus |
 |------|----------|
-| **教官區** | 移動、`look`、物品、基礎社交 |
-| **戰鬥區** | `attack`、`defend`、`flee`、即時戰鬥與冷卻 |
-| **駭客區** | `net`／NETRUN、`quickhack`、RAM 與協定 |
+| **Instructor zone** | Movement, `look`, items, basic social |
+| **Combat zone** | `attack`, `defend`, `flee`, real-time combat and cooldowns |
+| **Netrunner zone** | `net` / NETRUN, `quickhack`, RAM and protocols |
 
-`help tutorial` 依世界與指令自動產生新手教學；完成訓練後進入 `square` 等公開區域。
+`help tutorial` auto-generates onboarding from world and commands; after training, players enter public areas such as `square`.
 
-## 派系與陣營
+## Factions & Allegiances
 
-玩家可透過 `pledge` 宣誓效忠派系；PDA 顯示當前**派系**與**聲望（reputation）**。
+Players swear allegiance to factions via `pledge`; the PDA shows current **faction** and **reputation**.
 
-| 派系 ID | 設定方向 |
+| Faction ID | Direction |
 |---------|----------|
-| `arasaka` | **荒坂**——巨企安全、監控、高端科技與冷酷秩序 |
-| `maelstrom` | **漩渦幫**——狂熱義體、街頭暴力、機械崇拜 |
-| `militech` | **軍武**——傭兵、火力、戰爭經濟 |
-| `tyrell` | **泰瑞**——基因／義體實驗、精英主義（Blade Runner 致敬） |
+| `arasaka` | **Arasaka** — megacorp security, surveillance, high-end tech, and cold order |
+| `maelstrom` | **Maelstrom** — fanatical cyberware, street violence, machine worship |
+| `militech` | **Militech** — mercenaries, firepower, war economy |
+| `tyrell` | **Tyrell** — gene / cyberware experiments, elitism (Blade Runner homage) |
 
-派系影響對話、任務 hint、部分區域敵意與商店態度（具體規則見 `data/` 與 `commands/pledge.py`）。未宣誓者為獨立**邊緣人**，靠人脈與黑市求生。
+Factions affect dialogue, quest hints, hostility in some areas, and shop attitudes (see `data/` and `commands/pledge.py`). Unpledged players are independent **edgerunners**, surviving on contacts and the black market.
 
-## 角色與改造
+## Characters & Augmentation
 
-角色數值採 **CP2077 風格**五維與駭客資源，在 PDA／戰鬥／NETRUN 中可讀：
+Character stats use **CP2077-style** five attributes and netrunner resources, readable in PDA / combat / NETRUN:
 
-| 類別 | 欄位 | 敘事意義 |
+| Category | Field | Narrative meaning |
 |------|------|----------|
-| 生存 | `hp`、`gold` | 肉體損傷與街頭貨幣 |
-| 五維 | Body、Reflex、Technical、Cool、Intelligence | 近戰、閃避、技工、沉著、駭客智力 |
-| 駭客 | `ram`／`max_ram`、`skills`（協定） | 快速破解與戰鬥駭入配額 |
-| 人性 | `humanity` | 義體安裝與改造代價 |
-| 名聲 | `reputation` | 夜城中的信用與恐嚇 |
-| 狀態 | `status_effects` | 流血、中毒、義體過熱等（可擴充） |
+| Survival | `hp`, `gold` | Physical damage and street currency |
+| Five stats | Body, Reflex, Technical, Cool, Intelligence | Melee, dodge, tech, composure, netrunner intellect |
+| Netrunner | `ram` / `max_ram`, `skills` (protocols) | Quickhack and combat hack quota |
+| Humanity | `humanity` | Cost of cyberware installs and augmentation |
+| Reputation | `reputation` | Credit and intimidation in Night City |
+| Status | `status_effects` | Bleeding, poison, cyberware overheat, etc. (extensible) |
 
-**義體（implants）**：`install` 將企業／黑市義體裝入 cyber 槽位，改變屬性與戰鬥加成。  
-**裝備**：槍械、防具、武器模組（`mod`）——街頭與企業武裝的具象化。  
-**技能協定**：`learn` 取得 `quickhack` 等戰鬥與駭入能力。
+**Cyberware (implants)**: `install` slots corporate / black-market implants into cyber slots, changing stats and combat bonuses.  
+**Gear**: firearms, armor, weapon mods (`mod`) — street and corporate armament made tangible.  
+**Skill protocols**: `learn` grants combat and hack abilities such as `quickhack`.
 
-## 夜城與 NETRUN
+## Night City & NETRUN
 
-遊戲有 **兩層體驗**，敘事上為「肉體在街頭、意識潛入網路」：
+The game has **two layers of experience**, narratively “body on the street, mind diving the net”:
 
-### 夜城（實體層）
+### Night City (physical layer)
 
-- 預設模式：Textual client **夜城主題**
-- 探索、對話、槍戰、拾取、派系
-- 提示符與狀態列顯示房間、HP、時間、天氣等
+- Default mode: Textual client **Night City theme**
+- Explore, talk, gunfights, loot, factions
+- Prompt and status bar show room, HP, time, weather, etc.
 
-### NETRUN（駭入層）
+### NETRUN (hack layer)
 
-- `net`／`netrun` 進入 **Hacknet 風格子 shell**
-- 獨立 **NETRUN 主題**、提示符（如 `ghost@netrun-kali`）、指令歷史與補全
-- 與世界內 `hack`、`probe`、`terminal` 等物件連動
-- Client 限制：NETRUN 模式下不可直接下一般 MUD 指令（須 `exit` 回夜城）
+- `net` / `netrun` enters a **Hacknet-style grid shell**
+- Separate **NETRUN theme**, prompt (e.g. `ghost@netrun-kali`), command history and completion
+- Tied to in-world `hack`, `probe`, `terminal`, and similar objects
+- Client constraint: in NETRUN mode you cannot run normal MUD commands directly (use `exit` to return to Night City)
 
-雙層切換是核心世界觀體驗：**同一角色，兩種介面、兩種風險**。
+Layer switching is core to the setting: **one character, two interfaces, two kinds of risk**.
 
-## 天氣與時間
+## Weather & Time
 
-| 系統 | 表現 |
+| System | Behavior |
 |------|------|
-| **世界時鐘** | 日／夜、時段（晨／午／暮／夜…）；`time` 查詢；狀態列 `@meta time` |
-| **區域天氣** | 酸雨、霧、霾、霓虹反光、乾燥等；隨 tick 變化 |
-| **影響** | `look` 描述、氛圍；可擴充視野、移動、戰鬥／NETRUN 修正 |
+| **World clock** | Day / night, time bands (dawn / noon / dusk / night…); query with `time`; status bar `@meta time` |
+| **District weather** | Acid rain, fog, smog, neon glare, dry heat, etc.; changes with tick |
+| **Effects** | `look` text and atmosphere; extensible vision, movement, combat / NETRUN modifiers |
 
-夜城永不眠：時段改變 NPC 作息（店鋪、巡邏），天氣改變街頭敘事色調。
+Night City never sleeps: time bands shift NPC routines (shops, patrols); weather shifts the street narrative tone.
 
-## 社會與經濟
+## Society & Economy
 
-- **企業**：管制資料、義體與保全；高區 Corpo／Tyrell 監控嚴密
-- **幫派**：Combat Zone、Undercity 幫派火併；Maelstrom 象徵義體狂熱
-- **黑市**：Kabuki、Docks 的情報、武器、違禁協定；`appraise` 估價、`give` 交易
-- **情報**：情報經紀人、`scan`／`search` 探索環境與隱藏互動
-- **多人**：玩家可見彼此進出（廣播）；同房 `look` 可察覺 NPC／玩家動態
+- **Corporations**: control data, cyberware, and security; Corpo / Tyrell high districts are heavily monitored
+- **Gangs**: turf wars in Combat Zone and Undercity; Maelstrom embodies cyberware fanaticism
+- **Black market**: intel, weapons, banned protocols in Kabuki and Docks; `appraise` for pricing, `give` for trade
+- **Intel**: info brokers, `scan` / `search` to explore the environment and hidden interactions
+- **Multiplayer**: players see each other enter and leave (broadcast); `look` in the same room reveals NPC / player activity
 
-金錢（`gold`）代表街頭生存能力，非企業信用點；巨企資源透過派系、駭入與任務間接取得。
+Money (`gold`) is street survival, not corporate credits; megacorp resources come indirectly through factions, hacking, and quests.
 
-## 玩法錨點
+## Gameplay Anchors
 
-將世界觀落到具體指令的對照表：
+Mapping setting concepts to concrete commands:
 
-| 世界觀概念 | 遊戲表現 |
+| Setting concept | In-game expression |
 |------------|----------|
-| 個人終端 | `pda`／`status`（F2 側欄） |
-| 街頭裝備 | `equip`、`equipment`（F5） |
-| 義體改造 | `install`、`mod` |
-| 槍戰 | `attack`、`defend`、`flee`、即時 encounter |
-| 快速破解 | `quickhack`（耗 RAM） |
-| 潛入網路 | `net`、`hack`、`probe` |
-| 宣誓派系 | `pledge arasaka` 等 |
-| 回訓練場 | `recall` → `tutorial` |
-| 探索地圖 | `map`（F4）、`go`、`look` |
+| Personal terminal | `pda` / `status` (F2 sidebar) |
+| Street gear | `equip`, `equipment` (F5) |
+| Cyberware | `install`, `mod` |
+| Gunfights | `attack`, `defend`, `flee`, real-time encounter |
+| Quickhacks | `quickhack` (spends RAM) |
+| Net dive | `net`, `hack`, `probe` |
+| Faction pledge | `pledge arasaka`, etc. |
+| Return to training | `recall` → `tutorial` |
+| Explore map | `map` (F4), `go`, `look` |
 
-## 世界規模與資料
+## World Scale & Data
 
-原專案以 `tools/generate_world.py` 程序生成世界，目標規模：
+The original project procedurally generates the world via `tools/generate_world.py`, targeting roughly:
 
-| 類型 | 數量（約） |
+| Type | Count (approx.) |
 |------|------------|
-| 房間 | 200 |
-| 物品 | 45 |
-| NPC | 109 |
+| Rooms | 200 |
+| Items | 45 |
+| NPCs | 109 |
 
-靜態定義在 `data/world.yaml`（及 items／npcs／skills／implants 等），動態狀態在 `world_state.json`（地面物品、時鐘、天氣、戰鬥等）。文案 key 在 `data/locale/zh.yaml`、`en.yaml`。
+Static definitions live in `data/world.yaml` (and items / npcs / skills / implants, etc.); dynamic state in `world_state.json` (ground items, clock, weather, combat, etc.). Copy keys in `data/locale/zh.yaml`, `en.yaml`.
 
-**起始位置**：新連線玩家落點由 `world.start_room` 決定（公開區或教程入口，以資料為準）。
+**Start location**: new connections land per `world.start_room` (public area or tutorial entry — per data).
 
-## Fork 時改世界觀
+## Reskinning the World When Forking
 
-若 **cyber_mud** 要換題材，建議只改以下層，程式架構可沿用：
+If **cyber_mud** changes theme, only these layers need edits; program architecture can stay:
 
-1. **區域名稱與氛圍**——`generate_world.py` 或手寫 `data/`
-2. **派系表**——`factions` 與 `pledge` 文案
-3. **locale**——MOTD、房間描述、NPC 對話
-4. **教程三區主題**——`tutorial` 房間與 `help tutorial`
-5. **NETRUN 皮膚**——主題色與提示符，機制可保留
+1. **District names and atmosphere** — `generate_world.py` or hand-written `data/`
+2. **Faction table** — `factions` and `pledge` copy
+3. **Locale** — MOTD, room descriptions, NPC dialogue
+4. **Tutorial three-zone theme** — `tutorial` rooms and `help tutorial`
+5. **NETRUN skin** — theme colors and prompt; mechanics can remain
 
-保留「實體探索 + 駭入層 + PDA + 派系 + tick 世界」的骨架，換皮成本最低、體驗最完整。
+Keep the skeleton of “physical exploration + hack layer + PDA + factions + tick world” for lowest reskin cost and fullest experience.
 
 ---
 
-相關文件：[IMPLEMENTATION.md](IMPLEMENTATION.md)（系統實作）、[PHASES.md](PHASES.md)（功能階段）、[BOOTSTRAP.md](BOOTSTRAP.md)（從零啟動）。
+Related docs: [IMPLEMENTATION.md](IMPLEMENTATION.md) (system implementation), [PHASES.md](PHASES.md) (feature phases), [BOOTSTRAP.md](BOOTSTRAP.md) (start from zero).
