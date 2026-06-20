@@ -1,6 +1,6 @@
 # Contributing
 
-> **中文：** 協作慣例亦見 [CLAUDE.zh.md](CLAUDE.zh.md)（Agent 行為準則）。
+> **中文：** [CONTRIBUTING.zh.md](CONTRIBUTING.zh.md) · Agent 行為準則見 [CLAUDE.zh.md](CLAUDE.zh.md)。
 
 Thank you for contributing to **cyber_mud** — human or AI-assisted.
 
@@ -54,20 +54,16 @@ docs: clarify CC BY scope for data/ / 釐清 data CC BY 範圍
 
 One **major item** per commit (see [CLAUDE.md](CLAUDE.md) § Version control).
 
-## World population overlay
+## World authoring tools
 
-Procedural grid NPCs and district loot live in `data/world_population.yaml`, merged at load time by `world/loader.py` (`POPULATION_PATH`). Hand-authored entries in `data/world.yaml` are **not** overwritten.
+Procedural grids, population overlays, and quest scaffolding: **[docs/WORLD_TOOLS.md](docs/WORLD_TOOLS.md)** ([中文](docs/WORLD_TOOLS.zh.md)).
 
-**Regenerate** after changing district grids in `data/world.yaml` or archetype rules in `tools/expand_world_population.py`:
+Quick regen after archetype or grid changes:
 
 ```bash
-python -m tools.expand_world_population          # writes data/world_population.yaml
+python -m tools.expand_world_population
 ./admin.sh validate
 ```
-
-- Edit archetype `talk_key`, loot, and counts in `tools/expand_world_population.py`; add matching `talk.*` keys to `data/locale/en.yaml` and `zh.yaml`.
-- Add hub NPCs, quests, shops, and story anchors in `data/world.yaml` (or `quests.yaml`) — keep them out of the generated overlay.
-- Use `--dry-run` to preview counts without writing the file.
 
 ## Pull requests
 

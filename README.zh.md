@@ -47,6 +47,7 @@ Agent 行為準則：**[CLAUDE.zh.md](CLAUDE.zh.md)**
 | [docs/ARCHITECTURE.zh.md](docs/ARCHITECTURE.zh.md) | 系統架構 |
 | [docs/BOOTSTRAP.zh.md](docs/BOOTSTRAP.zh.md) | MVP 啟動步驟 |
 | [docs/PHASES.zh.md](docs/PHASES.zh.md) | 分階段實作清單 |
+| [docs/WORLD_TOOLS.zh.md](docs/WORLD_TOOLS.zh.md) | 世界格點／人口／任務編寫 CLI |
 
 英文版（GitHub 預設）：同路徑無 `.zh` 後綴，例如 [docs/WORLD.md](docs/WORLD.md)。
 

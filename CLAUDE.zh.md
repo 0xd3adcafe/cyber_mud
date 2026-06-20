@@ -173,6 +173,7 @@
 | [`docs/PHASES.zh.md`](docs/PHASES.zh.md) | 分階段實作清單 |
 | [`docs/CLIENT_UI_DEBUG.zh.md`](docs/CLIENT_UI_DEBUG.zh.md) | Client 版面／側欄除錯案例與交付 checklist |
 | [`docs/LOCALIZATION.zh.md`](docs/LOCALIZATION.zh.md) | 雙語政策 |
+| [`docs/WORLD_TOOLS.zh.md`](docs/WORLD_TOOLS.zh.md) | 世界格點／人口／任務編寫 CLI |
 
 ## 開發慣例
 

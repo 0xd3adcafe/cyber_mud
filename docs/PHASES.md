@@ -193,7 +193,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | World expansion W.8–W.10 (2026-06) | `data/schedule.yaml` shop hours + period patrol multipliers; NPC schedules (`bazaar_fixer`, `dock_smuggler`, `corp_guard`); `docks_gray` shop + `gray_market` quest (`give_npc`); corp/street `appraise`; `give <item> <npc>`; `presence.enter`/`leave` on `go`; sender-excluded `say`/`give` broadcasts; `tests/test_schedule.py`, `tests/test_black_market.py`, `tests/test_multiplayer.py` |
 | World expansion W.12–W.13 (2026-06) | `poison` tick + `antidote` consumable; player `overheat` debuff (quickhack backlash); `world/reactions.py` reputation shifts (pledge/hack/combat); broker rep/wanted talk; tick `ambient_tick` + `trauma_tick` broadcast; `tests/test_status_effects.py`, `tests/test_world_reactions.py` |
 | World expansion W.14 (2026-06) | `tools/expand_world_population.py` + `data/world_population.yaml` overlay; **109 NPCs**, **45 items** on 263-room grid; loader merge; `tests/test_world_scale.py` |
-| Content depth D.1–D.6 (2026-06) | Archetype `talk.*` keys + regen population; quest WARN fixes + `hub_briefing`; hub NPCs (`tyrell_liaison`, `zone_warden`, etc.); grid loot craft/disassemble + shop stock; 8 district grid net nodes + interactables; `tests/test_content_depth.py`; population workflow in `CONTRIBUTING.md` |
+| Content depth D.1–D.6 (2026-06) | Archetype `talk.*` keys + regen population; quest WARN fixes + `hub_briefing`; hub NPCs (`tyrell_liaison`, `zone_warden`, etc.); grid loot craft/disassemble + shop stock; 8 district grid net nodes + interactables; `tests/test_content_depth.py`; [WORLD_TOOLS.md](WORLD_TOOLS.md) |
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 
 ## Multi-session development (mandatory)
@@ -284,7 +284,7 @@ Not yet implemented or only partially implemented.
 | ~~D.3~~ | ~~Hand-authored district hubs~~ | ✅ `tyrell_liaison`, `zone_warden`, `plaza_handler`, `gate_herbalist`; hub `look` flavor in `data/world.yaml` |
 | ~~D.4~~ | ~~Item lore & economy~~ | ✅ `street_stim`/`gutter_blade` craft; `combat_scrap`/`black_ice_shard` disassemble; `kabuki_bazaar`/`docks_gray` stock |
 | ~~D.5~~ | ~~Interactables & NETRUN on grid~~ | ✅ 7 grid interactables; 8 district `*_grid_node` in `data/net_nodes.yaml`; `tests/test_content_depth.py` |
-| ~~D.6~~ | ~~Population tool workflow~~ | ✅ Regen workflow in `CONTRIBUTING.md` § World population overlay |
+| ~~D.6~~ | ~~Population tool workflow~~ | ✅ [WORLD_TOOLS.md](WORLD_TOOLS.md) / [WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md) |
 
 **Suggested order:** D.2 → D.1 → D.3 → D.4 → D.5 → D.6. **All phases shipped (2026-06).**
 

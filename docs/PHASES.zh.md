@@ -193,7 +193,7 @@
 | 世界擴充 W.8–W.10（2026-06） | `data/schedule.yaml` 商店營業＋時段巡邏倍率；NPC schedule（`bazaar_fixer`、`dock_smuggler`、`corp_guard`）；`docks_gray` 灰市＋`gray_market` 任務（`give_npc`）；企業／街頭 `appraise`；`give <物品> <NPC>`；`go` 觸發 `presence.enter`／`leave`；`say`／`give` 廣播排除發送者；`tests/test_schedule.py`、`tests/test_black_market.py`、`tests/test_multiplayer.py` |
 | 世界擴充 W.12–W.13（2026-06） | `poison` tick＋`antidote` 消耗品；玩家 `overheat` debuff（快速破解反噬）；`world/reactions.py` 聲望變動（宣誓／駭入／戰鬥）；經紀人聲望／通緝對話；tick `ambient_tick`＋`trauma_tick` 廣播；`tests/test_status_effects.py`、`tests/test_world_reactions.py` |
 | 世界擴充 W.14（2026-06） | `tools/expand_world_population.py`＋`data/world_population.yaml` 覆蓋層；**109 NPC**、**45 物品**（263 房格點）；loader 合併；`tests/test_world_scale.py` |
-| 內容深度 D.1–D.6（2026-06） | 原型 `talk.*`＋重產 population；任務 WARN 修復＋`hub_briefing`；樞紐 NPC；格點戰利品 craft/disassemble＋商店；8 區 net 節點＋互動物；`tests/test_content_depth.py`；`CONTRIBUTING.md` 工作流 |
+| 內容深度 D.1–D.6（2026-06） | 原型 `talk.*`＋重產 population；任務 WARN 修復＋`hub_briefing`；樞紐 NPC；格點戰利品 craft/disassemble＋商店；8 區 net 節點＋互動物；`tests/test_content_depth.py`；[WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md) |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
 
 ## 多 session 開發（必做）
@@ -282,7 +282,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~D.3~~ | ~~手寫區域樞紐~~ | ✅ `tyrell_liaison`、`zone_warden`、`plaza_handler`、`gate_herbalist`；樞紐 `look` 敘事 |
 | ~~D.4~~ | ~~物品敘事與經濟~~ | ✅ `street_stim`／`gutter_blade` craft；`combat_scrap` 等 disassemble；`kabuki_bazaar`／`docks_gray` 庫存 |
 | ~~D.5~~ | ~~格點互動物與 NETRUN~~ | ✅ 7 個格點互動物；8 區 `*_grid_node`；`tests/test_content_depth.py` |
-| ~~D.6~~ | ~~人口工具工作流~~ | ✅ `CONTRIBUTING.md` § World population overlay |
+| ~~D.6~~ | ~~人口工具工作流~~ | ✅ [WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md)／[WORLD_TOOLS.md](WORLD_TOOLS.md) |
 
 **建議順序：** D.2 → D.1 → D.3 → D.4 → D.5 → D.6。**全階段已交付（2026-06）。**
 

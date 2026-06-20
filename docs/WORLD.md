@@ -176,7 +176,7 @@ Mapping setting concepts to concrete commands:
 
 ## World Scale & Data
 
-The original project procedurally generates the world via `tools/generate_world.py`, targeting roughly:
+The original project procedurally generates the world via `tools/generate_world.py` (see **[WORLD_TOOLS.md](WORLD_TOOLS.md)** for the full CLI pipeline), targeting roughly:
 
 | Type | Count (approx.) |
 |------|------------|

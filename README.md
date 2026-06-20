@@ -58,6 +58,7 @@ Collaboration rules: **[CLAUDE.md](CLAUDE.md)** (behavior guidelines reference `
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture |
 | [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md) | MVP bootstrap steps |
 | [docs/PHASES.md](docs/PHASES.md) | Phased delivery checklist |
+| [docs/WORLD_TOOLS.md](docs/WORLD_TOOLS.md) | World grid / population / quest authoring CLI |
 
 Chinese mirrors: same paths with `.zh.md` suffix (e.g. [docs/WORLD.zh.md](docs/WORLD.zh.md)).
 

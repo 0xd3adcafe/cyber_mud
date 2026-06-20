@@ -139,9 +139,14 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 
 ### 工具
 
-- [x] `admin.sh validate` / `saves` / `delete-save`
-- [x] `tools/generate_world.py`（程序生成房間格點）
+- [x] `admin.sh validate` / `saves` / `delete-save` / `quests`
+- [x] `tools/generate_world.py` — 單區域房間格點 YAML
+- [x] `tools/merge_world_grid.py` — 八區格點併入 `data/world.yaml`
+- [x] `tools/expand_world_population.py` — 程序 NPC／物品覆蓋層
+- [x] `tools/quest_author.py` — 任務驗證／腳手架（`./admin.sh quests`）
 - [x] pytest
+
+完整用法：**[WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md)**（[English](WORLD_TOOLS.md)）。
 
 ## 規劃中
 

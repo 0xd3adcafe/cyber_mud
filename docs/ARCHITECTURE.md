@@ -139,9 +139,14 @@ Client updates status bar, hint_bar, prompt token sources.
 
 ### Tools
 
-- [x] `admin.sh validate` / `saves` / `delete-save`
-- [x] `tools/generate_world.py` (procedural room grid)
+- [x] `admin.sh validate` / `saves` / `delete-save` / `quests`
+- [x] `tools/generate_world.py` — single-district room grid YAML
+- [x] `tools/merge_world_grid.py` — merge eight district grids into `data/world.yaml`
+- [x] `tools/expand_world_population.py` — procedural NPC/item overlay
+- [x] `tools/quest_author.py` — quest validate / scaffold (via `./admin.sh quests`)
 - [x] pytest
+
+Full usage: **[WORLD_TOOLS.md](WORLD_TOOLS.md)** ([中文](WORLD_TOOLS.zh.md)).
 
 ## Planned
 

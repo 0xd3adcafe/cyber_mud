@@ -174,7 +174,7 @@
 
 ## 世界規模與資料
 
-原專案以 `tools/generate_world.py` 程序生成世界，目標規模：
+原專案以 `tools/generate_world.py` 程序生成世界（完整 CLI 流程見 **[WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md)**），目標規模：
 
 | 類型 | 數量（約） |
 |------|------------|

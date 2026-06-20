@@ -173,6 +173,7 @@ Full doc index (English default; `*.zh.md` mirrors where listed):
 | [`docs/PHASES.md`](docs/PHASES.md) ([`PHASES.zh.md`](docs/PHASES.zh.md)) | Phased delivery checklist |
 | [`docs/CLIENT_UI_DEBUG.md`](docs/CLIENT_UI_DEBUG.md) ([`CLIENT_UI_DEBUG.zh.md`](docs/CLIENT_UI_DEBUG.zh.md)) | Client layout / sidebar debug cases and delivery checklist |
 | [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md) ([`LOCALIZATION.zh.md`](docs/LOCALIZATION.zh.md)) | Bilingual policy (English primary + zh) |
+| [`docs/WORLD_TOOLS.md`](docs/WORLD_TOOLS.md) ([`WORLD_TOOLS.zh.md`](docs/WORLD_TOOLS.zh.md)) | World grid / population / quest authoring CLI |
 
 ## Development conventions
 
