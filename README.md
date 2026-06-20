@@ -4,77 +4,93 @@
 [![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](.python-version)
 [![Textual](https://img.shields.io/badge/Client-Textual_TUI-00D4AA)](https://textual.textualize.io/)
 [![Cyberpunk MUD](https://img.shields.io/badge/Genre-Cyberpunk_MUD-FF00FF)](docs/WORLD.md)
+[![Locale](https://img.shields.io/badge/Locale-en+zh-00D4AA)](docs/LOCALIZATION.md)
 
-以原 **mud** 專案為藍本的**實作文件 fork**，用於在本機從零建立新的文字型多人冒險遊戲（MUD）。
+Cyberpunk text MUD set in **Night City**. Forked from the original **mud** project with a full MVP codebase and implementation docs.
 
-已初始化 **MVP 程式骨架**（`look`／`go`／`help`／`quit` + 夜城起點世界），並保留完整實作文件。
+Built-in **Textual TUI client** is the primary player interface (`look` / `go` / `help` / `quit` + starter world).
 
-## Agent 指引
+**Default locale: English.** Use `lang zh` in-game for Traditional Chinese. See [docs/LOCALIZATION.md](docs/LOCALIZATION.md).
 
-協作規則與專案慣例見 **[CLAUDE.md](CLAUDE.md)**（行為準則參考上層 `andrej-karpathy-skills.md`）。
+## Agent guide
 
-## 文件索引
+Collaboration rules: **[CLAUDE.md](CLAUDE.md)** (behavior guidelines reference `andrej-karpathy-skills.md`).
 
-| 文件 | 用途 |
-|------|------|
-| [CLAUDE.md](CLAUDE.md) | Agent 協作準則與開發慣例 |
-| [docs/WORLD.md](docs/WORLD.md) | **世界觀**：夜城設定、區域、派系、敘事錨點 |
-| [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md) | **主文件**：完整實作藍圖 |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | 系統架構與模組依賴 |
-| [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md) | 新專案啟動步驟（MVP） |
-| [docs/PHASES.md](docs/PHASES.md) | 分階段實作清單（Phase 0–E） |
+## Documentation
 
-## 建議閱讀順序
+| Doc | Purpose |
+|-----|---------|
+| [CLAUDE.md](CLAUDE.md) | Agent collaboration & dev conventions |
+| [docs/LOCALIZATION.md](docs/LOCALIZATION.md) | **Bilingual policy** (en primary + zh) |
+| [docs/WORLD.md](docs/WORLD.md) | World setting, districts, factions |
+| [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md) | Implementation blueprint |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture |
+| [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md) | MVP bootstrap steps |
+| [docs/PHASES.md](docs/PHASES.md) | Phased delivery checklist |
 
-1. [WORLD.md](docs/WORLD.md) — 夜城是什麼、玩家扮演誰  
-2. [ARCHITECTURE.md](docs/ARCHITECTURE.md) — 整體長什麼樣  
-3. [BOOTSTRAP.md](docs/BOOTSTRAP.md) — 先做出最小可玩版本  
-4. [IMPLEMENTATION.md](docs/IMPLEMENTATION.md) — 各模組怎麼做  
-5. [PHASES.md](docs/PHASES.md) — 排期與驗收
+## Reading order
 
-## 核心原則
+1. [WORLD.md](docs/WORLD.md) — what Night City is  
+2. [ARCHITECTURE.md](docs/ARCHITECTURE.md) — system overview  
+3. [BOOTSTRAP.md](docs/BOOTSTRAP.md) — minimal playable build  
+4. [IMPLEMENTATION.md](docs/IMPLEMENTATION.md) — module details  
+5. [PHASES.md](docs/PHASES.md) — schedule & acceptance
 
-1. **內建 Textual client** 為正式介面，不用第三方 MUD client。  
-2. **世界放 `data/`**，程式只負責解讀。  
-3. **一指令一模組**，`commands/` 註冊制。  
-4. **繁體中文**為預設語系。
+## Core principles
 
-## 取得原專案原始碼（可選）
+1. **Built-in Textual client** — no third-party MUD clients for production play.  
+2. **World in `data/`** — code interprets YAML, not hardcoded rooms.  
+3. **One command per module** under `commands/`.  
+4. **English default**, bilingual `en` + `zh` locale files.
 
-若你有權限存取原 OneDrive bare repo（在**有原始碼的電腦**上）：
-
-```bash
-git clone "/path/to/mud.git" mud
-cd mud
-./setup.sh
-pytest tests/
-```
-
-原專案最後已知 commit 約 **`34d5525`**（含側欄裝備自動刷新）。  
-本文件 fork 整理自此版本前的完整實作脈絡。
-
-## 快速開始
+## Quick start
 
 ```bash
 cd cyber_mud
-./setup.sh          # 首次：安裝依賴
-./run.sh            # 啟動伺服器
-./run.sh --client   # 另一終端：內建 TUI client
-./admin.sh validate # 驗證世界 + 測試
+./setup.sh          # first run: install deps
+./run.sh            # start server
+./run.sh --client   # another terminal: TUI client
+./admin.sh validate # validate world data + tests
 ```
 
-## 版本控制（Git）
+## Git
 
-本專案以 **git** 管理原始碼；執行期資料（`data/saves/`、`data/world_state.json`）與 `.venv/` 不納入版本庫。
+Runtime data (`data/saves/`, `data/world_state.json`) and `.venv/` are not tracked.
 
 ```bash
 git status
-git log --oneline -10
-./admin.sh validate   # 提交前建議全過
-git add <檔案>
-git commit -m "feat: 簡述"
+./admin.sh validate
+git commit -m "feat: short English summary / 可選中文簡述"
 ```
 
-慣例見 [CLAUDE.md](CLAUDE.md#版本控制)：一個大項目一個 commit、訊息格式 `<type>: <簡述>`、變更須同步 [PHASES.md](docs/PHASES.md) backlog。
+Convention: one commit per major feature; update [PHASES.md](docs/PHASES.md) backlog before commit.
 
-依 [PHASES.md](docs/PHASES.md) 擴充登入、戰鬥、NETRUN 等功能。
+---
+
+## 中文
+
+賽博龐克文字 MUD，背景為**夜城**。由原 **mud** 專案 fork，含 MVP 程式骨架與完整實作文件。
+
+**預設語系為英文**；遊戲內輸入 `lang zh` 可切換繁體中文。雙語慣例見 [docs/LOCALIZATION.md](docs/LOCALIZATION.md)。
+
+### 核心原則
+
+1. **內建 Textual client** 為正式介面。  
+2. **世界放 `data/`**，程式只負責解讀。  
+3. **一指令一模組**，`commands/` 註冊制。  
+4. **英文為預設**，`data/locale/en.yaml` 與 `zh.yaml` 並行維護。
+
+### 快速開始
+
+```bash
+./setup.sh && ./run.sh
+./run.sh --client
+```
+
+### Commit
+
+```
+feat: English summary / 中文簡述（可選）
+```
+
+變更須同步 [PHASES.md](docs/PHASES.md) backlog。

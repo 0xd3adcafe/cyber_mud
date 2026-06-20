@@ -16,7 +16,7 @@ def clear_locale_cache() -> None:
 def _load_locale(locale: str) -> dict:
     path = DATA_ROOT / f"{locale}.yaml"
     if not path.exists():
-        path = DATA_ROOT / "zh.yaml"
+        path = DATA_ROOT / "en.yaml"
     with path.open(encoding="utf-8") as fh:
         return yaml.safe_load(fh) or {}
 

@@ -34,7 +34,7 @@ def detect_prompt_edit(text: str) -> PromptEditContext | None:
 
 
 def expand_prompt_from_view(template: str, view: ClientViewState) -> str:
-    locale = view.locale or "zh"
+    locale = view.locale or "en"
     faction = view.faction or t(locale, "prompt.faction_none")
     replacements = {
         "%n": view.player_name or "旅人",
@@ -65,12 +65,13 @@ def current_prompt_template(view: ClientViewState, *, local_override: str = "") 
     return DEFAULT_PROMPT
 
 
-def format_prompt_preview(template: str, expanded: str) -> str:
-    return f"[dim]預覽[/] [bold cyan]{expanded}[/]  [dim]· {template}[/]"
+def format_prompt_preview(template: str, expanded: str, *, locale: str = "en") -> str:
+    label = t(locale, "prompt.preview_label")
+    return f"[dim]{label}[/] [bold cyan]{expanded}[/]  [dim]· {template}[/]"
 
 
 def format_prompt_show_lines(view: ClientViewState, *, local_override: str = "") -> list[str]:
-    locale = view.locale or "zh"
+    locale = view.locale or "en"
     template = current_prompt_template(view, local_override=local_override)
     expanded = expand_prompt_from_view(template, view)
     lines = [

@@ -130,7 +130,7 @@ class CyberMudApp(App):
         self._completion_cycle_key = ""
         self._completion_cycle_index = 0
         self._last_rtt_ms: float | None = None
-        self._login_locale = "zh"
+        self._login_locale = "en"
         self._login_motd_tips: list[str] = []
         self._login_motd_index = 0
         self._login_motd_frame = 0
@@ -142,11 +142,8 @@ class CyberMudApp(App):
             yield Static("", id="login_art", markup=False)
             with VerticalScroll(id="login_form_scroll"):
                 with Vertical(id="login_form"):
-                    yield Static(
-                        "[bold]◈ 夜城神經連結[/]\n[dim]NEURAL LINK · cyber_mud[/]",
-                        id="login_title",
-                    )
-                    yield Static("[dim]視覺主題[/]", id="login_theme_label")
+                    yield Static("", id="login_title")
+                    yield Static("[dim]Visual theme[/]", id="login_theme_label")
                     yield Select(
                         select_options(),
                         id="login_theme",
@@ -154,51 +151,51 @@ class CyberMudApp(App):
                         allow_blank=False,
                     )
                     yield Static(
-                        "[dim]快速登入（PIN）[/]",
+                        "[dim]Quick login (PIN)[/]",
                         id="login_pin_label",
                         classes="credential-hidden",
                     )
                     yield Input(
-                        placeholder="4–6 位 PIN",
+                        placeholder="4–6 digit PIN",
                         id="login_pin",
                         password=True,
                         classes="credential-hidden",
                     )
-                    yield Static("[dim]帳號模式[/]", id="auth_mode_label")
+                    yield Static("[dim]Account mode[/]", id="auth_mode_label")
                     yield Select(
-                        (("登入既有帳號", "login"), ("註冊新帳號", "register")),
+                        (("Sign in", "login"), ("Register", "register")),
                         id="auth_mode",
                         value="login",
                         allow_blank=False,
                     )
-                    yield Static("[dim]使用者名稱[/]", id="login_name_label")
+                    yield Static("[dim]Username[/]", id="login_name_label")
                     yield Input(placeholder="runner_id", id="login_name")
-                    yield Static("[dim]密碼[/]", id="login_password_label")
+                    yield Static("[dim]Password[/]", id="login_password_label")
                     yield Input(placeholder="••••••••", id="login_password", password=True)
-                    yield Checkbox("記住帳號（PIN 保護）", id="remember_credentials", value=False)
+                    yield Checkbox("Remember account (PIN protected)", id="remember_credentials", value=False)
                     yield Static(
-                        "[dim]設定 PIN[/]",
+                        "[dim]Set PIN[/]",
                         id="login_pin_setup_label",
                         classes="credential-hidden",
                     )
                     yield Input(
-                        placeholder="新 PIN",
+                        placeholder="New PIN",
                         id="login_pin_setup",
                         password=True,
                         classes="credential-hidden",
                     )
                     yield Static(
-                        "[dim]確認 PIN[/]",
+                        "[dim]Confirm PIN[/]",
                         id="login_pin_confirm_label",
                         classes="credential-hidden",
                     )
                     yield Input(
-                        placeholder="再輸入一次",
+                        placeholder="Re-enter PIN",
                         id="login_pin_confirm",
                         password=True,
                         classes="credential-hidden",
                     )
-                    yield Static("[dim]Enter 送出 · Ctrl+C 離開[/]", id="login_hint")
+                    yield Static("[dim]Enter to submit · Ctrl+C to quit[/]", id="login_hint")
                     yield Static("", id="login_status")
 
         with Container(id="game_container", classes="game-hidden"):
@@ -265,6 +262,7 @@ class CyberMudApp(App):
             frame=self._log_buffer.frame,
             host=self.host,
             port=self.port,
+            locale=self._client_locale(),
         )
 
     def _chrome_bar(self) -> str:
@@ -396,7 +394,7 @@ class CyberMudApp(App):
             return
         expanded = expand_prompt_from_view(ctx.template, self.view)
         preview.remove_class("preview-hidden")
-        preview.update(format_prompt_preview(ctx.template, expanded))
+        preview.update(format_prompt_preview(ctx.template, expanded, locale=self._client_locale()))
 
     def _clear_prompt_preview(self) -> None:
         preview = self.query_one("#prompt_preview", Static)
@@ -452,6 +450,31 @@ class CyberMudApp(App):
         art_widget = self.query_one("#login_art", Static)
         art_widget._render_markup = False
         art_widget.update(art)
+
+    def _client_locale(self) -> str:
+        if self.view.authenticated and self.view.locale:
+            return self.view.locale
+        return self._login_locale
+
+    def _ui(self, key: str, **kwargs: str) -> str:
+        return t(self._client_locale(), key, **kwargs)
+
+    def _refresh_login_form_labels(self) -> None:
+        loc = self._login_locale
+        self.query_one("#login_theme_label", Static).update(f"[dim]{t(loc, 'client.login.theme_label')}[/]")
+        self.query_one("#login_pin_label", Static).update(f"[dim]{t(loc, 'client.login.pin_label')}[/]")
+        pin_input = self.query_one("#login_pin", Input)
+        pin_input.placeholder = t(loc, "client.login.pin_placeholder")
+        self.query_one("#auth_mode_label", Static).update(f"[dim]{t(loc, 'client.login.auth_mode_label')}[/]")
+        self.query_one("#login_name_label", Static).update(f"[dim]{t(loc, 'client.login.name_label')}[/]")
+        self.query_one("#login_password_label", Static).update(f"[dim]{t(loc, 'client.login.password_label')}[/]")
+        self.query_one("#remember_credentials", Checkbox).label = t(loc, "client.login.remember")
+        self.query_one("#login_pin_setup_label", Static).update(f"[dim]{t(loc, 'client.login.pin_setup_label')}[/]")
+        self.query_one("#login_pin_setup", Input).placeholder = t(loc, "client.login.pin_setup_placeholder")
+        self.query_one("#login_pin_confirm_label", Static).update(
+            f"[dim]{t(loc, 'client.login.pin_confirm_label')}[/]"
+        )
+        self.query_one("#login_pin_confirm", Input).placeholder = t(loc, "client.login.pin_confirm_placeholder")
 
     def _set_login_status(self, text: str) -> None:
         self.query_one("#login_status", Static).update(text)
@@ -528,9 +551,10 @@ class CyberMudApp(App):
         self._set_credential_section_visible("#login_pin_setup", show_setup)
         self._set_credential_section_visible("#login_pin_confirm_label", show_setup)
         self._set_credential_section_visible("#login_pin_confirm", show_setup)
-        base = self._startup_hint or "Enter 送出 · Ctrl+C 離開"
+        loc = self._login_locale
+        base = self._startup_hint or t(loc, "client.login.hint")
         if stored:
-            self._set_login_hint(f"{base} · PIN 快速登入 · F7 清除記憶")
+            self._set_login_hint(t(loc, "client.login.hint_pin", base=base))
         else:
             self._set_login_hint(base)
 
@@ -580,7 +604,7 @@ class CyberMudApp(App):
         err = save_credentials(username=name, password=password, mode=mode, pin=pin)
         self._pending_credential_save = None
         if err:
-            self._set_login_status(f"帳號已登入，但儲存失敗：{err}")
+            self._set_login_status(self._ui("client.login.save_failed", err=err))
             return
         self._refresh_credential_ui()
 
@@ -965,7 +989,8 @@ class CyberMudApp(App):
     async def on_mount(self) -> None:
         startup = StartupReport()
         self.stylesheet_path = None
-        with startup.measure("主題"):
+        self._refresh_login_form_labels()
+        with startup.measure("theme"):
             self._register_themes()
             saved_theme = load_theme_id()
             self._apply_theme(saved_theme, persist=False)
@@ -974,7 +999,7 @@ class CyberMudApp(App):
             except Exception:
                 pass
         self._set_auth_ui(False)
-        with startup.measure("登入畫面"):
+        with startup.measure("login_ui"):
             self._refresh_credential_ui()
         for widget_id in (
             "#login_title",
@@ -1001,7 +1026,7 @@ class CyberMudApp(App):
         self.set_interval(0.5, self._on_login_motd_tick)
         self._reset_login_motd()
         try:
-            with startup.measure("連線"):
+            with startup.measure("connect"):
                 await self.conn.connect()
             self._reconnect_attempts = 0
             self._reader_task = asyncio.create_task(self._read_loop(log))
@@ -1010,7 +1035,7 @@ class CyberMudApp(App):
         except OSError as exc:
             self._startup_hint = startup.format_status()
             self._refresh_credential_ui()
-            self._set_login_status(f"無法連線：{exc}（請先執行 ./run.sh）")
+            self._set_login_status(self._ui("client.login.connect_failed", err=str(exc)))
             self._schedule_reconnect(log)
 
     def _mark_disconnected(self, *, was_authenticated: bool) -> None:
@@ -1043,7 +1068,7 @@ class CyberMudApp(App):
             self._needs_reauth = False
             self._reconnecting = False
             self._set_auth_ui(False)
-            self._set_login_status("連線已恢復，請重新登入。")
+            self._set_login_status(self._ui("client.login.reauth"))
             return
         self._auth_pending = True
         try:
@@ -1070,7 +1095,7 @@ class CyberMudApp(App):
             if self.view.authenticated:
                 self._append_log(log, f"{SYS_PREFIX}神經連結已恢復。", kind="sys")
             else:
-                self._set_login_status("神經連結已恢復。")
+                self._set_login_status(self._ui("client.login.link_restored"))
                 self._refresh_login_art()
             await self._restart_reader(log)
             await self._resend_auth_if_needed(log)
@@ -1130,7 +1155,7 @@ class CyberMudApp(App):
                     if self.view.authenticated:
                         self._append_log(log, f"{SYS_PREFIX}神經連結中斷。", kind="sys")
                     else:
-                        self._set_login_status("神經連結中斷。")
+                        self._set_login_status(self._ui("client.login.link_lost"))
                     self._mark_disconnected(was_authenticated=was_authenticated)
                     self._schedule_reconnect(log)
                     break
@@ -1194,12 +1219,12 @@ class CyberMudApp(App):
         if remember_widget.value and not from_pin_unlock:
             pin_setup = self.query_one("#login_pin_setup", Input).value
             pin_confirm = self.query_one("#login_pin_confirm", Input).value
-            pin_err = validate_pin(pin_setup)
+            pin_err = validate_pin(pin_setup, self._login_locale)
             if pin_err:
                 self._set_login_status(pin_err)
                 return
             if pin_setup != pin_confirm:
-                self._set_login_status("PIN 確認不一致。")
+                self._set_login_status(self._ui("client.login.pin_mismatch"))
                 return
             self._pending_credential_save = (name, password, mode, pin_setup)
         else:
@@ -1207,36 +1232,36 @@ class CyberMudApp(App):
         command = build_auth_command(mode, name, password)
         if command is None:
             self._pending_credential_save = None
-            self._set_login_status("請輸入名稱與密碼。")
+            self._set_login_status(self._ui("client.login.need_credentials"))
             return
         if not self.conn.connected:
             self._pending_credential_save = None
-            self._set_login_status("未連線伺服器。")
+            self._set_login_status(self._ui("client.login.not_connected"))
             return
         self._auth_pending = True
         self._last_auth_line = command
         pass_widget.value = ""
-        self._set_login_status("驗證中…")
+        self._set_login_status(self._ui("client.login.verifying"))
         try:
             self._note_outbound()
             await self.conn.send_line(command)
         except OSError as exc:
             self._auth_pending = False
             self._pending_credential_save = None
-            self._set_login_status(f"傳送失敗：{exc}")
+            self._set_login_status(self._ui("client.login.send_failed", err=str(exc)))
 
     async def _submit_pin_unlock(self) -> None:
         if self._auth_pending or self.view.authenticated or not has_stored_credentials():
             return
         pin_widget = self.query_one("#login_pin", Input)
         pin = pin_widget.value
-        pin_err = validate_pin(pin)
+        pin_err = validate_pin(pin, self._login_locale)
         if pin_err:
             self._set_login_status(pin_err)
             return
         creds = unlock_credentials(pin)
         if creds is None:
-            self._set_login_status("PIN 錯誤。")
+            self._set_login_status(self._ui("client.login.pin_wrong"))
             return
         self.query_one("#auth_mode", Select).value = creds.mode
         self.query_one("#login_name", Input).value = creds.username
@@ -1258,14 +1283,14 @@ class CyberMudApp(App):
         if self.view.authenticated:
             return
         if not has_stored_credentials():
-            self._set_login_status("沒有已儲存的帳號。")
+            self._set_login_status(self._ui("client.login.no_stored_account"))
             return
         clear_credentials()
         self._pending_credential_save = None
         self._clear_pin_fields()
         self.query_one("#remember_credentials", Checkbox).value = False
         self._refresh_credential_ui()
-        self._set_login_status("已清除儲存帳號。")
+        self._set_login_status(self._ui("client.login.cleared_credentials"))
         self.query_one("#login_name", Input).focus()
 
     @on(Input.Submitted, "#login_pin")

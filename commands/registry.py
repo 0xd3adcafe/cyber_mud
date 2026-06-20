@@ -331,6 +331,7 @@ def register_builtin_commands() -> None:
         inventory,
         login,
         look,
+        lang,
         learn,
         stats,
         gigs,

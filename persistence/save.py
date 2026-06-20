@@ -84,9 +84,9 @@ def player_from_dict(data: dict) -> Player:
     cyberware_raw = data.get("cyberware") or {}
     cyberware = {str(k): str(v) for k, v in cyberware_raw.items()}
     player = Player(
-        name=str(data.get("name", "旅人")),
+        name=str(data.get("name", "Traveler")),
         room_id=str(data.get("room_id", "square")),
-        locale=str(data.get("locale", "zh")),
+        locale=str(data.get("locale", "en")),
         named=True,
         hp=int(data.get("hp", 100)),
         max_hp=int(data.get("max_hp", 100)),

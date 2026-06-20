@@ -4,6 +4,7 @@ import time
 from dataclasses import dataclass
 
 from client.output_prefix import spinner_char
+from shared.i18n import t
 
 SLOW_RTT_MS = 800.0
 STALE_RECV_S = 12.0
@@ -51,14 +52,14 @@ def classify_link(snapshot: LinkSnapshot) -> str:
     return "ok"
 
 
-def _format_age(seconds: float | None) -> str:
+def _format_age(seconds: float | None, locale: str) -> str:
     if seconds is None:
-        return "—"
+        return t(locale, "client.link.age_dash")
     if seconds < 1.0:
-        return f"{int(seconds * 1000)}ms前"
+        return t(locale, "client.link.age_ms", n=str(int(seconds * 1000)))
     if seconds < 60.0:
-        return f"{seconds:.1f}s前"
-    return f"{int(seconds // 60)}m前"
+        return t(locale, "client.link.age_s", n=f"{seconds:.1f}")
+    return t(locale, "client.link.age_m", n=str(int(seconds // 60)))
 
 
 def _endpoint_label(host: str, port: int) -> str:
@@ -75,48 +76,59 @@ def format_link_status_bar(
     frame: int = 0,
     host: str = "",
     port: int = 0,
+    locale: str = "en",
 ) -> str:
     state = classify_link(snapshot)
     recv_age = _age_seconds(snapshot, snapshot.last_recv_at)
     send_age = _age_seconds(snapshot, snapshot.last_send_at)
     spin = spinner_char(frame)
-    header = "[bold cyan]連線[/]"
+    header = f"[bold cyan]{t(locale, 'client.link.header')}[/]"
     endpoint = _endpoint_label(host, port)
     endpoint_part = f"  [dim]│[/]  [dim]{endpoint}[/]" if endpoint else ""
 
     if state == "reconnecting":
-        return f"{header}  [yellow]{spin}[/] [yellow]重連中…[/]  [dim]│[/]  [dim]等待伺服器恢復[/]"
+        return (
+            f"{header}  [yellow]{spin}[/] [yellow]{t(locale, 'client.link.reconnecting')}[/]"
+            f"  [dim]│[/]  [dim]{t(locale, 'client.link.reconnect_hint')}[/]"
+        )
     if state == "disconnected":
-        return f"{header}  [red]●[/] [red]未連線[/]  [dim]│[/]  [dim]/reconnect 手動重連[/]"
+        return (
+            f"{header}  [red]●[/] [red]{t(locale, 'client.link.disconnected')}[/]"
+            f"  [dim]│[/]  [dim]{t(locale, 'client.link.reconnect_cmd')}[/]"
+        )
     if state == "panel":
         return (
-            f"{header}  [cyan]{spin}[/] [cyan]載入側欄…[/]"
-            f"  [dim]│[/]  [dim]已送 {_format_age(send_age)}[/]"
+            f"{header}  [cyan]{spin}[/] [cyan]{t(locale, 'client.link.panel')}[/]"
+            f"  [dim]│[/]  [dim]{t(locale, 'client.link.sent', age=_format_age(send_age, locale))}[/]"
         )
     if state == "waiting":
         rtt = f"  [dim]│[/]  [cyan]{int(snapshot.last_rtt_ms)}ms[/]" if snapshot.last_rtt_ms else ""
         return (
-            f"{header}  [cyan]{spin}[/] [cyan]等待回應…[/]"
-            f"{rtt}  [dim]│[/]  [dim]已送 {_format_age(send_age)}[/]"
+            f"{header}  [cyan]{spin}[/] [cyan]{t(locale, 'client.link.waiting')}[/]"
+            f"{rtt}  [dim]│[/]  [dim]{t(locale, 'client.link.sent', age=_format_age(send_age, locale))}[/]"
         )
     if state == "slow":
-        rtt = f"{int(snapshot.last_rtt_ms)}ms" if snapshot.last_rtt_ms else "偏慢"
+        rtt = (
+            f"{int(snapshot.last_rtt_ms)}ms"
+            if snapshot.last_rtt_ms
+            else t(locale, "client.link.slow_label")
+        )
         return (
-            f"{header}  [yellow]●[/] [yellow]回應偏慢[/]"
+            f"{header}  [yellow]●[/] [yellow]{t(locale, 'client.link.slow')}[/]"
             f"  [dim]│[/]  [yellow]{rtt}[/]"
-            f"  [dim]│[/]  [dim]已送 {_format_age(send_age)}[/]"
+            f"  [dim]│[/]  [dim]{t(locale, 'client.link.sent', age=_format_age(send_age, locale))}[/]"
         )
     if state == "idle":
         return (
-            f"{header}  [green]●[/] [green]正常[/]"
+            f"{header}  [green]●[/] [green]{t(locale, 'client.link.ok')}[/]"
             f"{endpoint_part}"
-            f"  [dim]│[/]  [dim]{_format_age(recv_age)}[/]"
+            f"  [dim]│[/]  [dim]{_format_age(recv_age, locale)}[/]"
         )
     rtt_part = ""
     if snapshot.last_rtt_ms is not None:
         rtt_part = f"  [dim]│[/]  [cyan]{int(snapshot.last_rtt_ms)}ms[/]"
     return (
-        f"{header}  [green]●[/] [green]順暢[/]"
+        f"{header}  [green]●[/] [green]{t(locale, 'client.link.smooth')}[/]"
         f"{endpoint_part}"
         f"{rtt_part}"
     )

@@ -15,11 +15,16 @@ def cred_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     return path
 
 
-def test_validate_pin_rejects_non_digits():
-    assert creds.validate_pin("12ab") == "PIN 僅能為數字。"
-    assert creds.validate_pin("123") == "PIN 需為 4–6 位數字。"
-    assert creds.validate_pin("1234567") == "PIN 需為 4–6 位數字。"
-    assert creds.validate_pin("1234") is None
+def test_validate_pin_rejects_non_digits_en():
+    assert creds.validate_pin("12ab", "en") == "PIN must be digits only."
+    assert creds.validate_pin("123", "en") == "PIN must be 4–6 digits."
+    assert creds.validate_pin("1234567", "en") == "PIN must be 4–6 digits."
+    assert creds.validate_pin("1234", "en") is None
+
+
+def test_validate_pin_rejects_non_digits_zh():
+    assert creds.validate_pin("12ab", "zh") == "PIN 僅能為數字。"
+    assert creds.validate_pin("123", "zh") == "PIN 需為 4–6 位數字。"
 
 
 def test_save_and_unlock_roundtrip(cred_path: Path):

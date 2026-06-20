@@ -84,21 +84,30 @@ class Game:
         from commands.registry import player_meta
         from server.heartbeat import log_server_event
 
+        from shared.server_locale import server_locale
+
+        loc = server_locale()
         if kind == "data":
-            message = "世界資料已重載。"
             world = self.state.world
+            message = t(loc, "server.reload_world_msg")
             log_server_event(
-                f"↻ 世界資料重載 · {len(world.rooms)} 房 · {len(world.items)} 物 · {len(world.npcs)} NPC"
+                t(
+                    loc,
+                    "server.reload_world",
+                    rooms=str(len(world.rooms)),
+                    items=str(len(world.items)),
+                    npcs=str(len(world.npcs)),
+                )
             )
         else:
-            message = "程式碼已重載。"
             if failures:
-                message = f"程式碼重載完成（{len(failures)} 個模組失敗）。"
-                log_server_event(f"↻ 程式碼重載 · {len(failures)} 個模組失敗")
+                message = t(loc, "server.reload_code_msg_fail", count=str(len(failures)))
+                log_server_event(t(loc, "server.reload_code_fail", count=str(len(failures))))
                 for name, err in failures:
-                    log_server_event(f"  ✗ {name}: {err}")
+                    log_server_event(t(loc, "server.reload_fail_line", name=name, err=err))
             else:
-                log_server_event("↻ 程式碼已重載")
+                message = t(loc, "server.reload_code_msg")
+                log_server_event(t(loc, "server.reload_code"))
         for session in self.sessions:
             await session.send(f"{SYS_PREFIX}{message}")
             if session.player.named:
@@ -112,7 +121,9 @@ class Game:
         for line in t_list(locale, "motd.lines"):
             await session.send(f"{MOTD_PREFIX}{line}")
         if self.startup is not None:
-            await session.send(f"{SYS_PREFIX}伺服器 {self.startup.format_brief()}")
+            await session.send(
+                f"{SYS_PREFIX}{t(locale, 'server.ready_line', brief=self.startup.format_brief())}"
+            )
         await session.send_meta(player_meta(CommandContext(session.player, self.state, "")))
 
     async def broadcast_room(self, room_id: str, lines: list[str], *, exclude: ClientSession | None = None) -> None:
@@ -401,11 +412,11 @@ class Game:
 
 def create_game() -> tuple[Game, StartupReport]:
     startup = StartupReport()
-    with startup.measure("世界資料"):
+    with startup.measure("world_data"):
         world = load_world()
-    with startup.measure("時鐘設定"):
+    with startup.measure("clock_config"):
         config = load_time_config()
-    with startup.measure("世界狀態"):
+    with startup.measure("world_state"):
         state = load_world_state(world, config)
     game = Game(state=state, startup=startup)
     return game, startup

@@ -5,9 +5,9 @@ from dataclasses import dataclass, field
 
 @dataclass
 class Player:
-    name: str = "旅人"
+    name: str = "Traveler"
     room_id: str = "square"
-    locale: str = "zh"
+    locale: str = "en"
     named: bool = False
     hp: int = 100
     max_hp: int = 100

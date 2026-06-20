@@ -26,7 +26,7 @@
 2. **資料驅動**：房間、NPC、物品、技能、天氣等放 `data/`，程式只解讀與執行。
 3. **指令一檔一案**：`commands/<verb>.py` 註冊至 `registry`。
 4. **單連線指令序列化**：server 對每個 client `await handle_command` 後才讀下一行（client 可依此在指令後安全追發 refresh）。
-5. **繁體中文為預設語系**，文案放 `locale/`，以 key 查表（`shared/i18n.py`、`commands/i18n_helpers.py`）。
+5. **English 為預設語系**（`lang en`／`lang zh` 切換），文案放 `locale/en.yaml` + `locale/zh.yaml`，以 key 查表（`shared/i18n.py`）；慣例見 [`LOCALIZATION.md`](LOCALIZATION.md)。
 
 ## 技術棧
 

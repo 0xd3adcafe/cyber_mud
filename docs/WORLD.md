@@ -1,6 +1,8 @@
-# 世界觀（World）
+# 世界觀（World）/ Night City Setting
 
-> 整理自原 **mud** 專案設定與 `data/` 世界資料脈絡（約 commit `34d5525`）。  
+> **Language / 語言:** English-primary policy in [LOCALIZATION.md](LOCALIZATION.md). Lore below is **zh**; play in English via `lang en` and `*_en` world fields.
+
+> 整理自原 **mud** 專案設定與 `data/` 世界資料脈絡（約 commit `34d5525`）。
 > 風格致敬 **Blade Runner** 與 **Cyberpunk 2077**，為原創 MUD 敘事，非官方授權劇情。
 
 ## 目錄

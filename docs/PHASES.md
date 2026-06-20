@@ -170,6 +170,7 @@
 | Gigs 側邊欄追蹤 | `gigs`／`journal` → `ok_panel`；`commands/gigs_helpers.py`；F7 快捷鍵；`quest`／`hint` meta 自動刷新；`tests/test_gigs.py` |
 | Help 指令分類 | `commands/help_cmd.py` `HELP_CATEGORIES`；locale `help.category.*`；overlay 分類標題；`tests/test_help_cmd.py` |
 | Focus 追蹤區塊 | `client/focus_block.py` prompt 上方；委託／戰鬥／執行中；漸層 accent＋計時；`focus_palette_for_theme`；`tests/test_focus_block.py` |
+| 雙語英文預設 | 預設 `locale=en`；`lang` 指令；`server.*`／`client.*` locale；`docs/LOCALIZATION.md`；commit 英文主述；`tests/test_lang.py` |
 
 ## Backlog 維護慣例
 

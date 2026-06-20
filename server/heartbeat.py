@@ -5,6 +5,9 @@ import sys
 import time
 from typing import TYPE_CHECKING
 
+from shared.i18n import t
+from shared.server_locale import server_locale
+
 if TYPE_CHECKING:
     from server.game import Game
 
@@ -22,21 +25,31 @@ def _format_uptime(seconds: float) -> str:
     return f"{secs}s"
 
 
-def format_heartbeat(game: Game, *, started_at: float, dev: bool = False) -> str:
+def format_heartbeat(game: Game, *, started_at: float, dev: bool = False, locale: str | None = None) -> str:
+    loc = locale or server_locale()
     state = game.state
-    clock = state.clock.format_clock("zh")
-    period = state.clock.format_period("zh", state.time_config)
+    clock = state.clock.format_clock(loc)
+    period = state.clock.format_period(loc, state.time_config)
     sessions = len(game.sessions)
     players = len(game.all_named_players())
     combats = len(state.encounters)
     corpses = len(state.corpses)
     respawns = len(state.npc_respawns)
     uptime = _format_uptime(time.monotonic() - started_at)
-    dev_tag = " · DEV" if dev else ""
-    return (
-        f"♥ tick={state.tick_count} · {clock}（{period}）· "
-        f"連線 {players}/{sessions} · 戰鬥 {combats} · "
-        f"屍體 {corpses} · 重生 {respawns} · 運行 {uptime}{dev_tag}"
+    dev_tag = t(loc, "server.dev_tag") if dev else ""
+    return t(
+        loc,
+        "server.heartbeat",
+        tick=str(state.tick_count),
+        clock=clock,
+        period=period,
+        players=str(players),
+        sessions=str(sessions),
+        combats=str(combats),
+        corpses=str(corpses),
+        respawns=str(respawns),
+        uptime=uptime,
+        dev=dev_tag,
     )
 
 

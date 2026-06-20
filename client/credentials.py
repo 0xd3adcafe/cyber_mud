@@ -11,6 +11,7 @@ from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 from client.themes import settings_path
+from shared.i18n import t
 
 PBKDF2_ITERATIONS = 600_000
 SALT_BYTES = 16
@@ -31,11 +32,16 @@ def credentials_path() -> Path:
     return settings_path().parent / "credentials.json"
 
 
-def validate_pin(pin: str) -> str | None:
+def validate_pin(pin: str, locale: str = "en") -> str | None:
     if not pin.isdigit():
-        return "PIN 僅能為數字。"
+        return t(locale, "client.credentials.pin_digits")
     if not PIN_MIN_LEN <= len(pin) <= PIN_MAX_LEN:
-        return f"PIN 需為 {PIN_MIN_LEN}–{PIN_MAX_LEN} 位數字。"
+        return t(
+            locale,
+            "client.credentials.pin_length",
+            min=str(PIN_MIN_LEN),
+            max=str(PIN_MAX_LEN),
+        )
     return None
 
 
@@ -101,7 +107,7 @@ def has_stored_credentials() -> bool:
 
 
 def save_credentials(*, username: str, password: str, mode: str, pin: str) -> str | None:
-    pin_err = validate_pin(pin)
+    pin_err = validate_pin(pin, "en")
     if pin_err:
         return pin_err
     name = username.strip()

@@ -7,7 +7,9 @@ import time
 from entities.player import Player
 from server.game import ClientSession, Game, create_game
 from server.heartbeat import heartbeat_loop, log_server_event
+from shared.i18n import t
 from shared.protocol import DEFAULT_HOST, DEFAULT_PORT, ENCODING
+from shared.server_locale import server_locale
 
 
 async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWriter, game: Game) -> None:
@@ -16,7 +18,8 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         player=Player(room_id=game.state.world.start_room),
     )
     await game.add_session(session)
-    log_server_event(f"+ 連線（{len(game.sessions)}）")
+    loc = server_locale()
+    log_server_event(t(loc, "server.connect", count=str(len(game.sessions))))
     try:
         while True:
             data = await reader.readline()
@@ -32,9 +35,11 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         pass
     finally:
         await game.notify_disconnect(session)
-        label = session.player.name if session.player.named else "訪客"
+        label = session.player.name if session.player.named else t(loc, "server.guest")
         game.remove_session(session)
-        log_server_event(f"- 離線 {label}（{len(game.sessions)}）")
+        log_server_event(
+            t(loc, "server.disconnect", name=label, count=str(len(game.sessions)))
+        )
         writer.close()
         try:
             await writer.wait_closed()
@@ -46,7 +51,8 @@ async def run_server(host: str, port: int, *, dev: bool = False) -> None:
     from shared.startup import StartupReport
 
     boot = StartupReport()
-    with boot.measure("載入遊戲"):
+    loc = server_locale()
+    with boot.measure("load_game"):
         game, load_report = create_game()
     started_at = time.monotonic()
     tick_task = asyncio.create_task(game.tick_loop())
@@ -64,15 +70,23 @@ async def run_server(host: str, port: int, *, dev: bool = False) -> None:
         from server.dev_reload import start_dev_watcher
 
         dev_task = asyncio.create_task(start_dev_watcher(game))
-        print("dev 模式：監看 data/*.yaml 與程式碼熱重載")
-    with boot.measure("網路監聽"):
+        print(t(loc, "server.dev_watch"))
+    with boot.measure("network_listen"):
         server = await asyncio.start_server(lambda r, w: handle_client(r, w, game), host=host, port=port)
     addrs = ", ".join(str(sock.getsockname()) for sock in server.sockets or [])
     world = game.state.world
-    print(load_report.format_console(title="伺服器載入"))
-    print(f"  內容: {len(world.rooms)} 房 · {len(world.items)} 物 · {len(world.npcs)} NPC")
-    print(boot.format_console(title="啟動程序"))
-    print(f"cyber_mud server 監聽 {addrs}")
+    print(load_report.format_console(title=t(loc, "server.load_title")))
+    print(
+        t(
+            loc,
+            "server.content",
+            rooms=str(len(world.rooms)),
+            items=str(len(world.items)),
+            npcs=str(len(world.npcs)),
+        )
+    )
+    print(boot.format_console(title=t(loc, "server.boot_title")))
+    print(t(loc, "server.listening", addrs=addrs))
     try:
         async with server:
             await server.serve_forever()
@@ -95,12 +109,12 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="cyber_mud server")
     parser.add_argument("--host", default=DEFAULT_HOST)
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
-    parser.add_argument("--dev", action="store_true", help="開發模式（data 與程式碼熱重載）")
+    parser.add_argument("--dev", action="store_true", help="Development mode (data + code hot-reload)")
     args = parser.parse_args(argv)
     try:
         asyncio.run(run_server(args.host, args.port, dev=args.dev))
     except KeyboardInterrupt:
-        print("\n伺服器已停止")
+        print(f"\n{t(server_locale(), 'server.stopped')}")
 
 
 if __name__ == "__main__":

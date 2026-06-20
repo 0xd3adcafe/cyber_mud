@@ -97,7 +97,8 @@ def test_tutorial_interactables_present():
     assert world.interactable("tutorial_med_console") is not None
 
 
-def test_go_through_tutorial_hub():
+def test_go_through_tutorial_hub(monkeypatch):
+    monkeypatch.setattr("commands.go.random.random", lambda: 1.0)
     player = make_player(room_id="tutorial")
     state = make_state()
 
@@ -108,7 +109,8 @@ def test_go_through_tutorial_hub():
     assert any("裝備庫" in line or "Armory" in line for line in result.lines)
 
 
-def test_go_tutorial_expansion_paths():
+def test_go_tutorial_expansion_paths(monkeypatch):
+    monkeypatch.setattr("commands.go.random.random", lambda: 1.0)
     player = make_player(room_id="tutorial")
     state = make_state()
 

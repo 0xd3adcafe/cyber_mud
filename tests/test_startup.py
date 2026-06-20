@@ -19,23 +19,23 @@ def test_startup_report_measures_steps():
 
 
 def test_startup_format_status():
-    report = StartupReport()
-    with report.measure("主題"):
+    report = StartupReport(locale="en")
+    with report.measure("theme"):
         pass
     text = report.format_status()
-    assert "啟動完成" in text
-    assert "主題" in text
+    assert "Startup complete" in text
+    assert "theme" in text
     assert "ms" in text
 
 
 def test_startup_format_console():
-    report = StartupReport()
-    with report.measure("世界資料"):
+    report = StartupReport(locale="en")
+    with report.measure("world_data"):
         pass
-    text = report.format_console(title="伺服器載入")
-    assert "伺服器載入" in text
-    assert "世界資料" in text
-    assert "總計" in text
+    text = report.format_console(title="Server load")
+    assert "Server load" in text
+    assert "world data" in text
+    assert "Total" in text
 
 
 def test_create_game_returns_startup_report():
@@ -44,4 +44,4 @@ def test_create_game_returns_startup_report():
     game, report = create_game()
     assert game.state.world.rooms
     assert report.steps
-    assert any(name == "世界資料" for name, _ in report.steps)
+    assert any(name == "world_data" for name, _ in report.steps)

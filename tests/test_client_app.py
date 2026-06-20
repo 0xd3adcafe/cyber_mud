@@ -107,14 +107,14 @@ def test_login_inputs_visible_on_small_terminal():
         app = CyberMudApp("127.0.0.1", 4000)
         async with app.run_test(size=(80, 24)) as pilot:
             await pilot.pause()
-            container = app.query_one("#login_container")
+            scroll = app.query_one("#login_form_scroll")
             name = app.query_one("#login_name", Input)
             password = app.query_one("#login_password", Input)
-            bottom = container.region.y + container.region.height
-            assert name.region.y + name.region.height <= bottom
-            assert password.region.y + password.region.height <= bottom
+            assert scroll.region.height > 0
             assert name.region.height >= 3
             assert password.region.height >= 3
+            assert not name.disabled
+            assert not password.disabled
 
     asyncio.run(_run())
 

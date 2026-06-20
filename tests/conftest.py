@@ -28,8 +28,9 @@ def make_state(*, room_items: dict[str, list[str]] | None = None) -> WorldState:
     )
 
 
-def make_player(*, room_id: str = "square", named: bool = True, name: str = "V", **kwargs) -> Player:
-    return Player(room_id=room_id, locale="zh", named=named, name=name, **kwargs)
+def make_player(*, room_id: str = "square", locale: str = "zh", named: bool = True, name: str = "V", **kwargs) -> Player:
+    # Production default is en (entities/player.py); tests default zh for legacy assertions.
+    return Player(room_id=room_id, locale=locale, named=named, name=name, **kwargs)
 
 
 @pytest.fixture

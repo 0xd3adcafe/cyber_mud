@@ -47,9 +47,9 @@ def test_format_link_status_waiting():
         panel_fetching=False,
         last_send_at=time.monotonic() - 0.5,
     )
-    text = format_link_status_bar(snap)
-    assert "等待回應" in text
-    assert "連線" in text
+    text = format_link_status_bar(snap, locale="en")
+    assert "Waiting for response" in text
+    assert "Link" in text
 
 
 def test_format_link_status_reconnecting():
@@ -59,5 +59,5 @@ def test_format_link_status_reconnecting():
         command_pending=False,
         panel_fetching=False,
     )
-    text = format_link_status_bar(snap)
+    text = format_link_status_bar(snap, locale="zh")
     assert "重連中" in text

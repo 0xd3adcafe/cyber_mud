@@ -152,7 +152,7 @@
 - 通訊：TCP 換行文字協定（`shared/protocol.py`）
 - 世界資料與程式碼分離；新增房間優先改 `data/`，不硬編在程式裡
 - 指令處理採註冊制；每個指令一個模組，放在 `commands/`
-- 回應文字使用繁體中文（`data/locale/zh.yaml` 為主）
+- **雙語慣例**：英文為預設；遊戲文案同時維護 `data/locale/en.yaml` 與 `zh.yaml`（見 [`docs/LOCALIZATION.md`](docs/LOCALIZATION.md)）
 - 測試：`pytest tests/`；修改指令或世界邏輯後必跑相關測試
 - 執行時：`PYTHONPATH` 指向 repo 根目錄（`run.sh`／`admin.sh` 已處理）
 
@@ -179,7 +179,7 @@
 3. 通過後 `git add` 相關檔案 → `git commit`
 4. 需要時 `git push`
 
-Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`test: 補齊移動測試`）。
+Commit message 格式：**英文主述** `<type>: <EN summary>`，可選繁中後綴 ` / <中文簡述>`（如 `feat: add item system / 新增物品系統`）。
 
 **Backlog 為必做步驟**：任何修正、client／server 行為變更，交付前都要寫入 PHASES，不得只改程式。
 

@@ -252,6 +252,7 @@ help_cmds:
   login: "登入（login <名稱> <密碼>）"
   register: "註冊（register <名稱> <密碼>）"
   help: "顯示說明（F3）"
+  lang: "lang [en|zh] — 切換顯示語系"
   quit: "離開遊戲"
   attack: "攻擊敵人（依武器自動選招，或 attack slash <敵人>）"
   shoot: "開槍（需裝備槍械）"
@@ -606,6 +607,7 @@ appraise:
 
 prompt:
   usage: "用法：prompt show | prompt set <範本> | prompt template <名稱> | prompt reset"
+  preview_label: 預覽
   show_header: "◈ 提示符"
   template: "範本：{template}"
   expanded: "展開：{expanded}"
@@ -847,3 +849,103 @@ mod:
   no_weapon: "請先裝備武器。"
   already: "武器已安裝 {mod}。"
   ok: "你將 {mod} 安裝到 {weapon} 上。"
+
+lang:
+  usage: "用法：lang [en|zh]"
+  invalid: "未知語系：{code}。請使用 en 或 zh。"
+  ok: "語系已切換為 {code}。"
+  current: "目前語系：{code}。"
+
+server:
+  guest: 訪客
+  connect: "+ 連線（{count}）"
+  disconnect: "- 離線 {name}（{count}）"
+  dev_watch: "dev 模式：監看 data/*.yaml 與程式碼熱重載"
+  dev_help: "開發模式（data 與程式碼熱重載）"
+  load_title: 伺服器載入
+  boot_title: 啟動程序
+  content: "  內容: {rooms} 房 · {items} 物 · {npcs} NPC"
+  listening: "cyber_mud server 監聽 {addrs}"
+  stopped: 伺服器已停止
+  ready_line: "伺服器 {brief}"
+  heartbeat: "♥ tick={tick} · {clock}（{period}）· 連線 {players}/{sessions} · 戰鬥 {combats} · 屍體 {corpses} · 重生 {respawns} · 運行 {uptime}{dev}"
+  dev_tag: " · DEV"
+  reload_world: "↻ 世界資料重載 · {rooms} 房 · {items} 物 · {npcs} NPC"
+  reload_world_msg: 世界資料已重載。
+  reload_code: "↻ 程式碼已重載"
+  reload_code_fail: "↻ 程式碼重載 · {count} 個模組失敗"
+  reload_code_msg: 程式碼已重載。
+  reload_code_msg_fail: "程式碼重載完成（{count} 個模組失敗）。"
+  reload_fail_line: "  ✗ {name}: {err}"
+  startup:
+    title: 啟動摘要
+    total: "  總計: {total}ms"
+    complete: "啟動完成 · {total}ms"
+    complete_steps: "啟動完成 · {steps} · 共 {total}ms"
+    brief: "就緒 · {total}ms"
+    steps:
+      world_data: 世界資料
+      clock_config: 時鐘設定
+      world_state: 世界狀態
+      load_game: 載入遊戲
+      network_listen: 網路監聽
+      theme: 主題
+      login_ui: 登入畫面
+      connect: 連線
+
+client:
+  link:
+    header: 連線
+    reconnecting: 重連中…
+    reconnect_hint: 等待伺服器恢復
+    disconnected: 未連線
+    reconnect_cmd: "/reconnect 手動重連"
+    panel: 載入側欄…
+    sent: "已送 {age}"
+    waiting: 等待回應…
+    slow: 回應偏慢
+    slow_label: 偏慢
+    ok: 正常
+    smooth: 順暢
+    age_ms: "{n}ms前"
+    age_s: "{n}s前"
+    age_m: "{n}m前"
+    age_dash: "—"
+  login:
+    theme_label: 視覺主題
+    pin_label: 快速登入（PIN）
+    pin_placeholder: 4–6 位 PIN
+    auth_mode_label: 帳號模式
+    auth_login: 登入既有帳號
+    auth_register: 註冊新帳號
+    name_label: 使用者名稱
+    password_label: 密碼
+    remember: 記住帳號（PIN 保護）
+    pin_setup_label: 設定 PIN
+    pin_setup_placeholder: 新 PIN
+    pin_confirm_label: 確認 PIN
+    pin_confirm_placeholder: 再輸入一次
+    hint: "Enter 送出 · Ctrl+C 離開"
+    hint_pin: "{base} · PIN 快速登入 · F7 清除記憶"
+    save_failed: "帳號已登入，但儲存失敗：{err}"
+    connect_failed: "無法連線：{err}（請先執行 ./run.sh）"
+    reauth: 連線已恢復，請重新登入。
+    link_restored: 神經連結已恢復。
+    link_lost: 神經連結中斷。
+    pin_mismatch: PIN 確認不一致。
+    need_credentials: 請輸入名稱與密碼。
+    not_connected: 未連線伺服器。
+    verifying: 驗證中…
+    send_failed: "傳送失敗：{err}"
+    pin_wrong: PIN 錯誤。
+    no_stored_account: 沒有已儲存的帳號。
+    cleared_credentials: 已清除儲存帳號。
+    pin_error: "{err}"
+  credentials:
+    pin_digits: PIN 僅能為數字。
+    pin_length: "PIN 需為 {min}–{max} 位數字。"
+  motd_fallback:
+    - "建立連線中…請 register 或 login。"
+    - "登入後輸入 look 探索，go <方向> 移動。"
+    - "Tab 補全指令 · F2–F6 開啟側欄。"
+    - "輸入 help 查看指令 · /theme 切換視覺主題。"

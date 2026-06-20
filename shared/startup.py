@@ -3,11 +3,15 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 
+from shared.i18n import t
+from shared.server_locale import server_locale
+
 
 @dataclass
 class StartupReport:
     steps: list[tuple[str, float]] = field(default_factory=list)
     _t0: float = field(default_factory=time.perf_counter, repr=False)
+    locale: str = field(default_factory=server_locale)
 
     def measure(self, name: str) -> _StartupStep:
         return _StartupStep(self, name)
@@ -16,21 +20,32 @@ class StartupReport:
     def total_ms(self) -> float:
         return (time.perf_counter() - self._t0) * 1000
 
-    def format_console(self, *, title: str = "啟動摘要") -> str:
-        lines = [f"{title}:"]
+    def _step_label(self, name: str) -> str:
+        key = f"server.startup.steps.{name}"
+        label = t(self.locale, key)
+        return label if label != key else name
+
+    def format_console(self, *, title: str | None = None) -> str:
+        heading = title or t(self.locale, "server.startup.title")
+        lines = [f"{heading}:"]
         for name, ms in self.steps:
-            lines.append(f"  {name}: {ms:.0f}ms")
-        lines.append(f"  總計: {self.total_ms:.0f}ms")
+            lines.append(f"  {self._step_label(name)}: {ms:.0f}ms")
+        lines.append(t(self.locale, "server.startup.total", total=f"{self.total_ms:.0f}"))
         return "\n".join(lines)
 
     def format_status(self) -> str:
         if not self.steps:
-            return f"啟動完成 · {self.total_ms:.0f}ms"
-        parts = [f"{name} {ms:.0f}ms" for name, ms in self.steps]
-        return f"啟動完成 · {' · '.join(parts)} · 共 {self.total_ms:.0f}ms"
+            return t(self.locale, "server.startup.complete", total=f"{self.total_ms:.0f}")
+        parts = [f"{self._step_label(name)} {ms:.0f}ms" for name, ms in self.steps]
+        return t(
+            self.locale,
+            "server.startup.complete_steps",
+            steps=" · ".join(parts),
+            total=f"{self.total_ms:.0f}",
+        )
 
     def format_brief(self) -> str:
-        return f"就緒 · {self.total_ms:.0f}ms"
+        return t(self.locale, "server.startup.brief", total=f"{self.total_ms:.0f}")
 
 
 class _StartupStep:

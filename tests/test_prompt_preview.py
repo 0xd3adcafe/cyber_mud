@@ -56,14 +56,28 @@ def test_expand_prompt_from_view_tokens():
     assert "夜晚" in expanded
 
 
-def test_format_prompt_preview_markup():
-    text = format_prompt_preview("[%h] %n>", "[80/100] V>")
+def test_format_prompt_preview_markup_en():
+    text = format_prompt_preview("[%h] %n>", "[80/100] V>", locale="en")
+    assert "Preview" in text
+    assert "[80/100] V>" in text
+
+
+def test_format_prompt_preview_markup_zh():
+    text = format_prompt_preview("[%h] %n>", "[80/100] V>", locale="zh")
     assert "預覽" in text
     assert "[80/100] V>" in text
 
 
-def test_format_prompt_show_lines_lists_tokens():
-    lines = format_prompt_show_lines(_view(player_name="V", hp="100/100"))
+def test_format_prompt_show_lines_lists_tokens_en():
+    lines = format_prompt_show_lines(_view(player_name="V", hp="100/100", locale="en"))
+    text = "\n".join(lines)
+    assert "Prompt" in text
+    assert "%n" in text
+    assert "%l" in text
+
+
+def test_format_prompt_show_lines_lists_tokens_zh():
+    lines = format_prompt_show_lines(_view(player_name="V", hp="100/100", locale="zh"))
     text = "\n".join(lines)
     assert "提示符" in text
     assert "%n" in text
