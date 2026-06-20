@@ -5,7 +5,7 @@ import asyncio
 from textual.widgets import Select
 
 from client.app import CyberMudApp
-from tests.client_ui_helpers import scroll_covers_log, settle_layout, wait_for_class
+from tests.client_ui_helpers import fake_connected, scroll_covers_log, settle_layout, wait_for_class
 
 
 def test_auth_select_mounts_with_login_value():
@@ -110,13 +110,15 @@ def test_bare_slash_shows_local_usage_not_crash():
         app = CyberMudApp("127.0.0.1", 4000)
         async with app.run_test(size=(100, 40)) as pilot:
             apply_meta(app.view, "auth", "1")
+            apply_meta(app.view, "locale", "en")
             app._set_auth_ui(True)
-            await pilot.pause()
+            await settle_layout(pilot)
             log = app.query_one("#log", RichLog)
             prompt = app.query_one("#prompt", Input)
+            prompt.focus()
             prompt.value = "/"
             await pilot.press("enter")
-            await pilot.pause()
+            await settle_layout(pilot)
             text = " ".join(entry.text for entry in app._log_buffer.entries)
             assert "/clear" in text or "clear" in text
 
@@ -212,12 +214,12 @@ def test_stacked_sidebar_does_not_capture_focus():
             )
             apply_meta(app.view, "ui_panel_end", "1")
             app._render_sidebar()
-            await pilot.pause()
+            await settle_layout(pilot)
             sidebar = app.query_one("#sidebar", VerticalScroll)
             assert sidebar.can_focus is False
             prompt = app.query_one("#prompt", Input)
             app._focus_game_prompt()
-            await pilot.pause()
+            await settle_layout(pilot, rounds=6)
             assert prompt.has_focus
 
     asyncio.run(_run())
@@ -479,6 +481,7 @@ def test_panel_fetch_actions_do_not_block():
         async with app.run_test(size=(120, 30)) as pilot:
             apply_meta(app.view, "auth", "1")
             app._set_auth_ui(True)
+            await fake_connected(app)
             app._schedule_panel_fetch = _capture_schedule
             app._schedule_help_fetch = _capture_help
             await settle_layout(pilot)

@@ -326,18 +326,18 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
-| CL.1 | Log 種類分類 | `client/log_classifier.py`；擴充 `LogEntry.kind`；依 locale 前綴辨識（`combat.*`、`quest.*`、`go.ok`、`say`／`talk`、`progression.*`、`street_cred.*`、`proficiency.*`、`presence.*`、`world.ambient`）；接 `app._append_log` 與伺服器行路徑 |
-| CL.2 | 各類視覺識別 | `client/log_styles.py`＋`themes.py` `LogPalette`（如 `EnvPalette` 隨主題）；每類專用圖示＋色（戰鬥 ⚔、委託 ◆、社交 💬、環境 ▸、成長 ▲、環境 tick ～）；`/theme` 重繪 log |
-| CL.3 | 戰鬥頻道 | 命中／未中、CD、quickhack、狀態、gore、逃離／勝利／敗北用戰鬥色盤；可選回合間淡分隔；保留 CD 即時倒數（`cd_display.py`） |
-| CL.4 | 環境區塊 | look 與 scan 標題層級；房名／描述／實體列表層次；look 區塊間空行或細線；格點風味與區域行視覺上從屬房間標題 |
-| CL.5 | 社交與存在感 | `say`／`talk`／NPC 回覆／`presence.enter`／`leave`／戰鬥廣播獨立社交頻道；中英前綴偵測；多人可掃讀 |
-| CL.6 | 成長與委託 feed | XP、升級、天賦／屬性點、街頭聲望、熟練度、任務目標／完成／提示用成長色盤（金／青）；與 F7 委託側欄風格一致 |
-| CL.7 | 環境 tick 與世界回饋 | `ambient_tick`、`trauma_tick`、聲望變動、通緝無人機等弱化（斜體暗淡），不淹沒戰鬥／社交；換主題仍可讀 |
-| CL.8 | 測試與文件 | `tests/test_log_classifier.py`；擴充 `tests/test_output_prefix.py`／`tests/test_env_format.py`；[CLIENT_UI_DEBUG.md](CLIENT_UI_DEBUG.md) log 一節；玩家指南 `docs/player/client.md` 圖例 |
+| ~~CL.1~~ | ~~Log 種類分類~~ | ✅ `client/log_classifier.py`；自動辨識 combat／quest／social／progression／ambient／env；`app._append_log` |
+| ~~CL.2~~ | ~~各類視覺識別~~ | ✅ `client/log_styles.py`；`themes.py` `LogPalette`；`/theme` 重繪 log |
+| ~~CL.3~~ | ~~戰鬥頻道~~ | ✅ 戰鬥色盤＋CD 歸 `combat`；回合間 `───` 分隔；保留 `cd_display.py` |
+| ~~CL.4~~ | ~~環境區塊~~ | ✅ `env_format.py` 描述／風味層級；新 look 前 `───`；scan／實體上色 |
+| ~~CL.5~~ | ~~社交與存在感~~ | ✅ `say`／`talk`／presence 中英標記 → `social` |
+| ~~CL.6~~ | ~~成長與委託 feed~~ | ✅ XP／升級／聲望／熟練度＋`◈` 委託行 → `progression`／`quest` |
+| ~~CL.7~~ | ~~環境 tick 與世界回饋~~ | ✅ `ambient` 淡化斜體 |
+| ~~CL.8~~ | ~~測試與文件~~ | ✅ `tests/test_log_classifier.py`；`CLIENT_UI_DEBUG.md`；`docs/player/CLIENT.md` 圖例；client UI 測試修復 |
 
 **可選後續（不在 CL.1–CL.8）：** `/log compact` 或分類開關（隱藏 ambient）；log 匯出檔案。
 
-**建議順序：** CL.1 → CL.2 → CL.3＋CL.4（可並行）→ CL.5＋CL.6 → CL.7 → CL.8。
+**建議順序：** CL.1 → CL.2 → CL.3＋CL.4（可並行）→ CL.5＋CL.6 → CL.7 → CL.8。**全階段已交付（2026-06）。**
 
 ---
 

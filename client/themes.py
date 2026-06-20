@@ -23,6 +23,36 @@ class FocusPalette:
 
 
 @dataclass(frozen=True)
+class LogKindStyle:
+    glyph: str
+    color: str = ""
+    dim_prefix: bool = False
+    muted: bool = False
+
+
+@dataclass(frozen=True)
+class LogPalette:
+    default_color: str
+    echo_color: str
+    err_color: str
+    motd: LogKindStyle
+    sys: LogKindStyle
+    combat: LogKindStyle
+    quest: LogKindStyle
+    social: LogKindStyle
+    progression: LogKindStyle
+    ambient: LogKindStyle
+    env_move: LogKindStyle
+    env: LogKindStyle
+    text: LogKindStyle
+
+    def for_kind(self, kind: str) -> LogKindStyle:
+        if kind == "echo":
+            return LogKindStyle("❯", self.echo_color)
+        return getattr(self, kind, self.text)
+
+
+@dataclass(frozen=True)
 class EnvPalette:
     header: str
     scan: str
@@ -185,6 +215,33 @@ def focus_palette_for_theme(theme_id: str) -> FocusPalette:
         ),
         status_color=accent,
         status_muted=_muted_hex(str(spec["foreground"]), 0.55),
+    )
+
+
+def log_palette_for_theme(theme_id: str) -> LogPalette:
+    resolved = resolve_theme_id(theme_id) or DEFAULT_THEME_ID
+    spec = _THEME_SPECS[resolved]
+    foreground = str(spec["foreground"])
+    accent = str(spec["accent"])
+    primary = str(spec["primary"])
+    warning = str(spec["warning"])
+    error = str(spec["error"])
+    success = str(spec["success"])
+    icons = _THEME_FOCUS_ICONS.get(resolved, _THEME_FOCUS_ICONS["night_city"])
+    return LogPalette(
+        default_color=foreground,
+        echo_color=accent,
+        err_color=error,
+        motd=LogKindStyle("◈", accent),
+        sys=LogKindStyle("⚙", warning),
+        combat=LogKindStyle(icons["combat"], error),
+        quest=LogKindStyle(icons["quest"], warning),
+        social=LogKindStyle("💬", primary),
+        progression=LogKindStyle("▲", success),
+        ambient=LogKindStyle("～", _muted_hex(foreground, 0.55), muted=True),
+        env_move=LogKindStyle("▸", accent),
+        env=LogKindStyle("◎", foreground),
+        text=LogKindStyle("›", foreground, dim_prefix=True),
     )
 
 

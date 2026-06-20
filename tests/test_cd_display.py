@@ -45,7 +45,9 @@ def test_animated_log_pending_only_on_command_line():
     done_echo = buf.render()[0]
     assert "❯" in done_echo
     assert SPINNER_FRAMES[3] not in done_echo
-    assert "›" in buf.render()[1]
+    rendered = buf.render()
+    assert any("霓虹" in line for line in rendered)
+    assert any("───" in line for line in rendered)
 
 
 def test_animated_log_render_entry_matches_render_tail():

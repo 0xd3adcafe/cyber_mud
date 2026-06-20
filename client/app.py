@@ -50,7 +50,8 @@ from client.completion import MudPrompt, MudSuggester, complete_cycle_from_view,
 from client.history import CommandHistory
 from client.link_status import format_link_status_bar, make_link_snapshot
 from client.reconnect import reconnect_status_message, should_resend_auth
-from client.output_prefix import classify_output_line, spinner_char
+from client.log_classifier import classify_log_line
+from client.output_prefix import spinner_char
 from client.tui_styles import APP_CSS
 from client.ui_format import format_hotkey_bar, format_info_bar, format_sidebar_header
 from client.meta_handlers import (
@@ -302,7 +303,7 @@ class CyberMudApp(App):
         self._update_link_status_bar()
 
     def _append_log(self, log: RichLog, text: str, *, kind: str | None = None) -> None:
-        resolved = kind or classify_output_line(text)
+        resolved = classify_log_line(text, kind=kind)
         self._log_buffer.append(text, kind=resolved)
         line = self._log_buffer.render_entry()
         if line is not None:
@@ -704,6 +705,7 @@ class CyberMudApp(App):
         content.update(format_sidebar_content(self.view))
         wrap.remove_class("sidebar-hidden")
         wrap.add_class("sidebar-visible")
+        self._configure_game_focus_targets()
         self.call_after_refresh(self._focus_game_prompt)
 
     def _configure_help_overlay_focus(self) -> None:

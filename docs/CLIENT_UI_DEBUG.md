@@ -138,7 +138,7 @@ Verify in **Windows Terminal / your usual terminal** and `pytest`:
 
 Full backlog entry: [PHASES.md](PHASES.md) — hotkey bar visibility.
 
-## Client log UX (planned — CL.1–CL.8)
+## Client log UX (CL.1–CL.8 shipped)
 
 **Problem:** Most server lines use the same dim `›` prefix (`client/output_prefix.py` kind `text`). Only MOTD/SYS/ERR/echo differ; `env_format.py` colors look/scan entity rows but not combat, quests, social, or progression.
 

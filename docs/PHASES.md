@@ -197,6 +197,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Content depth D.1–D.6 (2026-06) | Archetype `talk.*` keys + regen population; quest WARN fixes + `hub_briefing`; hub NPCs (`tyrell_liaison`, `zone_warden`, etc.); grid loot craft/disassemble + shop stock; 8 district grid net nodes + interactables; `tests/test_content_depth.py`; [WORLD_TOOLS.md](WORLD_TOOLS.md) |
 | Content depth D.7–D.10 (2026-06) | 8 district spotlight NPCs; `district.grid.*` look flavor; 4 district quest chains; full `world.ambient.*`; `tests/test_content_depth.py` |
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
+| Client log UX CL.1–CL.8 (2026-06) | `log_classifier.py`/`log_styles.py`/`LogPalette`; combat/env/social/progression channels; block separators; `tests/test_log_classifier.py`; `docs/player/CLIENT.md` legend |
 
 ## Multi-session development (mandatory)
 
@@ -328,18 +329,18 @@ Not yet implemented or only partially implemented.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
-| CL.1 | Log kind taxonomy | `client/log_classifier.py`; extend `LogEntry.kind` beyond 5 kinds; classify from locale prefixes (`combat.*`, `quest.*`, `go.ok`, `say`/`talk`, `progression.*`, `street_cred.*`, `proficiency.*`, `presence.*`, `world.ambient`); wire `app._append_log` + `classify_server_line` path |
-| CL.2 | Per-kind visual identity | `client/log_styles.py` + `themes.py` `LogPalette` (theme-synced like `EnvPalette`); distinct glyph + color per kind (combat ⚔, quest ◆, social 💬, env ▸, progression ▲, ambient ～); `/theme` redraws log |
-| CL.3 | Combat log channel | Combat hit/miss, CD, quickhack, status, gore, flee/victory/defeat use combat palette; optional faint separator between encounter rounds; preserve live CD tick (`cd_display.py`) |
-| CL.4 | Environment blocks | look vs scan header tiers; room title / description / entity list hierarchy; blank or rule between look blocks; grid flavor + district lines visually subordinate to room header |
-| CL.5 | Social & presence | `say` / `talk` / NPC reply / `presence.enter`/`leave` / combat broadcast distinct social channel; EN+ZH prefix detection; multiplayer skimmable |
-| CL.6 | Progression & gigs feed | XP, level-up, perk/attribute points, street cred, proficiency, quest objective/complete/hint lines use progression palette (gold/cyan); gig sidebar hint matches log styling |
-| CL.7 | Ambient & world tick | `ambient_tick`, `trauma_tick`, rep shift, wanted drone lines de-emphasized (dim italic) so they do not drown combat/social; still readable on `/theme` switch |
-| CL.8 | Tests & docs | `tests/test_log_classifier.py`, extend `tests/test_output_prefix.py` / `tests/test_env_format.py`; log section in [CLIENT_UI_DEBUG.md](CLIENT_UI_DEBUG.md); player guide `docs/player/client.md` log legend |
+| ~~CL.1~~ | ~~Log kind taxonomy~~ | ✅ `client/log_classifier.py`; auto-classify combat/quest/social/progression/ambient/env; `app._append_log` |
+| ~~CL.2~~ | ~~Per-kind visual identity~~ | ✅ `client/log_styles.py`; `themes.py` `LogPalette`; `/theme` redraws log |
+| ~~CL.3~~ | ~~Combat log channel~~ | ✅ Combat palette + CD → `combat` kind; `───` separator between rounds; `cd_display.py` preserved |
+| ~~CL.4~~ | ~~Environment blocks~~ | ✅ `env_format.py` desc/flavor tiers; `───` before new look header; scan/entity colors |
+| ~~CL.5~~ | ~~Social & presence~~ | ✅ `say`/`talk`/presence EN+ZH markers → `social` channel |
+| ~~CL.6~~ | ~~Progression & gigs feed~~ | ✅ XP/level/street cred/proficiency + `◈` quest lines → `progression`/`quest` |
+| ~~CL.7~~ | ~~Ambient & world tick~~ | ✅ `ambient` kind dim italic via `LogPalette` |
+| ~~CL.8~~ | ~~Tests & docs~~ | ✅ `tests/test_log_classifier.py`; `tests/test_output_prefix.py`; `CLIENT_UI_DEBUG.md`; `docs/player/CLIENT.md` legend; client UI test fixes |
 
 **Optional follow-up (not in CL.1–CL.8):** `/log compact` or category toggles (hide ambient); log export to file.
 
-**Suggested order:** CL.1 → CL.2 → CL.3 + CL.4 (parallel) → CL.5 + CL.6 → CL.7 → CL.8.
+**Suggested order:** CL.1 → CL.2 → CL.3 + CL.4 (parallel) → CL.5 + CL.6 → CL.7 → CL.8. **All phases shipped (2026-06).**
 
 ---
 

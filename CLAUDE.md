@@ -243,7 +243,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | Area | Items |
 |------|--------|
 | Environment | pyenv native Python build |
-| **Client log UX** | CL.1–CL.8 pending — log kind taxonomy, per-channel styling, combat/env/social/progression palettes; see PHASES **Client log UX** |
+| **Client log UX** | CL.1–CL.8 shipped — log channels, `LogPalette`, block separators; see PHASES **Client log UX** |
 | **World expansion (WORLD.md)** | W.1–W.14 shipped (263 rooms / 121 NPCs / 45 items); see PHASES **World expansion** |
 | **Content depth** | D.1–D.10 shipped (spotlight NPCs, district quests, grid look flavor); see PHASES **Content depth** |
 

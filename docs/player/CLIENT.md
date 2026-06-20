@@ -126,6 +126,25 @@ Link status bar shows connection state and round-trip hint.
 - `/theme` redraws the log with new env palette  
 - `lang zh` switches UI chrome strings; game text follows locale  
 
+### Log channel legend
+
+The scrollback prefixes help you scan output at a glance:
+
+| Prefix | Channel | Examples |
+|--------|---------|----------|
+| `❯` | Your command (echo) | Typed line before server reply |
+| `◎` | Environment | `look` / `scan` room header, exits, items, NPCs |
+| `▸` | Movement | `go` direction line |
+| `⚔` | Combat | Hits, CD, quickhack, flee, victory |
+| `◆` | Gigs / quests | Objectives, stage progress, completion |
+| `▲` | Progression | XP, level-up, street cred, proficiency |
+| `💬` | Social | `say`, `talk`, presence enter/leave |
+| `～` | Ambient (dim) | District tick, trauma, background flavor |
+| `⚙` | System | Connection, client commands, NETRUN hints |
+| `✗` | Error | Refused commands, disconnect |
+
+A faint `───` rule separates new look blocks and combat rounds. Use `/clear` if the log gets noisy.
+
 ## Tips
 
 ```text

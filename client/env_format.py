@@ -20,6 +20,7 @@ _LIST_SEP_RE = re.compile(r"[、,]")
 def reset_environment_state(state: dict[str, str]) -> None:
     state.clear()
     state["phase"] = "idle"
+    state["desc_lines"] = 0
 
 
 def format_environment_line(
@@ -37,6 +38,7 @@ def format_environment_line(
 
     if stripped.startswith(_HEADER_MARK):
         state["phase"] = "desc"
+        state["desc_lines"] = 0
         if "掃描" in stripped or "Scan" in stripped:
             return f"[bold {palette.scan}]{stripped}[/]"
         if "隱藏" in stripped or "Hidden clue" in stripped:
@@ -97,6 +99,10 @@ def format_environment_line(
             )
 
     if state.get("phase") == "desc":
+        desc_lines = int(state.get("desc_lines", 0))
+        state["desc_lines"] = desc_lines + 1
+        if desc_lines > 0:
+            return f"[dim italic {palette.desc}]{stripped}[/]"
         return f"[italic {palette.desc}]{stripped}[/]"
 
     return line

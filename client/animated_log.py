@@ -6,10 +6,13 @@ from dataclasses import dataclass, field
 
 from client.cd_display import format_cooldown_line, parse_cooldown_line
 from client.env_format import format_environment_line, reset_environment_state
-from client.output_prefix import format_output_line
+from client.log_classifier import classify_log_line
+from client.log_styles import format_log_line
 from client.themes import DEFAULT_THEME_ID, resolve_theme_id
 
 _MAX_LINES = 500
+_BLOCK_SEPARATOR = "[dim]───[/]"
+_ENV_HEADER_MARK = "◈"
 
 
 @dataclass
@@ -42,11 +45,14 @@ class AnimatedLogBuffer:
         self.frame = 0
 
     def append(self, text: str, *, kind: str) -> None:
-        if kind == "echo":
+        resolved = classify_log_line(text, kind=kind)
+        if resolved == "echo":
             reset_environment_state(self._env_state)
         plain = _strip_rich(text)
         cd = parse_cooldown_line(plain)
-        entry = LogEntry(text=plain, kind=kind)
+        if cd is not None:
+            resolved = "combat"
+        entry = LogEntry(text=plain, kind=resolved)
         if cd is not None:
             prefix, seconds = cd
             entry.cd_prefix = prefix
@@ -92,7 +98,7 @@ class AnimatedLogBuffer:
 
     def _format_entry(self, entry: LogEntry) -> str:
         text = entry.text
-        if entry.kind == "text" and text.strip():
+        if entry.kind in ("text", "env", "env_move") and text.strip():
             text = format_environment_line(text, self._env_state, theme_id=self.theme_id) or text
         if entry.has_cooldown:
             remaining = _cd_remaining(entry)
@@ -100,11 +106,12 @@ class AnimatedLogBuffer:
                 text = format_cooldown_line(entry.cd_prefix, remaining)
             else:
                 text = format_cooldown_line(entry.cd_prefix, 0)
-        return format_output_line(
+        return format_log_line(
             text,
             kind=entry.kind,
             frame=self.frame,
             animate=entry.pending,
+            theme_id=self.theme_id,
         )
 
     def render_entry(self, index: int = -1) -> str | None:
@@ -113,7 +120,27 @@ class AnimatedLogBuffer:
         return self._format_entry(self.entries[index])
 
     def render(self) -> list[str]:
-        return [self._format_entry(entry) for entry in self.entries]
+        lines: list[str] = []
+        prev: LogEntry | None = None
+        for entry in self.entries:
+            if _needs_block_separator(prev, entry):
+                lines.append(_BLOCK_SEPARATOR)
+            lines.append(self._format_entry(entry))
+            prev = entry
+        return lines
+
+
+def _needs_block_separator(prev: LogEntry | None, entry: LogEntry) -> bool:
+    if prev is None:
+        return False
+    text = entry.text.strip()
+    if entry.kind == "env" and text.startswith(_ENV_HEADER_MARK):
+        if prev.kind == "env_move":
+            return True
+        return prev.kind not in ("env",)
+    if entry.kind == "combat":
+        return prev.kind != "combat"
+    return False
 
 
 def _cd_remaining(entry: LogEntry) -> int:
