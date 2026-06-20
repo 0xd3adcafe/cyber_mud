@@ -5,6 +5,26 @@ from commands.registry import CommandContext, ok_panel, player_meta, register
 from shared.i18n import t
 from shared.ui_json import panel_json
 
+_AUTH_KEYS = frozenset({"login", "register", "help", "quit"})
+
+HELP_CATEGORIES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("auth", ("login", "register", "help", "quit")),
+    ("explore", ("look", "go", "scan", "map", "interact", "time", "recall")),
+    ("items", ("take", "drop", "inventory", "give", "appraise", "craft", "disassemble")),
+    ("equipment", ("equip", "unequip", "equipment", "mod", "use", "eat", "drink")),
+    ("cyberware", ("install", "cyberware", "uninstall")),
+    ("housing", ("rent", "home", "stash")),
+    ("travel", ("transit", "vehicles", "drive")),
+    ("trade", ("shop", "buy", "sell")),
+    ("social", ("talk", "say", "pledge", "learn")),
+    ("combat", ("attack", "shoot", "slash", "bash", "punch", "backstab", "defend", "flee", "quickhack")),
+    ("netrun", ("net",)),
+    ("quests", ("gigs",)),
+    ("growth", ("stats", "talents", "improve")),
+    ("panels", ("pda", "prompt")),
+    ("media", ("braindance",)),
+)
+
 
 def _help_command_desc(ctx: CommandContext, key: str) -> str:
     if key == "defend":
@@ -12,90 +32,57 @@ def _help_command_desc(ctx: CommandContext, key: str) -> str:
     return t(ctx.player.locale, f"help_cmds.{key}")
 
 
-HELP_ENTRIES = (
-    ("look", "look"),
-    ("go", "go"),
-    ("interact", "interact"),
-    ("craft", "craft"),
-    ("disassemble", "disassemble"),
-    ("braindance", "braindance"),
-    ("take", "take"),
-    ("drop", "drop"),
-    ("inventory", "inventory"),
-    ("equip", "equip"),
-    ("unequip", "unequip"),
-    ("equipment", "equipment"),
-    ("install", "install"),
-    ("cyberware", "cyberware"),
-    ("uninstall", "uninstall"),
-    ("rent", "rent"),
-    ("home", "home"),
-    ("stash", "stash"),
-    ("transit", "transit"),
-    ("vehicles", "vehicles"),
-    ("drive", "drive"),
-    ("use", "use"),
-    ("eat", "eat"),
-    ("drink", "drink"),
-    ("scan", "scan"),
-    ("map", "map"),
-    ("give", "give"),
-    ("appraise", "appraise"),
-    ("shop", "shop"),
-    ("buy", "buy"),
-    ("sell", "sell"),
-    ("attack", "attack"),
-    ("shoot", "shoot"),
-    ("slash", "slash"),
-    ("bash", "bash"),
-    ("punch", "punch"),
-    ("backstab", "backstab"),
-    ("defend", "defend"),
-    ("flee", "flee"),
-    ("quickhack", "quickhack"),
-    ("gigs", "gigs"),
-    ("net", "net"),
-    ("pledge", "pledge"),
-    ("recall", "recall"),
-    ("talk", "talk"),
-    ("say", "say"),
-    ("learn", "learn"),
-    ("stats", "stats"),
-    ("talents", "talents"),
-    ("improve", "improve"),
-    ("mod", "mod"),
-    ("pda", "pda"),
-    ("time", "time"),
-    ("prompt", "prompt"),
-    ("login", "login"),
-    ("register", "register"),
-    ("help", "help"),
-    ("quit", "quit"),
-)
+def _category_entries(ctx: CommandContext, keys: tuple[str, ...]) -> list[tuple[str, str]]:
+    entries: list[tuple[str, str]] = []
+    for key in keys:
+        if not ctx.player.named and key not in _AUTH_KEYS:
+            continue
+        entries.append((key, key))
+    return entries
+
+
+def _category_title(ctx: CommandContext, category_id: str) -> str:
+    return t(ctx.player.locale, f"help.category.{category_id}")
 
 
 def format_help(ctx: CommandContext) -> list[str]:
-    lines = [t(ctx.player.locale, "help.header"), ""]
+    locale = ctx.player.locale
+    lines = [t(locale, "help.header"), ""]
     if not ctx.player.named:
-        lines.append(t(ctx.player.locale, "auth.help_note"))
+        lines.append(t(locale, "auth.help_note"))
         lines.append("")
-    for name, key in HELP_ENTRIES:
-        if not ctx.player.named and key not in {"login", "register", "help", "quit"}:
+    for category_id, keys in HELP_CATEGORIES:
+        entries = _category_entries(ctx, keys)
+        if not entries:
             continue
-        lines.append(t(ctx.player.locale, "help.line", name=name, desc=_help_command_desc(ctx, key)))
+        lines.append(t(locale, "help.category_line", name=_category_title(ctx, category_id)))
+        for name, key in entries:
+            lines.append(t(locale, "help.line", name=name, desc=_help_command_desc(ctx, key)))
+        lines.append("")
+    if lines and lines[-1] == "":
+        lines.pop()
     return lines
 
 
 def _help_ui(ctx: CommandContext) -> str:
-    items = []
-    for name, key in HELP_ENTRIES:
-        if not ctx.player.named and key not in {"login", "register", "help", "quit"}:
-            continue
-        items.append(f"{name} — {_help_command_desc(ctx, key)}")
+    sections: list[dict] = []
+    for category_id, keys in HELP_CATEGORIES:
+        items = [
+            f"{name} — {_help_command_desc(ctx, key)}"
+            for name, key in _category_entries(ctx, keys)
+        ]
+        if items:
+            sections.append(
+                {
+                    "kind": "list",
+                    "title": _category_title(ctx, category_id),
+                    "items": items,
+                }
+            )
     return panel_json(
         panel="help",
         title=t(ctx.player.locale, "help.header"),
-        sections=[{"kind": "list", "items": items}],
+        sections=sections,
     )
 
 

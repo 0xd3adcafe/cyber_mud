@@ -190,6 +190,23 @@ chase:
 help:
   header: "◈ Commands"
   line: "  {name} — {desc}"
+  category_line: "── {name} ──"
+  category:
+    auth: "Account"
+    explore: "Explore"
+    items: "Items"
+    equipment: "Gear & consumables"
+    cyberware: "Cyberware"
+    housing: "Housing"
+    travel: "Transit & vehicles"
+    trade: "Shops"
+    social: "Social"
+    combat: "Combat"
+    netrun: "NETRUN"
+    quests: "Gigs"
+    growth: "Progression"
+    panels: "UI panels"
+    media: "Braindance"
 
 help_cmds:
   look: "Look around or at a target (look [item|NPC|equipment])"

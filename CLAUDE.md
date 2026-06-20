@@ -271,6 +271,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | Help log 區 dropdown | `client/help_overlay.py`、`#help_dropdown` 覆蓋 log、`tests/test_help_overlay.py` |
 | 新手區二次擴充 | 4 新房、6 教學 NPC、`patrol_dummy`、4 互動點、補給站新商品；`tests/test_tutorial_zone.py` |
 | Gigs 側邊欄追蹤 | `gigs`／`journal` 側欄面板、F7 快捷鍵、任務進度自動刷新；`tests/test_gigs.py` |
+| Help 指令分類 | `HELP_CATEGORIES` 15 類；F3 overlay 分類標題；`tests/test_help_cmd.py` |
 
 世界觀與區域擴充見 [`docs/WORLD.md`](docs/WORLD.md)。
 

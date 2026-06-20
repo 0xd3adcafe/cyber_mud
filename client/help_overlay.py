@@ -15,17 +15,34 @@ def _format_entry(name: str, desc: str) -> str:
     return f"[bold cyan]{name:<16}[/] [dim]{desc}[/]"
 
 
+_CATEGORY_LINE_RE = re.compile(r"^──\s*(.+?)\s*──$")
+
+
 def _entries_from_panel_lines(lines: list[str]) -> list[str]:
     rows: list[str] = []
     for line in lines:
-        if not line.strip() or line.strip().startswith("◈"):
+        stripped = line.strip()
+        if not stripped or stripped.startswith("◈"):
             continue
-        match = _LINE_RE.match(line.strip())
+        category = _CATEGORY_LINE_RE.match(stripped)
+        if category:
+            _append_category_title(rows, category.group(1))
+            continue
+        match = _LINE_RE.match(stripped)
         if match:
             rows.append(_format_entry(match.group("name"), match.group("desc")))
         else:
             rows.append(f"[dim]{line.strip()}[/]")
     return rows
+
+
+def _append_category_title(rows: list[str], title: str) -> None:
+    label = title.strip()
+    if not label:
+        return
+    if rows:
+        rows.append("")
+    rows.append(f"[bold underline]{label}[/]")
 
 
 def _entries_from_ui(panel: SidebarPanel) -> list[str]:
@@ -35,6 +52,7 @@ def _entries_from_ui(panel: SidebarPanel) -> list[str]:
     for section in panel.ui.get("sections", []):
         if section.get("kind") != "list":
             continue
+        _append_category_title(rows, str(section.get("title", "")))
         for item in section.get("items", []):
             text = str(item)
             if " — " in text:

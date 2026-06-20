@@ -14,15 +14,35 @@ def test_format_help_overlay_from_ui_list():
             "sections": [
                 {
                     "kind": "list",
+                    "title": "探索移動",
                     "items": ["look — 察看環境", "go — 移動"],
                 }
             ],
         }
     )
     text = format_help_overlay_content(panel)
+    assert "探索移動" in text
     assert "look" in text
     assert "察看環境" in text
     assert "go" in text
+
+
+def test_format_help_overlay_from_categorized_panel_lines():
+    panel = SidebarPanel(
+        lines=[
+            "◈ 可用指令",
+            "",
+            "── 物品背包 ──",
+            "  take — 撿起地上物品",
+            "── 戰鬥 ──",
+            "  flee — 逃離戰鬥",
+        ]
+    )
+    text = format_help_overlay_content(panel)
+    assert "物品背包" in text
+    assert "take" in text
+    assert "戰鬥" in text
+    assert "flee" in text
 
 
 def test_format_help_overlay_from_panel_lines():

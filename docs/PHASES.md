@@ -168,6 +168,7 @@
 | Help log 區 dropdown | `client/help_overlay.py`；`#help_dropdown` 覆蓋 `#scrollback_wrap`；F3／`help`／Esc 切換；不再進側欄 stack；`tests/test_help_overlay.py` |
 | 新手區二次擴充 | 簡報室 `rookie_fixer`／餐廳 `canteen_tech`／靶場 `range_officer`／義體診所 `clinic_tutor`／障礙道 `course_guide`＋`patrol_dummy`；互動委託板／儲物櫃／掃描柱／示範主機；`tests/test_tutorial_zone.py` 10 項 |
 | Gigs 側邊欄追蹤 | `gigs`／`journal` → `ok_panel`；`commands/gigs_helpers.py`；F7 快捷鍵；`quest`／`hint` meta 自動刷新；`tests/test_gigs.py` |
+| Help 指令分類 | `commands/help_cmd.py` `HELP_CATEGORIES`；locale `help.category.*`；overlay 分類標題；`tests/test_help_cmd.py` |
 
 ## Backlog 維護慣例
 

@@ -190,6 +190,23 @@ chase:
 help:
   header: "◈ 可用指令"
   line: "  {name} — {desc}"
+  category_line: "── {name} ──"
+  category:
+    auth: "登入"
+    explore: "探索移動"
+    items: "物品背包"
+    equipment: "裝備消耗"
+    cyberware: "義體"
+    housing: "住宅儲物"
+    travel: "交通載具"
+    trade: "商店交易"
+    social: "社交 NPC"
+    combat: "戰鬥"
+    netrun: "NETRUN"
+    quests: "委託任務"
+    growth: "成長技能"
+    panels: "介面面板"
+    media: "腦舞"
 
 help_cmds:
   look: "察看環境或目標（look [物品|NPC|裝備]）"
