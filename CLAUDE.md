@@ -266,6 +266,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | 載具車庫 | `vehicles buy/select`、`vehicles[]` |
 | 製作拆解腦舞 | `craft`／`disassemble`／`braindance`、`tests/test_backlog_features.py` |
 | NPC 派系動機 AI | `world/npc_ai.py`、`corp_scout`／`thug` 派系衝突、`tests/test_npc_ai.py` |
+| 登入 banner MOTD 動態展示 | `client/login_motd.py`、`motd.tips` 輪播、`tests/test_login_motd.py` |
 
 世界觀與區域擴充見 [`docs/WORLD.md`](docs/WORLD.md)。
 

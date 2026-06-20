@@ -1,10 +1,19 @@
 motd:
+  title: "◈ Night City Neural Link"
+  subtitle: "NEURAL LINK · cyber_mud"
   lines:
     - "═══════════════════════════════════════"
     - "◈ Night City Neural Link"
     - "═══════════════════════════════════════"
     - "Link established. Register or login first: register <name> <password> or login <name> <password>."
     - "Then type look to explore, go <dir> to move."
+  tips:
+    - "Register or login to jack in."
+    - "Type look to explore, go <dir> to move."
+    - "Tab completes commands · F2–F6 open sidebar panels."
+    - "Type help for commands · /theme switches visuals."
+    - "Store credentials behind a PIN · F7 clears memory."
+    - "The city never sleeps — chrome optional, attitude required."
 
 direction:
   north: north

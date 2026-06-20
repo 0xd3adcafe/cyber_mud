@@ -20,6 +20,8 @@ from client.credentials import (
 )
 from client.connection import ServerConnection
 from client.login_art import render_login_art
+from client.login_motd import banner_text, default_tips, parse_motd_line
+from shared.i18n import t
 from client.themes import (
     DEFAULT_THEME_ID,
     build_textual_theme,
@@ -112,6 +114,10 @@ class CyberMudApp(App):
         self._completion_cycle_key = ""
         self._completion_cycle_index = 0
         self._last_rtt_ms: float | None = None
+        self._login_locale = "zh"
+        self._login_motd_tips: list[str] = []
+        self._login_motd_index = 0
+        self._login_motd_frame = 0
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -379,6 +385,38 @@ class CyberMudApp(App):
     def _set_login_status(self, text: str) -> None:
         self.query_one("#login_status", Static).update(text)
 
+    def _reset_login_motd(self) -> None:
+        self._login_motd_tips = default_tips(self._login_locale)
+        self._login_motd_index = 0
+        self._login_motd_frame = 0
+        self._refresh_login_banner()
+
+    def _refresh_login_banner(self) -> None:
+        text = banner_text(
+            locale=self._login_locale,
+            tips=self._login_motd_tips,
+            tip_index=self._login_motd_index,
+            frame=self._login_motd_frame,
+        )
+        self.query_one("#login_title", Static).update(text)
+
+    def _add_login_motd_tip(self, line: str) -> None:
+        title = t(self._login_locale, "motd.title")
+        tip = parse_motd_line(line, title=title if title != "motd.title" else "")
+        if not tip:
+            return
+        if tip not in self._login_motd_tips:
+            self._login_motd_tips.append(tip)
+        self._refresh_login_banner()
+
+    def _on_login_motd_tick(self) -> None:
+        if self.view.authenticated:
+            return
+        self._login_motd_frame += 1
+        if self._login_motd_tips and self._login_motd_frame % 6 == 0:
+            self._login_motd_index = (self._login_motd_index + 1) % len(self._login_motd_tips)
+        self._refresh_login_banner()
+
     def _set_login_hint(self, text: str) -> None:
         self.query_one("#login_hint", Static).update(text)
 
@@ -501,6 +539,7 @@ class CyberMudApp(App):
             login.remove_class("login-hidden")
             game.add_class("game-hidden")
             self._set_login_form_active(True)
+            self._reset_login_motd()
             self._refresh_login_art()
             self._refresh_credential_ui()
             self._focus_login_entry()
@@ -779,6 +818,8 @@ class CyberMudApp(App):
         self._configure_game_focus_targets()
         self.set_interval(0.2, self._on_spinner_tick)
         self.set_interval(1.0, self._on_cd_tick)
+        self.set_interval(0.5, self._on_login_motd_tick)
+        self._reset_login_motd()
         try:
             with startup.measure("連線"):
                 await self.conn.connect()
@@ -922,7 +963,7 @@ class CyberMudApp(App):
                     if kind == "panel" or kind == "ui":
                         continue
                     if line.startswith(MOTD_PREFIX):
-                        self._set_login_status(line[len(MOTD_PREFIX):])
+                        self._add_login_motd_tip(line[len(MOTD_PREFIX):])
                     elif line.startswith(SYS_PREFIX):
                         self._set_login_status(line[len(SYS_PREFIX):])
                     elif line.startswith(ERR_PREFIX):

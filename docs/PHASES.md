@@ -161,6 +161,7 @@
 | 製作／拆解 | `craft`／`disassemble`；`data/recipes.yaml`；`world/craft.py` |
 | 腦舞 | `braindance`／`bd`；`data/braindances.yaml`；`world/braindance.py`；艙體互動 |
 | NPC 派系動機 AI | `faction`／`motivation`；`data/npc_ai.yaml`；`world/npc_ai.py` 同房交戰／社交／追獵；`tests/test_npc_ai.py` |
+| 登入 banner MOTD 動態展示 | `client/login_motd.py`；`motd.tips` locale；`#login_title` 輪播提示＋spinner；MOTD 不再覆寫 `#login_status`；`tests/test_login_motd.py` |
 
 ## Backlog 維護慣例
 

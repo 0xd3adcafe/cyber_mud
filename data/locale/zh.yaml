@@ -1,10 +1,19 @@
 motd:
+  title: "◈ 夜城神經連結"
+  subtitle: "NEURAL LINK · cyber_mud"
   lines:
     - "═══════════════════════════════════════"
     - "◈ 夜城神經連結"
     - "═══════════════════════════════════════"
     - "建立連線中…請先 register <名稱> <密碼> 或 login <名稱> <密碼>。"
     - "登入後輸入 look 探索，go <方向> 移動。"
+  tips:
+    - "建立連線中…請 register 或 login。"
+    - "登入後輸入 look 探索，go <方向> 移動。"
+    - "Tab 補全指令 · F2–F6 開啟側欄。"
+    - "輸入 help 查看指令 · /theme 切換視覺主題。"
+    - "記住帳號可用 PIN 快速登入 · F7 清除記憶。"
+    - "夜城永不入眠——chrome optional, attitude required."
 
 direction:
   north: 北

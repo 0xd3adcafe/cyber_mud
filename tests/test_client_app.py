@@ -57,6 +57,23 @@ def test_credential_pin_section_visible_with_store(monkeypatch):
     asyncio.run(_run())
 
 
+def test_login_banner_rotates_tips():
+    async def _run() -> None:
+        from textual.widgets import Static
+
+        app = CyberMudApp("127.0.0.1", 4000)
+        async with app.run_test(size=(80, 40)) as pilot:
+            await pilot.pause()
+            title = app.query_one("#login_title", Static)
+            first = str(title.render())
+            app._login_motd_index = 1
+            app._refresh_login_banner()
+            second = str(title.render())
+            assert first != second
+
+    asyncio.run(_run())
+
+
 def test_login_inputs_visible_on_small_terminal():
     async def _run() -> None:
         from textual.widgets import Input
