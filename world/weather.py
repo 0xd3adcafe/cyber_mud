@@ -89,8 +89,9 @@ def maybe_tick_weather(state: WorldState, config: WeatherConfig) -> list[str]:
         if len(pool) < 2:
             continue
         current = state.weather.get(district_id, info.default)
-        choices = [w for w in pool if w != current] or pool
-        new_weather = random.choice(choices)
+        from world.districts import weighted_weather_choice
+
+        new_weather = weighted_weather_choice(pool, district_id, current)
         if new_weather != current:
             state.weather[district_id] = new_weather
             changed.append(district_id)

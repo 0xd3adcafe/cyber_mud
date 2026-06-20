@@ -3,13 +3,31 @@ tick_every: 6
 districts:
   watson:
     default: neon_haze
-    types: [acid_rain, fog, clear, neon_haze]
+    types: [acid_rain, fog, clear, neon_haze, smog]
   tutorial:
     default: clear
     types: [clear, neon_haze]
+  kabuki:
+    default: neon_haze
+    types: [neon_haze, fog, clear, smog]
+  little_china:
+    default: smog
+    types: [smog, fog, clear, acid_rain]
+  corpo:
+    default: smog
+    types: [smog, clear, neon_glare, fog]
+  tyrell:
+    default: clear
+    types: [clear, neon_glare, smog, fog]
   docks:
     default: fog
+    types: [fog, acid_rain, clear, smog]
+  undercity:
+    default: fog
     types: [fog, acid_rain, clear]
+  combat_zone:
+    default: dry_heat
+    types: [dry_heat, acid_rain, fog, clear]
 
 types:
   acid_rain:
@@ -24,3 +42,12 @@ types:
   neon_haze:
     name_zh: 霓虹霧霾
     name_en: Neon Haze
+  smog:
+    name_zh: 煙霧
+    name_en: Smog
+  neon_glare:
+    name_zh: 霓虹眩光
+    name_en: Neon Glare
+  dry_heat:
+    name_zh: 乾熱
+    name_en: Dry Heat

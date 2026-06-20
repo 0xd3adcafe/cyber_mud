@@ -1,0 +1,67 @@
+# District safety (0–3), atmosphere flavor, patrol density, aggro bias, weather weights.
+districts:
+  tutorial:
+    safety: 3
+    atmosphere: training
+    patrol_density: 0.4
+    aggro_bonus: -0.2
+    weather_bias: {clear: 3, neon_haze: 1}
+    entry_blocked_factions: []
+  watson:
+    safety: 2
+    atmosphere: street_chaos
+    patrol_density: 0.7
+    aggro_bonus: 0.05
+    weather_bias: {neon_haze: 2, acid_rain: 2, fog: 1, clear: 1}
+    entry_blocked_factions: []
+  kabuki:
+    safety: 2
+    atmosphere: neon_nightlife
+    patrol_density: 0.6
+    aggro_bonus: 0.0
+    weather_bias: {neon_haze: 3, fog: 1, clear: 1}
+    entry_blocked_factions: []
+  little_china:
+    safety: 2
+    atmosphere: incense_alleys
+    patrol_density: 0.65
+    aggro_bonus: 0.02
+    weather_bias: {fog: 2, smog: 2, clear: 1}
+    entry_blocked_factions: []
+  corpo:
+    safety: 3
+    atmosphere: corpo_surveillance
+    patrol_density: 1.2
+    aggro_bonus: -0.1
+    weather_bias: {smog: 2, clear: 2, neon_glare: 1}
+    entry_blocked_factions: [maelstrom]
+    allied_factions: [arasaka, militech, tyrell]
+  tyrell:
+    safety: 3
+    atmosphere: elite_labs
+    patrol_density: 1.0
+    aggro_bonus: -0.05
+    weather_bias: {clear: 2, neon_glare: 2, smog: 1}
+    entry_blocked_factions: [maelstrom]
+    allied_factions: [tyrell, arasaka]
+  docks:
+    safety: 1
+    atmosphere: smuggler_fog
+    patrol_density: 0.5
+    aggro_bonus: 0.08
+    weather_bias: {fog: 3, acid_rain: 2, clear: 1}
+    entry_blocked_factions: []
+  undercity:
+    safety: 1
+    atmosphere: flooded_ruins
+    patrol_density: 0.45
+    aggro_bonus: 0.1
+    weather_bias: {fog: 2, acid_rain: 2, clear: 1}
+    entry_blocked_factions: []
+  combat_zone:
+    safety: 0
+    atmosphere: warzone
+    patrol_density: 0.35
+    aggro_bonus: 0.15
+    weather_bias: {dry_heat: 2, acid_rain: 2, fog: 1}
+    entry_blocked_factions: [arasaka, militech, tyrell]

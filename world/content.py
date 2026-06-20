@@ -86,6 +86,7 @@ class Quest:
     reward_street_cred: int = 0
     street_cred_req: int = 0
     requires_quest: str = ""
+    requires_faction: str = ""
     reward_items: list[str] = field(default_factory=list)
     stages: list[QuestStage] = field(default_factory=list)
     rating: str = "teen"
@@ -327,6 +328,7 @@ def load_quests(path: Path | None = None) -> dict[str, Quest]:
             reward_street_cred=int(data.get("reward_street_cred", 0)),
             street_cred_req=int(data.get("street_cred_req", 0)),
             requires_quest=str(data.get("requires_quest", "")),
+            requires_faction=str(data.get("requires_faction", "")),
             reward_items=[str(item_id) for item_id in (data.get("reward_items") or [])],
             objective_type=str(data.get("objective_type", "")),
             objective_target=str(data.get("objective_target", "")),
@@ -355,6 +357,7 @@ def load_quests_mature(path: Path | None = None) -> dict[str, Quest]:
             reward_street_cred=int(data.get("reward_street_cred", 0)),
             street_cred_req=int(data.get("street_cred_req", 0)),
             requires_quest=str(data.get("requires_quest", "")),
+            requires_faction=str(data.get("requires_faction", "")),
             reward_items=[str(item_id) for item_id in (data.get("reward_items") or [])],
             objective_type=str(data.get("objective_type", "")),
             objective_target=str(data.get("objective_target", "")),

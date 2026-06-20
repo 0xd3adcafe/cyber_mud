@@ -60,10 +60,12 @@ def _maybe_move_patrolling_npcs(state: WorldState) -> list[TickEvent]:
             continue
         if len(npc.patrol) < 2:
             continue
-        if random.random() > 0.5:
-            continue
-
         current = state.npc_room(npc_id)
+        room = state.world.room(current)
+        from world.districts import patrol_move_chance
+
+        if random.random() > patrol_move_chance(0.5, room):
+            continue
         if current not in npc.patrol:
             current = npc.patrol[0]
         idx = npc.patrol.index(current)

@@ -57,6 +57,8 @@ def quest_available(player: Player, quest: Quest) -> bool:
         return False
     if quest.requires_quest and not quest_is_done(player, quest.requires_quest):
         return False
+    if quest.requires_faction and player.faction != quest.requires_faction:
+        return False
     return True
 
 
@@ -88,6 +90,8 @@ def accept_quest(player: Player, state: WorldState, quest_id: str, locale: str) 
             required = state.world.quest(quest.requires_quest)
             req_name = _quest_name(required, locale) if required else quest.requires_quest
             return [t(locale, "gigs.need_quest", quest=req_name)]
+        if quest.requires_faction and player.faction != quest.requires_faction:
+            return [t(locale, "gigs.need_faction", faction=quest.requires_faction)]
         if player.street_cred < quest.street_cred_req:
             return [
                 t(
@@ -383,9 +387,13 @@ def quest_hint_for_quest(player: Player, state: WorldState, quest: Quest, locale
                 label = node.name_zh if locale == "zh" else (node.name_en or node.name_zh)
                 return t(locale, "quest.hint_hack_net", target=label or stage.objective_target)
             return t(locale, "quest.hint_hack_net", target=stage.objective_target)
-    if locale == "zh":
-        return quest.hint_zh
-    return quest.hint_en or quest.hint_zh
+    base = quest.hint_zh if locale == "zh" else (quest.hint_en or quest.hint_zh)
+    from world.factions import faction_quest_hint_suffix
+
+    suffix = faction_quest_hint_suffix(player, locale)
+    if suffix and base:
+        return f"{base} {suffix}"
+    return base or suffix
 
 
 def format_journal_lines(player: Player, state: WorldState, locale: str) -> list[str]:

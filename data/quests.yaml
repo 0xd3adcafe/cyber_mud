@@ -53,6 +53,25 @@ quests:
         objective_target: broker
       - objective_type: hack_net
         objective_target: terminal
+  tyrell_intel:
+    name_zh: 泰瑞情報投遞
+    name_en: Tyrell Intel Drop
+    npc_id: broker
+    description_zh: 宣誓泰瑞後，經紀人要你從企業保全取得實驗室座標並前往泰瑞廣場。
+    description_en: After pledging Tyrell, the broker wants corpo guard coordinates and a visit to Tyrell Plaza.
+    hint_zh: pledge tyrell，與企業保全交談，再前往 tyrell_plaza。
+    hint_en: pledge tyrell, talk to the corpo guard, then visit tyrell_plaza.
+    complete_npc_id: broker
+    requires_quest: hack_core
+    requires_faction: tyrell
+    reward_gold: 120
+    reward_xp: 50
+    reward_street_cred: 15
+    stages:
+      - objective_type: talk_npc
+        objective_target: corp_guard
+      - objective_type: visit_room
+        objective_target: tyrell_plaza
   alley_clearance:
     name_zh: 小巷清剿
     name_en: Alley Clearance

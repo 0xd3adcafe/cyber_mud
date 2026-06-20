@@ -67,25 +67,34 @@ def find_shop_item_id(ctx: CommandContext, name: str, shop: Shop) -> str | None:
     return None
 
 
-def buy_price(shop: Shop, item_id: str, world: World) -> int | None:
+def buy_price(shop: Shop, item_id: str, world: World, *, player=None) -> int | None:
     if item_id not in shop.sells:
         return None
     price = shop.sells[item_id]
-    if price > 0:
-        return price
-    item = world.item(item_id)
-    if item is None:
-        return None
-    return max(1, item.value)
+    if price <= 0:
+        item = world.item(item_id)
+        if item is None:
+            return None
+        price = max(1, item.value)
+    if player is not None:
+        from world.factions import adjusted_buy_price
+
+        return adjusted_buy_price(price, player, shop)
+    return price
 
 
-def sell_price(shop: Shop, item_id: str, world: World) -> int | None:
+def sell_price(shop: Shop, item_id: str, world: World, *, player=None) -> int | None:
     if not shop.buy_items:
         return None
     item = world.item(item_id)
     if item is None or item.value <= 0:
         return None
-    return max(1, int(item.value * shop.buy_rate))
+    base = max(1, int(item.value * shop.buy_rate))
+    if player is not None:
+        from world.factions import adjusted_sell_price
+
+        return adjusted_sell_price(base, player, shop)
+    return base
 
 
 def remove_player_item(player, item_id: str) -> None:
@@ -107,7 +116,7 @@ def format_shop_lines(ctx: CommandContext, shop: Shop) -> list[str]:
             item = ctx.state.world.item(item_id)
             if item is None:
                 continue
-            price = buy_price(shop, item_id, ctx.state.world)
+            price = buy_price(shop, item_id, ctx.state.world, player=ctx.player)
             if price is None:
                 continue
             lines.append(

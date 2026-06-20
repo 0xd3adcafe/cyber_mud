@@ -216,6 +216,31 @@ help:
     media: "腦舞"
     mature: "18+ 內容（自願啟用）"
     life: "生活與生命徵象"
+  tutorial:
+    header: "◈ 教學區 — 訓練場與指令"
+    rooms_header: "訓練房間（tutorial_*）："
+    room_line: "  · {room} — {blurb}"
+    commands_header: "訓練場建議練習的指令："
+    footer: "完成訓練後往西進霓虹廣場。輸入 help 可看完整列表。"
+
+district:
+  atmosphere:
+    training: "空氣裡有臭氧與教學全息煙霧的味道。"
+    street_chaos: "街頭噪音與霓虹滲進每一道陰影。"
+    neon_nightlife: "低音穿過積水的路面震動。"
+    incense_alleys: "香火與合成雨味在巷弄間交織。"
+    corpo_surveillance: "鏡頭與證件掃描追蹤每一個動作。"
+    elite_labs: "過濾空氣裡迴盪著企業實驗室的低鳴。"
+    smuggler_fog: "霧與起重機燈光掩護走私路線。"
+    flooded_ruins: "積水與電纜雜訊填滿隧道。"
+    warzone: "槍聲在廢墟外某處回盪。"
+
+faction:
+  entry_denied: "派系巡邏封鎖了 {district}——提高聲望或改變效忠。"
+  hint:
+    tyrell: "（泰瑞宣誓：企業攤商給你較好價格。）"
+    arasaka: "（荒坂宣誓：診所價格略降。）"
+    maelstrom: "（漩渦幫宣誓：街頭攤商加價。）"
 
 help_cmds:
   look: "察看環境或目標（look [物品|NPC|裝備]）"
@@ -756,6 +781,7 @@ talk:
   missing: "這裡沒有 {name}。"
   silent: "{name} 沒有回應。"
   broker: "情報經紀人壓低聲音：「想打聽漩渦幫的動向？小巷裡有個暴徒知道內情。」"
+  broker_tyrell: "經紀人看著你的泰瑞證件點頭：「情報活交辦了——先找企業保全，再去泰瑞廣場。」"
   broker_quest: "◈ 經紀人招手，有新的街頭委託。"
   thug: "街頭暴徒咧嘴一笑：「漩渦幫最近在收義體，別多問。回去跟你的經紀人說我講過了。」"
   instructor: "教官的全息影像亮起：「往上簡報室練 gigs／stats；北邊戰鬥、東邊駭入、南邊領裝備；裝備庫西邊餐廳可 sit／rest 練生活指令。準備好了就往西回廣場。」"
@@ -769,6 +795,7 @@ talk:
   bazaar_fixer: "中介敲了敲晶片：「灰市價在這——shop 看看。東邊夜總會，南邊小中國街。」"
   shrine_keeper: "司祭微微鞠躬：「人性有限。每次義體升級都會帶走一部分。升級前先想清楚。」"
   corp_guard: "保全面罩閃爍：「證件掃描通過。企業區禁止拔槍。」"
+  corp_guard_tyrell: "保全放下掃描儀：「泰瑞通行已記錄——廣場在東，實驗室在更深處。」"
   guard: "守衛的義眼瞇起：「今晚墓穴很安靜。別惹事。」"
   priest: "司祭低語：「資料比肉體長久。宣誓要謹慎——資料庫會記得。」"
   rat: "下水道老鼠發出雜訊般的嘶嘶聲——太兇野，無法交談。"
@@ -827,6 +854,7 @@ gigs:
   missing: "找不到委託：{quest}"
   need_cred: "街頭聲望不足（需要 {req}，目前 {have}）。"
   need_quest: "需先完成委託：{quest}"
+  need_faction: "需先宣誓派系：{faction}"
   locked: "委託尚未解鎖：{quest}"
   no_active: "目前沒有進行中的委託。"
   journal_header: "◈ 委託日誌"

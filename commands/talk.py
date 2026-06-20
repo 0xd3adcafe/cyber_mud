@@ -38,13 +38,17 @@ def handle(ctx: CommandContext):
         if wake_player(ctx.player):
             woke = True
             lines.append(t(ctx.player.locale, "life.wake_on_talk"))
-    talk_key = npc.talk_key or npc.id
+    from world.factions import faction_talk_key
+
+    talk_key = faction_talk_key(npc.talk_key or npc.id, ctx.player)
     if is_mature(ctx.player) and has_mature_talk(npc):
         dialogue = tm(ctx.player.locale, f"talk.{talk_key}")
         if dialogue == f"talk.{talk_key}":
             dialogue = t(ctx.player.locale, f"talk.{talk_key}")
     else:
         dialogue = t(ctx.player.locale, f"talk.{talk_key}")
+    if dialogue == f"talk.{talk_key}" and talk_key != (npc.talk_key or npc.id):
+        dialogue = t(ctx.player.locale, f"talk.{npc.talk_key or npc.id}")
     if dialogue != f"talk.{talk_key}":
         lines.append(dialogue)
 

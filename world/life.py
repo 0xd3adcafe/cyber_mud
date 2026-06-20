@@ -169,10 +169,12 @@ def fatigue_regen_multiplier(player: Player) -> float:
 
 
 def district_safety_level(room: Room | None, cfg: LifeConfig | None = None) -> int:
+    from world.districts import district_safety
+
+    if room is not None and room.district:
+        return district_safety(room)
     cfg = cfg or _cfg()
-    if room is None or not room.district:
-        return cfg.sleep_min_outdoor_safety
-    return cfg.district_safety.get(room.district, 2)
+    return cfg.sleep_min_outdoor_safety
 
 
 def outdoor_sleep_unsafe(room: Room | None, cfg: LifeConfig | None = None) -> bool:

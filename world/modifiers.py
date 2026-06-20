@@ -14,6 +14,12 @@ def period_for_room(state: WorldState) -> str:
     return state.clock.period_id(state.time_config)
 
 
+def district_aggro_bonus(state: WorldState, room_id: str) -> float:
+    from world.districts import aggro_chance_bonus
+
+    return aggro_chance_bonus(state.world.room(room_id))
+
+
 def combat_damage_multiplier(weather_type: str, period_id: str = "") -> float:
     mult = 1.0
     if weather_type == "acid_rain":

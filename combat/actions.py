@@ -98,8 +98,17 @@ def resolve_flee(state: WorldState, player: Player) -> CombatActionResult:
 
     line = encounter.append_log(locale, "combat.flee_fail", target=label)
     npc = state.world.npc(encounter.npc_id)
-    if npc is not None and npc.aggro > 0 and npc.hostile:
-        player.chased_by_npc = encounter.npc_id
+    if npc is not None and npc.hostile and npc.aggro > 0:
+        from world.factions import npc_aggro_modifier
+        from world.modifiers import district_aggro_bonus
+
+        effective_aggro = (
+            npc.aggro
+            + npc_aggro_modifier(player, state.world.room(player.room_id))
+            + int(district_aggro_bonus(state, player.room_id) * 10)
+        )
+        if effective_aggro > 0:
+            player.chased_by_npc = encounter.npc_id
         end_encounter(state, player, encounter)
         return CombatActionResult([line], world_changed=True, ended=True)
 

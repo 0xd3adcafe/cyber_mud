@@ -34,7 +34,7 @@ def handle(ctx: CommandContext):
     if item is None or not item.takeable:
         return ok([t(ctx.player.locale, "buy.not_sold", item=item_name)])
 
-    price = buy_price(shop, item_id, ctx.state.world)
+    price = buy_price(shop, item_id, ctx.state.world, player=ctx.player)
     if price is None:
         return ok([t(ctx.player.locale, "buy.not_sold", item=item_name)])
 

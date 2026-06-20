@@ -37,7 +37,7 @@ def handle(ctx: CommandContext):
     if item is None:
         return ok([t(ctx.player.locale, "sell.missing", item=item_name)])
 
-    price = sell_price(shop, item_id, ctx.state.world)
+    price = sell_price(shop, item_id, ctx.state.world, player=ctx.player)
     if price is None:
         return ok([t(ctx.player.locale, "sell.refused", item=item_label(item, ctx.player.locale))])
 

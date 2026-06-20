@@ -26,6 +26,12 @@ def handle(ctx: CommandContext):
     if refusal is not None:
         return ok(refusal)
 
+    from world.districts import entry_refusal
+
+    faction_refusal = entry_refusal(ctx.player, dest, ctx.player.locale)
+    if faction_refusal is not None:
+        return ok(faction_refusal)
+
     if dest is not None and dest.shop_id:
         hour = ctx.state.clock.hour
         if not shop_is_open(dest.shop_id, hour):

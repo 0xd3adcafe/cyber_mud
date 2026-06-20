@@ -95,6 +95,16 @@ def _help_ui(ctx: CommandContext) -> str:
 
 
 def handle(ctx: CommandContext):
+    if ctx.args.strip().lower() == "tutorial":
+        from world.help_tutorial import format_help_tutorial
+
+        lines = format_help_tutorial(ctx)
+        return ok_panel(
+            lines,
+            panel="help",
+            ui_json=_help_ui(ctx),
+            meta=player_meta(ctx),
+        )
     return ok_panel(
         format_help(ctx),
         panel="help",

@@ -189,6 +189,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Life command follow-ups (2026-06) | Activity fatigue gain (`move`/`combat`/`netrun`); district `safety` outdoor sleep gate; rest period/weather multipliers in `world/modifiers.py`; poison blocks sleep; high-fatigue HP regen penalty; `tests/test_life_commands.py`, `tests/test_modifiers.py` |
 | World expansion W.4–W.5, W.11 (2026-06) | Story anchors `crypt`, `data_vault`; NPCs `guard`/`priest`/`rat`; `plaza_terminal`/`vault_terminal`; `hack_core` quest + `hack_net` objective; net nodes `crypt_node`/`vault_core`; `tests/test_story_anchors.py`, `tests/test_net_story.py` |
 | World expansion W.1, W.2, W.14 scale (2026-06) | `tools/merge_world_grid.py`; 8 district grids → **263 rooms**; hubs `tyrell_plaza`, `combat_zone_gate`; hub↔grid links; `tests/test_world_scale.py`; `admin.sh validate` counts |
+| World expansion W.3, W.6, W.7 (2026-06) | `data/districts.yaml` safety/atmosphere; `look` flavor; patrol/aggro/weather bias; `help tutorial`; `tyrell_intel` quest + faction shop/talk/entry gates; `tests/test_districts.py`, `tests/test_help_tutorial.py`, `tests/test_factions.py` |
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 
 ## Multi-session development (mandatory)
@@ -245,7 +246,7 @@ Not yet implemented or only partially implemented.
 
 ### World expansion ([WORLD.md](WORLD.md))
 
-**Baseline (2026-06):** **263 rooms** (27 hand hubs + 236 procedural grid), **22 NPCs**, **31 items**; story anchors `crypt`/`data_vault` wired. **Targets** remaining: ~109 NPCs, ~45 item defs; W.3, W.6–W.10, W.12–W.13 still open.
+**Baseline (2026-06):** **263 rooms**, **22 NPCs**, **31 items**; district `safety`/`atmosphere` in `data/districts.yaml`; `help tutorial`; faction depth (`tyrell_intel`, shop rates, area gates). **Targets** remaining: ~109 NPCs, ~45 items; W.8–W.10, W.12–W.13 still open.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
