@@ -345,7 +345,7 @@ help_cmds:
   stats: "查看等級、經驗與成長"
   talents: "查看天賦（talent <名稱> 學習）"
   improve: "分配屬性點（improve <屬性>）"
-  mod: "安裝武器晶片（mod <晶片>）"
+  mod: "安裝武器晶片（mod <晶片> [武器]）"
 
 periods:
   dawn: "黎明"
@@ -1088,10 +1088,11 @@ learn:
   ok: "你向經紀人學會了 {skill}（花費 ${cost}）。"
 
 mod:
-  usage: "用法：mod <晶片>"
+  usage: "用法：mod <晶片> [武器]  （例：mod mod_chip、mod mod_chip knife 2、mod mod_chip secondary）"
   missing_chip: "你身上沒有那個晶片。"
   unknown_chip: "那個晶片無法安裝。"
   no_weapon: "請先裝備武器。"
+  missing_weapon: "你沒有裝備「{name}」。"
   already: "武器已安裝 {mod}。"
   ok: "你將 {mod} 安裝到 {weapon} 上。"
 

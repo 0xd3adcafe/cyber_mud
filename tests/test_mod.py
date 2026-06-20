@@ -30,3 +30,29 @@ def test_mod_requires_weapon():
     result = dispatch("mod mod_chip", player, state, [], [])
     assert "mod_chip" in player.inventory
     assert any("武器" in line for line in result.lines)
+
+
+def test_mod_secondary_weapon_by_name():
+    player, state = _ctx()
+    dispatch("take knife", player, state, [], [])
+    dispatch("take liberty_pistol", player, state, [], [])
+    dispatch("take mod_chip", player, state, [], [])
+    dispatch("equip liberty_pistol", player, state, [], [])
+    dispatch("equip knife", player, state, [], [])
+    dispatch("take mod_chip", player, state, [], [])
+    result = dispatch("mod mod_chip liberty_pistol", player, state, [], [])
+    assert "smart_link" in player.weapon_mods.get("liberty_pistol", [])
+    assert "smart_link" not in player.weapon_mods.get("knife", [])
+    assert any("智慧連結" in line or "Smart Link" in line for line in result.lines)
+
+
+def test_mod_secondary_weapon_by_slot():
+    player, state = _ctx()
+    dispatch("take knife", player, state, [], [])
+    dispatch("take liberty_pistol", player, state, [], [])
+    dispatch("take mod_chip", player, state, [], [])
+    dispatch("equip liberty_pistol", player, state, [], [])
+    dispatch("equip knife", player, state, [], [])
+    result = dispatch("mod mod_chip secondary", player, state, [], [])
+    assert "smart_link" in player.weapon_mods.get("liberty_pistol", [])
+    assert "smart_link" not in player.weapon_mods.get("knife", [])

@@ -155,6 +155,19 @@ def split_give_args(args: str) -> tuple[str, str]:
     return parts[0], " ".join(parts[1:])
 
 
+def split_mod_args(args: str) -> tuple[str, str | None]:
+    parts = args.split()
+    if not parts:
+        return "", None
+    if len(parts) == 1:
+        return parts[0], None
+    if len(parts) == 2 and parts[1].isdigit():
+        return f"{parts[0]} {parts[1]}", None
+    if len(parts) >= 3 and parts[1].isdigit():
+        return f"{parts[0]} {parts[1]}", " ".join(parts[2:])
+    return parts[0], " ".join(parts[1:])
+
+
 def _matching_item_refs_in_pool(
     state: WorldState,
     item_name: str,

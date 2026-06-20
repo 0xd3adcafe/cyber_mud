@@ -345,7 +345,7 @@ help_cmds:
   stats: "View level, XP, and growth"
   talents: "View talents (talent <name> to learn)"
   improve: "Spend attribute points (improve <stat>)"
-  mod: "Install a weapon chip (mod <chip>)"
+  mod: "Install a weapon chip (mod <chip> [weapon])"
 
 periods:
   dawn: "Dawn"
@@ -1088,10 +1088,11 @@ learn:
   ok: "You learned {skill} from the broker (${cost})."
 
 mod:
-  usage: "Usage: mod <chip>"
+  usage: "Usage: mod <chip> [weapon]  (e.g. mod mod_chip, mod mod_chip knife 2, mod mod_chip secondary)"
   missing_chip: "You do not have that chip."
   unknown_chip: "That chip cannot be installed."
   no_weapon: "Equip a weapon first."
+  missing_weapon: "You are not wielding \"{name}\"."
   already: "{mod} is already installed on your weapon."
   ok: "You install {mod} on {weapon}."
 
