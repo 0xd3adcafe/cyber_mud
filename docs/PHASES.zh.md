@@ -197,6 +197,7 @@
 | 內容深度 D.1–D.6（2026-06） | 原型 `talk.*`＋重產 population；任務 WARN 修復＋`hub_briefing`；樞紐 NPC；格點戰利品 craft/disassemble＋商店；8 區 net 節點＋互動物；`tests/test_content_depth.py`；[WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md) |
 | 內容深度 D.7–D.10（2026-06） | 八區聚光 NPC；`district.grid.*` look 敘事；四條區域委託；完整 `world.ambient.*`；`tests/test_content_depth.py` |
 | Client 單獨 `/` 輸入修復 | `is_local_command("/")` 不再 IndexError；顯示 `client.local_command.usage`；未知 `/foo` 留本機；`tests/test_client_meta.py`、`tests/test_client_app.py` |
+| Validate 加速（2026-06） | 快取 `load_world`／`default_room_items`／時段與天氣 YAML；`pytest-xdist` 平行 pytest；dev reload 呼叫 `clear_world_cache()`；約 6 分鐘→約 50 秒 |
 
 ## 多 session 開發（必做）
 

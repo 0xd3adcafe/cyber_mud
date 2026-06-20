@@ -199,6 +199,7 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Client bare `/` input fix | `is_local_command("/")` no IndexError; show `client.local_command.usage`; unknown `/foo` stays client-side; `tests/test_client_meta.py`, `tests/test_client_app.py` |
 | Client log UX CL.1–CL.8 (2026-06) | `log_classifier.py`/`log_styles.py`/`LogPalette`; combat/env/social/progression channels; block separators; `tests/test_log_classifier.py`; `docs/player/CLIENT.md` legend |
 | Client log UX CL.9–CL.11 (2026-06) | `/log compact`; `/log hide`/`show` channel toggles; `/log export`; `log_settings.py`; `tests/test_log_settings.py`; settings.json persistence |
+| Validate speedup (2026-06) | Cache `load_world`/`default_room_items`/time+weather YAML; `pytest-xdist` in `./admin.sh validate`; `clear_world_cache()` on dev reload; ~6 min → ~50s |
 
 ## Multi-session development (mandatory)
 

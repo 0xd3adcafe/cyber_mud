@@ -40,14 +40,19 @@ def test_patrol_movement_on_tick():
     state = make_state()
     broker = state.world.npc("broker")
     assert broker is not None
-    broker.schedule = {}
-    state.tick_count = PATROL_EVERY - 1
-    with patch("world.tick.random.random", return_value=0.1):
-        result = process_tick(state, state.time_config)
-    assert state.npc_rooms["broker"] == "alley"
-    kinds = [e.kind for e in result.events]
-    assert "npc_leave" in kinds
-    assert "npc_enter" in kinds
+    saved_schedule = dict(broker.schedule)
+    broker.schedule.clear()
+    try:
+        state.tick_count = PATROL_EVERY - 1
+        with patch("world.tick.random.random", return_value=0.1):
+            result = process_tick(state, state.time_config)
+        assert state.npc_rooms["broker"] == "alley"
+        kinds = [e.kind for e in result.events]
+        assert "npc_leave" in kinds
+        assert "npc_enter" in kinds
+    finally:
+        broker.schedule.clear()
+        broker.schedule.update(saved_schedule)
 
 
 def test_idle_message_on_tick():

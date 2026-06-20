@@ -33,6 +33,23 @@ DATA_PATH = DATA_DIR / "world.yaml"
 POPULATION_PATH = DATA_DIR / "world_population.yaml"
 IMPLANTS_PATH = DATA_DIR / "implants.yaml"
 
+_DEFAULT_WORLD_CACHE: World | None = None
+_DEFAULT_ROOM_ITEMS_CACHE: dict[str, list[str]] | None = None
+
+
+def clear_world_cache() -> None:
+    """Drop cached default world/room_items and related YAML configs (dev data reload)."""
+    global _DEFAULT_WORLD_CACHE, _DEFAULT_ROOM_ITEMS_CACHE
+    _DEFAULT_WORLD_CACHE = None
+    _DEFAULT_ROOM_ITEMS_CACHE = None
+    from world.clock import clear_time_config_cache
+    from world.schedule import clear_schedule_cache
+    from world.weather import clear_weather_config_cache
+
+    clear_time_config_cache()
+    clear_weather_config_cache()
+    clear_schedule_cache()
+
 
 def _load_world_raw(path: Path | None = None) -> dict:
     src = path or DATA_PATH
@@ -96,6 +113,17 @@ def _load_implants(path: Path | None = None) -> dict[str, Implant]:
 
 
 def load_world(path: Path | None = None) -> World:
+    global _DEFAULT_WORLD_CACHE
+    if path is None:
+        if _DEFAULT_WORLD_CACHE is not None:
+            return _DEFAULT_WORLD_CACHE
+        world = _build_world(None)
+        _DEFAULT_WORLD_CACHE = world
+        return world
+    return _build_world(path)
+
+
+def _build_world(path: Path | None) -> World:
     raw = _load_world_raw(path)
 
     rooms = {
@@ -214,8 +242,18 @@ def load_world(path: Path | None = None) -> World:
     )
 
 
+def _copy_room_items(items: dict[str, list[str]]) -> dict[str, list[str]]:
+    return {rid: list(item_ids) for rid, item_ids in items.items()}
+
+
 def default_room_items(path: Path | None = None) -> dict[str, list[str]]:
-    src = path or DATA_PATH
-    with src.open(encoding="utf-8") as fh:
-        raw = yaml.safe_load(fh) or {}
-    return _merge_room_items(raw, path)
+    global _DEFAULT_ROOM_ITEMS_CACHE
+    if path is not None:
+        with path.open(encoding="utf-8") as fh:
+            raw = yaml.safe_load(fh) or {}
+        return _merge_room_items(raw, path)
+    if _DEFAULT_ROOM_ITEMS_CACHE is None:
+        with DATA_PATH.open(encoding="utf-8") as fh:
+            raw = yaml.safe_load(fh) or {}
+        _DEFAULT_ROOM_ITEMS_CACHE = _merge_room_items(raw, None)
+    return _copy_room_items(_DEFAULT_ROOM_ITEMS_CACHE)

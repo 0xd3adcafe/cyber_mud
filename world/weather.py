@@ -31,8 +31,26 @@ class WeatherConfig:
     types: dict[str, WeatherType] = field(default_factory=dict)
 
 
+_WEATHER_CONFIG_CACHE: WeatherConfig | None = None
+
+
+def clear_weather_config_cache() -> None:
+    global _WEATHER_CONFIG_CACHE
+    _WEATHER_CONFIG_CACHE = None
+
+
 def load_weather_config(path: Path | None = None) -> WeatherConfig:
-    src = path or WEATHER_PATH
+    global _WEATHER_CONFIG_CACHE
+    if path is not None:
+        return _load_weather_config_from_path(path)
+    if _WEATHER_CONFIG_CACHE is not None:
+        return _WEATHER_CONFIG_CACHE
+    config = _load_weather_config_from_path(WEATHER_PATH)
+    _WEATHER_CONFIG_CACHE = config
+    return config
+
+
+def _load_weather_config_from_path(src: Path) -> WeatherConfig:
     with src.open(encoding="utf-8") as fh:
         raw = yaml.safe_load(fh) or {}
 

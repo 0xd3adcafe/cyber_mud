@@ -75,8 +75,26 @@ class WorldClock:
         )
 
 
+_TIME_CONFIG_CACHE: TimeConfig | None = None
+
+
+def clear_time_config_cache() -> None:
+    global _TIME_CONFIG_CACHE
+    _TIME_CONFIG_CACHE = None
+
+
 def load_time_config(path: Path | None = None) -> TimeConfig:
-    src = path or TIME_PATH
+    global _TIME_CONFIG_CACHE
+    if path is not None:
+        return _load_time_config_from_path(path)
+    if _TIME_CONFIG_CACHE is not None:
+        return _TIME_CONFIG_CACHE
+    config = _load_time_config_from_path(TIME_PATH)
+    _TIME_CONFIG_CACHE = config
+    return config
+
+
+def _load_time_config_from_path(src: Path) -> TimeConfig:
     with src.open(encoding="utf-8") as fh:
         raw = yaml.safe_load(fh) or {}
     periods = {

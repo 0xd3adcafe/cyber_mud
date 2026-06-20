@@ -74,8 +74,9 @@ class Game:
 
     def reload_world_data(self) -> None:
         from shared.i18n import clear_locale_cache
-        from world.loader import load_world
+        from world.loader import clear_world_cache, load_world
 
+        clear_world_cache()
         world = load_world()
         self.state.world = world
         clear_locale_cache()

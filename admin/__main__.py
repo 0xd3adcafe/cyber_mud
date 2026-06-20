@@ -1,11 +1,27 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 
 from persistence.save import delete_save, list_saves
 from world.loader import load_world
 from world.quest_author import validate_quests
+
+
+def _pytest_argv() -> list[str]:
+    argv = [sys.executable, "-m", "pytest", "tests/", "-q", "--tb=short"]
+    workers = os.environ.get("PYTEST_WORKERS", "").strip()
+    if workers:
+        argv.extend(["-n", workers])
+        return argv
+    try:
+        import xdist  # noqa: F401
+
+        argv.extend(["-n", "auto"])
+    except ImportError:
+        pass
+    return argv
 
 
 def validate() -> int:
@@ -15,8 +31,9 @@ def validate() -> int:
         for direction, target in room.exits.items():
             assert target in world.rooms, f"{rid}.{direction} -> missing {target}"
     print(f"OK: world valid ({len(world.rooms)} rooms, {len(world.items)} items, {len(world.npcs)} npcs)")
-    quest_errors = [issue for issue in validate_quests(world) if issue.severity == "error"]
-    quest_warnings = [issue for issue in validate_quests(world) if issue.severity == "warn"]
+    quest_issues = validate_quests(world)
+    quest_errors = [issue for issue in quest_issues if issue.severity == "error"]
+    quest_warnings = [issue for issue in quest_issues if issue.severity == "warn"]
     for issue in quest_warnings:
         print(f"WARN [quest:{issue.quest_id}] {issue.message}")
     if quest_errors:
@@ -35,7 +52,7 @@ def validate() -> int:
             print(f"ERR  [mature] {issue.message}")
         return 1
     print(f"OK: mature content valid ({len(mature_warnings)} warnings)")
-    result = subprocess.run([sys.executable, "-m", "pytest", "tests/", "-q"], check=False)
+    result = subprocess.run(_pytest_argv(), check=False)
     return result.returncode
 
 
