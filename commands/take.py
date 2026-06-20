@@ -59,6 +59,9 @@ def _take_from_corpse(ctx: CommandContext, item_args: str, corpse_name: str):
     if is_bulk(item_args) and taken > 1:
         lines.insert(0, t(locale, "take.bulk_ok", count=str(taken)))
 
+    from world.quests import advance_quest_on_inventory
+
+    lines.extend(advance_quest_on_inventory(ctx.player, ctx.state, locale))
     return ok(lines, meta=player_meta(ctx), world_changed=True)
 
 
@@ -92,6 +95,9 @@ def handle(ctx: CommandContext):
     if is_bulk(item_args) and taken > 1:
         lines.insert(0, t(ctx.player.locale, "take.bulk_ok", count=str(taken)))
 
+    from world.quests import advance_quest_on_inventory
+
+    lines.extend(advance_quest_on_inventory(ctx.player, ctx.state, ctx.player.locale))
     return ok(
         lines,
         meta=player_meta(ctx),

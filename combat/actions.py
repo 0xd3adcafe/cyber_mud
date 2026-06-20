@@ -278,6 +278,9 @@ def _finish_victory(
     from world.wanted import add_wanted
 
     lines.extend(add_wanted(player, 1, locale))
+    from world.quests import advance_quest_on_defeat
+
+    lines.extend(advance_quest_on_defeat(player, state, encounter.npc_id, locale))
     return CombatActionResult(
         lines,
         world_changed=True,

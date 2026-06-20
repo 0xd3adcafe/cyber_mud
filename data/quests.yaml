@@ -33,3 +33,21 @@ quests:
         objective_target: dock_crane
       - objective_type: talk_npc
         objective_target: broker
+  alley_clearance:
+    name_zh: 小巷清剿
+    name_en: Alley Clearance
+    npc_id: broker
+    description_zh: 經紀人要你「說服」小巷暴徒別再騷擾他的線人。
+    description_en: The broker wants the alley thug off his informants—permanently.
+    hint_zh: 在小巷擊倒街頭暴徒。
+    hint_en: Take down the street thug in the alley.
+    complete_npc_id: broker
+    requires_quest: broker_rumor
+    street_cred_req: 3
+    reward_gold: 100
+    reward_xp: 50
+    reward_street_cred: 5
+    reward_items: [med_stim]
+    stages:
+      - objective_type: defeat_npc
+        objective_target: thug

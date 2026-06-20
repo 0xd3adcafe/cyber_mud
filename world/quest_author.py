@@ -5,9 +5,10 @@ from dataclasses import dataclass, field
 import yaml
 
 from world.content import Quest, QuestStage
+from world.quests import quest_stages
 from world.world import World
 
-VALID_OBJECTIVE_TYPES = frozenset({"talk_npc", "visit_room", "interact"})
+VALID_OBJECTIVE_TYPES = frozenset({"talk_npc", "visit_room", "interact", "defeat_npc", "have_item"})
 
 
 @dataclass(frozen=True)
@@ -23,19 +24,6 @@ class NpcQuestRole:
     roles: list[str] = field(default_factory=list)
 
 
-def quest_stages(quest: Quest) -> list[QuestStage]:
-    if quest.stages:
-        return list(quest.stages)
-    if quest.objective_type:
-        return [
-            QuestStage(
-                objective_type=quest.objective_type,
-                objective_target=quest.objective_target,
-            )
-        ]
-    return []
-
-
 def resolve_target_label(world: World, objective_type: str, target: str) -> str:
     if objective_type == "talk_npc":
         npc = world.npc(target)
@@ -49,6 +37,14 @@ def resolve_target_label(world: World, objective_type: str, target: str) -> str:
         obj = world.interactable(target)
         if obj:
             return f"{target} ({obj.name_zh or obj.name_en})"
+    elif objective_type == "defeat_npc":
+        npc = world.npc(target)
+        if npc:
+            return f"{target} ({npc.name_zh or npc.name_en})"
+    elif objective_type == "have_item":
+        item = world.item(target)
+        if item:
+            return f"{target} ({item.name_zh or item.name_en})"
     return target
 
 
@@ -61,6 +57,10 @@ def _target_exists(world: World, objective_type: str, target: str) -> bool:
         return world.room(target) is not None
     if objective_type == "interact":
         return world.interactable(target) is not None
+    if objective_type == "defeat_npc":
+        return world.npc(target) is not None
+    if objective_type == "have_item":
+        return world.item(target) is not None
     return False
 
 
@@ -83,6 +83,13 @@ def validate_quest(world: World, quest: Quest) -> list[QuestIssue]:
 
     if not quest.complete_npc_id:
         issues.append(QuestIssue(qid, "warn", "未設定 complete_npc_id"))
+
+    if quest.requires_quest and world.quest(quest.requires_quest) is None:
+        issues.append(QuestIssue(qid, "error", f"requires_quest 不存在：{quest.requires_quest}"))
+
+    for item_id in quest.reward_items:
+        if world.item(item_id) is None:
+            issues.append(QuestIssue(qid, "error", f"reward_items 不存在：{item_id}"))
 
     for index, stage in enumerate(stages, start=1):
         if stage.objective_type not in VALID_OBJECTIVE_TYPES:

@@ -267,6 +267,7 @@ Commit message 格式：`<type>: <簡述>`（如 `feat: 新增物品系統`、`t
 | 登入 banner MOTD 動態展示 | `client/login_motd.py`、`motd.tips` 輪播、`tests/test_login_motd.py` |
 | Prompt 完整版（client 即時預覽） | `client/prompt_preview.py`、`#prompt_preview`、`tests/test_prompt_preview.py` |
 | NPC 任務編排工具 | `world/quest_author.py`、`./admin.sh quests`、`tests/test_quest_author.py` |
+| 完整任務系統 | `gigs accept`／`journal`、`defeat_npc`／`have_item`、`alley_clearance`、`tests/test_quest_system.py` |
 
 世界觀與區域擴充見 [`docs/WORLD.md`](docs/WORLD.md)。
 
