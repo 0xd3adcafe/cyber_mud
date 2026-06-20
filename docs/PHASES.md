@@ -203,7 +203,8 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | Validate speedup (2026-06) | Cache `load_world`/`default_room_items`/time+weather YAML; `pytest-xdist` in `./admin.sh validate`; `clear_world_cache()` on dev reload; ~6 min → ~50s |
 | Security ASVS L1 ASVS.1–5 (2026-06) | PBKDF2 passwords + legacy rehash; unified `invalid_credentials`; save path validation; input bounds; per-connection auth rate limit; save `0600`; `docs/SECURITY.md`; `tests/test_security_auth.py` |
 | Tutorial zone T.2–T.7 (2026-06) | `tutorial_debrief`; 3 NPCs; 8 interactables; 3 items; `tutorial_rotation` quest; `tests/test_tutorial_zone.py` 13 cases |
-| PDA stats & talents views (2026-06) | `pda stats` / `pda talents` reuse `format_stats_lines` / `format_talents_catalog_lines`; `stats` / `talents` unchanged; `tests/test_pda.py` |
+| PDA integrated growth panel (2026-06) | Single `pda` merges vitals, proficiencies, skill list, full talent catalog; `build_pda_ui` sidebar sections; `stats` / `talents` unchanged; `tests/test_pda.py` |
+| Sidebar refresh performance (2026-06) | `client/sidebar_refresh.py` debounced fetch (2s) + 15s poll; meta patch for open PDA vitals; coalesced `_render_sidebar`; `tests/test_sidebar_refresh.py` |
 
 ## Multi-session development (mandatory)
 

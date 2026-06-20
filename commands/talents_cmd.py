@@ -10,7 +10,7 @@ from world.progression import (
 )
 
 
-def _format_talent_line(ctx: CommandContext, talent) -> str:
+def format_talent_line(ctx: CommandContext, talent) -> str:
     locale = ctx.player.locale
     label = talent_label(talent, locale)
     if talent.id in ctx.player.perks:
@@ -27,7 +27,7 @@ def format_talents_catalog_lines(ctx: CommandContext) -> list[str]:
     locale = ctx.player.locale
     lines = [t(locale, "talent.header"), ""]
     for talent in ctx.state.world.talents.values():
-        lines.append(_format_talent_line(ctx, talent))
+        lines.append(format_talent_line(ctx, talent))
     lines.append("")
     lines.append(t(locale, "talent.hint"))
     return lines

@@ -201,7 +201,8 @@
 | Validate 加速（2026-06） | 快取 `load_world`／`default_room_items`／時段與天氣 YAML；`pytest-xdist` 平行 pytest；dev reload 呼叫 `clear_world_cache()`；約 6 分鐘→約 50 秒 |
 | 安全性 ASVS L1 ASVS.1–5（2026-06） | PBKDF2 密碼＋舊版自動升級；統一 `invalid_credentials`；存檔路徑驗證；輸入邊界；每連線認證速率限制；存檔 `0600`；`docs/SECURITY.md`；`tests/test_security_auth.py` |
 | 新手教學區 T.2–T.7（2026-06） | `tutorial_debrief`；3 NPC；8 互動物；3 物品；`tutorial_rotation` 委託；`tests/test_tutorial_zone.py` 13 案例 |
-| PDA stats／talents 檢視（2026-06） | `pda stats`／`pda talents` 重用 `format_stats_lines`／`format_talents_catalog_lines`；`stats`／`talents` 不變；`tests/test_pda.py` |
+| PDA 整合成長面板（2026-06） | 單一 `pda` 合併生存、熟練度、協定、完整天賦目錄；`build_pda_ui` 側欄區塊；`stats`／`talents` 不變；`tests/test_pda.py` |
+| 側欄刷新效能（2026-06） | `client/sidebar_refresh.py` 防抖抓取（2s）+ 15s 定時；meta 局部更新 PDA；合併 `_render_sidebar`；`tests/test_sidebar_refresh.py` |
 
 ## 多 session 開發（必做）
 

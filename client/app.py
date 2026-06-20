@@ -78,6 +78,7 @@ from client.meta_handlers import (
     is_client_slash_input,
     is_local_command,
     local_command_body,
+    patch_open_pda_ui,
     prepare_netrun_outbound,
     panels_to_refresh_on_equip,
     panels_to_refresh_on_move,
@@ -89,6 +90,12 @@ from client.meta_handlers import (
     should_refresh_sidebar_on_room_change,
     sidebar_should_show,
     toggle_sidebar_panel,
+)
+from client.sidebar_refresh import (
+    SIDEBAR_DEBOUNCE_INTERVAL,
+    SIDEBAR_POLL_INTERVAL,
+    panels_to_fetch,
+    stack_panels_for_poll,
 )
 from shared.protocol import ERR_PREFIX, META_PREFIX, MOTD_PREFIX, PANEL_PREFIX, SYS_PREFIX, UI_PREFIX
 from shared.startup import StartupReport
@@ -145,6 +152,9 @@ class CyberMudApp(App):
         self._cmd_sent_at = 0.0
         self._last_recv_at = 0.0
         self._status_update_scheduled = False
+        self._sidebar_render_scheduled = False
+        self._sidebar_pending_panels: set[str] = set()
+        self._sidebar_debounce_task: asyncio.Task | None = None
         self._completion_cycle_key = ""
         self._completion_cycle_index = 0
         self._last_rtt_ms: float | None = None
@@ -709,6 +719,51 @@ class CyberMudApp(App):
             except Exception:
                 pass
 
+    def _schedule_sidebar_render(self) -> None:
+        if self._sidebar_render_scheduled:
+            return
+        self._sidebar_render_scheduled = True
+        self.call_after_refresh(self._flush_sidebar_render)
+
+    def _flush_sidebar_render(self) -> None:
+        self._sidebar_render_scheduled = False
+        self._render_sidebar()
+
+    def _cancel_sidebar_debounce(self) -> None:
+        if self._sidebar_debounce_task is not None and not self._sidebar_debounce_task.done():
+            self._sidebar_debounce_task.cancel()
+        self._sidebar_debounce_task = None
+        self._sidebar_pending_panels.clear()
+
+    def _queue_sidebar_refresh(self, panel_ids: list[str]) -> None:
+        if not panel_ids or not self.view.sidebar_open:
+            return
+        self._sidebar_pending_panels.update(panel_ids)
+        if self._sidebar_debounce_task is not None and not self._sidebar_debounce_task.done():
+            return
+        self._sidebar_debounce_task = asyncio.create_task(self._flush_sidebar_debounce())
+
+    async def _flush_sidebar_debounce(self) -> None:
+        try:
+            await asyncio.sleep(SIDEBAR_DEBOUNCE_INTERVAL)
+            panels = panels_to_fetch(self._sidebar_pending_panels, self.view.sidebar_stack)
+            self._sidebar_pending_panels.clear()
+            if panels:
+                await self._refresh_sidebar_panels(panels)
+        except asyncio.CancelledError:
+            raise
+        finally:
+            self._sidebar_debounce_task = None
+
+    def _on_sidebar_poll_tick(self) -> None:
+        if not self.view.authenticated or not sidebar_should_show(self.view):
+            return
+        if self._panel_fetching:
+            return
+        panels = stack_panels_for_poll(self.view.sidebar_stack)
+        if panels:
+            asyncio.create_task(self._refresh_sidebar_panels(panels))
+
     def _render_sidebar(self) -> None:
         if not self.view.authenticated:
             return
@@ -847,6 +902,7 @@ class CyberMudApp(App):
         if command == HELP_OVERLAY_PANEL:
             self._toggle_help_overlay()
             return
+        self._cancel_sidebar_debounce()
         if not self.conn.connected:
             self._append_log(
                 self.query_one("#log", RichLog),
@@ -882,12 +938,14 @@ class CyberMudApp(App):
         was_auth = self.view.authenticated
         old_room_id = self.view.room_id
         apply_meta(self.view, key, value)
+        if patch_open_pda_ui(self.view, key):
+            self._schedule_sidebar_render()
         if key == "room_id" and should_refresh_sidebar_on_room_change(
             self.view,
             old_room_id=old_room_id,
             new_room_id=value,
         ):
-            asyncio.create_task(self._refresh_sidebar_panels(panels_to_refresh_on_move(self.view)))
+            self._queue_sidebar_refresh(panels_to_refresh_on_move(self.view))
         if key == "auth" and value == "1":
             self._auth_pending = False
             self._needs_reauth = False
@@ -901,7 +959,7 @@ class CyberMudApp(App):
             else:
                 self._update_status()
                 if self.view.sidebar_open and self.view.sidebar_stack:
-                    asyncio.create_task(self._refresh_sidebar_panels(list(self.view.sidebar_stack)))
+                    self._queue_sidebar_refresh(list(self.view.sidebar_stack))
         elif key == "auth" and value == "0" and was_auth:
             self._return_to_login_screen()
         if key == "locale":
@@ -919,15 +977,15 @@ class CyberMudApp(App):
                 if self._help_fetch_event is not None:
                     self._help_fetch_event.set()
             else:
-                self._render_sidebar()
+                self._schedule_sidebar_render()
             if self._panel_fetch_event is not None:
                 self._panel_fetch_event.set()
         if key in ("quest", "hint", "combat", "combat_log", "combat_target", "combat_cd"):
             self._update_focus_block()
         if key in ("quest", "hint") and self.view.sidebar_open and "gigs" in self.view.sidebar_stack:
-            asyncio.create_task(self._refresh_sidebar_panels(["gigs"]))
+            self._queue_sidebar_refresh(["gigs"])
         if key == "refresh_sidebar" and value == "1" and self.view.sidebar_open:
-            asyncio.create_task(self._refresh_sidebar_panels(panels_to_refresh_on_equip(self.view)))
+            self._queue_sidebar_refresh(panels_to_refresh_on_equip(self.view))
 
     async def _refresh_sidebar_panels(self, panel_ids: list[str]) -> None:
         if not panel_ids or not self.conn.connected:
@@ -1001,6 +1059,7 @@ class CyberMudApp(App):
             return
         self._close_help_overlay()
         self._cancel_panel_fetch()
+        self._cancel_sidebar_debounce()
         self.view.sidebar_open = False
         self.view.sidebar_stack.clear()
         self.view.pending_panel = ""
@@ -1089,6 +1148,7 @@ class CyberMudApp(App):
         self.set_interval(0.2, self._on_spinner_tick)
         self.set_interval(1.0, self._on_cd_tick)
         self.set_interval(0.5, self._on_login_motd_tick)
+        self.set_interval(SIDEBAR_POLL_INTERVAL, self._on_sidebar_poll_tick)
         self._reset_login_motd()
         try:
             with startup.measure("connect"):

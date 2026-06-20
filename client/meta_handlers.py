@@ -305,6 +305,41 @@ def handle_ui_json(state: ClientViewState, payload: str) -> None:
         _ensure_sidebar_panel(state, state.pending_panel).ui = None
 
 
+def patch_open_pda_ui(state: ClientViewState, meta_key: str) -> bool:
+    from client.sidebar_refresh import PDA_PATCH_META_KEYS
+    from shared.i18n import t
+    from world.life import posture_label
+
+    if meta_key not in PDA_PATCH_META_KEYS or "pda" not in state.sidebar_stack:
+        return False
+    panel = state.sidebar_panels.get("pda")
+    if panel is None or not panel.ui:
+        return False
+
+    locale = state.locale or "en"
+    patched = False
+    for section in panel.ui.get("sections", []):
+        section_id = section.get("id")
+        if section_id == "vitals" and meta_key in {"hp", "gold"}:
+            section["value"] = t(locale, "pda.vitals", hp=state.hp, gold=state.gold)
+            patched = True
+        elif section_id == "ram" and meta_key == "ram":
+            section["value"] = state.ram
+            patched = True
+        elif section_id == "life" and meta_key in {"posture", "fatigue"}:
+            section["value"] = t(
+                locale,
+                "pda.life",
+                posture=posture_label(state.posture, locale),
+                fatigue=state.fatigue,
+            )
+            patched = True
+        elif section_id == "time" and meta_key in {"time", "period"}:
+            section["value"] = t(locale, "pda.time", clock=state.time, period=state.period)
+            patched = True
+    return patched
+
+
 def format_sidebar_content(state: ClientViewState) -> str:
     from client.ui_format import format_stacked_sidebar
 
