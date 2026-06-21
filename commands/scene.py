@@ -92,6 +92,26 @@ def handle(ctx: CommandContext):
                 ]
             )
 
+    if profile.scene_requires_home:
+        if ctx.player.home_room_id != profile.scene_requires_home:
+            label = npc_label(ctx.state, npc_id, locale)
+            home = ctx.state.world.home_for_room(profile.scene_requires_home)
+            home_name = (
+                (home.name_en or home.name_zh)
+                if home and locale == "en"
+                else (home.name_zh if home else profile.scene_requires_home)
+            )
+            return ok(
+                [
+                    t(
+                        locale,
+                        "scene.need_home",
+                        name=label,
+                        home=home_name or profile.scene_requires_home,
+                    )
+                ]
+            )
+
     room = ctx.state.world.room(ctx.player.room_id)
     voice = resolve_mature_voice(ctx.player, ctx.state, room, npc_id=npc_id)
     npc_name = npc_label(ctx.state, npc_id, locale)

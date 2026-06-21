@@ -110,6 +110,13 @@ def perform_interact(
 
         lines.extend(play_braindance(player, state, obj.braindance_id, locale, free=True))
 
+    if getattr(obj, "kind", "") == "arcana":
+        from world.arcana import perform_arcana_draw
+
+        spread = int(player.interact_flags.pop("_arcana_spread", "1") or "1")
+        lines.extend(perform_arcana_draw(player, state, locale, spread=spread))
+        return lines
+
     from world.quests import advance_quest_on_interact
 
     lines.extend(advance_quest_on_interact(player, state, obj.id, locale))

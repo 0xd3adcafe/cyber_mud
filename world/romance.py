@@ -32,6 +32,7 @@ class RomanceProfile:
     voice_override: str = ""
     voice_triggers: tuple[str, ...] = ()
     scene_requires_quest: str = ""
+    scene_requires_home: str = ""
 
 
 def load_romance_profiles(path: Path | None = None) -> dict[str, RomanceProfile]:
@@ -57,6 +58,7 @@ def load_romance_profiles(path: Path | None = None) -> dict[str, RomanceProfile]
             voice_override=str(data.get("voice_override", "")),
             voice_triggers=triggers,
             scene_requires_quest=str(data.get("scene_requires_quest", "")),
+            scene_requires_home=str(data.get("scene_requires_home", "")),
         )
     return profiles
 

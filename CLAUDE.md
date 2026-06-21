@@ -255,7 +255,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Mature M.18** | Shipped — private `cyber_mud_mature` submodule at `data/mature/`; bilingual pack docs (`README`, `CLAUDE`, `CONTRIBUTING`, `LOCALIZATION` + `*.zh.md`); history purge via `scripts/mature-history-purge.sh`; see PHASES **M.18** |
 | **Mature M.19–M.26** | Shipped — dual voice (`noir`/`lewd`), SFW `persona`, `scene`/`whisper`, client Rich mature format; see PHASES **M.19–M.26** |
 | **Mature M.27** | Shipped — combat noir voice; `resolve_mature_combat_voice()` pins `noir`; `mature.noir.combat.*`; see PHASES **M.27** |
-| **Bleachbunny spotlight BB** | BB.2 shipped — Trauma Team; pending BB.Arcana, BB.3 idol, BB.1 Kabuki, etc.; see PHASES **BB** |
+| **Bleachbunny spotlight BB** | Shipped — BB.Arcana–BB.8 (Arcana, Trauma, idol, Kabuki, Tyrell, flatmates, Wintr, Little China, bouncer tiers); see PHASES **BB** |
 
 
 NSFW copy lives in private **`cyber_mud_mature`** (`data/mature/locale/mature_en.yaml` + `mature_zh.yaml`); default `teen` rating; M.0–M.18 shipped — see PHASES **Mature / NSFW content** and [docs/MATURE_CONTENT.md](docs/MATURE_CONTENT.md).

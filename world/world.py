@@ -102,6 +102,12 @@ class World:
     def home(self, home_id: str) -> Housing | None:
         return self.homes.get(home_id)
 
+    def home_for_room(self, room_id: str) -> Housing | None:
+        for home in self.homes.values():
+            if home.room_id == room_id:
+                return home
+        return None
+
     def vehicle(self, vehicle_id: str) -> Vehicle | None:
         return self.vehicles.get(vehicle_id)
 

@@ -279,6 +279,66 @@ quests:
         objective_target: jam_signals
       - objective_type: talk_npc
         objective_target: broker
+  idol_blackmail:
+    name_zh: 偶像勒索
+    name_en: Idol Blackmail
+    npc_id: kabuki_idol_haejin
+    description_zh: 偶像海珍說 VIP 區有把柄外流——先確認愛璃的立場，再回來結案。
+    description_en: Idol Haejin says leverage leaked in VIP—confirm Airi's stance, then check back.
+    hint_zh: 前往 kabuki_vip，與愛璃、海珍交談後 talk 海珍交件。
+    hint_en: Visit kabuki_vip, talk to Airi and Haejin, then turn in to Haejin.
+    complete_npc_id: kabuki_idol_haejin
+    street_cred_req: 0
+    reward_gold: 45
+    reward_xp: 22
+    reward_street_cred: 2
+    stages:
+      - objective_type: visit_room
+        objective_target: kabuki_vip
+      - objective_type: talk_npc
+        objective_target: kabuki_idol_airi
+      - objective_type: talk_npc
+        objective_target: kabuki_idol_haejin
+  tyrell_shadow:
+    name_zh: 泰瑞暗影
+    name_en: Tyrell Shadow
+    npc_id: tyrell_liaison_vera
+    description_zh: 聯絡員薇拉要企業大廳幽靈節點的入侵證明——hack 後回報她。
+    description_en: Liaison Vera wants proof you breached the lobby ghost node—hack it, then report.
+    hint_zh: 前往 corpo_lobby，net 後 hack corpo_ghost_control，再 talk 薇拉。
+    hint_en: Visit corpo_lobby, jack in and hack corpo_ghost_control, then talk to Vera.
+    complete_npc_id: tyrell_liaison_vera
+    street_cred_req: 3
+    reward_gold: 90
+    reward_xp: 42
+    reward_street_cred: 5
+    stages:
+      - objective_type: visit_room
+        objective_target: corpo_lobby
+      - objective_type: hack_net
+        objective_target: corpo_ghost_control
+      - objective_type: talk_npc
+        objective_target: tyrell_liaison_vera
+  kabuki_spotlight:
+    name_zh: 歌舞伎聚光
+    name_en: Kabuki Spotlight
+    npc_id: kabuki_fixer_amara
+    description_zh: 灰市中介阿瑪拉要直播主珍娜的檔案片段——集市碰面後回報。
+    description_en: Fixer Amara wants streamer Jenna's clip file—meet at the bazaar, then report back.
+    hint_zh: 前往 kabuki_bazaar，與珍娜、阿瑪拉交談結案。
+    hint_en: Visit kabuki_bazaar, talk to Jenna and Amara to finish.
+    complete_npc_id: kabuki_fixer_amara
+    street_cred_req: 2
+    reward_gold: 55
+    reward_xp: 28
+    reward_street_cred: 3
+    stages:
+      - objective_type: visit_room
+        objective_target: kabuki_bazaar
+      - objective_type: talk_npc
+        objective_target: kabuki_streamer_jenna
+      - objective_type: talk_npc
+        objective_target: kabuki_fixer_amara
   zone_sweep:
     name_zh: 戰區掃描
     name_en: Zone Sweep

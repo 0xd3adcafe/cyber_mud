@@ -290,3 +290,12 @@ interactables:
     description_en: An undercity grid flood sensor—depth and toxin readings blink.
     message_zh: 感測器讀數異常——undercity_grid_node 可能有未封鎖的資料殘留。
     message_en: "Sensor readings spike—undercity_grid_node may hold unsealed data remnants."
+  shrine_arcana_spread:
+    room_id: shrine
+    name_zh: 神社塔羅陣
+    name_en: Shrine Tarot Spread
+    description_zh: 全息燭火間的二十二張大阿爾克那牌陣——每時段可抽一次牌。
+    description_en: A Major Arcana spread among holo candles—one draw per time period.
+    kind: arcana
+    message_zh: 牌陣低語：「interact 抽一張；interact shrine_arcana_spread three 抽三張。」
+    message_en: 'The spread whispers: "interact for one card; interact shrine_arcana_spread three for a three-card spread."'

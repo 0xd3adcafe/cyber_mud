@@ -7,8 +7,13 @@ from world.interactables import interactable_label, perform_interact
 
 
 def handle(ctx: CommandContext):
-    target = ctx.args.strip()
+    raw = ctx.args.strip()
+    parts = raw.split()
+    target = parts[0] if parts else ""
+    spread_flag = parts[1].lower() if len(parts) > 1 else ""
     locale = ctx.player.locale
+    if spread_flag in {"three", "3", "spread"}:
+        ctx.player.interact_flags["_arcana_spread"] = "3"
     if not target:
         objs = ctx.state.world.interactables_in_room(ctx.player.room_id)
         if not objs:

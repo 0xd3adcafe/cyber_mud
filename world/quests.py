@@ -50,6 +50,13 @@ def _quest_name(quest: Quest, locale: str) -> str:
     return quest.name_zh or quest.id
 
 
+_ARCANA_QUEST_FLAGS: dict[str, str] = {
+    "idol_blackmail": "arcana_unlock_idol_blackmail",
+    "tyrell_shadow": "arcana_unlock_tyrell_shadow",
+    "kabuki_spotlight": "arcana_unlock_kabuki_spotlight",
+}
+
+
 def quest_available(player: Player, quest: Quest) -> bool:
     if quest_is_done(player, quest.id):
         return False
@@ -59,10 +66,20 @@ def quest_available(player: Player, quest: Quest) -> bool:
         return False
     if quest.requires_faction and player.faction != quest.requires_faction:
         return False
+    arcana_flag = _ARCANA_QUEST_FLAGS.get(quest.id)
+    if arcana_flag and player.quest_flags.get(arcana_flag) != "1":
+        return False
     return True
 
 
-def accept_quest(player: Player, state: WorldState, quest_id: str, locale: str) -> list[str]:
+def accept_quest(
+    player: Player,
+    state: WorldState,
+    quest_id: str,
+    locale: str,
+    *,
+    giver_npc_id: str = "",
+) -> list[str]:
     quest = state.world.quest(quest_id)
     if quest is None:
         return [t(locale, "gigs.missing", quest=quest_id)]
@@ -109,6 +126,8 @@ def accept_quest(player: Player, state: WorldState, quest_id: str, locale: str) 
     player.active_quest = quest_id
     if status in {"", "ready"}:
         player.quest_flags[quest_id] = "started"
+    if quest_id == "idol_fall":
+        player.quest_flags["idol_fall_giver"] = giver_npc_id or quest.npc_id
     lines = [t(locale, "gigs.accepted", quest=_quest_name(quest, locale))]
     desc = quest.description_zh if locale == "zh" else (quest.description_en or quest.description_zh)
     if desc:
@@ -249,8 +268,13 @@ def advance_quest_on_talk(
     if lines:
         return lines
 
-    if status == "ready" and npc_id == quest.complete_npc_id:
-        return _complete_quest(player, state, quest, locale)
+    if status == "ready":
+        if quest.id == "idol_fall":
+            giver = player.quest_flags.get("idol_fall_giver", quest.complete_npc_id)
+            if npc_id == giver:
+                return _complete_quest(player, state, quest, locale)
+        elif npc_id == quest.complete_npc_id:
+            return _complete_quest(player, state, quest, locale)
 
     return []
 
@@ -396,6 +420,12 @@ def advance_quest_on_give(
     )
 
 
+def _quest_offered_by(quest: Quest, npc_id: str) -> bool:
+    if quest.offer_npc_ids:
+        return npc_id in quest.offer_npc_ids
+    return quest.npc_id == npc_id
+
+
 def offer_quest_from_giver(
     player: Player,
     state: WorldState,
@@ -405,7 +435,7 @@ def offer_quest_from_giver(
     if player.active_quest:
         return []
     for quest in state.world.quests.values():
-        if quest.npc_id != npc_id:
+        if not _quest_offered_by(quest, npc_id):
             continue
         if quest_is_done(player, quest.id):
             continue
@@ -413,13 +443,19 @@ def offer_quest_from_giver(
             continue
         if quest_status(player, quest.id) not in {"", "started"}:
             continue
-        return accept_quest(player, state, quest.id, locale)
+        return accept_quest(player, state, quest.id, locale, giver_npc_id=npc_id)
     return []
 
 
 def _complete_quest(player: Player, state: WorldState, quest: Quest, locale: str) -> list[str]:
     player.quest_flags[quest.id] = "done"
     player.active_quest = ""
+    if quest.id == "idol_fall":
+        giver = player.quest_flags.get("idol_fall_giver", "")
+        if giver == "kabuki_idol_haejin":
+            player.quest_flags["idol_ending"] = "haejin"
+        elif giver == "kabuki_idol_airi":
+            player.quest_flags["idol_ending"] = "airi"
     lines = [t(locale, "quest.complete", quest=_quest_name(quest, locale))]
 
     if quest.reward_gold > 0:

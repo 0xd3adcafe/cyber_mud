@@ -92,3 +92,27 @@ net_nodes:
     name_zh: 地下城格點節點
     name_en: Undercity Grid Node
     hackable: true
+  corpo_ghost_control:
+    room_id: corpo_lobby
+    name_zh: 幽靈控制節點
+    name_en: Ghost Control Node
+    hackable: true
+    files:
+      ghost.log:
+        content_en: "Lobby ghost daemon routes badge echoes—corp_grid_node mirrors every ping."
+        content_zh: "大廳幽靈守護行程式轉發證件回聲——corpo_grid_node 鏡像每一次 ping。"
+  net_wintr_proxy:
+    room_id: watson_1_0
+    name_zh: Wintr 代理節點
+    name_en: Wintr Proxy Node
+    hackable: true
+    links:
+      - watson_grid_node
+      - corpo_grid_node
+    files:
+      mesh.route:
+        content_en: "Wintr proxy table—use route in NETRUN when trace climbs; mesh hops mask your footprint."
+        content_zh: "Wintr 代理表——追蹤升高時在 NETRUN 用 route；mesh 跳接掩蓋足跡。"
+      readme.txt:
+        content_en: "whisper me if you jack in mature—voice rides the proxy, not the lobby."
+        content_zh: "mature 模式下 jack-in 可 whisper——聲音走代理，不走大廳。"

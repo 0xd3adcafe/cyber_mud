@@ -103,6 +103,7 @@ class Quest:
     reward_items: list[str] = field(default_factory=list)
     stages: list[QuestStage] = field(default_factory=list)
     rating: str = "teen"
+    offer_npc_ids: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -383,6 +384,7 @@ def load_quests(path: Path | None = None) -> dict[str, Quest]:
             complete_npc_id=str(data.get("complete_npc_id", "")),
             stages=_parse_quest_stages(data),
             rating=str(data.get("rating", "teen")),
+            offer_npc_ids=[str(x) for x in (data.get("offer_npc_ids") or [])],
         )
         for qid, data in (raw.get("quests") or {}).items()
     }
@@ -412,6 +414,7 @@ def load_quests_mature(path: Path | None = None) -> dict[str, Quest]:
             complete_npc_id=str(data.get("complete_npc_id", "")),
             stages=_parse_quest_stages(data),
             rating=str(data.get("rating", "mature")),
+            offer_npc_ids=[str(x) for x in (data.get("offer_npc_ids") or [])],
         )
         for qid, data in (raw.get("quests") or {}).items()
     }

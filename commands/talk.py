@@ -43,7 +43,17 @@ def handle(ctx: CommandContext):
             lines.append(t(ctx.player.locale, "life.wake_on_talk"))
     from world.factions import faction_talk_key
 
-    talk_key = faction_talk_key(npc.talk_key or npc.id, ctx.player)
+    from world.bb_talk import bouncer_talk_key, peer_talk_key, peers_in_room
+
+    if npc_id == "kabuki_bouncer":
+        talk_key = bouncer_talk_key(ctx.player, npc)
+    else:
+        base_key = npc.talk_key or npc.id
+        peer_ids = tuple(sorted(peers_in_room(ctx.state, ctx.player.room_id, npc_id)))
+        if peer_ids and base_key.startswith("watson_flatmate"):
+            talk_key = peer_talk_key(npc, peer_ids)
+        else:
+            talk_key = faction_talk_key(base_key, ctx.player)
     if is_mature(ctx.player) and has_mature_talk(npc):
         dialogue = tm(ctx.player.locale, f"talk.{talk_key}")
         if dialogue == f"talk.{talk_key}":

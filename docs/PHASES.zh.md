@@ -357,19 +357,19 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | 抽牌冷卻 | **每遊戲時段一次**（時段變更重置；`interact_flags`／時段 id） |
 | 合租 Rin `scene` | 須已 **`rent`／`home` 於 `watson_flat`**；未租可 SFW `talk` |
 
-**建議實作順序：** BB.Arcana＋**BB.2**（Trauma）→ **BB.3**（偶像）→ BB.1（Kabuki）→ BB.4（Tyrell）→ BB.5（合租）→ BB.6（Wintr）→ BB.7（Little China）→ BB.8（深化舊三角）。
+**建議順序：** BB.Arcana–BB.8 已交付（2026-06）。
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
-| BB.Arcana | 塔羅抽牌 interact | `shrine_arcana_spread`；`interact`／三張 spread；22× `arcana.draw.*`（＋ mature noir／lewd）；時段冷卻；`tests/test_arcana_draw.py` |
+| ~~BB.Arcana~~ | ~~塔羅抽牌 interact~~ | ✅ `shrine_arcana_spread`；`world/arcana.py`；22× `arcana.draw.*`＋mature noir／lewd；時段冷卻；`tests/test_arcana_draw.py` |
 | ~~BB.2~~ | ~~Trauma Team 線（優先）~~ | ✅ `trauma_team_medic`、`ripperdoc_triage` @ `ripper_clinic`；SFW `trauma_run`；`scene_requires_quest`＋`trauma_intimate` noir scene；`tests/test_trauma_gig.py` |
-| BB.3 | 偶像互連委託 | `kabuki_idol_haejin`、`kabuki_idol_airi`；`idol_blackmail`→`idol_fall`；結局 `haejin`｜`airi`；`tests/test_idol_quests.py` |
-| BB.1 | Kabuki 娛樂擴充 | `kabuki_fixer_amara`、`kabuki_streamer_jenna`、`kabuki_artist_selene`、`kabuki_brat_neon`；romance＋偏高 lewd；`tests/test_bb_kabuki.py` |
-| BB.4 | Tyrell 企業線 | `tyrell_liaison_vera`、`tyrell_gene_thief_seojin`、`tyrell_corp_attendant_meera`、`corpo_ghost_control`；`tests/test_bb_tyrell.py` |
-| BB.5 | Watson 合租（Families 改寫） | `watson_flatmate_rin`／`yoojin`／`eunbi`；同房 `talk` 變體；Rin `scene` 需租 `watson_flat`；`tests/test_bb_flatmates.py` |
-| BB.6 | Wintr 網路代理 | `net_wintr_proxy`；`mesh`；`net_shell` 下 mature `whisper`；`tests/test_bb_wintr.py` |
-| BB.7 | Little China 寄宿 | `little_china_host_misato`、`little_china_sister_sayaka`；`shrine_net_shaman_nari`；`tests/test_bb_little_china.py` |
-| BB.8 | 深化 M.25 三角 | `kabuki_host`／`bd_den_clerk` 補 noir 階段 4–5；保鑣 talk 階段；減少 lewd 重複 |
+| ~~BB.3~~ | ~~偶像互連委託~~ | ✅ Haejin／Airi；`idol_blackmail`→`idol_fall`；`idol_ending`；`tests/test_idol_quests.py` |
+| ~~BB.1~~ | ~~Kabuki 娛樂擴充~~ | ✅ Amara／Jenna／Selene／Neon；`kabuki_spotlight`；`tests/test_bb_kabuki.py` |
+| ~~BB.4~~ | ~~Tyrell 企業線~~ | ✅ Vera／Seojin／Meera；`corpo_ghost_control`；`tests/test_bb_tyrell.py` |
+| ~~BB.5~~ | ~~Watson 合租~~ | ✅ Rin／Yoojin／Eunbi；`scene_requires_home`；`tests/test_bb_flatmates.py` |
+| ~~BB.6~~ | ~~Wintr 網路代理~~ | ✅ `net_wintr_proxy`；`net_shell` 下 `whisper`；`tests/test_bb_wintr.py` |
+| ~~BB.7~~ | ~~Little China 寄宿~~ | ✅ Misato／Sayaka／Nari；`tests/test_bb_little_china.py` |
+| ~~BB.8~~ | ~~深化 M.25 三角~~ | ✅ 保鑣 cred／wanted talk 階段；host／clerk noir 4–5 |
 
 **NPC 名冊（撰寫參考，原創 ID）：** Kabuki 偏高 lewd 浪漫角含 `kabuki_dancer`、`kabuki_streamer_jenna`、`kabuki_artist_selene`、`kabuki_brat_neon`、`watson_flatmate_rin`、`tyrell_corp_attendant_meera`、`little_china_sister_sayaka`、`net_wintr_proxy`、`kabuki_idol_airi`。
 

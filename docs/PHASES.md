@@ -361,19 +361,19 @@ Not yet implemented or only partially implemented.
 | Arcana cooldown | **Once per game time period** (period change resets draw; store in `interact_flags` / period id) |
 | Flatmate Rin `scene` | Requires **`rent` / `home` at `watson_flat`**; SFW `talk` without rent OK |
 
-**Suggested implementation order:** BB.Arcana + **BB.2** (Trauma) → **BB.3** (idol chain) → BB.1 (Kabuki) → BB.4 (Tyrell) → BB.5 (co-living) → BB.6 (Wintr) → BB.7 (Little China) → BB.8 (deepen host/dancer/clerk).
+**Suggested order:** BB.Arcana–BB.8 shipped (2026-06).
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
-| BB.Arcana | Tarot draw interact | `data/interactables.yaml` `shrine_arcana_spread`; `interact` / `interact … three`; 22× `arcana.draw.*` (+ mature `mature.noir/lewd.arcana.draw.*`); period cooldown; optional gig unlock via `quest_flags`; `tests/test_arcana_draw.py` |
+| ~~BB.Arcana~~ | ~~Tarot draw interact~~ | ✅ `shrine_arcana_spread`; `world/arcana.py`; 22× `arcana.draw.*` + mature noir/lewd; period cooldown; arcana gig unlock flags; `tests/test_arcana_draw.py` |
 | ~~BB.2~~ | ~~Trauma Team line (priority)~~ | ✅ `trauma_team_medic`, `ripperdoc_triage` @ `ripper_clinic`; SFW `trauma_run` gig; `scene_requires_quest` + `trauma_intimate` noir scene; `tests/test_trauma_gig.py` |
-| BB.3 | Idol interconnected gigs | `kabuki_idol_haejin`, `kabuki_idol_airi`; `idol_blackmail` → `idol_fall`; `quest_flags` ending `haejin` \| `airi`; `romance.yaml` + mature locale; `tests/test_idol_quests.py` |
-| BB.1 | Kabuki entertainment expansion | `kabuki_fixer_amara`, `kabuki_streamer_jenna`, `kabuki_artist_selene`, `kabuki_brat_neon` in `data/world.yaml`; romance + lewd-heavy voices; gigs from bazaar; `tests/test_bb_kabuki.py` |
-| BB.4 | Tyrell corpo line | `tyrell_liaison_vera` (or deepen hub), `tyrell_gene_thief_seojin`, `tyrell_corp_attendant_meera`, `corpo_ghost_control` net node; profiler + SFW/mature gigs; `tests/test_bb_tyrell.py` |
-| BB.5 | Watson co-living (Families homage) | `watson_flatmate_rin`, `watson_flatmate_yoojin`, `watson_flatmate_eunbi` in `watson_flat`; peer-present `talk.*` variants; Rin `scene` gated on `home_room_id=watson_flat`; `tests/test_bb_flatmates.py` |
-| BB.6 | Wintr net proxy | `net_wintr_proxy` in `data/net_nodes.yaml`; `mesh` hint; mature `whisper` during `net_shell`; `tests/test_bb_wintr.py` |
-| BB.7 | Little China boarding | `little_china_host_misato`, `little_china_sister_sayaka`; `shrine_net_shaman_nari` at `shrine`; optional mature romance; `tests/test_bb_little_china.py` |
-| BB.8 | Deepen M.25 triangle | Extra noir stage 4–5 for `kabuki_host` / `bd_den_clerk`; reduce lewd repetition; `bouncer` talk tiers (street cred / wanted) |
+| ~~BB.3~~ | ~~Idol interconnected gigs~~ | ✅ `kabuki_idol_haejin` / `kabuki_idol_airi`; `idol_blackmail` → `idol_fall`; `idol_ending` haejin\|airi; `offer_npc_ids`; `tests/test_idol_quests.py` |
+| ~~BB.1~~ | ~~Kabuki entertainment expansion~~ | ✅ Amara/Jenna/Selene/Neon; `kabuki_spotlight` gig; romance + lewd voices; bouncer tiers; `tests/test_bb_kabuki.py` |
+| ~~BB.4~~ | ~~Tyrell corpo line~~ | ✅ Vera/Seojin/Meera; `corpo_ghost_control`; `tyrell_shadow` gig; `tests/test_bb_tyrell.py` |
+| ~~BB.5~~ | ~~Watson co-living~~ | ✅ Rin/Yoojin/Eunbi; peer `talk.*`; `scene_requires_home`; `tests/test_bb_flatmates.py` |
+| ~~BB.6~~ | ~~Wintr net proxy~~ | ✅ `net_wintr_proxy` NPC+node; `whisper` in `net_shell`; `tests/test_bb_wintr.py` |
+| ~~BB.7~~ | ~~Little China boarding~~ | ✅ Misato/Sayaka/Nari; mature romance; `tests/test_bb_little_china.py` |
+| ~~BB.8~~ | ~~Deepen M.25 triangle~~ | ✅ Bouncer cred/wanted talk tiers; host/clerk/dancer noir stage 4–5 in mature pack |
 
 **NPC roster (authoring reference—original IDs):** see discussion in project notes; Kabuki lewd-forward romance targets include `kabuki_dancer`, `kabuki_streamer_jenna`, `kabuki_artist_selene`, `kabuki_brat_neon`, `watson_flatmate_rin`, `tyrell_corp_attendant_meera`, `little_china_sister_sayaka`, `net_wintr_proxy`, `kabuki_idol_airi`.
 

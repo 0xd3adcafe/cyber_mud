@@ -59,7 +59,6 @@ def handle(ctx: CommandContext):
             line = t(locale, "whisper.player_ok", target=peer.name, message=message)
         return ok([line], meta=player_meta(ctx))
 
-    refusal = gate_command(ctx.player, locale, "whisper")
     npc_result = resolve_npc(ctx, target_name, verb="whisper")
     if npc_result.needs_response:
         return ok(npc_result.lines)
@@ -67,6 +66,12 @@ def handle(ctx: CommandContext):
         return ok([t(locale, "whisper.not_found", target=target_name)])
 
     npc_id = npc_result.value
+    if npc_id == "net_wintr_proxy" and not ctx.player.net_shell:
+        return ok([t(locale, "whisper.wintr_need_net")])
+
+    refusal = gate_command(ctx.player, locale, "whisper")
+    if refusal is not None:
+        return ok(refusal)
     profiles = load_romance_profiles()
     profile = profile_for_npc(profiles, npc_id)
     voice = resolve_mature_voice(ctx.player, ctx.state, room, npc_id=npc_id)

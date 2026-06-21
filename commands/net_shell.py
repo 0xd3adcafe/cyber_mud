@@ -8,7 +8,9 @@ from shared.target_resolve import resolve_net_node
 NET_SHELL_COMMANDS = frozenset(
     {"hack", "probe", "exit", "help", "status", "connect", "breach", "exploit", "route", "cat", "cover"}
 )
-NET_ALLOWED_MUD_COMMANDS = frozenset({"look", "scan", "search", "talk", "say", "jam", "distract", "go"})
+NET_ALLOWED_MUD_COMMANDS = frozenset(
+    {"look", "scan", "search", "talk", "say", "jam", "distract", "go", "whisper"}
+)
 
 
 def net_meta(ctx: CommandContext) -> dict[str, str]:

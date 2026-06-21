@@ -4514,6 +4514,237 @@ npcs:
     talk_key: ripperdoc_triage
     idle_msg_zh: 「穩定生命徵象再說話。」
     idle_msg_en: '"Stabilize first—then talk."'
+  kabuki_idol_haejin:
+    name_zh: 偶像海珍
+    name_en: Idol Haejin
+    room_id: kabuki_lounge
+    description_zh: 歌舞伎簽約偶像，舞台妝下藏著勒索用的加密片段。
+    description_en: A Kabuki-signed idol—encrypted clips hide under stage makeup.
+    hp: 42
+    hostile: false
+    talk_key: kabuki_idol_haejin
+    tags:
+    - mature
+    schedule:
+      morning: kabuki_lounge
+      afternoon: kabuki_vip
+      dusk: kabuki_vip
+      night: kabuki_lounge
+    idle_msg_zh: 「VIP 北邊——別在包廂錄影。」
+    idle_msg_en: '"VIP north—no recording in the booths."'
+  kabuki_idol_airi:
+    name_zh: 偶像愛璃
+    name_en: Idol Airi
+    room_id: kabuki_vip
+    description_zh: 全息偶像殘影的真人原型，笑眼後是競爭對手的檔案夾。
+    description_en: The flesh behind a holo-idol ghost—rival dossiers glint behind her smile.
+    hp: 40
+    hostile: false
+    talk_key: kabuki_idol_airi
+    tags:
+    - mature
+    schedule:
+      morning: kabuki_lounge
+      afternoon: kabuki_vip
+      dusk: kabuki_vip
+      night: kabuki_lounge
+    idle_msg_zh: 「想站隊？先聽完兩邊版本。」
+    idle_msg_en: '"Picking sides? Hear both versions first."'
+  kabuki_fixer_amara:
+    name_zh: 灰市中介阿瑪拉
+    name_en: Fixer Amara
+    room_id: kabuki_bazaar
+    description_zh: 兜售直播檔案與 VIP 座標的街頭中介，指甲上沾著紫外墨。
+    description_en: A street fixer trading streamer clips and VIP coordinates—UV ink under her nails.
+    hp: 45
+    hostile: false
+    talk_key: kabuki_fixer_amara
+    tags:
+    - mature
+    idle_msg_zh: 「要聚光還是掩護？talk 或 gigs。」
+    idle_msg_en: '"Spotlight or cover? talk or gigs."'
+  kabuki_streamer_jenna:
+    name_zh: 直播主珍娜
+    name_en: Streamer Jenna
+    room_id: kabuki_bazaar
+    description_zh: 環形燈下的直播主，聊天室禮物與私密檔案同價。
+    description_en: A ring-light streamer—chat gifts and private clips share a price tag.
+    hp: 41
+    hostile: false
+    talk_key: kabuki_streamer_jenna
+    tags:
+    - mature
+    idle_msg_zh: 「donate 在螢幕上——flirt 在場下。」
+    idle_msg_en: '"Donations on-screen—flirt off-stream."'
+  kabuki_artist_selene:
+    name_zh: 全息畫師瑟琳
+    name_en: Holo Artist Selene
+    room_id: kabuki_lounge
+    description_zh: 在絨布卡座邊描摹剪影的畫師，筆觸裡藏著 VIP 邀請碼。
+    description_en: An artist sketching silhouettes by the velvet booths—VIP invites hide in every stroke.
+    hp: 43
+    hostile: false
+    talk_key: kabuki_artist_selene
+    tags:
+    - mature
+    schedule:
+      morning: kabuki_lounge
+      afternoon: kabuki_lounge
+      dusk: kabuki_vip
+      night: kabuki_vip
+    idle_msg_zh: 「別動——光線剛好落在你的 chrome。」
+    idle_msg_en: '"Hold still—the light just caught your chrome."'
+  kabuki_brat_neon:
+    name_zh: 霓虹小惡魔
+    name_en: Brat Neon
+    room_id: kabuki_vip
+    description_zh: 包廂邊緣的霓虹小惡魔，挑釁是邀請，翻白眼是前戲。
+    description_en: A neon brat at the booth edge—taunts are invites, eye-rolls are foreplay.
+    hp: 40
+    hostile: false
+    talk_key: kabuki_brat_neon
+    tags:
+    - mature
+    schedule:
+      morning: kabuki_lounge
+      afternoon: kabuki_vip
+      dusk: kabuki_vip
+      night: kabuki_lounge
+    idle_msg_zh: 「敢 flirt 就別害羞。」
+    idle_msg_en: '"Flirt if you dare—do not blush."'
+  tyrell_liaison_vera:
+    name_zh: 泰瑞聯絡員薇拉
+    name_en: Liaison Vera
+    room_id: tyrell_plaza
+    faction: tyrell
+    description_zh: 白袍聯絡員手持樣本清單與幽靈節點授權板。
+    description_en: A white-coated liaison—sample manifests and ghost-node clearance boards.
+    hp: 46
+    hostile: false
+    talk_key: tyrell_liaison_vera
+    tags:
+    - mature
+    idle_msg_zh: 核對樣本車與大廳幽靈節點的 ping 紀錄。
+    idle_msg_en: Cross-checks convoy seals against lobby ghost-node pings.
+  tyrell_gene_thief_seojin:
+    name_zh: 基因竊賊瑞珍
+    name_en: Gene Thief Seojin
+    room_id: tyrell_plaza
+    faction: tyrell
+    description_zh: 樣本箱旁的低聲竊賊，熟悉泰瑞格點的巡邏空檔。
+    description_en: A whisper-thief by the sample lane—knows patrol gaps on the Tyrell grid.
+    hp: 44
+    hostile: false
+    talk_key: tyrell_gene_thief_seojin
+    tags:
+    - mature
+    idle_msg_zh: 「樣本車過了再動手——別被掃描儀記住。」
+    idle_msg_en: '"Move after the convoy passes—do not get scanned."'
+  tyrell_corp_attendant_meera:
+    name_zh: 企業接待米拉
+    name_en: Corpo Attendant Meera
+    room_id: corpo_lobby
+    faction: arasaka
+    description_zh: 企業大廳的接待員，微笑與武器登記同樣精準。
+    description_en: A corpo lobby attendant—smiles as precise as weapon registries.
+    hp: 42
+    hostile: false
+    talk_key: tyrell_corp_attendant_meera
+    tags:
+    - mature
+    idle_msg_zh: 「識別證。企業區禁止錄影。」
+    idle_msg_en: '"ID badge. No recording in the corpo zone."'
+  watson_flatmate_rin:
+    name_zh: 合租室友凛
+    name_en: Flatmate Rin
+    room_id: watson_flat
+    description_zh: 沃森公寓的合租室友，冰箱貼上貼著分帳 QR 碼。
+    description_en: A Watson flat co-tenant—split-rent QR codes on the fridge.
+    hp: 41
+    hostile: false
+    talk_key: watson_flatmate_rin
+    tags:
+    - mature
+    idle_msg_zh: 「租約蓋章後，scene 才在公寓裡。」
+    idle_msg_en: '"Scene stays in the flat after rent is stamped."'
+  watson_flatmate_yoojin:
+    name_zh: 合租室友宥真
+    name_en: Flatmate Yoojin
+    room_id: watson_flat
+    description_zh: 夜班歸來的室友，咖啡香混著義體冷卻液味。
+    description_en: A night-shift flatmate—coffee scent mixed with implant coolant.
+    hp: 43
+    hostile: false
+    talk_key: watson_flatmate_yoojin
+    tags:
+    - mature
+    idle_msg_zh: 在折疊床邊擦乾頭髮。
+    idle_msg_en: Dries her hair by the fold-out bunk.
+  watson_flatmate_eunbi:
+    name_zh: 合租室友恩妃
+    name_en: Flatmate Eunbi
+    room_id: watson_flat
+    description_zh: 在客廳練習舞步的室友，腳步聲是公寓的時鐘。
+    description_en: A flatmate drilling dance steps in the living room—footfalls keep time.
+    hp: 40
+    hostile: false
+    talk_key: watson_flatmate_eunbi
+    tags:
+    - mature
+    idle_msg_zh: 「小聲點——凛 還在睡。」
+    idle_msg_en: '"Quiet—Rin is still sleeping."'
+  little_china_host_misato:
+    name_zh: 牌樓房東美里
+    name_en: Host Misato
+    room_id: little_china_gate
+    description_zh: 牌樓下的房東，鑰匙圈上掛著每間房的欠租紀錄。
+    description_en: A gate-side host—every keyring tag marks rent owed.
+    hp: 45
+    hostile: false
+    talk_key: little_china_host_misato
+    tags:
+    - mature
+    idle_msg_zh: 「房租日比幫會還準時。」
+    idle_msg_en: '"Rent day beats triad schedules."'
+  little_china_sister_sayaka:
+    name_zh: 學妹沙耶香
+    name_en: Sister Sayaka
+    room_id: little_china_0_0
+    description_zh: 小中國格點上的學妹，書包裡藏著廟口與牌樓的傳聞。
+    description_en: A Little China grid schoolgirl—shrine and gate gossip in her bag.
+    hp: 40
+    hostile: false
+    talk_key: little_china_sister_sayaka
+    tags:
+    - mature
+    idle_msg_zh: 「姐姐說晚歸要報備。」
+    idle_msg_en: '"Sis says check in if you are out late."'
+  net_wintr_proxy:
+    name_zh: Wintr 代理
+    name_en: Wintr Proxy
+    room_id: watson_1_0
+    description_zh: 沃森格點上的匿名代理殘影——聲音走 mesh 跳接，不走肉體。
+    description_en: An anonymous proxy ghost on the Watson grid—voice rides mesh hops, not flesh.
+    hp: 40
+    hostile: false
+    talk_key: net_wintr_proxy
+    tags:
+    - mature
+    idle_msg_zh: 靜電低語：「jack-in 後 whisper——我在代理裡。」
+    idle_msg_en: Static murmurs—"jack in, then whisper—I live in the proxy."
+  shrine_net_shaman_nari:
+    name_zh: 神社網路巫女娜莉
+    name_en: Shrine Net Shaman Nari
+    room_id: shrine
+    description_zh: 在全息燭火與節點殘影間低語的巫女，抽牌前先掃你的足跡。
+    description_en: A shaman murmuring between holo candles and node ghosts—reads your footprint before the draw.
+    hp: 48
+    hostile: false
+    talk_key: shrine_net_shaman_nari
+    tags:
+    - mature
+    idle_msg_zh: 「interact 牌陣前，先想清楚要問什麼。」
+    idle_msg_en: '"Know your question before you interact the spread."'
   watson_spotter:
     name_zh: 沃森線人
     name_en: Watson Spotter
