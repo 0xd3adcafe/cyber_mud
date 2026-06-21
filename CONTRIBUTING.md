@@ -36,7 +36,7 @@ When opening a PR or committing:
 2. Sync **[CLAUDE.md](CLAUDE.md)** backlog summary if it is a major item.
 3. Maintain **bilingual** game strings (`data/locale/en.yaml` + `zh.yaml`) when adding player-facing text.
 4. Maintain **English + Chinese docs** (`*.md` + `*.zh.md`) when changing project documentation.
-5. **18+ mature copy** belongs in the private **`cyber_mud_mature`** pack (`data/mature/`) — not in the public repo after M.18 split — see [docs/MATURE_CONTENT.md](docs/MATURE_CONTENT.md).
+5. **18+ mature copy** belongs in the private **`cyber_mud_mature`** pack (`data/mature/`) — not in the public repo after M.18 split. Pack docs: [README](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/README.md), [CLAUDE.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CLAUDE.md), [CONTRIBUTING.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CONTRIBUTING.md), [LOCALIZATION.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/LOCALIZATION.md) (+ `*.zh.md` mirrors). Game hooks: [docs/MATURE_CONTENT.md](docs/MATURE_CONTENT.md).
 
 ## Commit messages
 

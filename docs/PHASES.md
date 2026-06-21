@@ -290,7 +290,7 @@ Not yet implemented or only partially implemented.
 
 ### Mature / NSFW content (18+)
 
-**Policy:** Original homage-style cyberpunk fiction; not official IP. All mature content is **opt-in** (`content_rating` / `mature_enabled` on player save), gated at login and command layer, with copy in **separate locale files** (`data/locale/mature_en.yaml`, `mature_zh.yaml`)—never mixed into default help/MOTD.
+**Policy:** Original homage-style cyberpunk fiction; not official IP. All mature content is **opt-in** (`content_rating` / `mature_enabled` on player save), gated at login and command layer, with copy in the private **`cyber_mud_mature`** pack (`data/mature/locale/mature_en.yaml`, `mature_zh.yaml`)—never mixed into default help/MOTD.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
@@ -298,8 +298,8 @@ Not yet implemented or only partially implemented.
 | ~~M.1~~ | ~~Gore & bloody combat~~ | ✅ `combat/gore.py`; kill/crit/corpse lines; Focus `gore` tint; `tests/test_gore.py` |
 | ~~M.2~~ | ~~Injury & trauma flavor~~ | ✅ `world/trauma.py`; bleed status; ripperdoc treat on clinic entry; tick damage |
 | ~~M.3~~ | ~~Adult venues & NPCs~~ | ✅ `kabuki_lounge`, `bd_den`, `kabuki_host`; `tags: [mature]`; mature `talk` |
-| ~~M.4~~ | ~~Romance & intimacy~~ | ✅ `data/romance.yaml`; `flirt` / `spend_time`; `romance_flags` on save |
-| ~~M.5~~ | ~~Mature braindance & gigs~~ | ✅ `braindances_mature.yaml`, `quests_mature.yaml`; teen `gigs`/`bd` filter |
+| ~~M.4~~ | ~~Romance & intimacy~~ | ✅ `data/mature/romance.yaml`; `flirt` / `spend_time`; `romance_flags` on save |
+| ~~M.5~~ | ~~Mature braindance & gigs~~ | ✅ `data/mature/braindances_mature.yaml`, `quests_mature.yaml`; teen `gigs`/`bd` filter |
 | ~~M.6~~ | ~~Client warnings & UI~~ | ✅ Login 18+ checkbox; help hides mature category; Focus gore style |
 | ~~M.7~~ | ~~Authoring & admin~~ | ✅ `mature_validate.py`; `docs/MATURE_CONTENT.md`; CONTRIBUTING note |
 | ~~M.8~~ | ~~Mature look/scan flavor~~ | ✅ `world/mature_flavor.py`; `look`/`scan` room lines; `look <npc>` detail for mature NPCs |
@@ -312,7 +312,7 @@ Not yet implemented or only partially implemented.
 | ~~M.15~~ | ~~Mature presence flavor~~ | ✅ `social.presence_enter/leave.<room>` on `go` in mature venues |
 | ~~M.16~~ | ~~Romance gift reactions~~ | ✅ `world/mature_give.py`; `give <item> <romance_npc>` mature copy + broadcast |
 | ~~M.17~~ | ~~Combat taunt & finish~~ | ✅ `taunt <npc>` in combat; `finish` coup de grace when enemy ≤30% HP; help mature category |
-| ~~M.18~~ | ~~Mature private submodule + history purge~~ | ✅ Private `0xd3adcafe/cyber_mud_mature`; `data/mature` submodule; `scripts/mature-submodule-split.sh`; `scripts/mature-history-purge.sh` (legacy + `data/mature/*` paths); teen fallback when pack missing; `tests/test_mature_paths.py` |
+| ~~M.18~~ | ~~Mature private submodule + history purge~~ | ✅ Private `0xd3adcafe/cyber_mud_mature`; `data/mature` submodule; pack docs (`README`, `CLAUDE`, `CONTRIBUTING`, `LOCALIZATION` + `*.zh.md`, English default); `scripts/mature-submodule-split.sh`; `scripts/mature-history-purge.sh` (legacy + `data/mature/*` paths); teen fallback when pack missing; `tests/test_mature_paths.py` |
 
 **Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7 → M.8–M.18 shipped.
 

@@ -250,10 +250,10 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Security (ASVS L1)** | ASVS.1–6 shipped (PBKDF2, unified login errors, save validation, input bounds, rate limit, connection/idle limits); ASVS.7–14 backlog; see [`docs/SECURITY.md`](docs/SECURITY.md) |
 | **Architecture (incremental)** | ARCH.1–2 shipped (YAML lock predicates; scheduler on `tick_count`); see PHASES **Architecture (incremental)** |
 | **Surveillance hacking (Watch Dogs homage)** | WD.1–WD.10 backlog — profiler intel, ctOS infrastructure hacks, footprint heat, DedSec; see PHASES **Surveillance hacking** |
-| **Mature M.18** | Shipped — private `cyber_mud_mature` submodule at `data/mature/`; history purge via `scripts/mature-history-purge.sh`; see PHASES **M.18** |
+| **Mature M.18** | Shipped — private `cyber_mud_mature` submodule at `data/mature/`; bilingual pack docs (`README`, `CLAUDE`, `CONTRIBUTING`, `LOCALIZATION` + `*.zh.md`); history purge via `scripts/mature-history-purge.sh`; see PHASES **M.18** |
 
 
-NSFW copy lives in `data/locale/mature_*.yaml`; default `teen` rating; M.0–M.17 shipped — see PHASES **Mature / NSFW content** table.
+NSFW copy lives in private **`cyber_mud_mature`** (`data/mature/locale/mature_en.yaml` + `mature_zh.yaml`); default `teen` rating; M.0–M.18 shipped — see PHASES **Mature / NSFW content** and [docs/MATURE_CONTENT.md](docs/MATURE_CONTENT.md).
 
 Recent completions (2026-06) summary:
 

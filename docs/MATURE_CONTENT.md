@@ -30,7 +30,18 @@ Mature YAML lives in **`data/mature/`**, intended as a **private** git submodule
 git submodule update --init data/mature   # requires access to cyber_mud_mature
 ```
 
-Maintainers: edit the private **`cyber_mud_mature`** pack ([README](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/README.md), [CONTRIBUTING](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CONTRIBUTING.md), [LOCALIZATION](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/LOCALIZATION.md); Chinese mirrors `*.zh.md`). Split / purge scripts: `scripts/mature-submodule-split.sh`, `scripts/mature-history-purge.sh`. See [CONTRIBUTING.md](../CONTRIBUTING.md).
+### Pack documentation (`cyber_mud_mature`)
+
+English `*.md` is canonical; Traditional Chinese mirrors use `*.zh.md` (same policy as **cyber_mud**).
+
+| English | Chinese |
+|---------|---------|
+| [README](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/README.md) | [README.zh.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/README.zh.md) |
+| [CLAUDE.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CLAUDE.md) | [CLAUDE.zh.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CLAUDE.zh.md) |
+| [CONTRIBUTING.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CONTRIBUTING.md) | [CONTRIBUTING.zh.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CONTRIBUTING.zh.md) |
+| [LOCALIZATION.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/LOCALIZATION.md) | [LOCALIZATION.zh.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/LOCALIZATION.zh.md) |
+
+**Maintainers:** edit YAML in the private pack above; push, then bump the `data/mature` submodule in **cyber_mud**. Split / purge scripts (main repo): `scripts/mature-submodule-split.sh`, `scripts/mature-history-purge.sh`. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 Use `shared.mature_i18n.tm(locale, "combat.crit_1")` — keys are auto-prefixed with `mature.`.
 

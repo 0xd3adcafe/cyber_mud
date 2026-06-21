@@ -286,7 +286,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 ### 成人／NSFW 內容（18+）
 
-**原則：** 原創致敬風賽博龐克；所有成熟內容 **預設關閉、玩家 opt-in**（`content_rating`／`mature_enabled`），登入與指令層閘門；文案放 **`data/locale/mature_en.yaml`、`mature_zh.yaml`**，不混入預設 MOTD／help。
+**原則：** 原創致敬風賽博龐克；所有成熟內容 **預設關閉、玩家 opt-in**（`content_rating`／`mature_enabled`），登入與指令層閘門；文案放 private **`cyber_mud_mature`** 內容包（`data/mature/locale/mature_en.yaml`、`mature_zh.yaml`），不混入預設 MOTD／help。
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
@@ -294,8 +294,8 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~M.1~~ | ~~血腥戰鬥~~ | ✅ `combat/gore.py`；擊殺／暴擊／屍體描述；Focus gore 色；`tests/test_gore.py` |
 | ~~M.2~~ | ~~傷殘與創傷敘事~~ | ✅ `world/trauma.py`；流血狀態；進診所治療；tick 失血 |
 | ~~M.3~~ | ~~成人場景與 NPC~~ | ✅ `kabuki_lounge`、`bd_den`、`kabuki_host`；`tags: [mature]`；mature `talk` |
-| ~~M.4~~ | ~~浪漫與親密機制~~ | ✅ `data/romance.yaml`；`flirt`／`spend_time`；`romance_flags` 存檔 |
-| ~~M.5~~ | ~~成人腦舞與委託~~ | ✅ `braindances_mature.yaml`、`quests_mature.yaml`；teen 的 `gigs`／`bd` 過濾 |
+| ~~M.4~~ | ~~浪漫與親密機制~~ | ✅ `data/mature/romance.yaml`；`flirt`／`spend_time`；`romance_flags` 存檔 |
+| ~~M.5~~ | ~~成人腦舞與委託~~ | ✅ `data/mature/braindances_mature.yaml`、`quests_mature.yaml`；teen 的 `gigs`／`bd` 過濾 |
 | ~~M.6~~ | ~~Client 警示與 UI~~ | ✅ 登入 18+ 勾選；help 隱藏 mature 分類；Focus 血色樣式 |
 | ~~M.7~~ | ~~編寫與管理~~ | ✅ `mature_validate.py`；`docs/MATURE_CONTENT.md`；CONTRIBUTING 說明 |
 | ~~M.8~~ | ~~成熟 look/scan 氛圍~~ | ✅ `world/mature_flavor.py`；`look`/`scan` 房間描述；`look <npc>` 細節 |
@@ -308,7 +308,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~M.15~~ | ~~成熟 presence 氛圍~~ | ✅ `social.presence_enter/leave.<room>` 進出成熟場景 |
 | ~~M.16~~ | ~~浪漫送禮反應~~ | ✅ `world/mature_give.py`；送禮給浪漫 NPC 成熟文案 |
 | ~~M.17~~ | ~~戰鬥嘲諷與終結~~ | ✅ `taunt <npc>`；`finish` 弱敵終結技；help 18+ 分類 |
-| ~~M.18~~ | ~~成人內容 private submodule + 清 history~~ | ✅ private `0xd3adcafe/cyber_mud_mature`；`data/mature` submodule；split／purge 腳本（含 legacy 與 `data/mature/*`）；無包時 teen 模式 |
+| ~~M.18~~ | ~~成人內容 private submodule + 清 history~~ | ✅ private `0xd3adcafe/cyber_mud_mature`；`data/mature` submodule；內容包雙語文件（`README`、`CLAUDE`、`CONTRIBUTING`、`LOCALIZATION` + `*.zh.md`，英文預設）；split／purge 腳本（含 legacy 與 `data/mature/*`）；無包時 teen 模式 |
 
 **建議順序：** M.0–M.18 已交付。
 

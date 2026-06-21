@@ -144,7 +144,7 @@ stderr 會顯示合併後總數，例如 `npcs: 27 + 86 -> 113`。
 
 ## `quest_author.py`
 
-驗證與腳手架化 `data/quests.yaml`／`data/quests_mature.yaml` 的**多階段委託**。
+驗證與腳手架化 `data/quests.yaml`／`data/mature/quests_mature.yaml`（mature 內容包 submodule）的**多階段委託**。
 
 透過 `./admin.sh quests` 呼叫（轉發至 `python -m tools.quest_author`）。
 

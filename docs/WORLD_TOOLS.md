@@ -144,7 +144,7 @@ Loader merge: `world/loader.py` reads `POPULATION_PATH` and overlays `npcs`, `it
 
 ## `quest_author.py`
 
-Validate and scaffold **multi-stage gigs** in `data/quests.yaml` / `data/quests_mature.yaml`.
+Validate and scaffold **multi-stage gigs** in `data/quests.yaml` / `data/mature/quests_mature.yaml` (mature pack submodule).
 
 Invoked via `./admin.sh quests` (forwards to `python -m tools.quest_author`).
 

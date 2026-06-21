@@ -39,7 +39,10 @@
 | [docs/PHASES.md](PHASES.md) | [docs/PHASES.zh.md](PHASES.zh.md) |
 | [docs/CLIENT_UI_DEBUG.md](CLIENT_UI_DEBUG.md) | [docs/CLIENT_UI_DEBUG.zh.md](CLIENT_UI_DEBUG.zh.md) |
 | [docs/LOCALIZATION.md](LOCALIZATION.md) | [docs/LOCALIZATION.zh.md](LOCALIZATION.zh.md) |
+| [docs/MATURE_CONTENT.md](MATURE_CONTENT.md) | [docs/MATURE_CONTENT.zh.md](MATURE_CONTENT.zh.md) — **18+ game hooks (main repo)** |
 | [docs/player/*.md](player/README.md) | [docs/player/*.zh.md](player/README.zh.md) — **player guides** |
+
+**Mature pack (`cyber_mud_mature` submodule):** English `*.md` + `*.zh.md` at [github.com/0xd3adcafe/cyber_mud_mature](https://github.com/0xd3adcafe/cyber_mud_mature) — `README`, `CLAUDE`, `CONTRIBUTING`, `LOCALIZATION`; locale files `data/mature/locale/mature_en.yaml` (authoritative) + `mature_zh.yaml`.
 
 Edit both languages when changing project docs.
 

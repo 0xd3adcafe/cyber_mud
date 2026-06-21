@@ -30,7 +30,18 @@
 git submodule update --init data/mature
 ```
 
-維護者：於 private **`cyber_mud_mature`** 內容包編輯（[README](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/README.zh.md)、[CONTRIBUTING](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CONTRIBUTING.zh.md)、[LOCALIZATION](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/LOCALIZATION.zh.md)；英文 canonical 為 `*.md`）。拆分／清 history：`scripts/mature-submodule-split.sh`、`scripts/mature-history-purge.sh`。
+### 內容包文件（`cyber_mud_mature`）
+
+英文 `*.md` 為 canonical；繁中鏡像為 `*.zh.md`（與 **cyber_mud** 相同政策）。
+
+| 英文 | 繁中 |
+|------|------|
+| [README.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/README.md) | [README.zh.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/README.zh.md) |
+| [CLAUDE.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CLAUDE.md) | [CLAUDE.zh.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CLAUDE.zh.md) |
+| [CONTRIBUTING.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CONTRIBUTING.md) | [CONTRIBUTING.zh.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CONTRIBUTING.zh.md) |
+| [LOCALIZATION.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/LOCALIZATION.md) | [LOCALIZATION.zh.md](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/LOCALIZATION.zh.md) |
+
+**維護者：** 於上述 private 內容包編輯 YAML；推送後於 **cyber_mud** bump `data/mature` submodule。拆分／清 history（主 repo）：`scripts/mature-submodule-split.sh`、`scripts/mature-history-purge.sh`。
 
 程式使用 `shared.mature_i18n.tm(locale, "combat.crit_1")`，會自動加上 `mature.` 前綴。
 
