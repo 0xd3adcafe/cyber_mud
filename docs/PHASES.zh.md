@@ -308,11 +308,9 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~M.15~~ | ~~成熟 presence 氛圍~~ | ✅ `social.presence_enter/leave.<room>` 進出成熟場景 |
 | ~~M.16~~ | ~~浪漫送禮反應~~ | ✅ `world/mature_give.py`；送禮給浪漫 NPC 成熟文案 |
 | ~~M.17~~ | ~~戰鬥嘲諷與終結~~ | ✅ `taunt <npc>`；`finish` 弱敵終結技；help 18+ 分類 |
-| M.18 | 成人內容 private submodule + 清 history | **進行中（2026-06）：** `shared/mature_paths.py`；`data/mature/`；`cyber_mud_mature`；split／purge 腳本 |
+| ~~M.18~~ | ~~成人內容 private submodule + 清 history~~ | ✅ private `0xd3adcafe/cyber_mud_mature`；`data/mature` submodule；split／purge 腳本（含 legacy 與 `data/mature/*`）；無包時 teen 模式 |
 
-**M.18 待辦：** private repo、submodule、`git filter-repo`、force push、重打 tag。
-
-**建議順序：** M.0–M.17 已交付；**M.18** 進行中。
+**建議順序：** M.0–M.18 已交付。
 
 ### 世界擴充（[WORLD.md](WORLD.md)）
 

@@ -15,6 +15,12 @@ PATHS=(
   data/quests_mature.yaml
   data/braindances_mature.yaml
   data/romance.yaml
+  data/mature/locale/mature_en.yaml
+  data/mature/locale/mature_zh.yaml
+  data/mature/quests_mature.yaml
+  data/mature/braindances_mature.yaml
+  data/mature/romance.yaml
+  data/mature/README.md
 )
 
 ARGS=()
@@ -24,8 +30,10 @@ done
 
 echo "This will rewrite history and remove mature plaintext from all commits."
 echo "Paths: ${PATHS[*]}"
-read -r -p "Continue? [y/N] " ans
-[[ "$ans" == "y" || "$ans" == "Y" ]] || exit 0
+if [[ "${MATURE_PURGE_YES:-}" != "1" ]]; then
+  read -r -p "Continue? [y/N] " ans
+  [[ "$ans" == "y" || "$ans" == "Y" ]] || exit 0
+fi
 
 git filter-repo "${ARGS[@]}" --invert-paths --force
 

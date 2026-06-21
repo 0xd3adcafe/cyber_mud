@@ -312,11 +312,9 @@ Not yet implemented or only partially implemented.
 | ~~M.15~~ | ~~Mature presence flavor~~ | ✅ `social.presence_enter/leave.<room>` on `go` in mature venues |
 | ~~M.16~~ | ~~Romance gift reactions~~ | ✅ `world/mature_give.py`; `give <item> <romance_npc>` mature copy + broadcast |
 | ~~M.17~~ | ~~Combat taunt & finish~~ | ✅ `taunt <npc>` in combat; `finish` coup de grace when enemy ≤30% HP; help mature category |
-| M.18 | Mature private submodule + history purge | **In progress (2026-06):** `shared/mature_paths.py`; pack under `data/mature/`; private repo `cyber_mud_mature`; `scripts/mature-submodule-split.sh`; `scripts/mature-history-purge.sh`; teen fallback when pack missing; `tests/test_mature_paths.py` |
+| ~~M.18~~ | ~~Mature private submodule + history purge~~ | ✅ Private `0xd3adcafe/cyber_mud_mature`; `data/mature` submodule; `scripts/mature-submodule-split.sh`; `scripts/mature-history-purge.sh` (legacy + `data/mature/*` paths); teen fallback when pack missing; `tests/test_mature_paths.py` |
 
-**M.18 remaining:** `gh repo create cyber_mud_mature` (private); `git submodule add`; `git filter-repo` purge legacy paths; force push; update tags/releases; mirror `MATURE_CONTENT.md` / `CONTRIBUTING.md`.
-
-**Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7 → M.8–M.17 shipped; **M.18** in progress.
+**Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7 → M.8–M.18 shipped.
 
 ### World expansion ([WORLD.md](WORLD.md))
 
