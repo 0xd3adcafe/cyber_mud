@@ -30,7 +30,7 @@ Mature YAML lives in **`data/mature/`**, intended as a **private** git submodule
 git submodule update --init data/mature   # requires access to cyber_mud_mature
 ```
 
-Maintainers: `scripts/mature-submodule-split.sh`, `scripts/mature-history-purge.sh`. See [CONTRIBUTING.md](../CONTRIBUTING.md).
+Maintainers: edit the private **`cyber_mud_mature`** pack ([README](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/README.md), [CONTRIBUTING](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CONTRIBUTING.md), [LOCALIZATION](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/LOCALIZATION.md); Chinese mirrors `*.zh.md`). Split / purge scripts: `scripts/mature-submodule-split.sh`, `scripts/mature-history-purge.sh`. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 Use `shared.mature_i18n.tm(locale, "combat.crit_1")` — keys are auto-prefixed with `mature.`.
 

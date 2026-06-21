@@ -15,7 +15,7 @@ WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
 cp -a "$MATURE_DIR/." "$WORK/"
-cp "$ROOT/data/mature/README.md" "$WORK/README.md" 2>/dev/null || true
+# Pack docs (README*.md, CONTRIBUTING*.md, LOCALIZATION*.md) live in cyber_mud_mature; English *.md is canonical.
 
 cd "$WORK"
 git init -b master

@@ -30,7 +30,7 @@
 git submodule update --init data/mature
 ```
 
-維護者：`scripts/mature-submodule-split.sh`、`scripts/mature-history-purge.sh`。
+維護者：於 private **`cyber_mud_mature`** 內容包編輯（[README](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/README.zh.md)、[CONTRIBUTING](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/CONTRIBUTING.zh.md)、[LOCALIZATION](https://github.com/0xd3adcafe/cyber_mud_mature/blob/master/LOCALIZATION.zh.md)；英文 canonical 為 `*.md`）。拆分／清 history：`scripts/mature-submodule-split.sh`、`scripts/mature-history-purge.sh`。
 
 程式使用 `shared.mature_i18n.tm(locale, "combat.crit_1")`，會自動加上 `mature.` 前綴。
 
