@@ -66,13 +66,15 @@ def test_exit_leaves_shell():
     assert "net_shell" not in result.meta or result.meta.get("net_shell") != "1"
 
 
-def test_net_shell_blocks_mud_commands():
+def test_go_disconnects_netrun_and_moves():
     player = make_player(room_id="square")
     state = make_state()
     dispatch("net", player, state, [], [])
-    result = dispatch("go north", player, state, [], [])
-    assert player.room_id == "square"
-    assert any("NETRUN" in line for line in result.lines)
+    result = dispatch("go west", player, state, [], [])
+    assert not player.net_shell
+    assert player.room_id == "ripper_clinic"
+    text = "\n".join(result.lines)
+    assert "斷開" in text or "severed" in text.lower() or "snap" in text.lower()
 
 
 def test_look_works_in_net_shell():

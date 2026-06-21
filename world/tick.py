@@ -270,6 +270,26 @@ def _scheduler_events(state: WorldState, fired: list[ScheduledTask]) -> list[Tic
     return events
 
 
+def _process_net_trace(state: WorldState, players: list[Player]) -> list[TickEvent]:
+    from world.net_session import tick_net_trace
+
+    events: list[TickEvent] = []
+    for player in players:
+        if not player.named or not player.net_shell:
+            continue
+        lines = tick_net_trace(player, state)
+        for line in lines:
+            events.append(
+                TickEvent(
+                    kind="net_trace",
+                    player_name=player.name,
+                    message_key="net.trace.tick",
+                    message_kwargs={"text": line, "trace": str(player.net_trace)},
+                )
+            )
+    return events
+
+
 def _process_footprint_decay(state: WorldState, players: list[Player]) -> list[TickEvent]:
     from world.footprint import tick_footprint_decay_player
 
@@ -350,6 +370,7 @@ def process_tick(
         events.extend(_process_player_trauma(state, players))
         events.extend(_process_wanted_decay(players))
         events.extend(_process_footprint_decay(state, players))
+        events.extend(_process_net_trace(state, players))
         events.extend(_process_ambient_reactions(state, config, players))
 
     for room_id, message_key, message_kwargs in process_corpse_decay(state):

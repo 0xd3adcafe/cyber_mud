@@ -210,8 +210,10 @@ def start_encounter(state: WorldState, player: Player, npc_id: str) -> Encounter
     )
     state.encounters[encounter.id] = encounter
     from world.life import wake_player
+    from world.net_session import force_disconnect_netrun
 
     wake_player(player)
+    force_disconnect_netrun(player, state, player.locale, "combat")
     player.in_combat = True
     player.encounter_id = encounter.id
     return encounter

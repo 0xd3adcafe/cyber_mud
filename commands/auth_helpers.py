@@ -173,6 +173,10 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.active_quest = loaded.active_quest
     session_player.quest_flags = dict(loaded.quest_flags)
     session_player.net_shell = loaded.net_shell
+    session_player.net_trace = loaded.net_trace
+    session_player.net_connected_node = loaded.net_connected_node
+    session_player.net_route_node = loaded.net_route_node
+    session_player.net_breached_nodes = list(loaded.net_breached_nodes)
     session_player.weapon_mods = {k: list(v) for k, v in loaded.weapon_mods.items()}
     session_player.chased_by_npc = loaded.chased_by_npc
     session_player.in_combat = loaded.in_combat

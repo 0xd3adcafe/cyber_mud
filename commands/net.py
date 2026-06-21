@@ -11,7 +11,10 @@ def enter_net_shell(ctx: CommandContext):
     if ctx.player.net_shell:
         return ok([t(ctx.player.locale, "net.already")], meta=net_meta(ctx))
 
+    from world.net_session import clear_net_session
+
     ctx.player.net_shell = True
+    clear_net_session(ctx.player)
     lines = [
         t(ctx.player.locale, "net.enter"),
         "",

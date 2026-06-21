@@ -49,6 +49,10 @@ def handle(ctx: CommandContext):
         return ok([t(ctx.player.locale, weather_key)])
 
     life_lines: list[str] = []
+    if ctx.player.net_shell:
+        from world.net_session import force_disconnect_netrun
+
+        life_lines.extend(force_disconnect_netrun(ctx.player, ctx.state, ctx.player.locale, "move"))
     if ctx.player.posture != "standing":
         from world.life import wake_player
 

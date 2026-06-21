@@ -282,6 +282,23 @@ Not yet implemented or only partially implemented.
 
 **Deferred (out of scope for text MUD):** open-world driving, physical parkour, smartphone UI clone, real-time multiplayer ctOS invasion.
 
+### Hacknet-style NETRUN (HN)
+
+**Policy:** Original homage to **terminal breach fantasy** (Hacknet-style trace pressure, multi-step connect, proxy hops)—not Matt Trobbiani IP or story canon. Integrates with existing NETRUN shell, RAM, ctOS mesh (WD.8), footprint (WD.4), and district events (WD.9).
+
+**Goal:** NETRUN is a **persistent session** with trace pressure; the physical world (combat, movement, blackout, surveillance heat) can **force disconnect**.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| ~~HN.1~~ | ~~Trace meter~~ | ✅ `Player.net_trace` 0–100; `world/net_session.py` tick gain; full trace → disconnect + penalty; meta `net_trace`; `tests/test_net_trace.py` |
+| ~~HN.2~~ | ~~Multi-step breach~~ | ✅ `connect` / `breach` / `exploit`; `hack` auto-pipeline; node `security` in YAML; `tests/test_net_breach.py` |
+| ~~HN.3~~ | ~~Environment disconnect~~ | ✅ Combat / chase / `go` force `net_shell` off; `net.disconnect.*`; client + registry allow `go`; `tests/test_net_disconnect.py` |
+| ~~HN.4~~ | ~~Trace environment modifiers~~ | ✅ `blackout` / footprint / wanted accelerate trace; `tests/test_net_trace.py` |
+| ~~HN.5~~ | ~~Node files & cover~~ | ✅ `files:` on `net_nodes.yaml`; `cat` / `cover`; `tests/test_net_files.py` |
+| ~~HN.6~~ | ~~Mesh proxy route~~ | ✅ `route <node>` via mesh `links`; slower trace, RAM upkeep; `tests/test_net_route.py` |
+
+**Suggested order:** HN.1–6 shipped (2026-06).
+
 ### Mature / NSFW content (18+)
 
 **Policy:** Original homage-style cyberpunk fiction; not official IP. All mature content is **opt-in** (`content_rating` / `mature_enabled` on player save), gated at login and command layer, with copy in the private **`cyber_mud_mature`** pack (`data/mature/locale/mature_en.yaml`, `mature_zh.yaml`)—never mixed into default help/MOTD.

@@ -54,6 +54,10 @@ class Player:
     quest_flags: dict[str, str] = field(default_factory=dict)
     quest_hint: str = ""
     net_shell: bool = False
+    net_trace: int = 0
+    net_connected_node: str = ""
+    net_route_node: str = ""
+    net_breached_nodes: list[str] = field(default_factory=list)
     weapon_mods: dict[str, list[str]] = field(default_factory=dict)
     chased_by_npc: str = ""
     content_rating: str = "teen"

@@ -250,6 +250,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Security (ASVS L1)** | ASVS.1–14 shipped — PBKDF2, rate limit, TLS option, token resume, changepass, lockout, audit log, client PIN token; see [`docs/SECURITY.md`](docs/SECURITY.md) |
 | **Architecture (incremental)** | ARCH.1–2 shipped (YAML lock predicates; scheduler on `tick_count`); see PHASES **Architecture (incremental)** |
 | **Surveillance hacking (Watch Dogs homage)** | WD.1–WD.10 shipped — profiler, ctOS infra hacks, footprint, mesh, DedSec; see PHASES **Surveillance hacking** |
+| **Hacknet-style NETRUN (HN)** | HN.1–6 shipped — trace meter, connect/breach/exploit, env disconnect, node files, mesh route; see PHASES **Hacknet-style NETRUN** |
 | **Mature M.18** | Shipped — private `cyber_mud_mature` submodule at `data/mature/`; bilingual pack docs (`README`, `CLAUDE`, `CONTRIBUTING`, `LOCALIZATION` + `*.zh.md`); history purge via `scripts/mature-history-purge.sh`; see PHASES **M.18** |
 
 
@@ -316,6 +317,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 
 | Item | Module / acceptance |
 |------|---------------------|
+| Hacknet-style NETRUN HN.1–6 | `world/net_session.py`; `connect`/`breach`/`exploit`/`route`/`cat`/`cover`; trace tick + env disconnect; `tests/test_net_*.py` |
 | Tab multi-candidate cycling | `complete_input_cycle`, `client/app.py` |
 | Environment interactables | `interact`, `data/interactables.yaml`, `look` / `scan` |
 | Vertical movement (up/down) | `go up/down`, `u`/`d`, rooftop / underground areas |

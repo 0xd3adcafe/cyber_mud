@@ -370,7 +370,26 @@ def hint_text(state: ClientViewState) -> str:
 
 LOCAL_COMMANDS = frozenset({"clear", "log", "reconnect", "prompt", "quit", "theme"})
 NETRUN_ALLOWED_COMMANDS = frozenset(
-    {"hack", "probe", "status", "look", "scan", "search", "talk", "say", "exit", "help", "quit"}
+    {
+        "hack",
+        "probe",
+        "status",
+        "connect",
+        "breach",
+        "exploit",
+        "route",
+        "cat",
+        "cover",
+        "look",
+        "scan",
+        "search",
+        "talk",
+        "say",
+        "go",
+        "exit",
+        "help",
+        "quit",
+    }
 )
 NETRUN_EXIT_COMMANDS = frozenset({"exit", "quit", "disconnect", "logout"})
 

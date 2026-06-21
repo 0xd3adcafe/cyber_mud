@@ -5,8 +5,10 @@ from shared.i18n import t
 from shared.locale_content import item_label_with_id, net_node_label_with_id
 from shared.target_resolve import resolve_net_node
 
-NET_SHELL_COMMANDS = frozenset({"hack", "probe", "exit", "help", "status"})
-NET_ALLOWED_MUD_COMMANDS = frozenset({"look", "scan", "search", "talk", "say", "jam", "distract"})
+NET_SHELL_COMMANDS = frozenset(
+    {"hack", "probe", "exit", "help", "status", "connect", "breach", "exploit", "route", "cat", "cover"}
+)
+NET_ALLOWED_MUD_COMMANDS = frozenset({"look", "scan", "search", "talk", "say", "jam", "distract", "go"})
 
 
 def net_meta(ctx: CommandContext) -> dict[str, str]:
@@ -16,6 +18,7 @@ def net_meta(ctx: CommandContext) -> dict[str, str]:
     ctx.player.net_shell = was_shell
     meta["net_shell"] = "1"
     meta["net_prompt"] = t(ctx.player.locale, "net.prompt")
+    meta["net_trace"] = str(ctx.player.net_trace)
     return meta
 
 
@@ -45,6 +48,15 @@ def _sector_context_lines(ctx: CommandContext) -> list[str]:
     return lines
 
 
+def _resolve_node_target(ctx: CommandContext, target: str, *, verb: str):
+    result = resolve_net_node(ctx, target, verb=verb)
+    if result.needs_response:
+        return None, result.lines
+    if not result.ok:
+        return None, [t(ctx.player.locale, "net.no_node")]
+    return result.value, None
+
+
 def _handle_hack(ctx: CommandContext) -> CommandResult:
     target = ctx.args.strip()
     if not target:
@@ -56,69 +68,95 @@ def _handle_hack(ctx: CommandContext) -> CommandResult:
     if infra_lines is not None:
         return ok(infra_lines, meta=net_meta(ctx), world_changed=True)
 
-    node_result = resolve_net_node(ctx, target, verb="hack")
-    if node_result.needs_response:
-        return ok(node_result.lines, meta=net_meta(ctx))
-    if not node_result.ok:
-        return ok([t(ctx.player.locale, "net.no_node")], meta=net_meta(ctx))
-    node = ctx.state.world.net_node(node_result.value)
-    if node is None:
-        return ok([t(ctx.player.locale, "net.no_node")], meta=net_meta(ctx))
+    node_id, err = _resolve_node_target(ctx, target, verb="hack")
+    if err:
+        return ok(err, meta=net_meta(ctx))
 
-    from commands.lock_helpers import check_entity_lock
+    from world.net_session import auto_hack_pipeline
 
-    lock_denial = check_entity_lock(ctx, node, "hack")
-    if lock_denial is not None:
-        return ok(lock_denial, meta=net_meta(ctx))
+    lines = auto_hack_pipeline(ctx, node_id)
+    return ok(lines, meta=net_meta(ctx), world_changed=True)
 
-    if ctx.player.ram < 1:
-        return ok([t(ctx.player.locale, "net.no_ram")], meta=net_meta(ctx))
 
-    ctx.player.ram -= 1
-    from world.life import gain_fatigue
+def _handle_connect(ctx: CommandContext) -> CommandResult:
+    target = ctx.args.strip()
+    if not target:
+        return ok([t(ctx.player.locale, "net.connect_usage")], meta=net_meta(ctx))
+    node_id, err = _resolve_node_target(ctx, target, verb="connect")
+    if err:
+        return ok(err, meta=net_meta(ctx))
+    from world.net_session import connect_node
 
-    gain_fatigue(ctx.player, "netrun")
-    label = net_node_label_with_id(node, ctx.player.locale)
-    from world.progression import award_xp
+    lines = connect_node(ctx.player, ctx.state, node_id, ctx.player.locale)
+    return ok(lines, meta=net_meta(ctx))
 
-    lines = [t(ctx.player.locale, "net.hack_ok", target=label)]
-    lines.extend(award_xp(ctx.player, 15, ctx.player.locale))
-    from world.proficiencies import award_proficiency_xp
 
-    lines.extend(
-        award_proficiency_xp(
-            ctx.player,
-            "breach_protocol",
-            18,
-            ctx.player.locale,
-            proficiencies=ctx.state.world.proficiencies,
-        )
-    )
-    from world.street_cred import STREET_CRED_PER_HACK, award_street_cred
+def _handle_breach(ctx: CommandContext) -> CommandResult:
+    target = ctx.args.strip()
+    if not target:
+        return ok([t(ctx.player.locale, "net.breach_usage")], meta=net_meta(ctx))
+    node_id, err = _resolve_node_target(ctx, target, verb="breach")
+    if err:
+        return ok(err, meta=net_meta(ctx))
+    from world.net_session import breach_node
 
-    lines.extend(award_street_cred(ctx.player, STREET_CRED_PER_HACK, ctx.player.locale))
-    from world.reactions import reputation_from_net_hack, shift_reputation
+    lines = breach_node(ctx, node_id)
+    return ok(lines, meta=net_meta(ctx), world_changed=True)
 
-    lines.extend(shift_reputation(ctx.player, reputation_from_net_hack(), ctx.player.locale))
-    from world.quests import advance_quest_on_hack
 
-    lines.extend(advance_quest_on_hack(ctx.player, ctx.state, node.id, ctx.player.locale))
-    from world.footprint import CORPO_HACK_FOOTPRINT, add_footprint, corpo_footprint_bonus
+def _handle_exploit(ctx: CommandContext) -> CommandResult:
+    target = ctx.args.strip()
+    if not target:
+        return ok([t(ctx.player.locale, "net.exploit_usage")], meta=net_meta(ctx))
+    node_id, err = _resolve_node_target(ctx, target, verb="exploit")
+    if err:
+        return ok(err, meta=net_meta(ctx))
+    from world.net_session import exploit_node_rewards
 
-    lines.extend(
-        add_footprint(
-            ctx.player,
-            corpo_footprint_bonus(ctx.state, ctx.player.room_id, CORPO_HACK_FOOTPRINT),
-            ctx.state,
-            ctx.player.locale,
-            reason="hack",
-        )
-    )
-    return ok(
-        lines,
-        meta=net_meta(ctx),
-        world_changed=True,
-    )
+    lines = exploit_node_rewards(ctx.player, ctx.state, node_id, ctx.player.locale)
+    return ok(lines, meta=net_meta(ctx), world_changed=True)
+
+
+def _resolve_mesh_target(ctx: CommandContext, target: str) -> tuple[str | None, list[str] | None]:
+    from shared.names import matches_name
+
+    needle = target.strip().lower()
+    if not needle:
+        return None, [t(ctx.player.locale, "net.no_node")]
+    for node_id, node in ctx.state.world.net_nodes.items():
+        if matches_name(needle, node.id, node.name_zh, node.name_en):
+            return node_id, None
+    return None, [t(ctx.player.locale, "net.no_node")]
+
+
+def _handle_route(ctx: CommandContext) -> CommandResult:
+    target = ctx.args.strip()
+    if not target:
+        return ok([t(ctx.player.locale, "net.route_usage")], meta=net_meta(ctx))
+    node_id, err = _resolve_mesh_target(ctx, target)
+    if err:
+        return ok(err, meta=net_meta(ctx))
+    from world.net_session import route_via_mesh
+
+    lines = route_via_mesh(ctx.player, ctx.state, node_id, ctx.player.locale)
+    return ok(lines, meta=net_meta(ctx))
+
+
+def _handle_cat(ctx: CommandContext) -> CommandResult:
+    target = ctx.args.strip()
+    if not target:
+        return ok([t(ctx.player.locale, "net.cat_usage")], meta=net_meta(ctx))
+    from world.net_session import cat_file
+
+    lines = cat_file(ctx.player, ctx.state, target, ctx.player.locale)
+    return ok(lines, meta=net_meta(ctx))
+
+
+def _handle_cover(ctx: CommandContext) -> CommandResult:
+    from world.net_session import cover_traces
+
+    lines = cover_traces(ctx.player, ctx.state, ctx.player.locale)
+    return ok(lines, meta=net_meta(ctx), world_changed=True)
 
 
 def _handle_probe(ctx: CommandContext) -> CommandResult:
@@ -129,14 +167,19 @@ def _handle_probe(ctx: CommandContext) -> CommandResult:
     labels = _node_labels(ctx)
     lines = [t(ctx.player.locale, "net.probe_ok", nodes="、".join(labels))]
     from world.ctos_mesh import discover_mesh_in_room, format_mesh_map_lines
+    from world.net_session import probe_trace_bump
 
+    probe_trace_bump(ctx.player, 2)
     lines.extend(discover_mesh_in_room(ctx.player, ctx.state, ctx.player.room_id))
     lines.extend(format_mesh_map_lines(ctx.player, ctx.state, ctx.player.locale))
     return ok(lines, meta=net_meta(ctx))
 
 
 def _handle_exit(ctx: CommandContext) -> CommandResult:
+    from world.net_session import clear_net_session
+
     ctx.player.net_shell = False
+    clear_net_session(ctx.player)
     return ok(
         [t(ctx.player.locale, "net.exit")],
         meta=player_meta(ctx),
@@ -145,7 +188,22 @@ def _handle_exit(ctx: CommandContext) -> CommandResult:
 
 def _handle_help(ctx: CommandContext) -> CommandResult:
     lines = [t(ctx.player.locale, "net.help_header"), ""]
-    for key in ("hack", "probe", "status", "look", "scan", "talk", "exit", "help"):
+    for key in (
+        "connect",
+        "breach",
+        "exploit",
+        "hack",
+        "probe",
+        "route",
+        "cat",
+        "cover",
+        "status",
+        "look",
+        "scan",
+        "talk",
+        "exit",
+        "help",
+    ):
         lines.append(
             t(
                 ctx.player.locale,
@@ -160,12 +218,19 @@ def _handle_help(ctx: CommandContext) -> CommandResult:
 def _handle_status(ctx: CommandContext) -> CommandResult:
     labels = _node_labels(ctx)
     nodes_display = "、".join(labels) if labels else t(ctx.player.locale, "net.status_no_nodes")
+    connected = ""
+    if ctx.player.net_connected_node:
+        node = ctx.state.world.net_node(ctx.player.net_connected_node)
+        if node:
+            connected = net_node_label_with_id(node, ctx.player.locale)
     lines = [
         t(
             ctx.player.locale,
             "net.status",
             ram=f"{ctx.player.ram}/{ctx.player.max_ram}",
             nodes=nodes_display,
+            trace=str(ctx.player.net_trace),
+            connected=connected or t(ctx.player.locale, "net.status_no_link"),
         )
     ]
     sector = _sector_context_lines(ctx)
@@ -176,6 +241,12 @@ def _handle_status(ctx: CommandContext) -> CommandResult:
 
 _NET_HANDLERS = {
     "hack": _handle_hack,
+    "connect": _handle_connect,
+    "breach": _handle_breach,
+    "exploit": _handle_exploit,
+    "route": _handle_route,
+    "cat": _handle_cat,
+    "cover": _handle_cover,
     "probe": _handle_probe,
     "exit": _handle_exit,
     "help": _handle_help,
@@ -195,5 +266,3 @@ def dispatch_net(line: str, ctx: CommandContext) -> CommandResult:
     if handler is None:
         return ok([t(ctx.player.locale, "net.unknown_verb", verb=verb)], meta=net_meta(ctx))
     return handler(ctx)
-
-

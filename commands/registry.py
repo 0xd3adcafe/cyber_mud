@@ -175,6 +175,7 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
     meta["net_shell"] = "1" if ctx.player.net_shell else "0"
     if ctx.player.net_shell:
         meta["net_prompt"] = t(ctx.player.locale, "net.prompt")
+        meta["net_trace"] = str(ctx.player.net_trace)
     from shared.completion import completion_meta
 
     meta.update(completion_meta(ctx))

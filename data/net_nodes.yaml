@@ -4,6 +4,13 @@ net_nodes:
     name_zh: 核心終端
     name_en: Core Terminal
     hackable: true
+    files:
+      access.log:
+        content_en: "03:14:02 guest login from watson_grid_node — flagged low risk."
+        content_zh: "03:14:02 訪客自 watson_grid_node 登入——低風險標記。"
+      readme.txt:
+        content_en: "Corp maintenance shell v3.1 — do not expose to public mesh."
+        content_zh: "企業維護殼層 v3.1——勿暴露於公開 mesh。"
   alley_node:
     room_id: alley
     name_zh: 巷弄節點

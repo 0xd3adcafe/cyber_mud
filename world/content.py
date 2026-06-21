@@ -169,15 +169,32 @@ class Shop:
 
 
 @dataclass
+class NetNodeFile:
+    id: str
+    content_zh: str = ""
+    content_en: str = ""
+
+
+@dataclass
 class NetNode:
     id: str
     room_id: str = ""
     name_zh: str = ""
     name_en: str = ""
     hackable: bool = True
+    security: str = ""
     locks: dict[str, str] = field(default_factory=dict)
     links: list[str] = field(default_factory=list)
     link_locks: dict[str, str] = field(default_factory=dict)
+    files: dict[str, NetNodeFile] = field(default_factory=dict)
+
+    def file_content(self, file_id: str, locale: str) -> str:
+        entry = self.files.get(file_id)
+        if entry is None:
+            return ""
+        if locale == "zh":
+            return entry.content_zh or entry.content_en
+        return entry.content_en or entry.content_zh
 
 
 @dataclass
@@ -507,12 +524,21 @@ def load_net_nodes(path: Path | None = None) -> dict[str, NetNode]:
             name_zh=str(data.get("name_zh", "")),
             name_en=str(data.get("name_en", "")),
             hackable=bool(data.get("hackable", True)),
+            security=str(data.get("security", "")),
             locks=parse_locks(data.get("locks")),
             links=[str(link_id) for link_id in (data.get("links") or [])],
             link_locks={
                 str(target): str(expr).strip()
                 for target, expr in (data.get("link_locks") or {}).items()
                 if str(expr).strip()
+            },
+            files={
+                str(fid): NetNodeFile(
+                    id=str(fid),
+                    content_zh=str(fdata.get("content_zh", "")),
+                    content_en=str(fdata.get("content_en", "")),
+                )
+                for fid, fdata in (data.get("files") or {}).items()
             },
         )
         for nid, data in (raw.get("net_nodes") or {}).items()

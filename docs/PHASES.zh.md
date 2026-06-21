@@ -278,6 +278,23 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 **延後（文字 MUD 不適合）：** 開放世界駕駛、跑酷、手機 UI 複製、即時多人 ctOS 入侵。
 
+### Hacknet 風格 NETRUN（HN）
+
+**原則：** 致敬 **終端機入侵與追蹤壓力**（Hacknet 式 trace、多步 connect、proxy 跳接）—非原作 IP 或劇情。與現有 NETRUN、`RAM`、ctOS mesh（WD.8）、footprint（WD.4）、區域事件（WD.9）整合。
+
+**目標：** NETRUN 為**持續連線工作階段**並累積 trace；實體世界（戰鬥、移動、斷電、監控熱度）可**強制斷線**。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| ~~HN.1~~ | ~~Trace 追蹤條~~ | ✅ `Player.net_trace`；`world/net_session.py` tick 累積；滿條斷線；`tests/test_net_trace.py` |
+| ~~HN.2~~ | ~~多步驟 breach~~ | ✅ `connect`／`breach`／`exploit`；`hack` 相容管線；`tests/test_net_breach.py` |
+| ~~HN.3~~ | ~~環境強制斷線~~ | ✅ 戰鬥／追擊／`go` 斷線；client + registry 放行 `go`；`tests/test_net_disconnect.py` |
+| ~~HN.4~~ | ~~Trace 環境修正~~ | ✅ `blackout`、footprint、通緝加速 trace；`tests/test_net_trace.py` |
+| ~~HN.5~~ | ~~節點檔案與覆蓋~~ | ✅ `cat`、`cover`；`net_nodes.yaml` `files:`；`tests/test_net_files.py` |
+| ~~HN.6~~ | ~~Mesh proxy 路由~~ | ✅ `route <node>` 降 trace；`tests/test_net_route.py` |
+
+**建議順序：** HN.1–6 已交付（2026-06）。
+
 ### 成人／NSFW 內容（18+）
 
 **原則：** 原創致敬風賽博龐克；所有成熟內容 **預設關閉、玩家 opt-in**（`content_rating`／`mature_enabled`），登入與指令層閘門；文案放 private **`cyber_mud_mature`** 內容包（`data/mature/locale/mature_en.yaml`、`mature_zh.yaml`），不混入預設 MOTD／help。
