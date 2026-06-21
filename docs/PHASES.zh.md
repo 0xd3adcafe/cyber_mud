@@ -426,7 +426,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~CU.3~~ | ~~NETRUN HUD~~ | ✅ `client/overlay_panel.py`；trace 條；`net` 展開 |
 | ~~CU.4~~ | ~~NETRUN log + 側欄快照~~ | ✅ `netrun-active`；F11／F12；離開 NETRUN 還原 |
 | ~~CU.5~~ | ~~Mesh 面板 + 自動開~~ | ✅ `commands/mesh.py`；`/overlay netrun-sidebar off` |
-| CU.0 | 登入 ASCII 輪巡 | `scene_for_carousel`；10s — **獨立 commit** |
+| ~~CU.0~~ | ~~登入 ASCII 輪巡~~ | ✅ `scene_for_carousel`；10s 輪播 |
 
 **快捷鍵（遊戲內）：** F1 PDA · F2 Help · F3 地圖 · F4 裝備 · F5 委託 · F6 Mesh · F7–F10 保留 · **F11** 側欄 · **F12** NETRUN overlay。登入：**F8** 清除記憶帳密。
 

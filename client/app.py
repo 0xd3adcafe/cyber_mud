@@ -184,6 +184,7 @@ class CyberMudApp(App):
         self._login_motd_tips: list[str] = []
         self._login_motd_index = 0
         self._login_motd_frame = 0
+        self._login_art_scene_index = 0
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -490,6 +491,7 @@ class CyberMudApp(App):
             self._login_art_rows(),
             max_width=self._login_art_width(),
             theme_id=self._theme_id,
+            scene_index=self._login_art_scene_index,
         )
         art_widget = self.query_one("#login_art", Static)
         art_widget._render_markup = False
@@ -562,6 +564,9 @@ class CyberMudApp(App):
         self._login_motd_frame += 1
         if self._login_motd_tips and self._login_motd_frame % 6 == 0:
             self._login_motd_index = (self._login_motd_index + 1) % len(self._login_motd_tips)
+        if self._login_motd_frame % 20 == 0:
+            self._login_art_scene_index += 1
+            self._refresh_login_art()
         self._refresh_login_banner()
 
     def _set_login_hint(self, text: str) -> None:

@@ -1,7 +1,7 @@
 import random
 
 from client.auth_ui import build_auth_command, mask_auth_log_line
-from client.login_art import render_login_art
+from client.login_art import render_login_art, scene_for_carousel
 
 
 def test_render_login_art_exact_height():
@@ -23,6 +23,13 @@ def test_render_login_art_theme_bias():
     matrix_art = render_login_art(14, max_width=70, theme_id="matrix", rng=random.Random(1))
     tron_art = render_login_art(14, max_width=70, theme_id="tron", rng=random.Random(1))
     assert matrix_art != tron_art
+
+
+def test_scene_carousel_cycles():
+    a = render_login_art(10, max_width=50, theme_id="matrix", scene_index=0)
+    b = render_login_art(10, max_width=50, theme_id="matrix", scene_index=1)
+    assert a != b
+    assert scene_for_carousel("matrix", 0) is scene_for_carousel("matrix", 2)
 
 
 def test_render_login_art_random_variety():

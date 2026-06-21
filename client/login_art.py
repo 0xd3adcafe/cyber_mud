@@ -365,12 +365,21 @@ _SCENES: dict[str, SceneFn] = {
 }
 
 
-def _pick_scene(theme_id: str, rng: random.Random) -> SceneFn:
+def _scene_names_for_theme(theme_id: str) -> tuple[str, ...]:
     bias = _THEME_SCENE_BIAS.get(theme_id)
     if bias:
-        name = rng.choice(bias)
-        return _SCENES[name]
-    return rng.choice(tuple(_SCENES.values()))
+        return bias
+    return tuple(_SCENES.keys())
+
+
+def _pick_scene(theme_id: str, rng: random.Random) -> SceneFn:
+    name = rng.choice(_scene_names_for_theme(theme_id))
+    return _SCENES[name]
+
+
+def scene_for_carousel(theme_id: str, index: int) -> SceneFn:
+    names = _scene_names_for_theme(theme_id)
+    return _SCENES[names[index % len(names)]]
 
 
 def render_login_art(
@@ -379,6 +388,7 @@ def render_login_art(
     max_width: int = 80,
     theme_id: str = "night_city",
     rng: random.Random | None = None,
+    scene_index: int | None = None,
 ) -> str:
     """Procedurally compose login art that fills the upper terminal half."""
     width = max(40, max_width)
@@ -387,6 +397,9 @@ def render_login_art(
         return "◈ cyber_mud".center(width)[:width]
 
     picker = rng or random.Random()
-    scene = _pick_scene(theme_id, picker)
+    if scene_index is not None:
+        scene = scene_for_carousel(theme_id, scene_index)
+    else:
+        scene = _pick_scene(theme_id, picker)
     lines = scene(width, height, picker, theme_id)
     return "\n".join(_pad_lines(lines, width, height))

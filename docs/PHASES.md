@@ -430,7 +430,7 @@ Not yet implemented or only partially implemented.
 | ~~CU.3~~ | ~~NETRUN HUD~~ | ✅ `client/overlay_panel.py`; trace bar; expand on `net`; 50% height |
 | ~~CU.4~~ | ~~NETRUN log + sidebar snapshot~~ | ✅ `netrun-active` log tint; F11/F12; restore stack on exit |
 | ~~CU.5~~ | ~~Mesh panel + auto-open~~ | ✅ `commands/mesh.py`; NETRUN auto mesh; `/overlay netrun-sidebar off` |
-| CU.0 | Login ASCII rotation | `scene_for_carousel`; 10s tick — **separate commit** |
+| ~~CU.0~~ | ~~Login ASCII rotation~~ | ✅ `scene_for_carousel`; 10s tick |
 
 **Hotkeys (in-game):** F1 PDA · F2 Help · F3 Map · F4 Gear · F5 Gigs · F6 Mesh · F7–F10 reserved · **F11** sidebar · **F12** NETRUN overlay. Login: **F8** clear stored credentials.
 
