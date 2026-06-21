@@ -1,6 +1,16 @@
-# cyber_mud
+```text
+╔══════════════════════════════════════════════════════════════════════════╗
+║  ██████╗██╗   ██╗██████╗ ███████╗██████╗     ███╗   ███╗██╗   ██╗██████╗ ║
+║ ██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗    ████╗ ████║██║   ██║██╔══██╗║
+║ ██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝    ██╔████╔██║██║   ██║██║  ██║║
+║ ██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗    ██║╚██╔╝██║██║   ██║██║  ██║║
+║ ╚██████╗   ██║   ██████╔╝███████╗██║  ██║    ██║ ╚═╝ ██║╚██████╔╝██████╔╝║
+║  ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ║
+║                  ▸  N E O N   N I G H T   C I T Y  ◂                     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
 
-> **English:** [README.md](README.md)
+霓虹夜城 · 賽博龐克文字 MUD
 
 [![GitHub](https://img.shields.io/badge/GitHub-0xd3adcafe%2Fcyber__mud-181717?logo=github)](https://github.com/0xd3adcafe/cyber_mud)
 [![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](.python-version)
@@ -9,6 +19,9 @@
 [![Locale](https://img.shields.io/badge/Locale-en+zh-00D4AA)](docs/LOCALIZATION.zh.md)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-2563EB)](LICENSE)
 [![Content: CC BY 4.0](https://img.shields.io/badge/Content-CC_BY_4.0-7C3AED)](LICENSE-CONTENT.md)
+[![English](https://img.shields.io/badge/English-README.md-blue)](README.md)
+
+> **English（canonical）：** [README.md](README.md)
 
 賽博龐克文字 MUD，背景為**夜城**——接入神經連結、接委託、駭入節點、在霓虹與黑市中活下去。由原 **mud** 專案 fork；**263 房**、**109 NPC**、內建 **Textual TUI**，不必另裝傳統 MUD 客戶端。
 
