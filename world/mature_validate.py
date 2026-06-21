@@ -5,10 +5,17 @@ from pathlib import Path
 
 import yaml
 
-from world.content import BRAINDANCES_MATURE_PATH, QUESTS_MATURE_PATH
-from world.romance import DATA_PATH as ROMANCE_PATH
+from shared.mature_paths import (
+    braindances_mature_path,
+    mature_content_available,
+    mature_locale_path,
+    quests_mature_path,
+    romance_path,
+)
 
-LOCALE_DIR = Path(__file__).resolve().parent.parent / "data" / "locale"
+ROMANCE_PATH = romance_path()
+QUESTS_MATURE_PATH = quests_mature_path()
+BRAINDANCES_MATURE_PATH = braindances_mature_path()
 
 
 @dataclass
@@ -25,7 +32,7 @@ def _load_yaml(path: Path) -> dict:
 
 
 def _locale_keys(locale: str) -> set[str]:
-    path = LOCALE_DIR / f"mature_{locale}.yaml"
+    path = mature_locale_path(locale)
     data = _load_yaml(path)
     mature = data.get("mature") or {}
 
@@ -43,6 +50,13 @@ def _locale_keys(locale: str) -> set[str]:
 
 
 def validate_mature_content(world) -> list[MatureIssue]:
+    if not mature_content_available():
+        return [
+            MatureIssue(
+                "warn",
+                "mature content pack missing — init submodule: git submodule update --init data/mature",
+            )
+        ]
     issues: list[MatureIssue] = []
     en_keys = _locale_keys("en")
     zh_keys = _locale_keys("zh")

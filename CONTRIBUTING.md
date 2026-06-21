@@ -36,7 +36,7 @@ When opening a PR or committing:
 2. Sync **[CLAUDE.md](CLAUDE.md)** backlog summary if it is a major item.
 3. Maintain **bilingual** game strings (`data/locale/en.yaml` + `zh.yaml`) when adding player-facing text.
 4. Maintain **English + Chinese docs** (`*.md` + `*.zh.md`) when changing project documentation.
-5. **18+ mature copy** belongs in `data/locale/mature_en.yaml` + `mature_zh.yaml` only — see [docs/MATURE_CONTENT.md](docs/MATURE_CONTENT.md).
+5. **18+ mature copy** belongs in the private **`cyber_mud_mature`** pack (`data/mature/`) — not in the public repo after M.18 split — see [docs/MATURE_CONTENT.md](docs/MATURE_CONTENT.md).
 
 ## Commit messages
 

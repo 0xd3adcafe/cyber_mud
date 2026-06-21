@@ -14,12 +14,23 @@ All mature / NSFW-adjacent content in **cyber_mud** is **opt-in**. Default playe
 
 Teen-rated players cannot enter `tags: [mature]` rooms, use `flirt` / `spend_time`, accept mature gigs, or play mature braindances.
 
-## Copy files (do not mix into default locale)
+## Content pack (private submodule, M.18)
+
+Mature YAML lives in **`data/mature/`**, intended as a **private** git submodule (`cyber_mud_mature`). Public clones without submodule access run in teen mode only.
 
 | File | Purpose |
 |------|---------|
-| `data/locale/mature_en.yaml` | English gore, trauma, romance, mature talk |
-| `data/locale/mature_zh.yaml` | Traditional Chinese mirror (keep keys in lockstep) |
+| `data/mature/locale/mature_en.yaml` | English gore, trauma, romance, mature talk |
+| `data/mature/locale/mature_zh.yaml` | Traditional Chinese mirror (keep keys in lockstep) |
+| `data/mature/quests_mature.yaml` | Mature gigs |
+| `data/mature/braindances_mature.yaml` | Mature braindances |
+| `data/mature/romance.yaml` | Romance profile scaffolding |
+
+```bash
+git submodule update --init data/mature   # requires access to cyber_mud_mature
+```
+
+Maintainers: `scripts/mature-submodule-split.sh`, `scripts/mature-history-purge.sh`. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 Use `shared.mature_i18n.tm(locale, "combat.crit_1")` — keys are auto-prefixed with `mature.`.
 
@@ -29,12 +40,12 @@ Use `shared.mature_i18n.tm(locale, "combat.crit_1")` — keys are auto-prefixed 
 |-------------|--------|
 | `tags: [mature]` on rooms | Gates `go` for teen players |
 | `tags: [mature]` on NPCs | Gates `talk`; mature dialogue from `mature.talk.<talk_key>` |
-| `rating: mature` on quests | Loaded from `data/quests_mature.yaml`; hidden from teen `gigs` |
-| `rating: mature` on braindances | Loaded from `data/braindances_mature.yaml` |
+| `rating: mature` on quests | Loaded from `data/mature/quests_mature.yaml`; hidden from teen `gigs` |
+| `rating: mature` on braindances | Loaded from `data/mature/braindances_mature.yaml` |
 
 ## Romance scaffold
 
-`data/romance.yaml` maps NPCs to `flirt` / `spend_time` affinity stages. Copy lives under `mature.romance.*` in mature locale files.
+`data/mature/romance.yaml` maps NPCs to `flirt` / `spend_time` affinity stages. Copy lives under `mature.romance.*` in mature locale files.
 
 Staged lines use suffixes `_2` and `_3` on the base key (e.g. `kabuki_flirt_2`). `world/mature_flavor.romance_line()` picks the highest tier available and falls back to the base key.
 

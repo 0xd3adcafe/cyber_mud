@@ -46,4 +46,11 @@ fi
 
 "$PYTHON" -m pip install --upgrade pip
 "$PYTHON" -m pip install -r requirements.txt
+if [[ -f "$ROOT/.gitmodules" ]] && grep -q 'data/mature' "$ROOT/.gitmodules" 2>/dev/null; then
+  if timeout 15 git submodule update --init data/mature 2>/dev/null; then
+    echo "✓ mature content submodule initialized"
+  else
+    echo "⚠ data/mature submodule skipped (no access or network)"
+  fi
+fi
 echo "✓ cyber_mud 環境就緒。執行 ./run.sh 或 ./run.sh --client"

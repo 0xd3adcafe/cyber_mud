@@ -5,7 +5,7 @@ from pathlib import Path
 
 import yaml
 
-DATA_ROOT = Path(__file__).resolve().parent.parent / "data" / "locale"
+from shared.mature_paths import mature_content_available, mature_locale_path
 
 
 def clear_mature_locale_cache() -> None:
@@ -14,9 +14,11 @@ def clear_mature_locale_cache() -> None:
 
 @lru_cache(maxsize=4)
 def _load_mature_locale(locale: str) -> dict:
-    path = DATA_ROOT / f"mature_{locale}.yaml"
+    if not mature_content_available():
+        return {}
+    path = mature_locale_path(locale)
     if not path.exists():
-        path = DATA_ROOT / "mature_en.yaml"
+        path = mature_locale_path("en")
     if not path.exists():
         return {}
     with path.open(encoding="utf-8") as fh:

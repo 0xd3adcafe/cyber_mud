@@ -6,6 +6,7 @@ from pathlib import Path
 import yaml
 
 from shared.locks import parse_locks
+from shared.mature_paths import braindances_mature_path, quests_mature_path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
@@ -23,8 +24,8 @@ NET_NODES_PATH = DATA_DIR / "net_nodes.yaml"
 INTERACTABLES_PATH = DATA_DIR / "interactables.yaml"
 RECIPES_PATH = DATA_DIR / "recipes.yaml"
 BRAINDANCES_PATH = DATA_DIR / "braindances.yaml"
-BRAINDANCES_MATURE_PATH = DATA_DIR / "braindances_mature.yaml"
-QUESTS_MATURE_PATH = DATA_DIR / "quests_mature.yaml"
+BRAINDANCES_MATURE_PATH = braindances_mature_path()
+QUESTS_MATURE_PATH = quests_mature_path()
 PASSIVE_CHAINS_PATH = DATA_DIR / "passive_chains.yaml"
 
 

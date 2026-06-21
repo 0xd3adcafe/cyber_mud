@@ -32,7 +32,7 @@
 2. 重大項目同步 **[CLAUDE.zh.md](CLAUDE.zh.md)** backlog 摘要。
 3. 玩家可見文案維持 **`data/locale/en.yaml` + `zh.yaml`**。
 4. 專案文件維持 **英文 `*.md` + 中文 `*.zh.md`**。
-5. **18+ 成熟文案**僅放 `data/locale/mature_*.yaml`——見 [docs/MATURE_CONTENT.zh.md](docs/MATURE_CONTENT.zh.md)。
+5. **18+ 成熟文案**放在 private **`cyber_mud_mature`** 內容包（`data/mature/`）——M.18 拆分後勿提交至公開 repo——見 [docs/MATURE_CONTENT.zh.md](docs/MATURE_CONTENT.zh.md)。
 
 ## Commit 訊息
 

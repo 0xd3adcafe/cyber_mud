@@ -14,12 +14,23 @@
 
 `teen` 玩家無法進入 `tags: [mature]` 房間、使用 `flirt`／`spend_time`、接限制級委託或體驗限制級腦舞。
 
-## 文案檔（勿混入預設 locale）
+## 內容包（private submodule，M.18）
+
+限制級 YAML 位於 **`data/mature/`**，預定為 **private** git submodule（`cyber_mud_mature`）。無 submodule 權限的公開 clone 僅能 teen 模式。
 
 | 檔案 | 用途 |
 |------|------|
-| `data/locale/mature_en.yaml` | 英文血腥、創傷、浪漫、成人對話 |
-| `data/locale/mature_zh.yaml` | 繁中鏡像（鍵名須同步） |
+| `data/mature/locale/mature_en.yaml` | 英文血腥、創傷、浪漫、成人對話 |
+| `data/mature/locale/mature_zh.yaml` | 繁中鏡像（鍵名須同步） |
+| `data/mature/quests_mature.yaml` | 限制級委託 |
+| `data/mature/braindances_mature.yaml` | 限制級腦舞 |
+| `data/mature/romance.yaml` | 浪漫機制骨架 |
+
+```bash
+git submodule update --init data/mature
+```
+
+維護者：`scripts/mature-submodule-split.sh`、`scripts/mature-history-purge.sh`。
 
 程式使用 `shared.mature_i18n.tm(locale, "combat.crit_1")`，會自動加上 `mature.` 前綴。
 
@@ -29,12 +40,12 @@
 |------------|------|
 | 房間 `tags: [mature]` | `teen` 無法 `go` 進入 |
 | NPC `tags: [mature]` | `teen` 無法 `talk`；已啟用者讀 `mature.talk.<talk_key>` |
-| 委託 `rating: mature` | 來自 `data/quests_mature.yaml`；`teen` 的 `gigs` 不顯示 |
-| 腦舞 `rating: mature` | 來自 `data/braindances_mature.yaml` |
+| 委託 `rating: mature` | 來自 `data/mature/quests_mature.yaml`；`teen` 的 `gigs` 不顯示 |
+| 腦舞 `rating: mature` | 來自 `data/mature/braindances_mature.yaml` |
 
 ## 浪漫機制骨架
 
-`data/romance.yaml` 定義 NPC 的 `flirt`／`spend_time` 好感階段；文案在 mature locale 的 `mature.romance.*`。
+`data/mature/romance.yaml` 定義 NPC 的 `flirt`／`spend_time` 好感階段；文案在 mature locale 的 `mature.romance.*`。
 
 多階段台詞使用 `_2`、`_3` 後綴（如 `kabuki_flirt_2`）。`world/mature_flavor.romance_line()` 依好感階段選最高可用鍵，否則回退基底鍵。
 

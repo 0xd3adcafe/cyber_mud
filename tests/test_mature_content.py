@@ -1,10 +1,18 @@
 from __future__ import annotations
 
+import pytest
+
 from commands.registry import dispatch
+from shared.mature_paths import mature_content_available
 from tests.conftest import make_player, make_state
 from world.mature_flavor import romance_line
 from world.mature_validate import validate_mature_content
 from world.loader import load_world
+
+pytestmark = pytest.mark.skipif(
+    not mature_content_available(),
+    reason="mature content pack missing (git submodule data/mature)",
+)
 
 
 def test_mature_talk_and_flirt():

@@ -7,9 +7,10 @@ import yaml
 
 from entities.player import Player
 from world.mature import is_mature
+from shared.mature_paths import romance_path
 from world.mature_flavor import romance_line
 
-DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "romance.yaml"
+DATA_PATH = romance_path()
 
 
 @dataclass
