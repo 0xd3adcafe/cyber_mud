@@ -114,7 +114,7 @@ For multi-step work, state a short plan first:
 
 **cyber_mud** is a text-based multiplayer adventure game (MUD) set in cyberpunk **Night City** (original narrative inspired by Blade Runner + Cyberpunk 2077 atmosphere). Players explore, interact with NPCs, solve puzzles, and fight via text commands.
 
-This repo was forked from the original **mud** project: MVP code skeleton plus full implementation docs (see `docs/`).
+This repo ships a playable **Night City** stack: Python server, Textual client, YAML world data, tests, and full implementation docs (see `docs/`).
 
 **Core principles**
 
@@ -233,7 +233,7 @@ Commit message format: **English subject** `<type>: <EN summary>`, optional Trad
 ./admin.sh validate      # validate world data + run tests
 ```
 
-(Original mud `saves` / `delete-save` commands await persistence implementation.)
+(`saves` / `delete-save` admin commands await persistence implementation.)
 
 ## Backlog
 
