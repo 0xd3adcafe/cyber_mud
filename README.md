@@ -19,13 +19,43 @@
 [![Content: CC BY 4.0](https://img.shields.io/badge/Content-CC_BY_4.0-7C3AED)](LICENSE-CONTENT.md)
 [![中文](https://img.shields.io/badge/中文-README.zh.md-red)](README.zh.md)
 
-Cyberpunk text MUD set in **Night City**. Forked from the original **mud** project with a full MVP codebase and implementation docs.
-
-Built-in **Textual TUI client** is the primary player interface (`look` / `go` / `sit` / `rest` / `help` / `quit` + starter world).
+Cyberpunk text MUD set in **Night City** — jack in, take gigs, hack the grid, and survive the after-dark economy. Forked from the original **mud** project; **263 rooms**, **109 NPCs**, and a built-in **Textual TUI** so you play in-repo, not in a legacy MUD client.
 
 **Default locale: English.** Use `lang zh` in-game for Traditional Chinese. See [docs/LOCALIZATION.md](docs/LOCALIZATION.md).
 
 **中文說明：** [README.zh.md](README.zh.md)
+
+## Why jack in?
+
+Original Night City fiction with **homage vibes** you will recognize — neon rain and corporate dystopia (**Blade Runner**), street cred, cyberware, and quickhacks (**Cyberpunk 2077**), plus a **Watch Dogs**-style surveillance-hacking roadmap (profiler, ctOS hacks, digital footprint). Not official IP; built to *feel* like the worlds you already love.
+
+### Play the city
+
+| | |
+|---|---|
+| **Explore** | Districts, rooftops, underground, transit, vehicles, housing & stash |
+| **Fight** | Real-time combat, CP2077 weapon types, quickhacks, taunt/finish, corpses & loot |
+| **Run the net** | NETRUN nodes, `hack` / `probe`, RAM, environment interaction mid-run |
+| **Live the grind** | Gigs & journal, street cred, shops, craft, braindance, NCPD heat, faction AI |
+| **Grow** | Levels, talents, nine cyberware slots, romance scaffolding, `sit` / `rest` / `sleep` vitals |
+
+Tutorial yard onboarding → Watson flats → Kabuki clubs and corpo hubs. Type `look`, `scan`, `go`, `talk`, `gigs` — the city answers back.
+
+### Optional 18+ (opt-in)
+
+Mature content is **off by default** (`teen` rating). Register with `mature` or `settings mature on` to unlock 18+ venues, romance beats, mature gigs/braindances, and grittier combat copy — gated at login and command layer. Pack lives in private **`cyber_mud_mature`**; public clones stay teen-safe. See [docs/MATURE_CONTENT.md](docs/MATURE_CONTENT.md).
+
+### Built for players and builders
+
+- **Textual TUI** — sidebar PDA, live map, equipment, gigs tracker, Tab completion, `/theme` (incl. ctOS / DedSec / Profiler skins), auto-reconnect  
+- **Data-driven world** — rooms, NPCs, quests, and locale in YAML; `./run.sh --dev` hot-reloads data and code  
+- **Bilingual** — `en` default, `zh` opt-in; player guides under [docs/player/](docs/player/README.md)  
+- **Agent-friendly repo** — [CLAUDE.md](CLAUDE.md), phased backlog [PHASES.md](docs/PHASES.md), `./admin.sh validate`
+
+```bash
+./setup.sh && ./run.sh          # server
+./run.sh --client               # jack in — this is the real game
+```
 
 ## Player guides (read on GitHub)
 
@@ -79,6 +109,8 @@ Chinese mirrors: same paths with `.zh.md` suffix (e.g. [docs/WORLD.zh.md](docs/W
 5. **Bilingual mirrors** — `en.yaml` + `zh.yaml`, English `*.md` + `*.zh.md`.
 
 ## Quick start
+
+First time? Read [Getting Started](docs/player/GETTING_STARTED.md) — register, `look`, leave the tutorial yard.
 
 ```bash
 cd cyber_mud

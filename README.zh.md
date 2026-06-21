@@ -10,11 +10,41 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-2563EB)](LICENSE)
 [![Content: CC BY 4.0](https://img.shields.io/badge/Content-CC_BY_4.0-7C3AED)](LICENSE-CONTENT.md)
 
-賽博龐克文字 MUD，背景為**夜城**。由原 **mud** 專案 fork，含 MVP 程式骨架與完整實作文件。
-
-內建 **Textual TUI client** 為正式玩家介面（`look`／`go`／`sit`／`rest`／`help`／`quit` 與起始世界）。
+賽博龐克文字 MUD，背景為**夜城**——接入神經連結、接委託、駭入節點、在霓虹與黑市中活下去。由原 **mud** 專案 fork；**263 房**、**109 NPC**、內建 **Textual TUI**，不必另裝傳統 MUD 客戶端。
 
 **預設語系為英文**；遊戲內輸入 `lang zh` 可切換繁體中文。雙語慣例見 [docs/LOCALIZATION.zh.md](docs/LOCALIZATION.zh.md)。
+
+## 為什麼要接入？
+
+原創夜城劇情，帶著你熟悉的**致敬氛圍**——霓虹雨與企業反烏托邦（**銀翼殺手**）、街頭聲望、義體與快速破解（**電馭叛客 2077**），以及 **看門狗**風格的監控駭客路線圖（Profiler、ctOS、數位足跡）。非官方授權；目的是重現你已在其他媒介愛上的那種賽博感。
+
+### 玩法亮點
+
+| | |
+|---|---|
+| **探索** | 區域、屋頂／地下、大眾運輸、載具、租屋與藏匿處 |
+| **戰鬥** | 即時戰鬥、2077 武器類型、快速破解、嘲諷／終結技、屍體與掠奪 |
+| **網路跑** | NETRUN 節點、`hack`／`probe`、RAM、跑酷中仍可 `look`／`scan` |
+| **街頭人生** | 委託與日誌、街頭聲望、商店、製作、腦舞、NCPD 通緝、派系 AI |
+| **成長** | 等級、天賦、九格義體、`sit`／`rest`／`sleep` 與生命恢復 |
+
+新手訓練場 → 沃森公寓 → 歌舞伎俱樂部與企業中樞。輸入 `look`、`scan`、`go`、`talk`、`gigs`——城市會回應你。
+
+### 可選 18+（自願啟用）
+
+限制級內容**預設關閉**（`teen`）。註冊時選 `mature` 或 `settings mature on` 可解鎖 18+ 場域、浪漫劇情、限制級委託／腦舞與更血腥的戰鬥文案——登入與指令層雙重門檻。內容包在 private **`cyber_mud_mature`**；公開 clone 維持 teen 安全。見 [docs/MATURE_CONTENT.zh.md](docs/MATURE_CONTENT.zh.md)。
+
+### 給玩家與開發者
+
+- **Textual TUI** — 側欄 PDA、即時地圖、裝備、委託追蹤、Tab 補全、`/theme`（含 ctOS／DedSec／Profiler 主題）、自動重連  
+- **資料驅動世界** — 房間、NPC、任務、語系皆 YAML；`./run.sh --dev` 熱重載資料與程式  
+- **雙語** — 預設 `en`，`zh` opt-in；玩家指南見 [docs/player/](docs/player/README.zh.md)  
+- **利於協作** — [CLAUDE.zh.md](CLAUDE.zh.md)、階段清單 [PHASES.zh.md](docs/PHASES.zh.md)、`./admin.sh validate`
+
+```bash
+./setup.sh && ./run.sh          # 伺服器
+./run.sh --client               # 接入——這才是正式遊玩方式
+```
 
 ## 玩家指南（GitHub 閱讀）
 
@@ -68,6 +98,8 @@ Agent 行為準則：**[CLAUDE.zh.md](CLAUDE.zh.md)**
 5. **雙語對照** — `en.yaml` + `zh.yaml`；英文 `*.md` + 中文 `*.zh.md`。
 
 ## 快速開始
+
+首次遊玩？請讀 [快速上手](docs/player/GETTING_STARTED.zh.md)——註冊、`look`、離開訓練場。
 
 ```bash
 ./setup.sh && ./run.sh
