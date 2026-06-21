@@ -320,8 +320,16 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~M.16~~ | ~~浪漫送禮反應~~ | ✅ `world/mature_give.py`；送禮給浪漫 NPC 成熟文案 |
 | ~~M.17~~ | ~~戰鬥嘲諷與終結~~ | ✅ `taunt <npc>`；`finish` 弱敵終結技；help 18+ 分類 |
 | ~~M.18~~ | ~~成人內容 private submodule + 清 history~~ | ✅ private `0xd3adcafe/cyber_mud_mature`；`data/mature` submodule；內容包雙語文件（`README`、`CLAUDE`、`CONTRIBUTING`、`LOCALIZATION` + `*.zh.md`，英文預設）；split／purge 腳本（含 legacy 與 `data/mature/*`）；無包時 teen 模式 |
+| M.19 | 內容包文風指南 | `cyber_mud_mature/docs/STYLE.md`＋`STYLE.zh.md`；noir／lewd 規則；禁用陳腔；`{persona}`／`{player}` 模板 |
+| M.20 | 雙聲線解析 | `world/mature_voice.py`；`resolve_mature_voice()` → `noir`｜`lewd`；房間／腦舞／狀態／消耗品／追蹤／NPC 觸發；`mature.noir.*`／`mature.lewd.*` |
+| M.21 | Persona（SFW，全玩家） | `persona`／`persona set`／`persona clear`；`Player.persona`（≤200 字）存檔；`look <玩家>` 公開；`look me` 保留數值；NPC `{persona}` 外觀一行；`tests/test_persona.py` |
+| M.22 | Scene＋whisper | `scene`／`scene status` 僅浪漫階段閘門；`whisper <目標> <訊息>` 同房（不推階段）；擴充 `romance.yaml`；`tests/test_mature_social.py` |
+| M.23 | Client 成熟 Rich | `client/mature_format.py`；`*動作*`／對白／`>環境`／SFX 色盤；成熟 log channel；可選 `@meta mature_voice` |
+| M.24 | Lewd 觸發接線 | 消耗品 ID、成熟腦舞、賽博精神病（`humanity ≤ 25`）接入 `resolve_mature_voice`；觸發文案於內容包 |
+| M.25 | 雙聲線 NPC 內容 | `kabuki_host`、`bd_den_clerk`、VIP 舞者；階段 4–5；`voice_default`／`voice_triggers`；noir＋lewd 台詞集 |
+| M.26 | 成熟驗證擴充 | `mature_validate.py` 禁用詞掃描（EN lewd）；`noir`／`lewd` 雙語鍵同步；`./admin.sh validate` |
 
-**建議順序：** M.0–M.18 已交付。
+**建議順序：** M.0–M.18 已交付 → **M.19** → **M.21**＋**M.20** → **M.22** → **M.23** → **M.24** → **M.25** → **M.26**。
 
 ### 世界擴充（[WORLD.md](WORLD.md)）
 

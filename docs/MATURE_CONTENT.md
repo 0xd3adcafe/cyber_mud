@@ -13,6 +13,11 @@ All mature / NSFW-adjacent content in **cyber_mud** is **opt-in**. Default playe
 - [Romance scaffold](#romance-scaffold)
 - [Mature flavor hooks (look / scan / interact)](#mature-flavor-hooks-look-scan-interact)
 - [Mature social & combat (M.13–M.17)](#mature-social-combat-m13m17)
+- [Planned expansion (M.19–M.26)](#planned-expansion-m19m26)
+  - [Dual voice engine (M.20)](#dual-voice-engine-m20)
+  - [Persona (M.21, SFW)](#persona-m21-sfw)
+  - [Scene & whisper (M.22)](#scene--whisper-m22)
+  - [Client Rich formatting (M.23)](#client-rich-formatting-m23)
 - [Validation](#validation)
 - [Help and client](#help-and-client)
 
@@ -94,6 +99,75 @@ Only players with `content_rating=mature` in mature-tagged rooms/NPCs see these 
 | Finish | `finish` when enemy ≤30% HP (18+) | `combat/finish.py`; `mature.combat.finish_*` |
 
 Peer broadcasts use `localized_broadcast_line()` — mature observers see mature copy; teen observers keep default locale lines.
+
+## Planned expansion (M.19–M.26)
+
+Backlog items below extend the mature pack with a **dual voice engine**, SFW **persona**, mature **scene** / **whisper**, and client Rich formatting. Mechanics live in **cyber_mud**; copy in **`cyber_mud_mature`**. See [PHASES.md](PHASES.md) **Mature / NSFW content** for acceptance criteria.
+
+### Dual voice engine (M.20)
+
+Mature narration picks one of two authored voices at runtime (not LLM generation):
+
+| Voice | Code key | Style |
+|-------|----------|-------|
+| **noir** | `noir` | Default — blunt cyberpunk prose; less repetitive lewd wording |
+| **lewd** | `lewd` | Explicit Slutbunny-inspired RP (code key `lewd`, not `slutbunny`) |
+
+`world/mature_voice.py` exposes `resolve_mature_voice(player, state, room) → "noir" | "lewd"`. Triggers are **OR** conditions (any match may switch to `lewd`):
+
+- Mature-tagged rooms (`bd_den`, `kabuki_vip`, etc.)
+- Active mature braindance session
+- Player status: `overheat`, `bleed`, or `humanity ≤ 25`
+- Specific consumables (pack-defined item IDs)
+- High NETRUN trace threshold
+- Per-NPC `voice_override` / `voice_triggers` in `data/mature/romance.yaml`
+
+Locale keys: `mature.noir.*` and `mature.lewd.*` in `mature_en.yaml` / `mature_zh.yaml`. Language follows **`player.locale`**. English **lewd** authoring aligns with the [Slutbunny Lewd RP Preset](https://chub.ai/presets/bleachbunny/slutbunny-lewd-roleplay-preset-15458f06c7fd): direct anatomy, no euphemisms, SFX lines, and a banned-cliché list (enforced in M.26).
+
+**M.19** adds `docs/STYLE.md` / `STYLE.zh.md` in the mature pack — voice rules, banned phrases, and `{persona}` / `{player}` template conventions.
+
+### Persona (M.21, SFW)
+
+**All players** (`teen` and `mature`) may use persona commands; copy is SFW and stored on the save.
+
+| Command | Detail |
+|---------|--------|
+| `persona` | Show current persona text |
+| `persona set <text>` | Set public description (≤200 chars) |
+| `persona clear` | Remove custom text |
+
+| Field | Detail |
+|-------|--------|
+| `Player.persona` | `str`, persisted in save JSON |
+| `look <player>` | Shows **full** persona to other players (public) |
+| `look me` | Keeps HP / posture / stats; persona shown separately |
+| `{persona}` in NPC templates | **Appearance one-liner** for mature dialogue — custom persona if set, else auto summary from equipment + posture |
+
+Teen players may set persona; they still cannot enter `tags: [mature]` rooms. Lewd voice **reframes** persona in narration at render time; it does **not** store a separate lewd persona field.
+
+### Scene & whisper (M.22)
+
+| Command | Rating | Gate | Notes |
+|---------|--------|------|-------|
+| `scene` / `scene status` | `mature` | Romance **stage only** (no time cooldown) | Scripted intimate beats from `romance.yaml` + locale |
+| `whisper <target> <message>` | `mature` for mature targets | Same room | Player or NPC; **does not** advance romance stage |
+
+Romance stage advances only via existing `flirt` / `spend_time` (confirmed). `whisper` to an NPC is private flavor, not affinity progression.
+
+NPC cards in `data/mature/romance.yaml` gain `scene_min_stage`, `voice_default`, `voice_triggers`, stages 4–5 lines, and persona/power template fields. First targets: `kabuki_host`, `bd_den_clerk`, VIP dancer.
+
+### Client Rich formatting (M.23)
+
+`client/mature_format.py` applies Rich styling to mature log lines:
+
+- `*action*` — italic emphasis
+- `"dialogue"` — quoted speech
+- `>env` — environment / narrator block
+- SFX / onomatopoeia lines — distinct palette
+
+New log channel kinds and optional `@meta mature_voice` chip (`noir` / `lewd`) in the status strip.
+
+**M.24** wires consumable, BD, and cyberpsychosis triggers into `resolve_mature_voice`. **M.25** ships dual-voice NPC content in the mature pack. **M.26** extends `mature_validate` with ban-list checks and `noir` / `lewd` key parity between `mature_en.yaml` and `mature_zh.yaml`.
 
 ## Validation
 

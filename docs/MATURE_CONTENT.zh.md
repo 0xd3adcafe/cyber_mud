@@ -13,6 +13,11 @@
 - [浪漫機制骨架](#浪漫機制骨架)
 - [成熟氛圍掛鉤（look／scan／interact）](#成熟氛圍掛鉤lookscaninteract)
 - [成熟社交與戰鬥（M.13–M.17）](#成熟社交與戰鬥m13m17)
+- [規劃擴充（M.19–M.26）](#規劃擴充m19m26)
+  - [雙聲線引擎（M.20）](#雙聲線引擎m20)
+  - [人設 persona（M.21，SFW）](#人設-personam21sfw)
+  - [scene 與 whisper（M.22）](#scene-與-whisperm22)
+  - [Client Rich 排版（M.23）](#client-rich-排版m23)
 - [驗證](#驗證)
 - [Help 與 client](#help-與-client)
 
@@ -94,6 +99,75 @@ git submodule update --init data/mature
 | 終結 | `finish`（敵人 ≤30% HP、18+） | `combat/finish.py`；`mature.combat.finish_*` |
 
 同房廣播依觀察者分級：mature 看成熟文案，teen 看預設語系。
+
+## 規劃擴充（M.19–M.26）
+
+以下 backlog 擴充成熟內容包：**雙聲線**、SFW **persona**、成熟 **scene**／**whisper**、Client Rich 排版。機制在主 repo；文案在 **`cyber_mud_mature`**。驗收見 [PHASES.zh.md](PHASES.zh.md) **成熟／NSFW 內容**。
+
+### 雙聲線引擎（M.20）
+
+成熟敘事在執行期擇一聲線（非 LLM 生成）：
+
+| 聲線 | 程式鍵 | 風格 |
+|------|--------|------|
+| **noir** | `noir` | 預設——直球賽博龐克；減少重複色情措辭 |
+| **lewd** | `lewd` | 露骨 Slutbunny 風 RP（鍵名 `lewd`，非 `slutbunny`） |
+
+`world/mature_voice.py` 提供 `resolve_mature_voice(player, state, room) → "noir" | "lewd"`。觸發為 **OR**（任一符合可切 `lewd`）：
+
+- 成熟標記房間（`bd_den`、`kabuki_vip` 等）
+- 進行中的成熟腦舞
+- 玩家狀態：`overheat`、`bleed` 或 `humanity ≤ 25`
+- 特定消耗品（內容包定義 item ID）
+- NETRUN 追蹤值過高
+- `data/mature/romance.yaml` 內 NPC 的 `voice_override`／`voice_triggers`
+
+語系鍵：`mature.noir.*`、`mature.lewd.*`（`mature_en.yaml`／`mature_zh.yaml` 同步）。語言跟 **`player.locale`**。英文 **lewd** 對齊 [Slutbunny Lewd RP Preset](https://chub.ai/presets/bleachbunny/slutbunny-lewd-roleplay-preset-15458f06c7fd)：直白解剖用語、不用委婉、擬聲 SFX、禁用陳腔（M.26 驗證）。
+
+**M.19** 於內容包新增 `docs/STYLE.md`／`STYLE.zh.md`——聲線規則、禁用詞、`{persona}`／`{player}` 模板慣例。
+
+### 人設 persona（M.21，SFW）
+
+**所有玩家**（`teen`／`mature`）可用；文案 SFW，存於存檔。
+
+| 指令 | 說明 |
+|------|------|
+| `persona` | 顯示目前人設 |
+| `persona set <文字>` | 設定公開描述（≤200 字） |
+| `persona clear` | 清除自訂文字 |
+
+| 欄位 | 說明 |
+|------|------|
+| `Player.persona` | `str`，寫入存檔 JSON |
+| `look <玩家>` | 向他人顯示**完整** persona（公開） |
+| `look me` | 保留 HP／姿態／數值；persona 另列 |
+| NPC 模板 `{persona}` | 成熟對話用的**外觀一行摘要**——有自訂則用之，否則由裝備＋姿態自動摘要 |
+
+`teen` 可設 persona，仍無法進 `tags: [mature]` 房間。`lewd` 聲線僅在**渲染時**改寫 persona 敘事，**不**另存 lewd 人設欄位。
+
+### scene 與 whisper（M.22）
+
+| 指令 | 分級 | 閘門 | 備註 |
+|------|------|------|------|
+| `scene`／`scene status` | `mature` | 僅浪漫**階段**（無時間冷卻） | `romance.yaml`＋語系腳本 |
+| `whisper <目標> <訊息>` | 對成熟目標需 `mature` | 同房 | 玩家或 NPC；**不**推進浪漫階段 |
+
+浪漫階段僅靠既有 `flirt`／`spend_time` 推進（已確認）。對 NPC `whisper` 為私密氛圍，非好感進度。
+
+`data/mature/romance.yaml` 擴充 `scene_min_stage`、`voice_default`、`voice_triggers`、階段 4–5 台詞、persona／權力模板。首批 NPC：`kabuki_host`、`bd_den_clerk`、VIP 舞者。
+
+### Client Rich 排版（M.23）
+
+`client/mature_format.py` 為成熟 log 套用 Rich：
+
+- `*動作*`——斜體強調
+- `"對白"`——引號對話
+- `>環境`——旁白／環境塊
+- 擬聲／SFX——獨立色盤
+
+新 log channel 與可選 `@meta mature_voice` 晶片（`noir`／`lewd`）於狀態列。
+
+**M.24** 將消耗品、腦舞、賽博精神病觸發接入 `resolve_mature_voice`。**M.25** 於內容包交付雙聲線 NPC 文案。**M.26** 擴充 `mature_validate`：禁用詞與 `noir`／`lewd` 雙語鍵同步。
 
 ## 驗證
 

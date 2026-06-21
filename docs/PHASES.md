@@ -324,8 +324,16 @@ Not yet implemented or only partially implemented.
 | ~~M.16~~ | ~~Romance gift reactions~~ | ✅ `world/mature_give.py`; `give <item> <romance_npc>` mature copy + broadcast |
 | ~~M.17~~ | ~~Combat taunt & finish~~ | ✅ `taunt <npc>` in combat; `finish` coup de grace when enemy ≤30% HP; help mature category |
 | ~~M.18~~ | ~~Mature private submodule + history purge~~ | ✅ Private `0xd3adcafe/cyber_mud_mature`; `data/mature` submodule; pack docs (`README`, `CLAUDE`, `CONTRIBUTING`, `LOCALIZATION` + `*.zh.md`, English default); `scripts/mature-submodule-split.sh`; `scripts/mature-history-purge.sh` (legacy + `data/mature/*` paths); teen fallback when pack missing; `tests/test_mature_paths.py` |
+| M.19 | Mature pack style guide | `cyber_mud_mature/docs/STYLE.md` + `STYLE.zh.md`; noir/lewd voice rules; banned cliché list; `{persona}` / `{player}` template conventions |
+| M.20 | Dual voice resolver | `world/mature_voice.py`; `resolve_mature_voice()` → `noir` \| `lewd`; room/BD/status/consumable/trace/NPC triggers; `mature.noir.*` / `mature.lewd.*` locale keys |
+| M.21 | Persona (SFW, all players) | `persona` / `persona set` / `persona clear`; `Player.persona` (≤200 chars) on save; `look <player>` public; `look me` keeps stats; `{persona}` one-liner for NPC templates; `tests/test_persona.py` |
+| M.22 | Scene + whisper | `scene` / `scene status` gated by romance stage only; `whisper <target> <msg>` same-room (no stage advance); expanded `romance.yaml` NPC cards; `tests/test_mature_social.py` |
+| M.23 | Client mature Rich format | `client/mature_format.py`; `*action*` / dialogue / `>env` / SFX palettes; mature log channels; optional `@meta mature_voice` chip |
+| M.24 | Lewd trigger wiring | Consumable IDs, mature BD session, cyberpsychosis (`humanity ≤ 25`) hooks into `resolve_mature_voice`; pack locale for trigger-flavored lines |
+| M.25 | Dual-voice NPC content | `kabuki_host`, `bd_den_clerk`, VIP dancer romance cards; stages 4–5; `voice_default` / `voice_triggers`; noir + lewd line sets in mature pack |
+| M.26 | Mature validate expansion | `mature_validate.py` ban-list scan (EN lewd clichés); `noir`/`lewd` key parity `mature_en.yaml` ↔ `mature_zh.yaml`; `./admin.sh validate` |
 
-**Suggested order:** M.0 → M.1 → M.3 → M.4 → M.5 → M.6 → M.2 → M.7 → M.8–M.18 shipped.
+**Suggested order:** M.0–M.18 shipped → **M.19** (style guide) → **M.21** (persona, SFW) + **M.20** (voice resolver) → **M.22** → **M.23** → **M.24** → **M.25** → **M.26**.
 
 ### World expansion ([WORLD.md](WORLD.md))
 
