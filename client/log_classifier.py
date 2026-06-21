@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 
+from client.mature_format import is_mature_marker_line
 from shared.protocol import ERR_PREFIX, MOTD_PREFIX, SYS_PREFIX
 
 LOG_KINDS = frozenset(
@@ -17,6 +18,7 @@ LOG_KINDS = frozenset(
         "ambient",
         "env_move",
         "env",
+        "mature",
         "text",
     }
 )
@@ -203,6 +205,9 @@ def classify_log_line(line: str, *, kind: str | None = None) -> str:
 
     if _MOVE_RE.match(plain):
         return "env_move"
+
+    if is_mature_marker_line(plain):
+        return "mature"
 
     for marker in _PROGRESSION_MARKERS:
         if marker.lower() in lower or marker in plain:

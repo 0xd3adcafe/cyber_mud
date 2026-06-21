@@ -59,6 +59,14 @@ def net_node_label_with_id(node, locale: str) -> str:
     return _label_with_suffix(label, command_name_suffix(node.name_en, node.id))
 
 
+def npc_label(npc, locale: str) -> str:
+    if npc is None:
+        return "?"
+    if locale == "en" and npc.name_en:
+        return npc.name_en
+    return npc.name_zh or npc.id
+
+
 def npc_label_with_id(npc, locale: str) -> str:
     if npc is None:
         return "?"

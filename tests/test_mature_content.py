@@ -6,7 +6,8 @@ from commands.registry import dispatch
 from shared.mature_paths import mature_content_available
 from tests.conftest import make_player, make_state
 from world.mature_flavor import romance_line
-from world.mature_validate import validate_mature_content
+from world.mature_validate import BANNED_LEWD_CLICHES, validate_mature_content
+from world.mature_voice import load_voice_config, resolve_mature_voice
 from world.loader import load_world
 
 pytestmark = pytest.mark.skipif(
@@ -90,9 +91,12 @@ def test_mature_look_npc_detail():
 
 
 def test_staged_flirt_lines():
-    assert "innuendo" in romance_line("en", "kabuki_flirt", 2).lower()
-    assert "invite" in romance_line("en", "kabuki_flirt", 3).lower()
+    assert "vip" in romance_line("en", "kabuki_flirt", 2).lower()
+    assert "backstage" in romance_line("en", "kabuki_flirt", 4).lower()
     assert romance_line("en", "kabuki_flirt", 1) != romance_line("en", "kabuki_flirt", 3)
+    assert romance_line("en", "kabuki_flirt", 3, voice="lewd") != romance_line(
+        "en", "kabuki_flirt", 3, voice="noir"
+    )
 
 
 def test_mature_interact_flavor():
@@ -187,6 +191,25 @@ def test_teen_cannot_taunt_or_finish():
     start_encounter(state, player, "thug")
     assert any("18+" in line or "mature" in line.lower() for line in dispatch("taunt thug", player, state, [], []).lines)
     assert any("18+" in line or "mature" in line.lower() for line in dispatch("finish", player, state, [], []).lines)
+
+
+def test_resolve_mature_voice_triggers():
+    state = make_state()
+    lounge = make_player(locale="en", room_id="kabuki_lounge", content_rating="mature")
+    square = make_player(locale="en", room_id="square", content_rating="mature")
+    lounge_room = state.world.room("kabuki_lounge")
+    square_room = state.world.room("square")
+    assert resolve_mature_voice(lounge, state, lounge_room) == "lewd"
+    assert resolve_mature_voice(square, state, square_room) == "noir"
+
+    cfg = load_voice_config()
+    square.braindance_flags[cfg.voice_mature_bd_flag] = "1"
+    assert resolve_mature_voice(square, state, square_room) == "lewd"
+
+
+def test_banned_lewd_cliches_exported():
+    assert "member" in BANNED_LEWD_CLICHES
+    assert "manhood" in BANNED_LEWD_CLICHES
 
 
 def test_mature_combat_broadcast_line_for_observer():

@@ -26,10 +26,25 @@ def handle(ctx: CommandContext):
         return ok([t(locale, "talk.missing", name=target or args)])
     npc_id = npc_result.value
 
+    room = ctx.state.world.room(ctx.player.room_id)
     if verb in {"spend", "time"} or args.lower().startswith("spend time "):
-        lines = spend_time_with_npc(ctx.player, npc_id, locale, profiles)
+        lines = spend_time_with_npc(
+            ctx.player,
+            npc_id,
+            locale,
+            profiles,
+            state=ctx.state,
+            room=room,
+        )
     else:
-        lines = flirt_with_npc(ctx.player, npc_id, locale, profiles)
+        lines = flirt_with_npc(
+            ctx.player,
+            npc_id,
+            locale,
+            profiles,
+            state=ctx.state,
+            room=room,
+        )
 
     if not lines:
         npc = ctx.state.world.npc(npc_id)

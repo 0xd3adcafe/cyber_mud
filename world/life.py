@@ -355,4 +355,7 @@ def format_self_life(player: Player, locale: str) -> list[str]:
     ]
     if player.life_anchor:
         lines.append(t(locale, "life.self_anchor", anchor=player.life_anchor))
+    persona = player.persona.strip()
+    if persona:
+        lines.append(t(locale, "persona.self_line", text=persona))
     return lines

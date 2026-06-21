@@ -44,6 +44,7 @@ class LogPalette:
     ambient: LogKindStyle
     env_move: LogKindStyle
     env: LogKindStyle
+    mature: LogKindStyle
     text: LogKindStyle
 
     def for_kind(self, kind: str) -> LogKindStyle:
@@ -68,6 +69,16 @@ class EnvPalette:
     corpses: str
     players: str
     weather: str
+
+
+@dataclass(frozen=True)
+class MaturePalette:
+    body: str
+    action: str
+    dialogue: str
+    env: str
+    env_marker: str
+    sfx: str
 
 _THEME_SPECS: dict[str, dict[str, str | bool]] = {
     "night_city": {
@@ -280,7 +291,25 @@ def log_palette_for_theme(theme_id: str) -> LogPalette:
         ambient=LogKindStyle("～", _muted_hex(foreground, 0.55), muted=True),
         env_move=LogKindStyle("▸", accent),
         env=LogKindStyle("◎", foreground),
+        mature=LogKindStyle("♦", primary),
         text=LogKindStyle("›", foreground, dim_prefix=True),
+    )
+
+
+def mature_palette_for_theme(theme_id: str) -> MaturePalette:
+    resolved = resolve_theme_id(theme_id) or DEFAULT_THEME_ID
+    spec = _THEME_SPECS[resolved]
+    foreground = str(spec["foreground"])
+    primary = str(spec["primary"])
+    accent = str(spec["accent"])
+    warning = str(spec["warning"])
+    return MaturePalette(
+        body=foreground,
+        action=primary,
+        dialogue=accent,
+        env=_muted_hex(foreground, 0.72),
+        env_marker=_muted_hex(accent, 0.85),
+        sfx=warning,
     )
 
 

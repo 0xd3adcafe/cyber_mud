@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 
 from client.cd_display import format_cooldown_line, parse_cooldown_line
 from client.env_format import format_environment_line, reset_environment_state
+from client.mature_format import format_mature_line
 from client.log_classifier import classify_log_line
 from client.log_settings import LogDisplaySettings
 from client.log_styles import format_log_line
@@ -103,7 +104,9 @@ class AnimatedLogBuffer:
 
     def _format_entry(self, entry: LogEntry) -> str:
         text = entry.text
-        if entry.kind in ("text", "env", "env_move") and text.strip():
+        if entry.kind == "mature" and text.strip():
+            text = format_mature_line(text, theme_id=self.theme_id) or text
+        elif entry.kind in ("text", "env", "env_move") and text.strip():
             text = format_environment_line(text, self._env_state, theme_id=self.theme_id) or text
         if entry.has_cooldown:
             remaining = _cd_remaining(entry)

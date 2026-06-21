@@ -13,7 +13,7 @@ All mature / NSFW-adjacent content in **cyber_mud** is **opt-in**. Default playe
 - [Romance scaffold](#romance-scaffold)
 - [Mature flavor hooks (look / scan / interact)](#mature-flavor-hooks-look-scan-interact)
 - [Mature social & combat (M.13–M.17)](#mature-social-combat-m13m17)
-- [Planned expansion (M.19–M.26)](#planned-expansion-m19m26)
+- [Dual voice, persona, scene & whisper (M.19–M.26)](#dual-voice-persona-scene--whisper-m19m26)
   - [Dual voice engine (M.20)](#dual-voice-engine-m20)
   - [Persona (M.21, SFW)](#persona-m21-sfw)
   - [Scene & whisper (M.22)](#scene--whisper-m22)
@@ -100,9 +100,9 @@ Only players with `content_rating=mature` in mature-tagged rooms/NPCs see these 
 
 Peer broadcasts use `localized_broadcast_line()` — mature observers see mature copy; teen observers keep default locale lines.
 
-## Planned expansion (M.19–M.26)
+## Dual voice, persona, scene & whisper (M.19–M.26)
 
-Backlog items below extend the mature pack with a **dual voice engine**, SFW **persona**, mature **scene** / **whisper**, and client Rich formatting. Mechanics live in **cyber_mud**; copy in **`cyber_mud_mature`**. See [PHASES.md](PHASES.md) **Mature / NSFW content** for acceptance criteria.
+Shipped (2026-06): **dual voice engine**, SFW **persona**, mature **scene** / **whisper**, and client Rich formatting. Mechanics in **cyber_mud**; copy in **`cyber_mud_mature`**. See [PHASES.md](PHASES.md) **Mature / NSFW content**.
 
 ### Dual voice engine (M.20)
 

@@ -13,6 +13,7 @@ ALWAYS_VISIBLE_KINDS = frozenset({"echo", "sys", "err", "motd"})
 HIDEABLE_KINDS: tuple[str, ...] = (
     "ambient",
     "social",
+    "mature",
     "combat",
     "env",
     "quest",

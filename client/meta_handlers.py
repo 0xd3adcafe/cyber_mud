@@ -62,6 +62,7 @@ class ClientViewState:
     player_name: str = ""
     locale: str = "en"
     content_rating: str = "teen"
+    mature_voice: str = ""
     level: str = "1"
     street_cred: str = "0"
     wanted: str = "0"
@@ -179,6 +180,8 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         state.locale = value or "en"
     elif key == "content_rating":
         state.content_rating = value or "teen"
+    elif key == "mature_voice":
+        state.mature_voice = value if value in {"noir", "lewd"} else ""
     elif key == "level":
         state.level = value
     elif key == "street_cred":

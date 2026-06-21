@@ -389,6 +389,20 @@ def format_look_target(ctx: CommandContext, target: str) -> list[str]:
 
         return format_self_life(ctx.player, ctx.player.locale)
 
+    from shared.names import matches_name
+
+    peer_candidates = list(ctx.peers)
+    for peer in ctx.all_players:
+        if peer is ctx.player or not peer.named:
+            continue
+        if peer.room_id == ctx.player.room_id and peer not in peer_candidates:
+            peer_candidates.append(peer)
+    for peer in peer_candidates:
+        if matches_name(text, peer.name):
+            from world.persona import format_look_player
+
+            return format_look_player(peer, ctx.player.locale)
+
     slot = resolve_equipment_slot_name(ctx, text)
     if text.strip().lower() in ("equipment", "gear", "裝備"):
         return format_look_equipment(ctx)

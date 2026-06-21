@@ -62,6 +62,7 @@ class Player:
     chased_by_npc: str = ""
     content_rating: str = "teen"
     romance_flags: dict[str, str] = field(default_factory=dict)
+    persona: str = ""
     player_status: dict[str, int] = field(default_factory=dict)
     posture: str = "standing"
     fatigue: int = 0

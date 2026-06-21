@@ -181,6 +181,11 @@ def player_meta(ctx: CommandContext) -> dict[str, str]:
     meta.update(completion_meta(ctx))
     meta["posture"] = ctx.player.posture
     meta["fatigue"] = str(ctx.player.fatigue)
+    from world.mature import is_mature
+    from world.mature_voice import resolve_mature_voice
+
+    if is_mature(ctx.player):
+        meta["mature_voice"] = resolve_mature_voice(ctx.player, ctx.state, room)
     return meta
 
 
@@ -397,6 +402,9 @@ def register_builtin_commands() -> None:
         braindance,
         settings_cmd,
         flirt,
+        persona,
+        scene,
+        whisper,
         taunt,
         finish_cmd,
         life,

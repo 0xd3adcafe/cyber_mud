@@ -344,6 +344,9 @@ help_cmds:
   spend_time: "Spend private time (18+, spend_time <npc>)"
   taunt: "Taunt enemy in combat (18+, taunt <npc>)"
   finish: "Coup de grace on weak enemy (18+, finish)"
+  persona: "Public persona (persona set/clear — SFW, all players)"
+  scene: "Intimate scene with romance NPC (18+, scene <npc>)"
+  whisper: "Private whisper (whisper <target> <msg>)"
   take: "Pick up an item"
   drop: "Drop an item"
   inventory: "Show inventory"
@@ -457,6 +460,31 @@ life:
   self_posture: "Posture: {posture}"
   self_anchor: "Rest spot: {anchor}"
   unknown: "Unknown life command."
+
+persona:
+  usage: "Usage: persona  ·  persona set <text>  ·  persona clear"
+  set_ok: "Persona set: {text}"
+  clear_ok: "Persona cleared."
+  show: "Persona: {text}"
+  look_player_header: "◈ {name}"
+  look_player_empty: "(No public persona set.)"
+  self_line: "Persona: {text}"
+  auto_summary: "{posture} — {gear}"
+  auto_summary_bare: "{posture} — unremarkable chrome"
+  lewd_wrap: "{persona} — hunger shows in every glance"
+
+scene:
+  usage: "Usage: scene <npc>  ·  scene status"
+  status_header: "◈ Scene status (romance stage)"
+  status_row: "{name}: stage {stage} (scene from {min_stage})"
+  no_targets: "No romance targets in this room."
+  need_stage: "{name} needs romance stage {stage} before a scene."
+
+whisper:
+  usage: "Usage: whisper <target> <message>"
+  player_ok: "You whisper to {target}: {message}"
+  npc_ok: "You whisper to {target}: {message}"
+  not_found: "No one here named {target}."
 
 repeat:
   done: "(repeated {count} times)"
@@ -1326,6 +1354,9 @@ client:
     age_s: "{n}s ago"
     age_m: "{n}m ago"
     age_dash: "—"
+  mature_voice:
+    noir: Noir
+    lewd: Lewd
   login:
     theme_label: "Visual theme"
     pin_label: "Quick login (PIN)"

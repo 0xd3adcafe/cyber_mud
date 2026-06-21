@@ -96,6 +96,7 @@ def format_status_markup(
     if state.quest and not combat_active(state):
         q_icon = animated_icon("◆", frame=spinner_frame, active=quest_active(state))
         quest_chip = f"  [dim]│[/]  [yellow]{q_icon} {state.quest}[/]"
+    mature_chip = _format_mature_voice_chip(state)
     link = ""
     if reconnecting:
         link = f"  [dim]│[/]  [yellow]{_ui(locale, 'status.reconnecting')}[/]"
@@ -104,8 +105,20 @@ def format_status_markup(
         f"  [dim]│[/]  [{hp_style}]{hp_icon} HP {state.hp}[/]"
         f"  [dim]│[/]  [yellow]€{state.gold}[/]"
         f"  [dim]│[/]  [dim]{state.time}  {state.period}[/]"
-        f"{weather}{net}{quest_chip}{link}"
+        f"{weather}{net}{quest_chip}{mature_chip}{link}"
     )
+
+
+def _format_mature_voice_chip(state: ClientViewState) -> str:
+    if state.content_rating != "mature" or state.mature_voice not in {"noir", "lewd"}:
+        return ""
+    locale = state.locale or "en"
+    label = t(locale, f"client.mature_voice.{state.mature_voice}")
+    if state.mature_voice == "lewd":
+        style = "bold magenta"
+    else:
+        style = "dim italic"
+    return f"  [dim]│[/]  [{style}]♦ {label}[/]"
 
 
 def format_hotkey_bar(*, locale: str = "en", net_shell: bool = False) -> str:

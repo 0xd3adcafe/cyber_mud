@@ -344,6 +344,9 @@ help_cmds:
   spend_time: "私密相處（18+，spend_time <NPC>）"
   taunt: "戰鬥嘲諷（18+，taunt <NPC>）"
   finish: "終結弱敵（18+，finish）"
+  persona: "公開人設（persona set/clear——SFW，全玩家）"
+  scene: "親密場景（18+，scene <NPC>）"
+  whisper: "私語（whisper <目標> <訊息>）"
   take: "撿起地上物品"
   drop: "丟下背包物品"
   inventory: "查看背包"
@@ -457,6 +460,31 @@ life:
   self_posture: "姿態：{posture}"
   self_anchor: "休息點：{anchor}"
   unknown: "未知的生活指令。"
+
+persona:
+  usage: "用法：persona  ·  persona set <文字>  ·  persona clear"
+  set_ok: "人設已設定：{text}"
+  clear_ok: "人設已清除。"
+  show: "人設：{text}"
+  look_player_header: "◈ {name}"
+  look_player_empty: "（未設定公開人設。）"
+  self_line: "人設：{text}"
+  auto_summary: "{posture}——{gear}"
+  auto_summary_bare: "{posture}——不起眼的 chrome"
+  lewd_wrap: "{persona}——每道目光都帶著飢渴"
+
+scene:
+  usage: "用法：scene <NPC>  ·  scene status"
+  status_header: "◈ 場景狀態（好感階段）"
+  status_row: "{name}：階段 {stage}（scene 需 {min_stage}）"
+  no_targets: "此房間沒有可發展的對象。"
+  need_stage: "{name} 需要好感階段 {stage} 才能進入 scene。"
+
+whisper:
+  usage: "用法：whisper <目標> <訊息>"
+  player_ok: "你對 {target} 低語：{message}"
+  npc_ok: "你對 {target} 低語：{message}"
+  not_found: "這裡沒有叫 {target} 的人。"
 
 repeat:
   done: "（重複完成 {count} 次）"
@@ -1326,6 +1354,9 @@ client:
     age_s: "{n}s前"
     age_m: "{n}m前"
     age_dash: "—"
+  mature_voice:
+    noir: 黑色電影
+    lewd: 情色
   login:
     theme_label: 視覺主題
     pin_label: 快速登入（PIN）

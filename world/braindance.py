@@ -42,7 +42,10 @@ def play_braindance(
 
     if bd.rating == "mature" and is_mature(player):
         from shared.mature_i18n import tm
+        from world.mature_voice import load_voice_config
 
+        cfg = load_voice_config()
+        player.braindance_flags[cfg.voice_mature_bd_flag] = "1"
         mature_lines = [tm(locale, f"braindance.{bd_id}.line_{index + 1}") for index in range(8)]
         lines = [line for line in mature_lines if not line.startswith("braindance.")]
         if not lines:

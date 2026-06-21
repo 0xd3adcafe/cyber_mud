@@ -60,6 +60,10 @@ def handle(ctx: CommandContext):
             life_lines.append(t(ctx.player.locale, "life.wake_on_move"))
 
     from_room = ctx.player.room_id
+    from world.mature_voice import load_voice_config
+
+    cfg = load_voice_config()
+    ctx.player.braindance_flags.pop(cfg.voice_mature_bd_flag, None)
     ctx.player.room_id = dest_id
     from world.life import gain_fatigue
 

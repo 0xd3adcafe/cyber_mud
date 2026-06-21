@@ -13,7 +13,7 @@
 - [浪漫機制骨架](#浪漫機制骨架)
 - [成熟氛圍掛鉤（look／scan／interact）](#成熟氛圍掛鉤lookscaninteract)
 - [成熟社交與戰鬥（M.13–M.17）](#成熟社交與戰鬥m13m17)
-- [規劃擴充（M.19–M.26）](#規劃擴充m19m26)
+- [雙聲線、persona、scene 與 whisper（M.19–M.26）](#雙聲線personascene-與-whisperm19m26)
   - [雙聲線引擎（M.20）](#雙聲線引擎m20)
   - [人設 persona（M.21，SFW）](#人設-personam21sfw)
   - [scene 與 whisper（M.22）](#scene-與-whisperm22)
@@ -100,9 +100,9 @@ git submodule update --init data/mature
 
 同房廣播依觀察者分級：mature 看成熟文案，teen 看預設語系。
 
-## 規劃擴充（M.19–M.26）
+## 雙聲線、persona、scene 與 whisper（M.19–M.26）
 
-以下 backlog 擴充成熟內容包：**雙聲線**、SFW **persona**、成熟 **scene**／**whisper**、Client Rich 排版。機制在主 repo；文案在 **`cyber_mud_mature`**。驗收見 [PHASES.zh.md](PHASES.zh.md) **成熟／NSFW 內容**。
+已交付（2026-06）：**雙聲線**、SFW **persona**、成熟 **scene**／**whisper**、Client Rich 排版。機制在主 repo；文案在 **`cyber_mud_mature`**。見 [PHASES.zh.md](PHASES.zh.md) **成熟／NSFW 內容**。
 
 ### 雙聲線引擎（M.20）
 

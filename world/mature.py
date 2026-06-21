@@ -5,7 +5,7 @@ from shared.i18n import t
 
 RATINGS = frozenset({"teen", "mature"})
 MATURE_TAG = "mature"
-MATURE_COMMANDS = frozenset({"flirt", "spend_time", "taunt", "finish"})
+MATURE_COMMANDS = frozenset({"flirt", "spend_time", "taunt", "finish", "scene", "whisper"})
 
 
 def is_mature(player: Player) -> bool:

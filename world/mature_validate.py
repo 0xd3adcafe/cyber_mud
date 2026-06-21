@@ -17,6 +17,24 @@ ROMANCE_PATH = romance_path()
 QUESTS_MATURE_PATH = quests_mature_path()
 BRAINDANCES_MATURE_PATH = braindances_mature_path()
 
+BANNED_LEWD_CLICHES: tuple[str, ...] = (
+    "member",
+    "manhood",
+    "womanhood",
+    "love canal",
+    "secret garden",
+    "throbbing member",
+    "man meat",
+    "love rod",
+    "pleasure pole",
+    "rod of pleasure",
+    "nether regions",
+    "bosom heaving",
+    "orbs of pleasure",
+    "tunnel of love",
+    "love button",
+)
+
 
 @dataclass
 class MatureIssue:
@@ -49,6 +67,43 @@ def _locale_keys(locale: str) -> set[str]:
     return walk(mature, "mature")
 
 
+def _voice_subtree_keys(locale: str, voice: str) -> set[str]:
+    path = mature_locale_path(locale)
+    data = _load_yaml(path)
+    mature = data.get("mature") or {}
+    voice_node = mature.get(voice) or {}
+
+    def walk(node: dict, prefix: str) -> set[str]:
+        keys: set[str] = set()
+        for key, value in node.items():
+            full = f"{prefix}.{key}" if prefix else key
+            if isinstance(value, dict):
+                keys.update(walk(value, full))
+            elif isinstance(value, str):
+                keys.add(full)
+        return keys
+
+    return walk(voice_node, f"mature.{voice}")
+
+
+def _collect_lewd_en_strings() -> list[tuple[str, str]]:
+    path = mature_locale_path("en")
+    data = _load_yaml(path)
+    lewd = (data.get("mature") or {}).get("lewd") or {}
+    found: list[tuple[str, str]] = []
+
+    def walk(node: dict, prefix: str) -> None:
+        for key, value in node.items():
+            full = f"{prefix}.{key}" if prefix else key
+            if isinstance(value, dict):
+                walk(value, full)
+            elif isinstance(value, str):
+                found.append((full, value))
+
+    walk(lewd, "mature.lewd")
+    return found
+
+
 def validate_mature_content(world) -> list[MatureIssue]:
     if not mature_content_available():
         return [
@@ -66,6 +121,25 @@ def validate_mature_content(world) -> list[MatureIssue]:
         issues.append(MatureIssue("error", f"mature locale missing zh key: {key}"))
     for key in missing_en:
         issues.append(MatureIssue("warn", f"mature locale missing en key: {key}"))
+
+    for voice in ("noir", "lewd"):
+        en_voice = _voice_subtree_keys("en", voice)
+        zh_voice = _voice_subtree_keys("zh", voice)
+        for key in sorted(en_voice - zh_voice):
+            issues.append(MatureIssue("error", f"mature {voice} missing zh key: {key}"))
+        for key in sorted(zh_voice - en_voice):
+            issues.append(MatureIssue("warn", f"mature {voice} missing en key: {key}"))
+
+    for key, text in _collect_lewd_en_strings():
+        lowered = text.lower()
+        for banned in BANNED_LEWD_CLICHES:
+            if banned in lowered:
+                issues.append(
+                    MatureIssue(
+                        "error",
+                        f"mature lewd banned cliché {banned!r} in {key}",
+                    )
+                )
 
     romance = _load_yaml(ROMANCE_PATH).get("romances") or {}
     for rid, data in romance.items():
