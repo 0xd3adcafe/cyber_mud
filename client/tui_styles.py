@@ -118,7 +118,8 @@ Select {
     height: auto;
 }
 
-#info_bar {
+#info_bar,
+#status_strip {
     width: 100%;
     height: auto;
     min-height: 1;
@@ -240,6 +241,11 @@ Select {
     layers: base dropdown;
 }
 
+#scrollback_wrap.netrun-active {
+    border-left: heavy cyan;
+    background: $panel 8%;
+}
+
 #log {
     layer: base;
     width: 1fr;
@@ -250,16 +256,73 @@ Select {
     padding: 0 1;
 }
 
+#overlay_panel,
 #help_dropdown {
     layer: dropdown;
     dock: top;
     width: 100%;
-    height: 1fr;
+    height: 50%;
     background: $background;
     border: heavy $accent;
     padding: 0;
 }
 
+#overlay_panel.overlay-collapsed,
+#help_dropdown.overlay-collapsed {
+    height: 0;
+    min-height: 0;
+    overflow: hidden;
+    border: none;
+    padding: 0;
+}
+
+.overlay-hidden,
+.help-dropdown-hidden {
+    display: none;
+}
+
+#overlay_tab_row {
+    height: 1;
+    min-height: 1;
+    layout: horizontal;
+    background: $panel;
+    border-bottom: solid $accent 40%;
+    padding: 0 1;
+    text-style: bold;
+}
+
+#overlay_tab_netrun,
+#overlay_tab_help {
+    width: auto;
+    height: 1;
+    min-height: 1;
+    padding: 0 1 0 0;
+    content-align: left middle;
+}
+
+#overlay_tab_netrun:hover,
+#overlay_tab_help:hover {
+    color: $accent;
+}
+
+#overlay_trace_bar {
+    width: 1fr;
+    height: 1;
+    min-height: 1;
+    padding: 0 1;
+    content-align: right middle;
+}
+
+#overlay_header_controls {
+    width: auto;
+    height: 1;
+    min-height: 1;
+    color: $text-muted;
+    padding: 0 0 0 1;
+    content-align: right middle;
+}
+
+#overlay_panel_header,
 #help_dropdown_header {
     height: 1;
     min-height: 1;
@@ -270,6 +333,7 @@ Select {
     text-style: bold;
 }
 
+#overlay_panel_scroll,
 #help_dropdown_scroll {
     height: 1fr;
     padding: 0 1;
@@ -278,14 +342,11 @@ Select {
     background: $background;
 }
 
+#overlay_panel_content,
 #help_dropdown_content {
     width: 1fr;
     height: auto;
     padding: 1 0;
-}
-
-.help-dropdown-hidden {
-    display: none;
 }
 
 #sidebar_wrap {

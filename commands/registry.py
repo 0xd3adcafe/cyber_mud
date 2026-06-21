@@ -371,6 +371,7 @@ def register_builtin_commands() -> None:
         gigs,
         talents_cmd,
         map,
+        mesh,
         mod,
         net,
         pda,

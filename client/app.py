@@ -21,7 +21,25 @@ from client.credentials import (
 )
 from client.connection import ServerConnection
 from client.login_art import render_login_art
-from client.help_overlay import format_help_overlay_content, help_overlay_header
+from client.help_overlay import format_help_overlay_content
+from client.overlay_controller import (
+    close_overlay as oc_close_overlay,
+    collapse_overlay as oc_collapse_overlay,
+    enter_netrun_session,
+    exit_netrun_session,
+    open_overlay as oc_open_overlay,
+    toggle_overlay_tab,
+)
+from client.overlay_panel import (
+    OVERLAY_TAB_HELP,
+    OVERLAY_TAB_NETRUN,
+    format_netrun_hud,
+    format_overlay_help_tab,
+    format_overlay_netrun_tab,
+    format_overlay_trace_chip,
+    overlay_header_controls,
+)
+from client.status_strip import format_status_strip
 from client.login_motd import banner_text, default_tips, parse_motd_line
 from client.prompt_preview import (
     detect_prompt_edit,
@@ -49,7 +67,7 @@ from commands.aliases import DEFAULT_ALIASES
 from client.status_indicators import status_needs_animation
 from client.completion import MudPrompt, MudSuggester, complete_cycle_from_view, complete_from_view
 from client.history import CommandHistory
-from client.link_status import format_link_status_bar, make_link_snapshot
+from client.link_status import make_link_snapshot
 from client.reconnect import reconnect_status_message, should_resend_auth
 from client.log_classifier import classify_log_line
 from client.log_settings import (
@@ -64,7 +82,7 @@ from client.log_settings import (
 )
 from client.output_prefix import spinner_char
 from client.tui_styles import APP_CSS
-from client.ui_format import format_hotkey_bar, format_info_bar, format_sidebar_header
+from client.ui_format import format_hotkey_bar, format_sidebar_header
 from client.meta_handlers import (
     HELP_OVERLAY_PANEL,
     META_SKIP_STATUS_REFRESH,
@@ -109,13 +127,16 @@ class CyberMudApp(App):
     BINDINGS = [
         Binding("ctrl+c", "quit", "離開"),
         Binding("tab", "tab_complete", "補全", show=False),
-        Binding("f2", "panel_pda", "PDA", show=True),
-        Binding("f3", "panel_help", "說明", show=True),
-        Binding("f4", "panel_map", "地圖", show=True),
-        Binding("f5", "panel_equipment", "裝備", show=True),
-        Binding("f6", "toggle_sidebar", "收合側欄", show=True),
-        Binding("f7", "panel_gigs", "委託", show=True),
-        Binding("escape", "close_help_overlay", "關閉說明", show=False),
+        Binding("f1", "panel_pda", "PDA", show=True),
+        Binding("f2", "panel_help", "說明", show=True),
+        Binding("f3", "panel_map", "地圖", show=True),
+        Binding("f4", "panel_equipment", "裝備", show=True),
+        Binding("f5", "panel_gigs", "委託", show=True),
+        Binding("f6", "panel_mesh", "Mesh", show=True),
+        Binding("f8", "clear_credentials", "清除帳密", show=False),
+        Binding("f11", "toggle_sidebar", "側欄", show=True),
+        Binding("f12", "toggle_netrun_overlay", "NET", show=False),
+        Binding("escape", "close_overlay", "關閉", show=False),
     ]
 
     def __init__(self, host: str, port: int) -> None:
@@ -146,7 +167,7 @@ class CyberMudApp(App):
         self._panel_fetch_event: asyncio.Event | None = None
         self._panel_fetching = False
         self._panel_fetch_generation = 0
-        self._help_overlay_open = False
+        self._netrun_sidebar_user_closed = False
         self._help_fetch_event: asyncio.Event | None = None
         self._help_fetching = False
         self._help_fetch_generation = 0
@@ -232,15 +253,18 @@ class CyberMudApp(App):
 
         with Container(id="game_container", classes="game-hidden"):
             with Vertical(id="top_dock"):
-                yield Static(self._info_bar(), id="info_bar")
-                yield Static(self._chrome_bar(), id="chrome_bar")
+                yield Static(self._status_strip(), id="status_strip")
             with Horizontal(id="main_row"):
                 with Container(id="scrollback_wrap"):
                     yield RichLog(id="log", highlight=True, markup=True)
-                    with Vertical(id="help_dropdown", classes="help-dropdown-hidden"):
-                        yield Static(help_overlay_header(), id="help_dropdown_header")
-                        with VerticalScroll(id="help_dropdown_scroll"):
-                            yield Static("", id="help_dropdown_content")
+                    with Vertical(id="overlay_panel", classes="overlay-hidden"):
+                        with Horizontal(id="overlay_tab_row"):
+                            yield Static("", id="overlay_tab_netrun")
+                            yield Static("", id="overlay_tab_help")
+                            yield Static("", id="overlay_trace_bar")
+                            yield Static("", id="overlay_header_controls")
+                        with VerticalScroll(id="overlay_panel_scroll"):
+                            yield Static("", id="overlay_panel_content")
                 with Vertical(id="sidebar_wrap", classes="sidebar-hidden"):
                     yield Static("", id="sidebar_header")
                     yield VerticalScroll(
@@ -267,44 +291,35 @@ class CyberMudApp(App):
 
         yield Footer()
 
-    def _info_bar(self) -> str:
-        return format_info_bar(
+    def _link_snapshot(self):
+        return make_link_snapshot(
+            connected=self.conn.connected,
+            reconnecting=self._reconnecting,
+            command_pending=self._log_buffer.has_pending(),
+            panel_fetching=self._panel_fetching or self._help_fetching,
+            auth_pending=self._auth_pending,
+            last_rtt_ms=self._last_rtt_ms,
+            last_recv_at=self._last_recv_at,
+            last_send_at=self._cmd_sent_at,
+        )
+
+    def _status_strip(self) -> str:
+        return format_status_strip(
             self.view,
+            snapshot=self._link_snapshot(),
             host=self.host,
             port=self.port,
-            reconnecting=self._reconnecting,
-            spinner_frame=self._log_buffer.frame,
+            frame=self._log_buffer.frame,
         )
 
     def _needs_ui_animation(self) -> bool:
         return self._log_buffer.has_pending() or status_needs_animation(self.view)
 
-    def _link_status_bar(self) -> str:
-        return format_link_status_bar(
-            make_link_snapshot(
-                connected=self.conn.connected,
-                reconnecting=self._reconnecting,
-                command_pending=self._log_buffer.has_pending(),
-                panel_fetching=self._panel_fetching or self._help_fetching,
-                auth_pending=self._auth_pending,
-                last_rtt_ms=self._last_rtt_ms,
-                last_recv_at=self._last_recv_at,
-                last_send_at=self._cmd_sent_at,
-            ),
-            frame=self._log_buffer.frame,
-            host=self.host,
-            port=self.port,
-            locale=self._client_locale(),
-        )
-
-    def _chrome_bar(self) -> str:
-        return self._link_status_bar()
-
-    def _update_chrome_bar(self) -> None:
+    def _update_status_strip(self) -> None:
         if not self.view.authenticated:
             return
         try:
-            self.query_one("#chrome_bar", Static).update(self._chrome_bar())
+            self.query_one("#status_strip", Static).update(self._status_strip())
         except Exception:
             pass
 
@@ -314,7 +329,7 @@ class CyberMudApp(App):
         self.query_one("#game_container").refresh(layout=True)
 
     def _update_link_status_bar(self) -> None:
-        self._update_chrome_bar()
+        self._update_status_strip()
 
     def _note_outbound(self) -> None:
         self._cmd_sent_at = time.monotonic()
@@ -398,10 +413,7 @@ class CyberMudApp(App):
         self._update_spinner_accent()
         self._update_focus_block()
         if status_needs_animation(self.view) and self._log_buffer.frame % 2 == 0:
-            try:
-                self.query_one("#info_bar", Static).update(self._info_bar())
-            except Exception:
-                pass
+            self._update_status_strip()
         self._update_link_status_bar()
 
     def _on_cd_tick(self) -> None:
@@ -411,7 +423,7 @@ class CyberMudApp(App):
         if changed:
             self._refresh_log_display(self.query_one("#log", RichLog), preserve_scroll=True)
         if self.view.in_combat or status_needs_animation(self.view):
-            self.query_one("#info_bar", Static).update(self._info_bar())
+            self._update_status_strip()
         self._update_focus_block()
 
     def _prompt_prefix(self) -> str:
@@ -634,6 +646,7 @@ class CyberMudApp(App):
         self._session_token = ""
         self._auth_pending = False
         self._pending_logout = False
+        self._netrun_sidebar_user_closed = False
         self.view = ClientViewState()
         self._log_buffer = AnimatedLogBuffer()
         self._log_buffer.set_theme_id(self._theme_id)
@@ -703,11 +716,13 @@ class CyberMudApp(App):
     def _update_status(self) -> None:
         if not self.view.authenticated:
             return
-        self.query_one("#info_bar", Static).update(self._info_bar())
-        self.query_one("#hotkey_bar", Static).update(format_hotkey_bar(locale=self._client_locale()))
+        self.query_one("#status_strip", Static).update(self._status_strip())
+        self.query_one("#hotkey_bar", Static).update(
+            format_hotkey_bar(locale=self._client_locale(), net_shell=self.view.net_shell)
+        )
         self.query_one("#prompt_prefix", Static).update(self._prompt_prefix())
         self._refresh_prompt_placeholder()
-        self._update_chrome_bar()
+        self._update_status_strip()
 
     def _schedule_status_update(self) -> None:
         if self._status_update_scheduled:
@@ -792,25 +807,97 @@ class CyberMudApp(App):
         self._configure_game_focus_targets()
         self.call_after_refresh(self._focus_game_prompt)
 
-    def _configure_help_overlay_focus(self) -> None:
+    def _configure_overlay_focus(self) -> None:
         try:
-            self.query_one("#help_dropdown_scroll").can_focus = False
+            self.query_one("#overlay_panel_scroll").can_focus = False
         except Exception:
             pass
 
-    def _render_help_overlay(self) -> None:
-        dropdown = self.query_one("#help_dropdown", Vertical)
-        header = self.query_one("#help_dropdown_header", Static)
-        content = self.query_one("#help_dropdown_content", Static)
-        if not self._help_overlay_open:
-            dropdown.add_class("help-dropdown-hidden")
-            content.update("")
+    def _render_overlay(self) -> None:
+        panel_wrap = self.query_one("#overlay_panel", Vertical)
+        scroll_wrap = self.query_one("#scrollback_wrap", Container)
+        locale = self._client_locale()
+        if not self.view.overlay_open:
+            panel_wrap.add_class("overlay-hidden")
+            panel_wrap.remove_class("overlay-collapsed")
+            scroll_wrap.remove_class("netrun-active")
+            self.query_one("#overlay_panel_content", Static).update("")
             return
-        dropdown.remove_class("help-dropdown-hidden")
-        header.update(help_overlay_header(locale=self._client_locale()))
-        panel = self.view.sidebar_panels.get(HELP_OVERLAY_PANEL)
-        content.update(format_help_overlay_content(panel))
+        panel_wrap.remove_class("overlay-hidden")
+        if self.view.overlay_collapsed:
+            panel_wrap.add_class("overlay-collapsed")
+        else:
+            panel_wrap.remove_class("overlay-collapsed")
+        if self.view.net_shell:
+            scroll_wrap.add_class("netrun-active")
+        else:
+            scroll_wrap.remove_class("netrun-active")
+        active = self.view.overlay_active_tab
+        self.query_one("#overlay_tab_netrun", Static).update(
+            format_overlay_netrun_tab(active, net_shell=self.view.net_shell)
+        )
+        self.query_one("#overlay_tab_help", Static).update(format_overlay_help_tab(active))
+        trace_bar = self.query_one("#overlay_trace_bar", Static)
+        if active == OVERLAY_TAB_NETRUN or self.view.net_shell:
+            trace_bar.update(format_overlay_trace_chip(self.view.net_trace, locale=locale))
+        else:
+            trace_bar.update("")
+        self.query_one("#overlay_header_controls", Static).update(overlay_header_controls(locale))
+        content = self.query_one("#overlay_panel_content", Static)
+        if active == OVERLAY_TAB_NETRUN:
+            content.update(format_netrun_hud(self.view, locale))
+        else:
+            help_panel = self.view.sidebar_panels.get(HELP_OVERLAY_PANEL)
+            content.update(format_help_overlay_content(help_panel))
         self.call_after_refresh(self._focus_game_prompt)
+
+    def _open_overlay_tab(self, tab: str) -> None:
+        if tab == OVERLAY_TAB_NETRUN and not self.view.net_shell:
+            return
+        toggle_overlay_tab(self.view, tab)
+        if "help" in self.view.sidebar_stack:
+            self.view.sidebar_stack.remove("help")
+        apply_meta(self.view, "ui_panel", HELP_OVERLAY_PANEL)
+        self._render_overlay()
+
+    def _close_overlay(self) -> None:
+        if not self.view.overlay_open:
+            return
+        self._cancel_help_fetch()
+        oc_close_overlay(self.view)
+        self.view.pending_panel = ""
+        if "help" in self.view.sidebar_stack:
+            self.view.sidebar_stack.remove("help")
+        self._render_overlay()
+
+    def _collapse_overlay(self) -> None:
+        if not self.view.overlay_open:
+            return
+        oc_collapse_overlay(self.view)
+        self._render_overlay()
+
+    def _toggle_netrun_overlay(self) -> None:
+        if not self.view.net_shell:
+            return
+        if (
+            self.view.overlay_open
+            and self.view.overlay_active_tab == OVERLAY_TAB_NETRUN
+            and not self.view.overlay_collapsed
+        ):
+            self._close_overlay()
+            return
+        oc_open_overlay(self.view, tab=OVERLAY_TAB_NETRUN)
+        self._render_overlay()
+
+    def _auto_mesh_sidebar(self) -> None:
+        if not self.view.netrun_sidebar_auto or self._netrun_sidebar_user_closed:
+            return
+        self.view.sidebar_open = True
+        self.view.sidebar_stack.clear()
+        self.view.sidebar_stack.append("mesh")
+        self.view.pending_panel = "mesh"
+        self._render_sidebar()
+        self._schedule_panel_fetch("mesh")
 
     def _cancel_help_fetch(self) -> None:
         self._help_fetch_generation += 1
@@ -845,32 +932,10 @@ class CyberMudApp(App):
                 self._help_fetch_event = None
             self._update_link_status_bar()
 
-    def _open_help_overlay(self) -> None:
-        if "help" in self.view.sidebar_stack:
-            self.view.sidebar_stack.remove("help")
-        self._help_overlay_open = True
-        apply_meta(self.view, "ui_panel", HELP_OVERLAY_PANEL)
-        self._render_help_overlay()
-        self._schedule_help_fetch()
-
-    def _close_help_overlay(self) -> None:
-        if not self._help_overlay_open:
-            return
-        self._cancel_help_fetch()
-        self._help_overlay_open = False
-        self.view.pending_panel = ""
-        if "help" in self.view.sidebar_stack:
-            self.view.sidebar_stack.remove("help")
-        self._render_help_overlay()
-
-    def _toggle_help_overlay(self) -> None:
-        if self._help_overlay_open:
-            self._close_help_overlay()
-        else:
-            self._open_help_overlay()
-
     def _help_panel_active(self) -> bool:
-        return self._help_overlay_open or self.view.pending_panel == HELP_OVERLAY_PANEL
+        return (
+            self.view.overlay_open and self.view.overlay_active_tab == OVERLAY_TAB_HELP
+        ) or self.view.pending_panel == HELP_OVERLAY_PANEL
 
     def _cancel_panel_fetch(self) -> None:
         self._panel_fetch_generation += 1
@@ -909,7 +974,11 @@ class CyberMudApp(App):
         if not self.view.authenticated:
             return
         if command == HELP_OVERLAY_PANEL:
-            self._toggle_help_overlay()
+            if self.view.overlay_open and self.view.overlay_active_tab == OVERLAY_TAB_HELP:
+                self._close_overlay()
+            else:
+                self._open_overlay_tab(OVERLAY_TAB_HELP)
+                self._schedule_help_fetch()
             return
         self._cancel_sidebar_debounce()
         if not self.conn.connected:
@@ -945,6 +1014,7 @@ class CyberMudApp(App):
     def _apply_meta(self, payload: str) -> None:
         key, value = parse_meta_payload(payload)
         was_auth = self.view.authenticated
+        was_net_shell = self.view.net_shell
         old_room_id = self.view.room_id
         apply_meta(self.view, key, value)
         if patch_open_pda_ui(self.view, key):
@@ -977,18 +1047,33 @@ class CyberMudApp(App):
                     self._queue_sidebar_refresh(list(self.view.sidebar_stack))
         elif key == "auth" and value == "0" and was_auth:
             self._return_to_login_screen()
+        if key == "net_shell":
+            if value == "1" and not was_net_shell:
+                self._netrun_sidebar_user_closed = False
+                enter_netrun_session(self.view)
+                self._auto_mesh_sidebar()
+                self._render_overlay()
+                self._render_sidebar()
+                self._update_status()
+            elif value == "0" and was_net_shell:
+                exit_netrun_session(self.view)
+                self._render_overlay()
+                self._render_sidebar()
+                self._update_status()
+        elif key == "net_trace" and self.view.overlay_open:
+            self._render_overlay()
         if key == "locale":
             self._update_status()
             self._render_sidebar()
             if self._help_panel_active():
-                self._render_help_overlay()
+                self._render_overlay()
         elif key not in META_SKIP_STATUS_REFRESH and key != "auth":
             self._schedule_status_update()
         if key == "ui_panel_end":
             if self._help_panel_active():
                 if HELP_OVERLAY_PANEL in self.view.sidebar_stack:
                     self.view.sidebar_stack.remove(HELP_OVERLAY_PANEL)
-                self._render_help_overlay()
+                self._render_overlay()
                 if self._help_fetch_event is not None:
                     self._help_fetch_event.set()
             else:
@@ -1051,11 +1136,21 @@ class CyberMudApp(App):
         self._send_panel_command("pda")
 
     async def action_panel_help(self) -> None:
-        self._toggle_help_overlay()
+        if self.view.overlay_open and self.view.overlay_active_tab == OVERLAY_TAB_HELP:
+            self._close_overlay()
+        else:
+            self._open_overlay_tab(OVERLAY_TAB_HELP)
+            self._schedule_help_fetch()
 
-    async def action_close_help_overlay(self) -> None:
-        if self.view.authenticated and self._help_overlay_open:
-            self._close_help_overlay()
+    async def action_close_overlay(self) -> None:
+        if self.view.authenticated and self.view.overlay_open:
+            self._close_overlay()
+
+    async def action_panel_mesh(self) -> None:
+        self._send_panel_command("mesh")
+
+    async def action_toggle_netrun_overlay(self) -> None:
+        self._toggle_netrun_overlay()
 
     async def action_panel_map(self) -> None:
         self._send_panel_command("map")
@@ -1064,22 +1159,25 @@ class CyberMudApp(App):
         self._send_panel_command("equipment")
 
     async def action_panel_gigs(self) -> None:
-        if not self.view.authenticated:
-            self.action_clear_credentials()
-            return
         self._send_panel_command("gigs")
 
     async def action_toggle_sidebar(self) -> None:
         if not self.view.authenticated:
             return
-        self._close_help_overlay()
+        self._close_overlay()
         self._cancel_panel_fetch()
         self._cancel_sidebar_debounce()
-        self.view.sidebar_open = False
-        self.view.sidebar_stack.clear()
-        self.view.pending_panel = ""
-        self._update_link_status_bar()
-        self._render_sidebar()
+        if self.view.sidebar_open:
+            if self.view.net_shell:
+                self._netrun_sidebar_user_closed = True
+            self.view.sidebar_open = False
+            self.view.sidebar_stack.clear()
+            self.view.pending_panel = ""
+            self._update_link_status_bar()
+            self._render_sidebar()
+        else:
+            self.view.sidebar_open = True
+            self._render_sidebar()
 
     def on_resize(self, event: Resize) -> None:
         if not self.view.authenticated:
@@ -1100,6 +1198,32 @@ class CyberMudApp(App):
         if self.view.authenticated:
             event.stop()
             self._focus_game_prompt()
+
+    @on(Click, "#overlay_tab_netrun")
+    def on_overlay_tab_netrun_click(self, event: Click) -> None:
+        if self.view.authenticated:
+            event.stop()
+            self._open_overlay_tab(OVERLAY_TAB_NETRUN)
+
+    @on(Click, "#overlay_tab_help")
+    def on_overlay_tab_help_click(self, event: Click) -> None:
+        if self.view.authenticated:
+            event.stop()
+            self._open_overlay_tab(OVERLAY_TAB_HELP)
+            self._schedule_help_fetch()
+
+    @on(Click, "#overlay_header_controls")
+    def on_overlay_header_controls_click(self, event: Click) -> None:
+        if self.view.authenticated:
+            event.stop()
+            self._collapse_overlay()
+
+    @on(Click, "#overlay_tab_row")
+    def on_overlay_tab_row_click(self, event: Click) -> None:
+        if self.view.authenticated and self.view.overlay_collapsed:
+            event.stop()
+            self.view.overlay_collapsed = False
+            self._render_overlay()
 
     def on_descendant_focus(self, event: DescendantFocus) -> None:
         dock = self.query_one("#prompt_dock", Horizontal)
@@ -1145,10 +1269,12 @@ class CyberMudApp(App):
             "#login_hint",
             "#login_status",
             "#prompt_preview",
-            "#help_dropdown_header",
-            "#help_dropdown_content",
-            "#info_bar",
-            "#chrome_bar",
+            "#status_strip",
+            "#overlay_tab_netrun",
+            "#overlay_tab_help",
+            "#overlay_trace_bar",
+            "#overlay_header_controls",
+            "#overlay_panel_content",
             "#hotkey_bar",
             "#sidebar_header",
             "#sidebar_content",
@@ -1159,7 +1285,7 @@ class CyberMudApp(App):
                 pass
         log = self.query_one("#log", RichLog)
         self._configure_game_focus_targets()
-        self._configure_help_overlay_focus()
+        self._configure_overlay_focus()
         self.set_interval(0.2, self._on_spinner_tick)
         self.set_interval(1.0, self._on_cd_tick)
         self.set_interval(0.5, self._on_login_motd_tick)
@@ -1540,6 +1666,28 @@ class CyberMudApp(App):
         verb, args = parse_local_command(text)
         if verb == "exit":
             return False
+        if verb == "overlay":
+            parts = args.split()
+            if len(parts) == 2 and parts[0] == "netrun-sidebar":
+                if parts[1] == "on":
+                    self.view.netrun_sidebar_auto = True
+                    self._append_log(
+                        log,
+                        t(locale, "client.ui.overlay_cmd.netrun_sidebar_on"),
+                        kind="sys",
+                    )
+                elif parts[1] == "off":
+                    self.view.netrun_sidebar_auto = False
+                    self._append_log(
+                        log,
+                        t(locale, "client.ui.overlay_cmd.netrun_sidebar_off"),
+                        kind="sys",
+                    )
+                else:
+                    self._append_log(log, t(locale, "client.ui.overlay_cmd.usage"), kind="text")
+            else:
+                self._append_log(log, t(locale, "client.ui.overlay_cmd.usage"), kind="text")
+            return True
         if not is_local_command(text):
             self._append_log(log, t(locale, "client.local_command.unknown", cmd=verb), kind="text")
             return True
@@ -1641,8 +1789,9 @@ class CyberMudApp(App):
             self._pending_logout = True
         panel_id = resolve_panel_command(text)
         if panel_id == HELP_OVERLAY_PANEL:
-            self._toggle_help_overlay()
-            if self._help_overlay_open:
+            self._open_overlay_tab(OVERLAY_TAB_HELP)
+            self._schedule_help_fetch()
+            if self.view.overlay_open:
                 self._log_buffer.mark_last_pending()
                 self._update_spinner_accent()
                 self._refresh_log_display(log, preserve_scroll=True)

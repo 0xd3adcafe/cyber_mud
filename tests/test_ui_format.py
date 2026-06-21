@@ -13,9 +13,10 @@ from client.ui_format import (
 
 def test_panel_header_labels_en():
     assert "PDA" in panel_header("pda", locale="en")
-    assert "F4" in panel_header("map", locale="en")
+    assert "F1" in panel_header("pda", locale="en")
+    assert "F3" in panel_header("map", locale="en")
     assert "Gigs" in panel_header("gigs", locale="en")
-    assert "F7" in panel_header("gigs", locale="en")
+    assert "F5" in panel_header("gigs", locale="en")
 
 
 def test_panel_header_labels_zh():
@@ -28,9 +29,11 @@ def test_format_hotkey_bar_en():
     assert "Hotkeys" in text
     assert "Tab" in text
     assert "history" in text
-    assert "F2" in text
-    assert "F7" in text
+    assert "F1" in text
+    assert "F11" in text
     assert "/reconnect" in text
+    net_text = format_hotkey_bar(locale="en", net_shell=True)
+    assert "F12" in net_text
 
 
 def test_format_hotkey_bar_zh():

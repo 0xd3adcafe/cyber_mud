@@ -251,6 +251,7 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Architecture (incremental)** | ARCH.1–2 shipped (YAML lock predicates; scheduler on `tick_count`); see PHASES **Architecture (incremental)** |
 | **Surveillance hacking (Watch Dogs homage)** | WD.1–WD.10 shipped — profiler, ctOS infra hacks, footprint, mesh, DedSec; see PHASES **Surveillance hacking** |
 | **Hacknet-style NETRUN (HN)** | HN.1–6 shipped — trace meter, connect/breach/exploit, env disconnect, node files, mesh route; see PHASES **Hacknet-style NETRUN** |
+| **Client UI modernization (CU)** | CU.1–5 shipped — Grok overlay HUD, F1–F12 hotkeys, mesh sidebar; see PHASES **Client UI modernization** |
 | **Mature M.18** | Shipped — private `cyber_mud_mature` submodule at `data/mature/`; bilingual pack docs (`README`, `CLAUDE`, `CONTRIBUTING`, `LOCALIZATION` + `*.zh.md`); history purge via `scripts/mature-history-purge.sh`; see PHASES **M.18** |
 
 
@@ -317,6 +318,7 @@ Maintenance rules: [`docs/PHASES.md`](docs/PHASES.md#backlog-維護慣例)—**u
 
 | Item | Module / acceptance |
 |------|---------------------|
+| Client UI CU.1–5 | `client/overlay_panel.py`; `#overlay_panel` tabs; F1–F12; `commands/mesh.py`; `docs/CLIENT_UI_REDESIGN.md` |
 | Hacknet-style NETRUN HN.1–6 | `world/net_session.py`; `connect`/`breach`/`exploit`/`route`/`cat`/`cover`; trace tick + env disconnect; `tests/test_net_*.py` |
 | Tab multi-candidate cycling | `complete_input_cycle`, `client/app.py` |
 | Environment interactables | `interact`, `data/interactables.yaml`, `look` / `scan` |

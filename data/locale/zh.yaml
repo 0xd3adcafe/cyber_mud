@@ -726,6 +726,7 @@ map:
 ctos:
   mesh:
     header: "◈ ctOS 連線圖（已發現連結）"
+    empty_panel: "尚未繪製 mesh 連結——在 NETRUN 中使用 probe 掃描。"
     line: "  {a} ↔ {b}"
     discovered: "發現網路連結：{link}"
     lock_probe: "街頭聲望不足，無法探測跨區跳接。"
@@ -1381,12 +1382,14 @@ client:
     hotkeys:
       label: 快捷鍵
       tab: Tab
-      f2_pda: PDA
-      f3_help: 說明
-      f4_map: 地圖
-      f5_equip: 裝備
-      f6_collapse: 收合
-      f7_gigs: 委託
+      f1_pda: PDA
+      f2_help: 說明
+      f3_map: 地圖
+      f4_equip: 裝備
+      f5_gigs: 委託
+      f6_mesh: Mesh
+      f11_sidebar: 側欄
+      f12_netrun: NET
       history: ↑↓歷史
     panels:
       pda:
@@ -1404,23 +1407,37 @@ client:
       gigs:
         icon: "◆ 委託"
         desc: 任務追蹤
+      mesh:
+        icon: "⎈ Mesh"
+        desc: ctOS 連結圖
       generic:
         icon: "◈ {panel}"
         desc: 側邊面板
-      collapse: F6 收合
+      collapse: F11 收合
     sidebar:
       empty: （側欄空白）
-      empty_hint: （側欄空白 · F2–F5／F7 開啟面板）
+      empty_hint: （側欄空白 · F1–F6 開啟面板）
     status:
       reconnecting: 重連中…
     prompt_placeholder: "指令 · Tab 補全 · ↑↓ 歷史 · Esc 還原 · Enter 送出"
     hint:
       explore: "▸  探索夜城 · look · go · help"
+    overlay:
+      trace: trace
+      link: link
+      nodes: nodes
+      commands: commands
+      collapse: "[−] 收合"
+      esc_close: Esc 關閉
     help_overlay:
       title: "? 指令說明"
-      close: F3 / Esc 關閉
+      close: F2 / Esc 關閉
+    overlay_cmd:
+      netrun_sidebar_off: NETRUN 將不再自動開啟 mesh 側欄。
+      netrun_sidebar_on: NETRUN 將自動開啟 mesh 側欄。
+      usage: "用法：/overlay netrun-sidebar on|off"
   motd_fallback:
     - "建立連線中…請 register 或 login。"
     - "登入後輸入 look 探索，go <方向> 移動。"
-    - "Tab 補全指令 · F2–F6 開啟側欄。"
+    - "Tab 補全指令 · F1–F6 開啟側欄。"
     - "輸入 help 查看指令 · /theme 切換視覺主題。"

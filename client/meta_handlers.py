@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from shared.completion import parse_csv_meta
 from shared.protocol import META_PREFIX, PANEL_PREFIX, UI_PREFIX
 
-SIDEBAR_PANEL_ORDER: tuple[str, ...] = ("pda", "gigs", "map", "equipment")
+SIDEBAR_PANEL_ORDER: tuple[str, ...] = ("pda", "gigs", "map", "equipment", "mesh")
 SIDEBAR_PANEL_IDS: frozenset[str] = frozenset(SIDEBAR_PANEL_ORDER + ("status", "help", "journal"))
 HELP_OVERLAY_PANEL = "help"
 _SIDEBAR_AUTO_REFRESH_ON_MOVE = frozenset({"map"})
@@ -70,7 +70,14 @@ class ClientViewState:
     posture: str = "standing"
     fatigue: str = "0"
     net_shell: bool = False
+    net_trace: str = "0"
     net_prompt: str = "ghost@netrun-kali> "
+    overlay_open: bool = False
+    overlay_collapsed: bool = False
+    overlay_active_tab: str = "help"
+    netrun_sidebar_auto: bool = True
+    sidebar_snapshot_open: bool = False
+    sidebar_snapshot_stack: list[str] = field(default_factory=list)
     sidebar_open: bool = False
     sidebar_stack: list[str] = field(default_factory=list)
     sidebar_panels: dict[str, SidebarPanel] = field(default_factory=dict)
@@ -188,6 +195,8 @@ def apply_meta(state: ClientViewState, key: str, value: str) -> None:
         state.fatigue = value
     elif key == "net_shell":
         state.net_shell = value == "1"
+    elif key == "net_trace":
+        state.net_trace = value or "0"
     elif key == "net_prompt":
         state.net_prompt = value
     elif key == "ui_panel":

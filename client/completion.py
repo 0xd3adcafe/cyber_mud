@@ -82,8 +82,12 @@ class MudPrompt(Input):
 
     def action_history_cancel(self) -> None:
         app = self.app
-        if getattr(app, "_help_overlay_open", False) and hasattr(app, "_close_help_overlay"):
-            app._close_help_overlay()
+        if (
+            getattr(app, "view", None) is not None
+            and app.view.overlay_open
+            and hasattr(app, "_close_overlay")
+        ):
+            app._close_overlay()
             return
         history = self._command_history()
         if history is None or not history.is_browsing:

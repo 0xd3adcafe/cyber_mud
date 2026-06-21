@@ -726,6 +726,7 @@ map:
 ctos:
   mesh:
     header: "◈ ctOS mesh (discovered links)"
+    empty_panel: "No mesh links mapped yet — use probe in NETRUN."
     line: "  {a} ↔ {b}"
     discovered: "Mesh link discovered: {link}"
     lock_probe: "Street cred too low to map that cross-district hop."
@@ -1381,12 +1382,14 @@ client:
     hotkeys:
       label: Hotkeys
       tab: Tab
-      f2_pda: PDA
-      f3_help: Help
-      f4_map: Map
-      f5_equip: Gear
-      f6_collapse: Collapse
-      f7_gigs: Gigs
+      f1_pda: PDA
+      f2_help: Help
+      f3_map: Map
+      f4_equip: Gear
+      f5_gigs: Gigs
+      f6_mesh: Mesh
+      f11_sidebar: Sidebar
+      f12_netrun: NET
       history: "↑↓ history"
     panels:
       pda:
@@ -1404,23 +1407,37 @@ client:
       gigs:
         icon: "◆ Gigs"
         desc: Quest tracker
+      mesh:
+        icon: "⎈ Mesh"
+        desc: ctOS link map
       generic:
         icon: "◈ {panel}"
         desc: Sidebar panel
-      collapse: "F6 collapse"
+      collapse: "F11 collapse"
     sidebar:
       empty: "(sidebar empty)"
-      empty_hint: "(sidebar empty · F2–F5 / F7 to open panels)"
+      empty_hint: "(sidebar empty · F1–F6 to open panels)"
     status:
       reconnecting: Reconnecting…
     prompt_placeholder: "command · Tab complete · ↑↓ history · Esc restore · Enter send"
     hint:
       explore: "▸  Explore Night City · look · go · help"
+    overlay:
+      trace: trace
+      link: link
+      nodes: nodes
+      commands: commands
+      collapse: "[−] collapse"
+      esc_close: Esc close
     help_overlay:
       title: "? Command help"
-      close: "F3 / Esc close"
+      close: "F2 / Esc close"
+    overlay_cmd:
+      netrun_sidebar_off: "NETRUN will no longer auto-open the mesh sidebar."
+      netrun_sidebar_on: "NETRUN will auto-open the mesh sidebar."
+      usage: "Usage: /overlay netrun-sidebar on|off"
   motd_fallback:
     - "Establishing link… use register or login."
     - "After login, type look to explore, go <dir> to move."
-    - "Tab completes commands · F2–F6 open sidebar panels."
+    - "Tab completes commands · F1–F6 open sidebar panels."
     - "Type help for commands · /theme switches visuals."

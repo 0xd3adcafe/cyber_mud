@@ -14,11 +14,12 @@ from client.status_indicators import (
 from shared.i18n import t
 
 _PANEL_KEYS: dict[str, tuple[str, str]] = {
-    "pda": ("F2", "pda"),
-    "help": ("F3", "help"),
-    "map": ("F4", "map"),
-    "equipment": ("F5", "equipment"),
-    "gigs": ("F7", "gigs"),
+    "pda": ("F1", "pda"),
+    "help": ("F2", "help"),
+    "map": ("F3", "map"),
+    "equipment": ("F4", "equipment"),
+    "gigs": ("F5", "gigs"),
+    "mesh": ("F6", "mesh"),
 }
 
 
@@ -107,20 +108,23 @@ def format_status_markup(
     )
 
 
-def format_hotkey_bar(*, locale: str = "en") -> str:
+def format_hotkey_bar(*, locale: str = "en", net_shell: bool = False) -> str:
     hk = lambda key: _ui(locale, f"hotkeys.{key}")
-    return (
+    base = (
         f"[bold cyan]{hk('label')}[/]"
         f"  {hk('tab')}"
-        f"  [magenta]F2[/]{hk('f2_pda')}"
-        f"  [cyan]F3[/]{hk('f3_help')}"
-        f"  [green]F4[/]{hk('f4_map')}"
-        f"  [yellow]F5[/]{hk('f5_equip')}"
-        f"  F6{hk('f6_collapse')}"
-        f"  [yellow]F7[/]{hk('f7_gigs')}"
-        f"  [dim]│[/]  [yellow]/reconnect[/]"
-        f"  [dim]│[/]  {hk('history')}"
+        f"  [magenta]F1[/]{hk('f1_pda')}"
+        f"  [cyan]F2[/]{hk('f2_help')}"
+        f"  [green]F3[/]{hk('f3_map')}"
+        f"  [yellow]F4[/]{hk('f4_equip')}"
+        f"  F5{hk('f5_gigs')}"
+        f"  [magenta]F6[/]{hk('f6_mesh')}"
+        f"  F11{hk('f11_sidebar')}"
     )
+    if net_shell:
+        base += f"  [magenta]F12[/]{hk('f12_netrun')}"
+    base += f"  [dim]│[/]  [yellow]/reconnect[/]  [dim]│[/]  {hk('history')}"
+    return base
 
 
 def _live_combat_cd(state: ClientViewState) -> str:

@@ -415,6 +415,23 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 **建議順序：** CL.1 → CL.2 → CL.3＋CL.4 → CL.5＋CL.6 → CL.7 → CL.8 → CL.9 → CL.10 → CL.11。**全階段已交付（2026-06）。**
 
+### Client UI 現代化（Grok 風格 + NETRUN HUD）
+
+**目標：** 精簡 chrome、分頁式 overlay（Help + NETRUN HUD）、F1–F12 快捷鍵、NETRUN 自動 mesh 側欄。完整規格：[`CLIENT_UI_REDESIGN.zh.md`](CLIENT_UI_REDESIGN.zh.md)。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| ~~CU.1~~ | ~~Status strip~~ | ✅ `#status_strip`；`client/status_strip.py` |
+| ~~CU.2~~ | ~~Overlay + 分頁~~ | ✅ `#overlay_panel`；`⎈ NET`／`? Help`；F2 help；Esc 關閉 |
+| ~~CU.3~~ | ~~NETRUN HUD~~ | ✅ `client/overlay_panel.py`；trace 條；`net` 展開 |
+| ~~CU.4~~ | ~~NETRUN log + 側欄快照~~ | ✅ `netrun-active`；F11／F12；離開 NETRUN 還原 |
+| ~~CU.5~~ | ~~Mesh 面板 + 自動開~~ | ✅ `commands/mesh.py`；`/overlay netrun-sidebar off` |
+| CU.0 | 登入 ASCII 輪巡 | `scene_for_carousel`；10s — **獨立 commit** |
+
+**快捷鍵（遊戲內）：** F1 PDA · F2 Help · F3 地圖 · F4 裝備 · F5 委託 · F6 Mesh · F7–F10 保留 · **F11** 側欄 · **F12** NETRUN overlay。登入：**F8** 清除記憶帳密。
+
+**建議順序：** CU.1 → … → CU.5（同一里程碑 commit）；CU.0 之後獨立提交。
+
 ### 安全性（OWASP ASVS L1）
 
 **目標：** 依 [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) Level 1 強化認證與存檔 I/O。完整對照表：[`SECURITY.md`](SECURITY.md)／[`SECURITY.zh.md`](SECURITY.zh.md)。

@@ -419,6 +419,23 @@ Not yet implemented or only partially implemented.
 
 **Suggested order:** CL.1 → CL.2 → CL.3 + CL.4 → CL.5 + CL.6 → CL.7 → CL.8 → CL.9 → CL.10 → CL.11. **All phases shipped (2026-06).**
 
+### Client UI modernization (Grok-style + NETRUN HUD)
+
+**Goal:** Minimal chrome, browser-tab overlay (Help + NETRUN HUD), F1–F12 hotkey map, mesh sidebar on NETRUN. Full spec: [`CLIENT_UI_REDESIGN.md`](CLIENT_UI_REDESIGN.md).
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| ~~CU.1~~ | ~~Status strip~~ | ✅ `#status_strip`; `client/status_strip.py` |
+| ~~CU.2~~ | ~~Overlay panel + tabs~~ | ✅ `#overlay_panel`; `⎈ NET` / `? Help` tabs; F2 help; Esc close |
+| ~~CU.3~~ | ~~NETRUN HUD~~ | ✅ `client/overlay_panel.py`; trace bar; expand on `net`; 50% height |
+| ~~CU.4~~ | ~~NETRUN log + sidebar snapshot~~ | ✅ `netrun-active` log tint; F11/F12; restore stack on exit |
+| ~~CU.5~~ | ~~Mesh panel + auto-open~~ | ✅ `commands/mesh.py`; NETRUN auto mesh; `/overlay netrun-sidebar off` |
+| CU.0 | Login ASCII rotation | `scene_for_carousel`; 10s tick — **separate commit** |
+
+**Hotkeys (in-game):** F1 PDA · F2 Help · F3 Map · F4 Gear · F5 Gigs · F6 Mesh · F7–F10 reserved · **F11** sidebar · **F12** NETRUN overlay. Login: **F8** clear stored credentials.
+
+**Suggested order:** CU.1 → CU.2 → CU.3 → CU.4 → CU.5 (one milestone commit); CU.0 after.
+
 ### Security (OWASP ASVS L1)
 
 **Goal:** Align authentication and save I/O with [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) Level 1 for the hobby MUD threat model. Full matrix: [`SECURITY.md`](SECURITY.md) / [`SECURITY.zh.md`](SECURITY.zh.md).

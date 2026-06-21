@@ -289,12 +289,13 @@ def test_panel_stream_defers_sidebar_render_until_end():
                 handle_panel_line(app.view, " ■ ")
             assert render_count == 0
             app._apply_meta("ui_panel_end=1")
+            await settle_layout(pilot)
             assert render_count == 1
 
     asyncio.run(_run())
 
 
-def test_chrome_bar_link_status_after_auth():
+def test_status_strip_link_status_after_auth():
     async def _run() -> None:
         from textual.widgets import Static
 
@@ -305,13 +306,16 @@ def test_chrome_bar_link_status_after_auth():
             apply_meta(app.view, "auth", "1")
             app._set_auth_ui(True)
             await settle_layout(pilot)
-            chrome = app.query_one("#chrome_bar", Static)
-            assert chrome.region.height >= 1
-            assert chrome.size.height >= 1
-            rendered = str(chrome.render())
-            assert "Link" in rendered
-            assert "127.0.0.1:4000" in rendered
+            status = app.query_one("#status_strip", Static)
+            assert status.region.height >= 1
+            assert status.size.height >= 1
+            rendered = str(status.render())
+            assert "HP" in rendered
             assert "Hotkeys" not in rendered
+            app._panel_fetching = True
+            app._update_status_strip()
+            rendered_fetch = str(status.render())
+            assert "sidebar" in rendered_fetch.lower()
 
     asyncio.run(_run())
 
@@ -348,25 +352,21 @@ def test_hotkey_bar_below_prompt_after_auth():
             app._set_auth_ui(True)
             app._refresh_game_layout()
             await settle_layout(pilot)
-            info = app.query_one("#info_bar", Static)
+            status = app.query_one("#status_strip", Static)
             prompt = app.query_one("#prompt_dock")
             hotkey = app.query_one("#hotkey_bar", Static)
-            chrome = app.query_one("#chrome_bar", Static)
             main = app.query_one("#main_row")
-            assert info.region.height >= 1
-            assert info.size.height >= 1
-            rendered_info = str(info.render())
-            assert "HP" in rendered_info
-            assert chrome.region.width > 0
-            assert chrome.region.height >= 1
-            assert chrome.size.height >= 1
+            assert status.region.height >= 1
+            assert status.size.height >= 1
+            rendered_status = str(status.render())
+            assert "HP" in rendered_status
             assert hotkey.region.height >= 1
             assert hotkey.size.height >= 1
-            assert chrome.region.y == info.region.y + info.region.height
             assert hotkey.region.y == prompt.region.y + prompt.region.height
-            assert main.region.y == chrome.region.y + chrome.region.height
+            assert main.region.y == status.region.y + status.region.height
             rendered = str(hotkey.render())
             assert "Hotkeys" in rendered
+            assert "F1" in rendered
             assert "F2" in rendered
             assert "/reconnect" in rendered
 
@@ -545,13 +545,14 @@ def test_help_overlay_covers_log_not_sidebar():
             app._set_auth_ui(True)
             await pilot.pause()
             wrap = app.query_one("#sidebar_wrap", Vertical)
-            dropdown = app.query_one("#help_dropdown", Vertical)
-            assert "help-dropdown-hidden" in dropdown.classes
+            overlay = app.query_one("#overlay_panel", Vertical)
+            assert "overlay-hidden" in overlay.classes
             assert "sidebar-hidden" in wrap.classes
 
-            app._open_help_overlay()
+            app._open_overlay_tab("help")
+            app._schedule_help_fetch = lambda: None
             await pilot.pause()
-            assert "help-dropdown-hidden" not in dropdown.classes
+            assert "overlay-hidden" not in overlay.classes
             assert "sidebar-hidden" in wrap.classes
 
             apply_meta(app.view, "ui_panel", "help")
@@ -560,14 +561,14 @@ def test_help_overlay_covers_log_not_sidebar():
                 '{"panel":"help","sections":[{"kind":"list","items":["look — 察看","go — 移動"]}]}',
             )
             apply_meta(app.view, "ui_panel_end", "1")
-            app._render_help_overlay()
+            app._render_overlay()
             await settle_layout(pilot)
-            content = app.query_one("#help_dropdown_content", Static)
+            content = app.query_one("#overlay_panel_content", Static)
             rendered = str(content.render())
             assert "look" in rendered
             assert "help" not in app.view.sidebar_stack
 
-            scroll = app.query_one("#help_dropdown_scroll", VerticalScroll)
+            scroll = app.query_one("#overlay_panel_scroll", VerticalScroll)
             log_wrap = app.query_one("#scrollback_wrap", Container)
             assert scroll_covers_log(scroll, log_wrap)
 

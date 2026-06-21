@@ -115,6 +115,7 @@ def test_resolve_panel_command_aliases():
     assert resolve_panel_command("st") == "pda"
     assert resolve_panel_command("gigs") == "gigs"
     assert resolve_panel_command("journal") == "gigs"
+    assert resolve_panel_command("mesh") == "mesh"
     assert resolve_panel_command("look") is None
 
 
