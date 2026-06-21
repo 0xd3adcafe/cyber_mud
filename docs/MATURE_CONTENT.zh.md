@@ -14,6 +14,7 @@
 - [成熟氛圍掛鉤（look／scan／interact）](#成熟氛圍掛鉤lookscaninteract)
 - [成熟社交與戰鬥（M.13–M.17）](#成熟社交與戰鬥m13m17)
 - [雙聲線、persona、scene 與 whisper（M.19–M.26）](#雙聲線personascene-與-whisperm19m26)
+- [規劃 spotlight NPC（BB）](#規劃-spotlight-npcbb)
   - [雙聲線引擎（M.20）](#雙聲線引擎m20)
   - [人設 persona（M.21，SFW）](#人設-personam21sfw)
   - [scene 與 whisper（M.22）](#scene-與-whisperm22)
@@ -168,6 +169,19 @@ git submodule update --init data/mature
 新 log channel 與可選 `@meta mature_voice` 晶片（`noir`／`lewd`）於狀態列。
 
 **M.24** 將消耗品、腦舞、賽博精神病觸發接入 `resolve_mature_voice`。**M.25** 於內容包交付雙聲線 NPC 文案。**M.26** 擴充 `mature_validate`：禁用詞與 `noir`／`lewd` 雙語鍵同步。
+
+## 規劃 spotlight NPC（BB）
+
+Backlog：[PHASES.zh.md](PHASES.zh.md) **Bleachbunny 風 spotlight NPC（BB）**。借 [Bleachbunny](https://bleachbunny.net/) 原型，不複製卡內劇情。
+
+| 已定規則 | 說明 |
+|----------|------|
+| 浪漫階段 | 僅 `flirt`／`spend_time` 推階段；`whisper` 不推 |
+| Lewd 密度 | 新成熟浪漫 NPC 約 **50%** 預設或覆寫 `lewd` 聲線 |
+| 塔羅抽牌 | **每遊戲時段**一次；teen SFW hint；mature noir／lewd 抽牌文案 |
+| `watson_flatmate_rin` | `scene` 須已租／`home` 於 `watson_flat` |
+
+實作順序：**BB.Arcana＋BB.2 Trauma** → BB.3 偶像 → BB.1 Kabuki → BB.4 Tyrell → BB.5 合租 → BB.6 Wintr → BB.7 Little China → BB.8 深化舊三角。
 
 ## 驗證
 

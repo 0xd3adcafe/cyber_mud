@@ -14,6 +14,7 @@ All mature / NSFW-adjacent content in **cyber_mud** is **opt-in**. Default playe
 - [Mature flavor hooks (look / scan / interact)](#mature-flavor-hooks-look-scan-interact)
 - [Mature social & combat (M.13–M.17)](#mature-social-combat-m13m17)
 - [Dual voice, persona, scene & whisper (M.19–M.26)](#dual-voice-persona-scene--whisper-m19m26)
+- [Planned spotlight NPCs (BB)](#planned-spotlight-npcs-bb)
   - [Dual voice engine (M.20)](#dual-voice-engine-m20)
   - [Persona (M.21, SFW)](#persona-m21-sfw)
   - [Scene & whisper (M.22)](#scene--whisper-m22)
@@ -168,6 +169,19 @@ NPC cards in `data/mature/romance.yaml` gain `scene_min_stage`, `voice_default`,
 New log channel kinds and optional `@meta mature_voice` chip (`noir` / `lewd`) in the status strip.
 
 **M.24** wires consumable, BD, and cyberpsychosis triggers into `resolve_mature_voice`. **M.25** ships dual-voice NPC content in the mature pack. **M.26** extends `mature_validate` with ban-list checks and `noir` / `lewd` key parity between `mature_en.yaml` and `mature_zh.yaml`.
+
+## Planned spotlight NPCs (BB)
+
+Backlog: [PHASES.md](PHASES.md) **Bleachbunny-inspired spotlight NPCs (BB)**. Original homage archetypes from [Bleachbunny](https://bleachbunny.net/)—not copied card plots.
+
+| Locked rule | Detail |
+|-------------|--------|
+| Romance stage | Only `flirt` / `spend_time` advance stage; `whisper` does not |
+| Lewd density | ~50% of new mature romance NPCs default or override `lewd` voice |
+| Arcana draw | Once per **game time period**; teen SFW hints; mature noir/lewd draw lines |
+| `watson_flatmate_rin` | `scene` requires `rent` / `home` at `watson_flat` |
+
+Implementation order: **BB.Arcana + BB.2 Trauma** → BB.3 idol chain → BB.1 Kabuki → BB.4 Tyrell → BB.5 co-living → BB.6 Wintr → BB.7 Little China → BB.8 deepen host/dancer/clerk.
 
 ## Validation
 

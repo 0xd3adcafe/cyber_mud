@@ -335,6 +335,38 @@ Not yet implemented or only partially implemented.
 
 **Suggested order:** M.0–M.26 shipped (2026-06).
 
+### Bleachbunny-inspired spotlight NPCs (BB)
+
+**Policy:** Original Night City homage—borrow **archetypes and interaction rhythm** from [Bleachbunny / Bunnyverse](https://bleachbunny.net/) and [chub.ai/users/bleachbunny](https://chub.ai/users/bleachbunny) (Arcana, Families, CYOA, Wintr, Slutbunny **style** only)—**do not** copy card names, plots, or Arcade/game IP. Mature copy stays in **`cyber_mud_mature`**. Romance **stage** advances only via `flirt` / `spend_time` (not `whisper`, `say`, `give`, or quest turn-in).
+
+**Design decisions (2026-06, confirmed):**
+
+| Decision | Choice |
+|----------|--------|
+| District coverage | **All four lines:** Kabuki entertainment, Watson Trauma, Tyrell corpo, Watson co-living + Little China boarding |
+| Arcana | **`interact` tarot draw** (22 Major Arcana locale keys—not 66 physical NPCs) |
+| Idol line | **Haejin ↔ Airi** interconnected mature gigs + dual endings (`quest_flags`) |
+| Trauma Team | **BB.2 first implementation priority** (CYOA homage → Watson clinic loop) |
+| Lewd density | **~50%** of new mature romance NPCs use `voice_default: lewd` or `voice_override: lewd` (not noir-only) |
+| Arcana cooldown | **Once per game time period** (period change resets draw; store in `interact_flags` / period id) |
+| Flatmate Rin `scene` | Requires **`rent` / `home` at `watson_flat`**; SFW `talk` without rent OK |
+
+**Suggested implementation order:** BB.Arcana + **BB.2** (Trauma) → **BB.3** (idol chain) → BB.1 (Kabuki) → BB.4 (Tyrell) → BB.5 (co-living) → BB.6 (Wintr) → BB.7 (Little China) → BB.8 (deepen host/dancer/clerk).
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| BB.Arcana | Tarot draw interact | `data/interactables.yaml` `shrine_arcana_spread`; `interact` / `interact … three`; 22× `arcana.draw.*` (+ mature `mature.noir/lewd.arcana.draw.*`); period cooldown; optional gig unlock via `quest_flags`; `tests/test_arcana_draw.py` |
+| BB.2 | Trauma Team line (priority) | `trauma_team_medic`, `ripperdoc_triage` (extend clinic); SFW gig `trauma_run` (bleed tutorial); mature optional `trauma_intimate` scene gate; `tests/test_trauma_gig.py` |
+| BB.3 | Idol interconnected gigs | `kabuki_idol_haejin`, `kabuki_idol_airi`; `idol_blackmail` → `idol_fall`; `quest_flags` ending `haejin` \| `airi`; `romance.yaml` + mature locale; `tests/test_idol_quests.py` |
+| BB.1 | Kabuki entertainment expansion | `kabuki_fixer_amara`, `kabuki_streamer_jenna`, `kabuki_artist_selene`, `kabuki_brat_neon` in `data/world.yaml`; romance + lewd-heavy voices; gigs from bazaar; `tests/test_bb_kabuki.py` |
+| BB.4 | Tyrell corpo line | `tyrell_liaison_vera` (or deepen hub), `tyrell_gene_thief_seojin`, `tyrell_corp_attendant_meera`, `corpo_ghost_control` net node; profiler + SFW/mature gigs; `tests/test_bb_tyrell.py` |
+| BB.5 | Watson co-living (Families homage) | `watson_flatmate_rin`, `watson_flatmate_yoojin`, `watson_flatmate_eunbi` in `watson_flat`; peer-present `talk.*` variants; Rin `scene` gated on `home_room_id=watson_flat`; `tests/test_bb_flatmates.py` |
+| BB.6 | Wintr net proxy | `net_wintr_proxy` in `data/net_nodes.yaml`; `mesh` hint; mature `whisper` during `net_shell`; `tests/test_bb_wintr.py` |
+| BB.7 | Little China boarding | `little_china_host_misato`, `little_china_sister_sayaka`; `shrine_net_shaman_nari` at `shrine`; optional mature romance; `tests/test_bb_little_china.py` |
+| BB.8 | Deepen M.25 triangle | Extra noir stage 4–5 for `kabuki_host` / `bd_den_clerk`; reduce lewd repetition; `bouncer` talk tiers (street cred / wanted) |
+
+**NPC roster (authoring reference—original IDs):** see discussion in project notes; Kabuki lewd-forward romance targets include `kabuki_dancer`, `kabuki_streamer_jenna`, `kabuki_artist_selene`, `kabuki_brat_neon`, `watson_flatmate_rin`, `tyrell_corp_attendant_meera`, `little_china_sister_sayaka`, `net_wintr_proxy`, `kabuki_idol_airi`.
+
 ### World expansion ([WORLD.md](WORLD.md))
 
 **Baseline (2026-06):** **263 rooms**, **109 NPCs**, **45 items** — WORLD.md scale targets met; district `safety`/`atmosphere`; `help tutorial`; faction depth; schedules + gray market; poison/overheat + live world reactions (`world/reactions.py`). **World expansion W.1–W.14 shipped** — authored follow-up tracked under **Content depth** below.
