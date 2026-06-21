@@ -13,7 +13,7 @@
 
 - Python **3.13**（建議 pyenv virtualenv，例如 `cyber-mud-3.13.12`）
 - 主要依賴：`textual`、`rich`、`pyyaml`、`pytest`
-- 啟動腳本：`setup.sh`、`run.sh`、`admin.sh`（可從原專案慣例複製結構）
+- 啟動腳本：`setup.sh`、`run.sh`、`admin.sh`
 
 ```bash
 # 首次

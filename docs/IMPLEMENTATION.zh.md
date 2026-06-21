@@ -2,8 +2,8 @@
 
 > **English:** [IMPLEMENTATION.md](IMPLEMENTATION.md)
 
-> 本文件整理自原 **mud** 專案（commit 約 `34d5525`），供 **cyber_mud** 從零重建或改題材 fork 使用。  
-> 不含可執行原始碼；細節以「模組職責 + 資料結構 + 協定 + 行為」描述。
+> **cyber_mud** 實作藍圖——模組職責、資料結構、協定與行為。  
+> 擴充程式或換題材改皮時搭配閱讀；不取代可執行原始碼，請對照模組本身。
 
 ## 目錄
 
@@ -20,7 +20,7 @@
 - [遊戲子系統](#遊戲子系統)
 - [持久化](#持久化)
 - [測試策略](#測試策略)
-- [Fork 新 MUD 時改什麼](#fork-新-mud-時改什麼)
+- [換題材時改什麼](#換題材時改什麼)
 
 ## 設計原則
 
@@ -130,7 +130,7 @@ dispatch(line, player, state, peers, all_players)
 - `posture`, `fatigue`（生活／休息狀態）
 - `net_shell`, `net_prompt`（駭入模式）
 
-### 已實作指令分類（原專案）
+### 已實作指令分類
 
 **移動／感知**：`look`, `go`, `map`, `scan`, `search`, `probe`  
 **物品**：`take`, `drop`, `inventory`, `equip`, `unequip`, `use`, `give`, `appraise` + `all` 批次  
@@ -245,7 +245,7 @@ game.tick_loop (背景):
 ### 側邊欄刷新
 
 - 開面板：`_refresh_panel` → 送 `pda` / `equipment` 等
-- **裝備變更後自動刷新**（原專案 `34d5525`）：若側欄開著 `pda` 或 `equipment`，在 `equip`/`unequip`/`drop`/`install`/`mod` 指令送出後自動 `_refresh_panel`
+- **裝備變更後自動刷新**：若側欄開著 `pda` 或 `equipment`，在 `equip`/`unequip`/`drop`/`install`/`mod` 指令送出後自動 `_refresh_panel`
 
 ### 自動重連
 
@@ -325,7 +325,7 @@ game.tick_loop (背景):
 
 慣例：修改指令或世界邏輯 → 跑相關測試 → 全量 `pytest tests/`。
 
-## Fork 新 MUD 時改什麼
+## 換題材時改什麼
 
 | 優先 | 項目 | 說明 |
 |------|------|------|

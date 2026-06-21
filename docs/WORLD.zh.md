@@ -2,7 +2,7 @@
 
 > **English:** [WORLD.md](WORLD.md)
 
-> 整理自原 **mud** 專案設定與 `data/` 世界資料脈絡（約 commit `34d5525`）。
+> **cyber_mud** 夜城世界觀與 `data/` 世界資料。
 > 風格致敬 **Blade Runner** 與 **Cyberpunk 2077**，為原創 MUD 敘事，非官方授權劇情。
 
 ## 目錄
@@ -19,7 +19,7 @@
 - [社會與經濟](#社會與經濟)
 - [玩法錨點](#玩法錨點)
 - [世界規模與資料](#世界規模與資料)
-- [Fork 時改世界觀](#fork-時改世界觀)
+- [換題材時改世界觀](#換題材時改世界觀)
 
 ## 一句話
 
@@ -174,7 +174,7 @@
 
 ## 世界規模與資料
 
-原專案以 `tools/generate_world.py` 程序生成世界（完整 CLI 流程見 **[WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md)**），目標規模：
+**cyber_mud** 以 `tools/generate_world.py` 程序生成大部分世界（完整 CLI 流程見 **[WORLD_TOOLS.zh.md](WORLD_TOOLS.zh.md)**），目標規模：
 
 | 類型 | 數量（約） |
 |------|------------|
@@ -186,9 +186,9 @@
 
 **起始位置**：新連線玩家落點由 `world.start_room` 決定（公開區或教程入口，以資料為準）。
 
-## Fork 時改世界觀
+## 換題材時改世界觀
 
-若 **cyber_mud** 要換題材，建議只改以下層，程式架構可沿用：
+若要以新題材改皮 **cyber_mud**，建議只改以下層，程式架構可沿用：
 
 1. **區域名稱與氛圍**——`generate_world.py` 或手寫 `data/`
 2. **派系表**——`factions` 與 `pledge` 文案

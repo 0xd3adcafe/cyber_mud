@@ -2,8 +2,8 @@
 
 # Implementation Blueprint
 
-> This document is distilled from the original **mud** project (commit ~`34d5525`), for **cyber_mud** to rebuild from scratch or fork with a new theme.  
-> It does not include runnable source code; details are described as **module responsibilities + data structures + protocol + behavior**.
+> Implementation blueprint for **cyber_mud** — module responsibilities, data structures, protocol, and behavior.  
+> Use when extending the codebase or reskinning with a new theme. Does not duplicate runnable source; read the modules alongside this doc.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@
 - [Game Subsystems](#game-subsystems)
 - [Persistence](#persistence)
 - [Testing Strategy](#testing-strategy)
-- [What to Change When Forking a New MUD](#what-to-change-when-forking-a-new-mud)
+- [What to Change for a New Theme](#what-to-change-for-a-new-theme)
 
 ## Design Principles
 
@@ -245,7 +245,7 @@ game.tick_loop (background):
 ### Sidebar Refresh
 
 - Open panel: `_refresh_panel` → send `pda` / `equipment`, etc.
-- **Auto-refresh after equipment changes** (original project `34d5525`): if the sidebar has `pda` or `equipment` open, automatically `_refresh_panel` after `equip`/`unequip`/`drop`/`install`/`mod` commands are sent
+- **Auto-refresh after equipment changes**: if the sidebar has `pda` or `equipment` open, automatically `_refresh_panel` after `equip`/`unequip`/`drop`/`install`/`mod` commands are sent
 
 ### Auto-Reconnect
 
@@ -325,7 +325,7 @@ Five core attributes affect combat / checks; shown on `pda`. Alongside `hp` / `r
 
 Convention: change a command or world logic → run related tests → full `pytest tests/`.
 
-## What to Change When Forking a New MUD
+## What to Change for a New Theme
 
 | Priority | Item | Notes |
 |----------|------|-------|

@@ -2,7 +2,7 @@
 
 > **English:** [PHASES.md](PHASES.md)
 
-對應原 **mud** 專案開發歷程，供 **cyber_mud** 排程與驗收。每階段完成後跑 `pytest` 並 commit 一次大項。
+**cyber_mud** 分階段交付清單與驗收標準。每階段完成後跑 `pytest` 並 commit 一次大項。
 
 ## 目錄
 
@@ -34,8 +34,6 @@
 | A.3 | CP2077 五維 + 人性聲望 | `entities/player.py` | `pda` 顯示完整 vitals |
 | A.4 | RAM／義體基礎 | `commands/install.py`, cyber helpers | 安裝義體影響屬性 |
 
-**原專案 commit 參考**：`52aeccc`（含 A/B/C 一批交付）
-
 ## Phase B：NPC、天氣
 
 | # | 項目 | 關鍵檔案 | 驗收 |
@@ -66,8 +64,6 @@
 | D.6 | give、appraise | 交易與估價 |
 | D.7 | look 輸出修正 | 主 log 顯示房間（非側欄、非 JSON 洩漏） |
 
-**原專案 commit 參考**：`3cf9466`, `7623666`
-
 ## Phase E：維護與體驗
 
 | # | 項目 | 驗收 | 狀態 |
@@ -76,8 +72,6 @@
 | E.2 | `./run.sh --dev` 熱重載 | 改 code/data 可重載 | ✅ |
 | E.3 | 側欄裝備自動刷新 | equip 後 F2/F5 即時更新 | ✅ |
 | E.4 | 中英文文件分離 + README ASCII banner | `*.zh.md` 對照；GitHub 預設英文 | ✅ |
-
-**原專案 commit 參考**：`34d5525`（側欄刷新）
 
 ## 已完成（原 Backlog）
 

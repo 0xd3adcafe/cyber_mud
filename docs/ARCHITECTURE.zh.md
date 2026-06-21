@@ -2,7 +2,7 @@
 
 > **English:** [ARCHITECTURE.md](ARCHITECTURE.md)
 
-> cyber_mud 文件 fork。描述原 mud 專案之系統架構（已實作 + 規劃）。
+> **cyber_mud** 系統架構（已實作 + 規劃）。
 
 ## 目錄
 
@@ -16,7 +16,7 @@
 
 ## 世界觀
 
-原 **mud** 設定為賽博龐克**夜城**：企業、幫派、義體與黑市並存；玩家經**神經連結**進入，並可在 **NETRUN** 駭入層與實體街頭間切換。完整設定見 **[WORLD.md](WORLD.md)**。
+設定為賽博龐克**夜城**：企業、幫派、義體與黑市並存；玩家經**神經連結**進入，並可在 **NETRUN** 駭入層與實體街頭間切換。完整設定見 **[WORLD.md](WORLD.md)**。
 
 ## 總覽
 
@@ -156,7 +156,7 @@ Client 更新狀態列、hint_bar、prompt token 來源。
 
 **內容深度：** D.1–D.10 已交付——見 PHASES **內容深度**。
 
-**已自原 mud 分叉交付**（不再是 backlog）：時段／天氣修正（`world/modifiers.py`）、被動義體鏈（`combat/passives.py`）、派系 NPC AI（`world/npc_ai.py`）、店鋪作息（`data/schedule.yaml`）、任務編寫（`./admin.sh quests`）、世界擴充 W.1–W.14、內容深度 D.1–D.6、生活指令 L.1–L.8。
+**已在 cyber_mud 交付**（不再是 backlog）：時段／天氣修正（`world/modifiers.py`）、被動義體鏈（`combat/passives.py`）、派系 NPC AI（`world/npc_ai.py`）、店鋪作息（`data/schedule.yaml`）、任務編寫（`./admin.sh quests`）、世界擴充 W.1–W.14、內容深度 D.1–D.6、生活指令 L.1–L.8。
 
 **可選後續：** NPC 追擊進階調校；持久化／管理工具擴充。
 

@@ -4,7 +4,7 @@
 
 > English-primary documentation. See [LOCALIZATION.md](LOCALIZATION.md). Play in Chinese via `lang zh` and localized world fields.
 
-> Compiled from the original **mud** project settings and `data/` world data context (around commit `34d5525`).
+> Night City lore and `data/` world definitions for **cyber_mud**.
 > Style pays homage to **Blade Runner** and **Cyberpunk 2077**; this is original MUD narrative, not officially licensed storyline.
 
 ## Table of Contents
@@ -21,7 +21,7 @@
 - [Society & Economy](#society--economy)
 - [Gameplay Anchors](#gameplay-anchors)
 - [World Scale & Data](#world-scale--data)
-- [Reskinning the World When Forking](#reskinning-the-world-when-forking)
+- [Reskinning the World for a New Theme](#reskinning-the-world-for-a-new-theme)
 
 ## In One Sentence
 
@@ -176,7 +176,7 @@ Mapping setting concepts to concrete commands:
 
 ## World Scale & Data
 
-The original project procedurally generates the world via `tools/generate_world.py` (see **[WORLD_TOOLS.md](WORLD_TOOLS.md)** for the full CLI pipeline), targeting roughly:
+**cyber_mud** procedurally generates much of the world via `tools/generate_world.py` (see **[WORLD_TOOLS.md](WORLD_TOOLS.md)** for the full CLI pipeline), targeting roughly:
 
 | Type | Count (approx.) |
 |------|------------|
@@ -188,9 +188,9 @@ Static definitions live in `data/world.yaml` (and items / npcs / skills / implan
 
 **Start location**: new connections land per `world.start_room` (public area or tutorial entry — per data).
 
-## Reskinning the World When Forking
+## Reskinning the World for a New Theme
 
-If **cyber_mud** changes theme, only these layers need edits; program architecture can stay:
+If you reskin **cyber_mud** with a new theme, only these layers need edits; program architecture can stay:
 
 1. **District names and atmosphere** — `generate_world.py` or hand-written `data/`
 2. **Faction table** — `factions` and `pledge` copy

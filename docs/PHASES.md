@@ -2,7 +2,7 @@
 
 # Phased Delivery Checklist
 
-Mirrors the original **mud** project development history for **cyber_mud** scheduling and acceptance. After each phase, run `pytest` and commit one major milestone.
+Phased delivery checklist and acceptance criteria for **cyber_mud**. After each phase, run `pytest` and commit one major milestone.
 
 ## Contents
 
@@ -34,8 +34,6 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | A.3 | CP2077 five stats + humanity/street cred | `entities/player.py` | `pda` shows full vitals |
 | A.4 | RAM / cyberware basics | `commands/install.py`, cyber helpers | Installing cyberware affects stats |
 
-**Original project commit reference:** `52aeccc` (batch delivery including A/B/C)
-
 ## Phase B: NPCs, Weather
 
 | # | Item | Key files | Acceptance |
@@ -66,8 +64,6 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | D.6 | give, appraise | Trade and appraisal |
 | D.7 | look output fix | Room in main log (not sidebar, no JSON leak) |
 
-**Original project commit reference:** `3cf9466`, `7623666`
-
 ## Phase E: Maintenance & UX
 
 | # | Item | Acceptance | Status |
@@ -76,8 +72,6 @@ Mirrors the original **mud** project development history for **cyber_mud** sched
 | E.2 | `./run.sh --dev` hot reload | Code/data changes reload | ✅ |
 | E.3 | Sidebar equipment auto-refresh | F2/F5 update immediately after equip | ✅ |
 | E.4 | Split EN/ZH docs + README ASCII banner | Consistent `docs/` format, TOC | ✅ |
-
-**Original project commit reference:** `34d5525` (sidebar refresh)
 
 ## Completed (formerly Backlog)
 

@@ -2,7 +2,7 @@
 
 > **中文：** [ARCHITECTURE.zh.md](ARCHITECTURE.zh.md)
 
-> cyber_mud documentation fork. Describes the system architecture of the original **mud** project (implemented + planned).
+> System architecture for **cyber_mud** (implemented + planned).
 
 ## Table of contents
 
@@ -16,7 +16,7 @@
 
 ## World setting
 
-The original **mud** setting is cyberpunk **Night City**: corporations, gangs, cyberware, and black markets. Players enter via a **neural link** and switch between the **NETRUN** hack layer and the physical streets. Full lore: **[WORLD.md](WORLD.md)**.
+The setting is cyberpunk **Night City**: corporations, gangs, cyberware, and black markets. Players enter via a **neural link** and switch between the **NETRUN** hack layer and the physical streets. Full lore: **[WORLD.md](WORLD.md)**.
 
 ## Overview
 
@@ -156,7 +156,7 @@ Changelog and todos: [PHASES.md — Backlog](PHASES.md#backlog). **Update before
 
 **Content depth:** D.1–D.10 shipped — see PHASES **Content depth**.
 
-**Shipped since original mud fork** (no longer backlog): period/weather modifiers (`world/modifiers.py`), passive cyberware chains (`combat/passives.py`), faction NPC AI (`world/npc_ai.py`), shop hours (`data/schedule.yaml`), quest authoring (`./admin.sh quests`), world scale W.1–W.14, content depth D.1–D.6, life commands L.1–L.8.
+**Shipped in cyber_mud** (no longer backlog): period/weather modifiers (`world/modifiers.py`), passive cyberware chains (`combat/passives.py`), faction NPC AI (`world/npc_ai.py`), shop hours (`data/schedule.yaml`), quest authoring (`./admin.sh quests`), world scale W.1–W.14, content depth D.1–D.6, life commands L.1–L.8.
 
 **Optional follow-up:** advanced NPC chase tuning; expanded persistence admin.
 
