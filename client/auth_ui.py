@@ -15,6 +15,17 @@ def build_auth_command(mode: str, name: str, password: str, *, mature: bool = Fa
     return f"{mode} {name} {password}"
 
 
+def build_resume_command(session_token: str) -> str | None:
+    token = session_token.strip()
+    if not token:
+        return None
+    return f"resume {token}"
+
+
 def mask_auth_log_line(mode: str, name: str) -> str:
     label = "登入" if mode == "login" else "註冊"
     return f"[dim]▸ {label}：{name}（密碼已隱藏）[/]"
+
+
+def mask_resume_log_line(name: str) -> str:
+    return f"[dim]▸ 恢復工作階段：{name}（權杖已隱藏）[/]"

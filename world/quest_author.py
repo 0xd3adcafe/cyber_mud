@@ -9,7 +9,18 @@ from world.quests import quest_stages
 from world.world import World
 
 VALID_OBJECTIVE_TYPES = frozenset(
-    {"talk_npc", "visit_room", "interact", "defeat_npc", "have_item", "hack_net", "give_npc"}
+    {
+        "talk_npc",
+        "visit_room",
+        "interact",
+        "defeat_npc",
+        "have_item",
+        "hack_net",
+        "give_npc",
+        "scan_npc",
+        "profile_trait",
+        "hack_infra",
+    }
 )
 
 
@@ -55,6 +66,12 @@ def resolve_target_label(world: World, objective_type: str, target: str) -> str:
         npc = world.npc(target)
         if npc:
             return f"{target} ({npc.name_zh or npc.name_en})"
+    elif objective_type in {"scan_npc", "profile_trait"}:
+        npc = world.npc(target)
+        if npc:
+            return f"{target} ({npc.name_zh or npc.name_en})"
+    elif objective_type == "hack_infra":
+        return target
     return target
 
 
@@ -75,6 +92,16 @@ def _target_exists(world: World, objective_type: str, target: str) -> bool:
         return target in world.net_nodes
     if objective_type == "give_npc":
         return world.npc(target) is not None
+    if objective_type == "scan_npc":
+        return world.npc(target) is not None
+    if objective_type == "profile_trait":
+        from world.profiler import load_profiler_profiles
+
+        return any(target in profile.traits for profile in load_profiler_profiles().values())
+    if objective_type == "hack_infra":
+        from world.ctos_hacks import CTOS_HACK_TYPES
+
+        return target in CTOS_HACK_TYPES
     return False
 
 

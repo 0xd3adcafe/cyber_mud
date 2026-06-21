@@ -1,0 +1,73 @@
+# ctOS-style profiler intel for NPCs (Watch Dogs homage — original Night City content).
+profiles:
+  broker:
+    occupation_zh: 情報經紀人
+    occupation_en: Info Broker
+    income_band: mid
+    traits:
+      - gambling_debt
+      - street_intel
+    vulnerability_zh: 賭債壓力讓他願意交換內線。
+    vulnerability_en: Gambling debt makes him trade insider tips.
+  thug:
+    occupation_zh: 街頭打手
+    occupation_en: Street Enforcer
+    income_band: low
+    traits:
+      - violent_impulse
+    vulnerability_zh: 義體過熱時反應遲鈍。
+    vulnerability_en: Cyberware overheats slow his reactions.
+  corp_scout:
+    occupation_zh: 企業偵察員
+    occupation_en: Corpo Scout
+    income_band: corp
+    traits:
+      - corp_access
+      - security_detail
+    vulnerability_zh: 巡邏回報節點可被干擾。
+    vulnerability_en: Patrol relay nodes can be jammed.
+  rookie_fixer:
+    occupation_zh: 菜鳥中介
+    occupation_en: Rookie Fixer
+    income_band: low
+    traits:
+      - eager_contact
+    vulnerability_zh: 急著證明自己，容易被說服。
+    vulnerability_en: Eager to prove himself—easy to persuade.
+  bazaar_fixer:
+    occupation_zh: 市集中介
+    occupation_en: Bazaar Fixer
+    income_band: mid
+    traits:
+      - gray_market
+      - street_intel
+    vulnerability_zh: 灰市帳本藏在隨身 PDA。
+    vulnerability_en: Gray-market ledger lives on a pocket PDA.
+  instructor:
+    occupation_zh: 訓練教官
+    occupation_en: Drill Instructor
+    income_band: mid
+    traits:
+      - trainer
+    vulnerability_zh: 訓練紀錄含學員弱點評分。
+    vulnerability_en: Training logs include trainee weakness scores.
+  netcoach:
+    occupation_zh: 駭客教練
+    occupation_en: Net Coach
+    income_band: mid
+    traits:
+      - netrunner
+      - trainer
+    vulnerability_zh: 模擬終端留有未清掉的後門腳本。
+    vulnerability_en: Sim terminals still carry uncleared backdoor scripts.
+
+talk_branches:
+  broker:
+    gambling_debt:
+      bribe_item: mod_chip
+      quest_flag: profiler_broker_tip
+      quest_flag_value: "1"
+  corp_scout:
+    corp_access:
+      quest_flag: profiler_scout_relay
+      quest_flag_value: "1"

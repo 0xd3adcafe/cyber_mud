@@ -176,6 +176,8 @@ class NetNode:
     name_en: str = ""
     hackable: bool = True
     locks: dict[str, str] = field(default_factory=dict)
+    links: list[str] = field(default_factory=list)
+    link_locks: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -506,6 +508,12 @@ def load_net_nodes(path: Path | None = None) -> dict[str, NetNode]:
             name_en=str(data.get("name_en", "")),
             hackable=bool(data.get("hackable", True)),
             locks=parse_locks(data.get("locks")),
+            links=[str(link_id) for link_id in (data.get("links") or [])],
+            link_locks={
+                str(target): str(expr).strip()
+                for target, expr in (data.get("link_locks") or {}).items()
+                if str(expr).strip()
+            },
         )
         for nid, data in (raw.get("net_nodes") or {}).items()
     }

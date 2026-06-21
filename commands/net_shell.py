@@ -6,7 +6,7 @@ from shared.locale_content import item_label_with_id, net_node_label_with_id
 from shared.target_resolve import resolve_net_node
 
 NET_SHELL_COMMANDS = frozenset({"hack", "probe", "exit", "help", "status"})
-NET_ALLOWED_MUD_COMMANDS = frozenset({"look", "scan", "search", "talk", "say"})
+NET_ALLOWED_MUD_COMMANDS = frozenset({"look", "scan", "search", "talk", "say", "jam", "distract"})
 
 
 def net_meta(ctx: CommandContext) -> dict[str, str]:
@@ -49,6 +49,12 @@ def _handle_hack(ctx: CommandContext) -> CommandResult:
     target = ctx.args.strip()
     if not target:
         return ok([t(ctx.player.locale, "net.hack_usage")], meta=net_meta(ctx))
+
+    from world.ctos_hacks import try_infra_hack
+
+    infra_lines = try_infra_hack(ctx, target.lower())
+    if infra_lines is not None:
+        return ok(infra_lines, meta=net_meta(ctx), world_changed=True)
 
     node_result = resolve_net_node(ctx, target, verb="hack")
     if node_result.needs_response:
@@ -97,6 +103,17 @@ def _handle_hack(ctx: CommandContext) -> CommandResult:
     from world.quests import advance_quest_on_hack
 
     lines.extend(advance_quest_on_hack(ctx.player, ctx.state, node.id, ctx.player.locale))
+    from world.footprint import CORPO_HACK_FOOTPRINT, add_footprint, corpo_footprint_bonus
+
+    lines.extend(
+        add_footprint(
+            ctx.player,
+            corpo_footprint_bonus(ctx.state, ctx.player.room_id, CORPO_HACK_FOOTPRINT),
+            ctx.state,
+            ctx.player.locale,
+            reason="hack",
+        )
+    )
     return ok(
         lines,
         meta=net_meta(ctx),
@@ -110,10 +127,12 @@ def _handle_probe(ctx: CommandContext) -> CommandResult:
         return ok([t(ctx.player.locale, "net.probe_empty")], meta=net_meta(ctx))
 
     labels = _node_labels(ctx)
-    return ok(
-        [t(ctx.player.locale, "net.probe_ok", nodes="、".join(labels))],
-        meta=net_meta(ctx),
-    )
+    lines = [t(ctx.player.locale, "net.probe_ok", nodes="、".join(labels))]
+    from world.ctos_mesh import discover_mesh_in_room, format_mesh_map_lines
+
+    lines.extend(discover_mesh_in_room(ctx.player, ctx.state, ctx.player.room_id))
+    lines.extend(format_mesh_map_lines(ctx.player, ctx.state, ctx.player.locale))
+    return ok(lines, meta=net_meta(ctx))
 
 
 def _handle_exit(ctx: CommandContext) -> CommandResult:

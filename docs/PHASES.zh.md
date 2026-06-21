@@ -263,18 +263,18 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
-| WD.1 | Profiler 資料模型 | `data/profiler.yaml` NPC `profile:`；`Player.profiled_npcs`；`scan <npc>` 快取情報；`profiler.*` locale；`tests/test_profiler.py` |
-| WD.2 | 基礎設施房間 tag | `power_grid`、`traffic`、`surveillance`、`steam`；`look`/`scan` 顯示 ctOS 連線物件 |
-| WD.3 | 環境駭入（NETRUN） | `blackout`、`jam_signals`、`overload` 等；`world/modifiers.py` 時段／天氣；RAM＋聲望消耗；`tests/test_ctos_hacks.py` |
-| WD.4 | 數位足跡與監控熱度 | `Player.footprint`；企業區駭入累積；拉高通緝／企業 NPC 敵意；PDA 列；`tests/test_footprint.py` |
-| WD.5 | Profiler 社交工程 | `talk` 依已掃描特質分支；賄賂物品；任務 flag；`tests/test_profiler_talk.py` |
-| WD.6 | Fixer Profiler 合約 | `scan_npc`、`profile_trait`、`hack_infra` 目標；`tests/test_profiler_gigs.py` |
-| WD.7 | 干擾巡邏 NPC | `jam`/`distract` 跳過巡邏或降敵意；`tests/test_ctos_distract.py` |
-| WD.8 | ctOS 節點連線圖 | `net_nodes.yaml` `links:`；`probe`／側欄顯示已發現網路；`tests/test_ctos_mesh.py` |
-| WD.9 | 排程城市事件 | ARCH.2 觸發區域斷電／交通鎖；`scheduler.ctos_*` 廣播；`tests/test_ctos_events.py` |
-| WD.10 | DedSec 派系與教學 | `dedsec` `pledge`；教程 Profiler 關卡；help **City OS**；`tests/test_dedsec.py` |
+| ~~WD.1~~ | ~~Profiler 資料模型~~ | ✅ `data/profiler.yaml`；`scan <npc>`；`tests/test_profiler.py` |
+| ~~WD.2~~ | ~~基礎設施房間 tag~~ | ✅ ctOS 房間 tag；`world/infrastructure.py`；`tests/test_infrastructure.py` |
+| ~~WD.3~~ | ~~環境駭入（NETRUN）~~ | ✅ `world/ctos_hacks.py`；`tests/test_ctos_hacks.py` |
+| ~~WD.4~~ | ~~數位足跡與監控熱度~~ | ✅ `Player.footprint`；PDA 列；`tests/test_footprint.py` |
+| ~~WD.5~~ | ~~Profiler 社交工程~~ | ✅ `world/profiler_talk.py`；`tests/test_profiler_talk.py` |
+| ~~WD.6~~ | ~~Fixer Profiler 合約~~ | ✅ `profiler_contract`；`tests/test_profiler_gigs.py` |
+| ~~WD.7~~ | ~~干擾巡邏 NPC~~ | ✅ `jam`/`distract`；`tests/test_ctos_distract.py` |
+| ~~WD.8~~ | ~~ctOS 節點連線圖~~ | ✅ `links:`／`link_locks`；`tests/test_ctos_mesh.py` |
+| ~~WD.9~~ | ~~排程城市事件~~ | ✅ `world/ctos_events.py`；`tests/test_ctos_events.py` |
+| ~~WD.10~~ | ~~DedSec 派系與教學~~ | ✅ `dedsec`；教程 Profiler；`tests/test_dedsec.py` |
 
-**建議順序：** WD.1 → WD.2 → WD.3 → WD.4（系統核心）→ WD.8 → WD.5 → WD.6 → WD.7 → WD.9 → WD.10（內容）。
+**建議順序：** WD.1–WD.10 已交付（2026-06）。
 
 **延後（文字 MUD 不適合）：** 開放世界駕駛、跑酷、手機 UI 複製、即時多人 ctOS 入侵。
 
@@ -410,16 +410,16 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~ASVS.4~~ | ~~輸入邊界~~ | ✅ 名稱／密碼長度；`maxsplit=1` 支援含空格密碼；單行 4 KiB 上限 |
 | ~~ASVS.5~~ | ~~認證速率限制~~ | ✅ 每連線 60 秒內 5 次失敗→封鎖 5 分鐘；`server/rate_limit.py` |
 | ~~ASVS.6~~ | ~~閒置／連線上限~~ | ✅ `server/connection_limits.py`；每 IP 連線上限＋訪客／已登入閒置斷線；`tests/test_security_auth.py` |
-| ASVS.7 | 存檔檔案權限 | ✅ 寫入 `chmod 0o600`（部分——目錄強化待做） |
-| ASVS.8 | 傳輸加密 | TLS 包裝或 VPN 部署文件 |
-| ASVS.9 | 重連不重送密碼 | Token 恢復工作階段 |
-| ASVS.10 | `changepass` 指令 | 已登入變更密碼 |
-| ASVS.11 | 帳號鎖定 | 多次失敗後持久鎖定 |
-| ASVS.12 | 安全稽核日誌 | 結構化認證失敗／管理日誌 |
-| ASVS.13 | 客戶端憑證衛生 | 選用 PIN 解鎖；不儲存明文密碼 |
-| ASVS.14 | 安全迴歸測試 | 速率限制整合與協定邊界；`tests/test_security_auth.py` |
+| ~~ASVS.7~~ | ~~存檔檔案權限~~ | ✅ 檔案 `0o600`、目錄 `0o700` |
+| ~~ASVS.8~~ | ~~傳輸加密~~ | ✅ 選用 TLS；VPN 部署文件 |
+| ~~ASVS.9~~ | ~~重連不重送密碼~~ | ✅ Session token；`resume` |
+| ~~ASVS.10~~ | ~~`changepass` 指令~~ | ✅ `commands/changepass.py` |
+| ~~ASVS.11~~ | ~~帳號鎖定~~ | ✅ `persistence/account_lockout.py` |
+| ~~ASVS.12~~ | ~~安全稽核日誌~~ | ✅ `server/audit_log.py` |
+| ~~ASVS.13~~ | ~~客戶端憑證衛生~~ | ✅ PIN 加密 token |
+| ~~ASVS.14~~ | ~~安全迴歸測試~~ | ✅ `tests/test_security_auth.py` 擴充 |
 
-**建議順序：** ASVS.1–6（已交付）→ ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14。
+**建議順序：** ASVS.1–14 已交付（2026-06）。見 [`SECURITY.zh.md`](SECURITY.zh.md)。
 
 ### 新手教學區（入門深度）
 

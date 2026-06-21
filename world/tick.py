@@ -10,7 +10,7 @@ from entities.player import Player
 from shared.i18n import t
 from world.clock import TimeConfig
 from world.corpses import process_corpse_decay
-from world.npc_ai import process_npc_ai
+from world.npc_ai import patrol_is_jammed, process_npc_ai, tick_npc_distract
 from world.npc_respawn import process_npc_respawns
 from world.schedule import npc_scheduled_room
 from world.scheduler import ScheduledTask
@@ -61,6 +61,8 @@ def _maybe_move_patrolling_npcs(state: WorldState, config: TimeConfig) -> list[T
         if npc.schedule:
             continue
         if len(npc.patrol) < 2:
+            continue
+        if patrol_is_jammed(state, npc_id):
             continue
         current = state.npc_room(npc_id)
         room = state.world.room(current)
@@ -250,8 +252,13 @@ def _process_ambient_reactions(
 
 
 def _scheduler_events(state: WorldState, fired: list[ScheduledTask]) -> list[TickEvent]:
+    from world.ctos_events import CTOS_SCHEDULER_KINDS, process_ctos_scheduler_task
+
     events: list[TickEvent] = []
     for task in fired:
+        if task.kind in CTOS_SCHEDULER_KINDS:
+            events.extend(process_ctos_scheduler_task(state, task))
+            continue
         events.append(
             TickEvent(
                 kind="scheduler_msg",
@@ -261,6 +268,15 @@ def _scheduler_events(state: WorldState, fired: list[ScheduledTask]) -> list[Tic
             )
         )
     return events
+
+
+def _process_footprint_decay(state: WorldState, players: list[Player]) -> list[TickEvent]:
+    from world.footprint import tick_footprint_decay_player
+
+    for player in players:
+        if player.named and player.footprint > 0:
+            tick_footprint_decay_player(player, state)
+    return []
 
 
 def _process_wanted_decay(players: list[Player]) -> list[TickEvent]:
@@ -296,6 +312,7 @@ def process_tick(
     time_changed = before != after
 
     state.tick_count += 1
+    tick_npc_distract(state)
     events: list[TickEvent] = []
 
     fired = state.scheduler.process(state.tick_count)
@@ -332,6 +349,7 @@ def process_tick(
         events.extend(_process_hp_regen(state, config, players))
         events.extend(_process_player_trauma(state, players))
         events.extend(_process_wanted_decay(players))
+        events.extend(_process_footprint_decay(state, players))
         events.extend(_process_ambient_reactions(state, config, players))
 
     for room_id, message_key, message_kwargs in process_corpse_decay(state):

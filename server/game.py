@@ -88,11 +88,13 @@ class Game:
 
     async def notify_dev_reload(self, kind: str, *, failures: list[tuple[str, str]] | None = None) -> None:
         from commands.registry import player_meta
+        from server.audit_log import log_security_event
         from server.heartbeat import log_server_event
 
         from shared.server_locale import server_locale
 
         loc = server_locale()
+        log_security_event("admin_dev_reload", kind=kind, failures=len(failures or []))
         if kind == "data":
             world = self.state.world
             message = t(loc, "server.reload_world_msg")
@@ -169,7 +171,7 @@ class Game:
 
         session.last_activity_at = time.monotonic()
         verb = line.strip().split(maxsplit=1)[0].lower() if line.strip() else ""
-        if verb == "login" and session.auth_rate_limit.is_blocked():
+        if verb in ("login", "resume") and session.auth_rate_limit.is_blocked():
             await session.send(t(session.player.locale, "auth.rate_limited"))
             return True
 
@@ -344,6 +346,16 @@ class Game:
 
                     label = weather_label(event.weather, target.player.locale)
                     await target.send_meta({"weather": label})
+            elif event.kind == "ctos_district":
+                from world.ctos_events import district_label
+
+                for target in self.sessions:
+                    room = self.state.world.room(target.player.room_id)
+                    if room is None or room.district != event.district:
+                        continue
+                    locale = target.player.locale
+                    district = district_label(locale, event.message_kwargs.get("district", event.district))
+                    await target.send(t(locale, event.message_key, district=district))
             elif event.kind == "chase_follow":
                 for target in self.sessions:
                     if target.player.name != event.player_name:

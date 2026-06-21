@@ -46,6 +46,8 @@ class Player:
     proficiency_levels: dict[str, int] = field(default_factory=dict)
     proficiency_xp: dict[str, int] = field(default_factory=dict)
     password_hash: str = ""
+    auth_failed_attempts: int = 0
+    auth_locked_until: float = 0.0
     in_combat: bool = False
     encounter_id: str = ""
     active_quest: str = ""
@@ -60,3 +62,6 @@ class Player:
     posture: str = "standing"
     fatigue: int = 0
     life_anchor: str = ""
+    profiled_npcs: list[str] = field(default_factory=list)
+    footprint: int = 0
+    discovered_net_links: list[str] = field(default_factory=list)

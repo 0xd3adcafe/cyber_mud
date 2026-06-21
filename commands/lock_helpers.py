@@ -12,5 +12,10 @@ def check_entity_lock(ctx: CommandContext, entity, action: str) -> list[str] | N
     key = f"lock.denied_{action}"
     msg = t(locale, key)
     if msg == key:
-        return [t(locale, "lock.denied")]
-    return [msg]
+        lines = [t(locale, "lock.denied")]
+    else:
+        lines = [msg]
+    from world.footprint import add_footprint
+
+    lines.extend(add_footprint(ctx.player, 4, ctx.state, locale, reason="lock"))
+    return lines

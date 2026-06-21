@@ -213,8 +213,8 @@ interactables:
     description_zh: 隔離的訓練用神經接口座，示範 net／probe／hack 流程。
     description_en: An isolated jack seat demoing net, probe, and hack flow.
     once_key: tutorial_net_jack
-    message_zh: 座席投影：「net 進入模擬；probe 掃節點；hack tutorial_terminal 完成入侵練習；exit 返回實體層。」
-    message_en: 'The seat projects: "net to enter sim; probe nodes; hack tutorial_terminal; exit back to physical layer."'
+    message_zh: 座席投影：「net 進入模擬；probe 掃節點；scan netcoach 練 Profiler；hack tutorial_terminal 完成入侵；exit 返回實體層。」
+    message_en: 'The seat projects: "net to enter sim; probe nodes; scan netcoach for profiler drill; hack tutorial_terminal; exit back to physical layer."'
   tutorial_stim_crane:
     room_id: tutorial_medbay
     name_zh: 急救吊臂

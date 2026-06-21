@@ -44,12 +44,14 @@ def clear_world_cache() -> None:
     _DEFAULT_WORLD_CACHE = None
     _DEFAULT_ROOM_ITEMS_CACHE = None
     from world.clock import clear_time_config_cache
+    from world.profiler import clear_profiler_cache
     from world.schedule import clear_schedule_cache
     from world.weather import clear_weather_config_cache
 
     clear_time_config_cache()
     clear_weather_config_cache()
     clear_schedule_cache()
+    clear_profiler_cache()
 
 
 def _load_world_raw(path: Path | None = None) -> dict:

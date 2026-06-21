@@ -247,9 +247,9 @@ Master list: [`docs/PHASES.md`](docs/PHASES.md).
 | **Client log UX** | CL.1–CL.11 shipped — log channels, `LogPalette`, `/log compact` & hide/show toggles, export; see PHASES **Client log UX** |
 | **World expansion (WORLD.md)** | W.1–W.14 shipped (263 rooms / 121 NPCs / 45 items); see PHASES **World expansion** |
 | **Content depth** | D.1–D.10 shipped (spotlight NPCs, district quests, grid look flavor); see PHASES **Content depth** |
-| **Security (ASVS L1)** | ASVS.1–6 shipped (PBKDF2, unified login errors, save validation, input bounds, rate limit, connection/idle limits); ASVS.7–14 backlog; see [`docs/SECURITY.md`](docs/SECURITY.md) |
+| **Security (ASVS L1)** | ASVS.1–14 shipped — PBKDF2, rate limit, TLS option, token resume, changepass, lockout, audit log, client PIN token; see [`docs/SECURITY.md`](docs/SECURITY.md) |
 | **Architecture (incremental)** | ARCH.1–2 shipped (YAML lock predicates; scheduler on `tick_count`); see PHASES **Architecture (incremental)** |
-| **Surveillance hacking (Watch Dogs homage)** | WD.1–WD.10 backlog — profiler intel, ctOS infrastructure hacks, footprint heat, DedSec; see PHASES **Surveillance hacking** |
+| **Surveillance hacking (Watch Dogs homage)** | WD.1–WD.10 shipped — profiler, ctOS infra hacks, footprint, mesh, DedSec; see PHASES **Surveillance hacking** |
 | **Mature M.18** | Shipped — private `cyber_mud_mature` submodule at `data/mature/`; bilingual pack docs (`README`, `CLAUDE`, `CONTRIBUTING`, `LOCALIZATION` + `*.zh.md`); history purge via `scripts/mature-history-purge.sh`; see PHASES **M.18** |
 
 

@@ -27,12 +27,12 @@ def test_validate_pin_rejects_non_digits_zh():
     assert creds.validate_pin("123", "zh") == "PIN 需為 4–6 位數字。"
 
 
-def test_save_and_unlock_roundtrip(cred_path: Path):
+def test_save_and_unlock_session_token_roundtrip(cred_path: Path):
     assert creds.save_credentials(
         username="runner",
-        password="s3cret!",
         mode="login",
         pin="2468",
+        session_token="tok-abc-123",
     ) is None
     assert cred_path.exists()
     assert oct(cred_path.stat().st_mode & 0o777) == oct(0o600)
@@ -40,8 +40,22 @@ def test_save_and_unlock_roundtrip(cred_path: Path):
     unlocked = creds.unlock_credentials("2468")
     assert unlocked is not None
     assert unlocked.username == "runner"
+    assert unlocked.session_token == "tok-abc-123"
+    assert unlocked.password == ""
+
+
+def test_save_and_unlock_legacy_password_roundtrip(cred_path: Path):
+    assert creds.save_credentials(
+        username="runner",
+        password="s3cret!",
+        mode="login",
+        pin="2468",
+    ) is None
+    unlocked = creds.unlock_credentials("2468")
+    assert unlocked is not None
+    assert unlocked.username == "runner"
     assert unlocked.password == "s3cret!"
-    assert unlocked.mode == "login"
+    assert unlocked.session_token == ""
 
 
 def test_unlock_wrong_pin_returns_none(cred_path: Path):
@@ -50,11 +64,16 @@ def test_unlock_wrong_pin_returns_none(cred_path: Path):
 
 
 def test_blob_does_not_contain_plaintext(cred_path: Path):
-    creds.save_credentials(username="neo", password="matrix", mode="register", pin="4321")
+    creds.save_credentials(
+        username="neo",
+        mode="register",
+        pin="4321",
+        session_token="secret-session-token-value",
+    )
     raw = json.loads(cred_path.read_text(encoding="utf-8"))
     text = json.dumps(raw)
     assert "neo" not in text
-    assert "matrix" not in text
+    assert "secret-session-token-value" not in text
 
 
 def test_clear_credentials(cred_path: Path):
@@ -79,10 +98,13 @@ def test_auth_meta_persists_pending_credentials(cred_path: Path, monkeypatch: py
         app = CyberMudApp("127.0.0.1", 4000)
         async with app.run_test(size=(80, 40)) as pilot:
             await pilot.pause()
-            app._pending_credential_save = ("runner", "secret", "login", "2468")
-            app._apply_meta("auth=1")
+            app._pending_credential_save = ("runner", "login", "2468")
+            app._apply_meta("session_token=tok-save-me")
             await pilot.pause()
             assert cred_path.exists()
+            unlocked = creds.unlock_credentials("2468")
+            assert unlocked is not None
+            assert unlocked.session_token == "tok-save-me"
             pin = app.query_one("#login_pin", Input)
             assert "credential-hidden" not in pin.classes
 

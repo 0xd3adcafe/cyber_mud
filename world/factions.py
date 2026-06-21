@@ -12,6 +12,7 @@ FACTION_SHOP_RATES: dict[str, dict[str, float]] = {
     "militech": {"buy": 0.94, "sell": 1.06},
     "tyrell": {"buy": 0.9, "sell": 1.1},
     "maelstrom": {"buy": 1.08, "sell": 0.92},
+    "dedsec": {"buy": 1.04, "sell": 0.96},
 }
 
 # Per-shop overrides (shop_id -> faction -> {buy, sell}).
@@ -70,11 +71,19 @@ def faction_quest_hint_suffix(player: Player, locale: str) -> str:
 
 
 def npc_aggro_modifier(player: Player, room: Room | None) -> int:
-    if room is None or not room.district or not player.faction:
+    if room is None or not room.district:
         return 0
-    profile = district_profile(room.district)
-    if player.faction in profile.entry_blocked_factions:
-        return 2
-    if player.faction in profile.allied_factions:
-        return -1
-    return 0
+    mod = 0
+    if player.faction:
+        profile = district_profile(room.district)
+        if player.faction in profile.entry_blocked_factions:
+            mod += 2
+        elif player.faction in profile.allied_factions:
+            mod -= 1
+    if room.district == "corpo":
+        from world.footprint import corp_aggro_bonus
+
+        mod += corp_aggro_bonus(player)
+        if player.faction == "dedsec":
+            mod += 1
+    return mod

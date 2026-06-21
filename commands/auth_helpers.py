@@ -2,18 +2,36 @@ from __future__ import annotations
 
 from commands.registry import CommandContext, ok
 from entities.player import Player
+from persistence.account_lockout import (
+    clear_lockout_state,
+    is_account_locked,
+    lockout_remaining_seconds,
+    record_auth_failure,
+)
 from persistence.passwords import hash_password, needs_rehash, verify_password
 from persistence.save import load_player, player_exists, save_name_allowed, save_player
+from server.audit_log import log_security_event
+from server.session_tokens import issue_session_token, rotate_session_token, validate_session_token
 from shared.i18n import t
 from shared.security import validate_character_name, validate_password
 from world.mature import set_content_rating
 
-AUTH_COMMANDS = frozenset({"login", "register", "help", "quit"})
+AUTH_COMMANDS = frozenset({"login", "register", "resume", "help", "quit"})
 
 STARTING_GOLD = 100
 
 
 def parse_auth_credentials(args: str) -> tuple[str, str] | None:
+    text = args.strip()
+    if not text:
+        return None
+    parts = text.split(maxsplit=1)
+    if len(parts) != 2 or not parts[0] or not parts[1]:
+        return None
+    return parts[0], parts[1]
+
+
+def parse_two_secret_fields(args: str) -> tuple[str, str] | None:
     text = args.strip()
     if not text:
         return None
@@ -37,6 +55,11 @@ def parse_register_credentials(args: str) -> tuple[str, str, bool] | None:
         return None
     name, password = creds
     return name, password, mature
+
+
+def auth_success_meta(player_name: str) -> dict[str, str]:
+    token = issue_session_token(player_name)
+    return {"session_token": token}
 
 
 def find_online_player(ctx: CommandContext, name: str):
@@ -85,6 +108,8 @@ def reset_player_to_guest(player, start_room: str) -> None:
     player.proficiency_levels = dict(fresh.proficiency_levels)
     player.proficiency_xp = dict(fresh.proficiency_xp)
     player.password_hash = fresh.password_hash
+    player.auth_failed_attempts = fresh.auth_failed_attempts
+    player.auth_locked_until = fresh.auth_locked_until
     player.in_combat = False
     player.encounter_id = ""
     player.active_quest = fresh.active_quest
@@ -142,6 +167,8 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.proficiency_levels = dict(loaded.proficiency_levels)
     session_player.proficiency_xp = dict(loaded.proficiency_xp)
     session_player.password_hash = loaded.password_hash
+    session_player.auth_failed_attempts = loaded.auth_failed_attempts
+    session_player.auth_locked_until = loaded.auth_locked_until
     session_player.faction = loaded.faction
     session_player.active_quest = loaded.active_quest
     session_player.quest_flags = dict(loaded.quest_flags)
@@ -156,6 +183,24 @@ def apply_loaded_player(session_player, loaded) -> None:
     session_player.posture = loaded.posture
     session_player.fatigue = loaded.fatigue
     session_player.life_anchor = loaded.life_anchor
+
+
+def _persist_lockout_state(loaded: Player) -> None:
+    save_player(loaded)
+
+
+def _account_locked_response(ctx: CommandContext, loaded: Player):
+    remaining = lockout_remaining_seconds(locked_until=loaded.auth_locked_until)
+    minutes = max(1, (remaining + 59) // 60)
+    log_security_event(
+        "auth_account_locked",
+        player=loaded.name,
+        remaining_seconds=remaining,
+    )
+    return ok(
+        [t(ctx.player.locale, "auth.account_locked", minutes=str(minutes))],
+        auth_failure=True,
+    )
 
 
 def handle_register(ctx: CommandContext):
@@ -187,10 +232,11 @@ def handle_register(ctx: CommandContext):
     if mature_opt_in:
         set_content_rating(ctx.player, True)
     save_player(ctx.player)
+    log_security_event("auth_register_success", player=name)
     lines = [t(ctx.player.locale, "auth.register_ok", name=name)]
     if mature_opt_in:
         lines.append(t(ctx.player.locale, "auth.register_mature_on"))
-    return ok(lines, auth_event=True)
+    return ok(lines, auth_event=True, meta=auth_success_meta(name))
 
 
 def handle_login(ctx: CommandContext):
@@ -206,11 +252,77 @@ def handle_login(ctx: CommandContext):
         return ok([t(ctx.player.locale, "auth.name_online", name=name)])
 
     loaded = load_player(name)
-    if loaded is None or not verify_password(password, loaded.password_hash):
+    if loaded is None:
+        log_security_event("auth_login_failure", player=name, reason="unknown_account")
         return ok([t(ctx.player.locale, "auth.invalid_credentials")], auth_failure=True)
 
+    if is_account_locked(locked_until=loaded.auth_locked_until):
+        return _account_locked_response(ctx, loaded)
+
+    if not verify_password(password, loaded.password_hash):
+        attempts, locked_until, newly_locked = record_auth_failure(
+            failed_attempts=loaded.auth_failed_attempts,
+            locked_until=loaded.auth_locked_until,
+        )
+        loaded.auth_failed_attempts = attempts
+        loaded.auth_locked_until = locked_until
+        _persist_lockout_state(loaded)
+        log_security_event(
+            "auth_login_failure",
+            player=name,
+            reason="bad_password",
+            newly_locked=newly_locked,
+        )
+        if newly_locked:
+            return _account_locked_response(ctx, loaded)
+        return ok([t(ctx.player.locale, "auth.invalid_credentials")], auth_failure=True)
+
+    loaded.auth_failed_attempts, loaded.auth_locked_until = clear_lockout_state()
     apply_loaded_player(ctx.player, loaded)
     if needs_rehash(loaded.password_hash):
         ctx.player.password_hash = hash_password(password)
-        save_player(ctx.player)
-    return ok([t(ctx.player.locale, "auth.login_ok", name=name)], auth_event=True)
+    save_player(ctx.player)
+    log_security_event("auth_login_success", player=name)
+    return ok(
+        [t(ctx.player.locale, "auth.login_ok", name=name)],
+        auth_event=True,
+        meta=auth_success_meta(name),
+    )
+
+
+def handle_resume(ctx: CommandContext):
+    if ctx.player.named:
+        return ok([t(ctx.player.locale, "auth.already_logged_in")])
+
+    token = ctx.args.strip()
+    if not token:
+        return ok([t(ctx.player.locale, "auth.resume_usage")])
+
+    player_key = validate_session_token(token)
+    if player_key is None:
+        log_security_event("auth_resume_failure", reason="invalid_token")
+        return ok([t(ctx.player.locale, "auth.invalid_session")], auth_failure=True)
+
+    loaded = load_player(player_key)
+    if loaded is None:
+        log_security_event("auth_resume_failure", player=player_key, reason="missing_save")
+        return ok([t(ctx.player.locale, "auth.invalid_session")], auth_failure=True)
+
+    if is_account_locked(locked_until=loaded.auth_locked_until):
+        return _account_locked_response(ctx, loaded)
+
+    if find_online_player(ctx, loaded.name):
+        return ok([t(ctx.player.locale, "auth.name_online", name=loaded.name)])
+
+    new_token = rotate_session_token(token)
+    if new_token is None:
+        log_security_event("auth_resume_failure", player=loaded.name, reason="rotate_failed")
+        return ok([t(ctx.player.locale, "auth.invalid_session")], auth_failure=True)
+
+    apply_loaded_player(ctx.player, loaded)
+    log_security_event("auth_resume_success", player=loaded.name)
+    return ok(
+        [t(ctx.player.locale, "auth.resume_ok", name=loaded.name)],
+        auth_event=True,
+        meta={"session_token": new_token},
+    )

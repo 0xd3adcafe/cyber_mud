@@ -29,6 +29,8 @@ COMBAT_ALLOWED_COMMANDS = frozenset(
         "finish",
         "taunt",
         "quickhack",
+        "jam",
+        "distract",
         "look",
         "use",
         "eat",

@@ -5,10 +5,10 @@ from commands.registry import CommandContext, ok_panel, player_meta, register
 from shared.i18n import t
 from shared.ui_json import panel_json
 
-_AUTH_KEYS = frozenset({"login", "register", "help", "quit"})
+_AUTH_KEYS = frozenset({"login", "register", "resume", "help", "quit"})
 
 HELP_CATEGORIES: tuple[tuple[str, tuple[str, ...]], ...] = (
-    ("auth", ("login", "register", "help", "quit")),
+    ("auth", ("login", "register", "resume", "help", "quit")),
     ("explore", ("look", "go", "scan", "map", "interact", "time", "recall", "lang")),
     ("life", ("sit", "stand", "lie", "rest", "sleep", "wake")),
     ("items", ("take", "drop", "inventory", "give", "appraise", "craft", "disassemble")),
@@ -20,6 +20,7 @@ HELP_CATEGORIES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("social", ("talk", "say", "pledge", "learn")),
     ("combat", ("attack", "shoot", "slash", "bash", "punch", "backstab", "defend", "flee", "quickhack")),
     ("netrun", ("net",)),
+    ("city_os", ("scan", "net", "quickhack", "pledge")),
     ("quests", ("gigs",)),
     ("growth", ("stats", "talents", "improve")),
     ("panels", ("pda", "prompt")),

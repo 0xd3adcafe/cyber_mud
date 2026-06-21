@@ -1,14 +1,30 @@
+from client.auth_ui import build_resume_command
 from client.reconnect import reconnect_status_message, should_resend_auth
 
 
-def test_should_resend_auth_after_disconnect():
-    assert should_resend_auth(needs_reauth=True, authenticated=True, last_auth_line="login V x")
+def test_should_resend_auth_when_needs_reauth():
+    assert should_resend_auth(needs_reauth=True, authenticated=True, last_auth_line="login a b")
+
+
+def test_should_resend_auth_when_not_authenticated():
+    assert should_resend_auth(needs_reauth=False, authenticated=False, last_auth_line="login a b")
+
+
+def test_should_not_resend_without_last_line():
     assert not should_resend_auth(needs_reauth=True, authenticated=True, last_auth_line="")
 
 
-def test_should_resend_auth_on_login_screen():
-    assert should_resend_auth(needs_reauth=False, authenticated=False, last_auth_line="login V x")
-    assert not should_resend_auth(needs_reauth=False, authenticated=False, last_auth_line="")
+def test_should_resend_resume_token_line():
+    assert should_resend_auth(
+        needs_reauth=True,
+        authenticated=True,
+        last_auth_line="resume abc.def.ghi",
+    )
+
+
+def test_build_resume_command():
+    assert build_resume_command("abc.def") == "resume abc.def"
+    assert build_resume_command("  ") is None
 
 
 def test_reconnect_status_message():

@@ -11,6 +11,7 @@ def test_world_loads():
 def test_factions_present():
     world = load_world()
     assert "arasaka" in world.factions
+    assert "dedsec" in world.factions
 
 
 def test_items_and_implants():

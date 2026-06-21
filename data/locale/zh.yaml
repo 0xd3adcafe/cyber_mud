@@ -234,7 +234,9 @@ help:
     media: "腦舞"
     mature: "18+ 內容（自願啟用）"
     life: "生活與生命徵象"
+    city_os: "城市 OS"
   tutorial:
+    profiler_lesson: "◈ Profiler 演練——scan 會快取職業、特質與弱點；在 talk 與委託中活用情報。"
     header: "◈ 教學區 — 訓練場與指令"
     rooms_header: "訓練房間（tutorial_*）："
     room_line: "  · {room} — {blurb}"
@@ -242,6 +244,16 @@ help:
     footer: "完成訓練後往西進霓虹廣場。輸入 help 可看完整列表。"
 
 district:
+  label:
+    tutorial: 訓練場
+    watson: 沃森區
+    kabuki: 歌舞伎區
+    little_china: 小中國
+    corpo: 企業廣場
+    tyrell: 泰瑞實驗區
+    docks: 碼頭
+    undercity: 地下城
+    combat_zone: 戰鬥區
   atmosphere:
     training: "空氣裡有臭氧與教學全息煙霧的味道。"
     street_chaos: "街頭噪音與霓虹滲進每一道陰影。"
@@ -268,6 +280,7 @@ faction:
     tyrell: "（泰瑞宣誓：企業攤商給你較好價格。）"
     arasaka: "（荒坂宣誓：診所價格略降。）"
     maelstrom: "（漩渦幫宣誓：街頭攤商加價。）"
+    dedsec: "（DedSec 宣誓：監控熱度較低；企業區更盯著你。）"
 
 help_cmds:
   look: "察看環境或目標（look [物品|NPC|裝備]）"
@@ -459,6 +472,14 @@ auth:
   login_ok: "歡迎回來，{name}。"
   too_many_connections: "此位址連線數已達上限。"
   idle_disconnect: "閒置逾時，連線已中斷。"
+  changepass_usage: "用法：changepass <目前密碼> <新密碼>"
+  changepass_ok: "密碼已變更。"
+  changepass_bad_current: "目前密碼不正確。"
+  changepass_same: "新密碼必須與目前密碼不同。"
+  resume_usage: "用法：resume <session_token>"
+  resume_ok: "工作階段已恢復。歡迎回來，{name}。"
+  invalid_session: "無效或已過期的工作階段權杖。"
+  account_locked: "登入失敗次數過多，帳號已鎖定。約 {minutes} 分鐘後再試。"
 
 lock:
   denied: "條件不符，無法進行。"
@@ -469,6 +490,10 @@ lock:
 
 scheduler:
   implant_side_effect: "義體後遺症發作——{label} 神經回饋急升。"
+  ctos_blackout_on: "◈ ctOS——{district} 全區斷電，籠罩在黑暗中。"
+  ctos_blackout_off: "◈ ctOS——{district} 電網恢復，燈光斷斷續續亮起。"
+  ctos_traffic_lock_on: "◈ ctOS——{district} 交通網鎖死，路口陷入癱瘓。"
+  ctos_traffic_lock_off: "◈ ctOS——{district} 號誌重設，車流恢復。"
 
 take:
   usage: "用法：take <物品> [from <屍體>]"
@@ -653,6 +678,84 @@ map:
   empty: "尚未探索任何區域。"
   legend: "圖例：[@] 目前位置  ■ 已知區域"
   room_line: "  {marker} {name}"
+
+ctos:
+  mesh:
+    header: "◈ ctOS 連線圖（已發現連結）"
+    line: "  {a} ↔ {b}"
+    discovered: "發現網路連結：{link}"
+    lock_probe: "街頭聲望不足，無法探測跨區跳接。"
+    lock_hack: "跨區跳接遭封鎖。"
+  hack:
+    no_infra: "此區沒有可駭入的 {hack} 基礎設施。"
+    need_ram: "此 ctOS 駭入需要 {cost} RAM。"
+    need_cred: "此 ctOS 駭入需要 {cost} 街頭聲望。"
+    blackout:
+      ok: "街區燈光熄滅——停電生效。"
+    jam_signals:
+      ok: "交通與監控訊號斷續——干擾成功。"
+    overload:
+      ok: "電網中繼過載，蒸汽管線尖嘯——過載觸發。"
+  infra:
+    power_grid:
+      look: "◈ ctOS — 碼頭變電站為整區供電。"
+      scan: "◈ ctOS 節點：電網中繼（可駭入基礎設施）"
+    traffic:
+      look: "◈ ctOS — 交通號誌網覆蓋這個路口。"
+      scan: "◈ ctOS 節點：交通控制網（可駭入基礎設施）"
+    surveillance:
+      look: "◈ ctOS — 監控鏡頭在霓虹下追蹤動線。"
+      scan: "◈ ctOS 節點：監控叢集（可駭入基礎設施）"
+    steam:
+      look: "◈ ctOS — 蒸汽管線接入市政服務隧道。"
+      scan: "◈ ctOS 節點：蒸汽管線（可駭入基礎設施）"
+  distract:
+    usage: "用法：jam <npc> 或 distract <npc> — 干擾巡邏或壓制敵意。"
+    missing: "這裡沒有 {name} 可干擾。"
+    no_patrol: "{name} 沒有巡邏路線可干擾。"
+    no_aggro: "{name} 敵意不足，無法用 distract。"
+    need_ram: "干擾訊號需要 {cost} RAM。"
+    jam_ok: "你灌入雜訊干擾 {name} 的回報——巡邏延遲 {ticks} 個 tick。"
+    distract_ok: "你引開 {name} 的注意力——敵意壓制 {ticks} 個 tick。"
+    resisted: "{name} 的安保隨行抵銷了訊號——效果縮短。"
+
+footprint:
+  gain: "監控熱度 +{amount}（足跡 {total}/100）。"
+  high_warning: "你在整區的監控鏡頭下無所遁形。"
+  pda_label: "數位足跡"
+  pda_row: "數位足跡：{value}/100"
+
+profiler:
+  usage: "用法：scan <人物> — 對房間內對象執行 Profiler 情報掃描。"
+  no_data: "沒有 {name} 的 Profiler 資料。"
+  header: "◈ Profiler — {name}"
+  header_cached: "◈ Profiler（快取）— {name}"
+  occupation: "職業：{value}"
+  income: "收入區間：{value}"
+  line_traits: "特徵：{value}"
+  vulnerability: "弱點：{value}"
+  income_band:
+    low: "低"
+    mid: "中"
+    high: "高"
+    corp: "企業"
+  traits:
+    gambling_debt: "賭債"
+    street_intel: "街頭情報"
+    violent_impulse: "暴力衝動"
+    corp_access: "企業權限"
+    security_detail: "安保隨行"
+    eager_contact: "急於建立人脈"
+    gray_market: "灰市交易"
+    trainer: "教官"
+    netrunner: "網路跑者"
+  talk:
+    bribe_ok: "對方收下 {item}，湊近低語。"
+    broker:
+      gambling_debt: "經紀人瞄了你的掃描檔：「你知道賭桌的事。低調點，我可以換一條路線情報。」"
+      gambling_debt_bribe: "他插上晶片，低聲說出灰市帳本路線。"
+    corp_scout:
+      corp_access: "偵察員的回報中斷——你的 Profiler 讀數讓巡邏交接碼露出破綻。"
 
 scan:
   header: "◈ 掃描 — {name}"
@@ -896,7 +999,7 @@ talk:
   broker_quest: "◈ 經紀人招手，有新的街頭委託。"
   thug: "街頭暴徒咧嘴一笑：「漩渦幫最近在收義體，別多問。回去跟你的經紀人說我講過了。」"
   instructor: "教官的全息影像亮起：「往上簡報室——東邊畢業檢定室接輪值檢定；北戰鬥、東駭入、南裝備庫；餐廳在裝備庫西邊。蓋章後訓練場往西進夜城。」"
-  netcoach: "駭客教練敲了敲終端：「輸入 net 進入模擬介面，對訓練用終端用 hack 或 probe 試試。北邊模擬診所可練 install。」"
+  netcoach: "駭客教練敲了敲終端：「輸入 net 進入模擬介面，對訓練用終端用 hack 或 probe 試試。scan 我來練 Profiler；北邊模擬診所可練 install。」"
   quartermaster: "裝備管理員指著架子：「地上有免費練習裝備；要交易用 shop 看價，buy／sell 即可。西邊餐廳練 eat／drink。」"
   rookie_fixer: "實習中介敲委託板：「accept tutorial_rotation 做訓練輪值檢定，journal 追進度。其他委託要街頭聲望。stats 看等級，recall 回訓練場。」"
   canteen_tech: "技師指著販賣機：「餓了 eat 口糧、渴了 drink 電解液；受傷用 use med_stim。儲物櫃 interact locker 還有一次性補給。」"
@@ -942,6 +1045,9 @@ quest:
   hint_have_item: "取得 {target}。"
   hint_give_npc: "把 {item} 交給 {npc}。"
   hint_hack_net: "輸入 net 進入駭入介面，hack {target}。"
+  hint_scan_npc: "用 scan 對 {target} 執行 Profiler 掃描。"
+  hint_profile_trait: "掃描 {target} 並確認特徵 {trait}。"
+  hint_hack_infra: "駭入區域基礎設施：{target}。"
 
 gigs:
   header: "◈ 街頭委託"
@@ -1129,6 +1235,7 @@ server:
   boot_title: 啟動程序
   content: "  內容: {rooms} 房 · {items} 物 · {npcs} NPC"
   listening: "cyber_mud server 監聽 {addrs}"
+  transport: "傳輸：{transport}"
   stopped: 伺服器已停止
   ready_line: "伺服器 {brief}"
   heartbeat: "♥ tick={tick} · {clock}（{period}）· 連線 {players}/{sessions} · 戰鬥 {combats} · 屍體 {corpses} · 重生 {respawns} · 運行 {uptime}{dev}"

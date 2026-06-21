@@ -492,6 +492,10 @@ def format_look(ctx: CommandContext) -> list[str]:
     grid_flavor = grid_flavor_line(room, ctx.player.locale)
     if grid_flavor:
         lines.append(grid_flavor)
+    from world.infrastructure import infrastructure_lines
+
+    for infra_line in infrastructure_lines(room, ctx.player.locale, mode="look"):
+        lines.append(infra_line)
     from world.mature_flavor import mature_room_flavor
 
     mature_flavor = mature_room_flavor(room, ctx.player)

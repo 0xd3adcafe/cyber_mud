@@ -61,6 +61,17 @@ def handle(ctx: CommandContext):
     if extra:
         lines.append(extra)
 
+    from world.profiler_talk import resolve_profiler_talk
+
+    profiler_lines, profiler_changed = resolve_profiler_talk(
+        ctx.player,
+        ctx.state,
+        npc_id,
+        ctx.player.locale,
+    )
+    if profiler_lines:
+        lines.extend(profiler_lines)
+
     from world.quests import advance_quest_on_talk, offer_quest_from_giver
 
     offer_lines = offer_quest_from_giver(ctx.player, ctx.state, npc_id, ctx.player.locale)
@@ -78,7 +89,7 @@ def handle(ctx: CommandContext):
         label = npc.name_zh if ctx.player.locale == "zh" else (npc.name_en or npc.name_zh)
         lines.append(t(ctx.player.locale, "talk.silent", name=label))
 
-    world_changed = bool(offer_lines) or bool(quest_lines) or woke
+    world_changed = bool(offer_lines) or bool(quest_lines) or woke or profiler_changed
     return ok(lines, meta=player_meta(ctx), world_changed=world_changed)
 
 

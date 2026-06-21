@@ -102,6 +102,11 @@ def resolve_flee(state: WorldState, player: Player) -> CombatActionResult:
     if npc is not None and npc.hostile and npc.aggro > 0:
         from world.factions import npc_aggro_modifier
         from world.modifiers import district_aggro_bonus
+        from world.npc_ai import aggro_is_suppressed
+
+        if aggro_is_suppressed(state, encounter.npc_id):
+            end_encounter(state, player, encounter)
+            return CombatActionResult([line], world_changed=True, ended=True)
 
         effective_aggro = (
             npc.aggro

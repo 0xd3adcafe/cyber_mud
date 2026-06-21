@@ -80,6 +80,8 @@ def player_to_dict(player: Player) -> dict:
         "proficiency_levels": {str(k): int(v) for k, v in player.proficiency_levels.items()},
         "proficiency_xp": {str(k): int(v) for k, v in player.proficiency_xp.items()},
         "password_hash": player.password_hash,
+        "auth_failed_attempts": player.auth_failed_attempts,
+        "auth_locked_until": player.auth_locked_until,
         "in_combat": player.in_combat,
         "encounter_id": player.encounter_id,
         "active_quest": player.active_quest,
@@ -93,6 +95,9 @@ def player_to_dict(player: Player) -> dict:
         "posture": player.posture,
         "fatigue": player.fatigue,
         "life_anchor": player.life_anchor,
+        "profiled_npcs": list(player.profiled_npcs),
+        "footprint": player.footprint,
+        "discovered_net_links": list(player.discovered_net_links),
     }
 
 
@@ -146,6 +151,8 @@ def player_from_dict(data: dict) -> Player:
         proficiency_levels={str(k): int(v) for k, v in (data.get("proficiency_levels") or {}).items()},
         proficiency_xp={str(k): int(v) for k, v in (data.get("proficiency_xp") or {}).items()},
         password_hash=str(data.get("password_hash", "")),
+        auth_failed_attempts=int(data.get("auth_failed_attempts", 0)),
+        auth_locked_until=float(data.get("auth_locked_until", 0.0)),
         in_combat=bool(data.get("in_combat", False)),
         encounter_id=str(data.get("encounter_id", "")),
         active_quest=str(data.get("active_quest", "")),
@@ -159,6 +166,9 @@ def player_from_dict(data: dict) -> Player:
         posture=str(data.get("posture", "standing")),
         fatigue=int(data.get("fatigue", 0)),
         life_anchor=str(data.get("life_anchor", "")),
+        profiled_npcs=list(data.get("profiled_npcs", [])),
+        footprint=int(data.get("footprint", 0)),
+        discovered_net_links=list(data.get("discovered_net_links", [])),
     )
     if not player.cyberware and player.implants:
         migrate_legacy_implants(player, load_world())
@@ -168,10 +178,18 @@ def player_from_dict(data: dict) -> Player:
     return player
 
 
+def _ensure_save_dir() -> None:
+    SAVE_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        SAVE_DIR.chmod(0o700)
+    except OSError:
+        pass
+
+
 def save_player(player: Player) -> Path:
     if not player.named:
         raise ValueError("cannot save unnamed player")
-    SAVE_DIR.mkdir(parents=True, exist_ok=True)
+    _ensure_save_dir()
     path = _save_path(player.name)
     path.write_text(json.dumps(player_to_dict(player), ensure_ascii=False, indent=2), encoding="utf-8")
     path.chmod(0o600)

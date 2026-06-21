@@ -36,6 +36,12 @@ net_nodes:
     name_zh: 沃森格點節點
     name_en: Watson Grid Node
     hackable: true
+    links:
+      - corpo_grid_node
+      - docks_grid_node
+      - kabuki_grid_node
+    link_locks:
+      corpo_grid_node: street_cred >= 5
   tyrell_grid_node:
     room_id: tyrell_0_0
     name_zh: 泰瑞格點節點
@@ -61,11 +67,19 @@ net_nodes:
     name_zh: 企業格點節點
     name_en: Corpo Grid Node
     hackable: true
+    links:
+      - watson_grid_node
+      - tyrell_grid_node
+    link_locks:
+      watson_grid_node: street_cred >= 3
   docks_grid_node:
     room_id: docks_0_0
     name_zh: 碼頭格點節點
     name_en: Docks Grid Node
     hackable: true
+    links:
+      - watson_grid_node
+      - undercity_grid_node
   undercity_grid_node:
     room_id: undercity_1_0
     name_zh: 地下城格點節點

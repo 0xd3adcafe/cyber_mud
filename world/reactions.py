@@ -15,6 +15,7 @@ PLEDGE_REPUTATION: dict[str, int] = {
     "militech": 4,
     "tyrell": 6,
     "maelstrom": -3,
+    "dedsec": 5,
 }
 
 

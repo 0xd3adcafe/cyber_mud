@@ -36,6 +36,9 @@ def save_world_state(state: WorldState) -> Path:
         "weather": dict(state.weather),
         "tick_count": state.tick_count,
         "scheduler": state.scheduler.to_list(),
+        "district_events": {str(k): list(v) for k, v in state.district_events.items()},
+        "npc_patrol_jam": {str(k): int(v) for k, v in state.npc_patrol_jam.items()},
+        "npc_aggro_distract": {str(k): int(v) for k, v in state.npc_aggro_distract.items()},
     }
     WORLD_STATE_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     return WORLD_STATE_PATH
@@ -66,6 +69,13 @@ def load_world_state(world: World, config: TimeConfig) -> WorldState:
     weather = {str(k): str(v) for k, v in (data.get("weather") or default_weather(weather_config)).items()}
     tick_count = int(data.get("tick_count", 0))
     scheduler = Scheduler.from_list(data.get("scheduler"))
+    district_events = {
+        str(k): [str(event) for event in v]
+        for k, v in (data.get("district_events") or {}).items()
+        if isinstance(v, list)
+    }
+    npc_patrol_jam = {str(k): int(v) for k, v in (data.get("npc_patrol_jam") or {}).items()}
+    npc_aggro_distract = {str(k): int(v) for k, v in (data.get("npc_aggro_distract") or {}).items()}
     return WorldState(
         world=world,
         clock=clock,
@@ -78,4 +88,7 @@ def load_world_state(world: World, config: TimeConfig) -> WorldState:
         weather=weather,
         tick_count=tick_count,
         scheduler=scheduler,
+        district_events=district_events,
+        npc_patrol_jam=npc_patrol_jam,
+        npc_aggro_distract=npc_aggro_distract,
     )

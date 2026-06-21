@@ -14,6 +14,7 @@ TUTORIAL_CATEGORIES: tuple[str, ...] = (
     "cyberware",
     "combat",
     "netrun",
+    "city_os",
     "quests",
     "panels",
 )

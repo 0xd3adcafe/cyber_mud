@@ -234,7 +234,9 @@ help:
     media: "Braindance"
     mature: "18+ content (opt-in)"
     life: "Life & vitals"
+    city_os: "City OS"
   tutorial:
+    profiler_lesson: "◈ Profiler drill — scan caches occupation, traits, and vulnerabilities. Use that intel in talk and gigs."
     header: "◈ Tutorial — Training Ground & Commands"
     rooms_header: "Training rooms (tutorial_*):"
     room_line: "  · {room} — {blurb}"
@@ -242,6 +244,16 @@ help:
     footer: "Finish the yard, then head west to Neon Square. Type help for the full list."
 
 district:
+  label:
+    tutorial: Tutorial Yard
+    watson: Watson
+    kabuki: Kabuki
+    little_china: Little China
+    corpo: Corpo Plaza
+    tyrell: Tyrell Labs
+    docks: Docks
+    undercity: Undercity
+    combat_zone: Combat Zone
   atmosphere:
     training: "The air smells of ozone and instructional holo-smoke."
     street_chaos: "Street noise and neon bleed into every shadow."
@@ -268,6 +280,7 @@ faction:
     tyrell: "(Tyrell pledge: corpo vendors favor you.)"
     arasaka: "(Arasaka pledge: clinic prices dip slightly.)"
     maelstrom: "(Maelstrom pledge: street vendors charge more.)"
+    dedsec: "(DedSec pledge: less surveillance heat; corps watch you closer.)"
 
 help_cmds:
   look: "Look around or at a target (look [item|NPC|equipment])"
@@ -459,6 +472,14 @@ auth:
   login_ok: "Welcome back, {name}."
   too_many_connections: "Too many connections from your address."
   idle_disconnect: "Disconnected due to inactivity."
+  changepass_usage: "Usage: changepass <current> <new>"
+  changepass_ok: "Password changed."
+  changepass_bad_current: "Current password is incorrect."
+  changepass_same: "New password must differ from the current password."
+  resume_usage: "Usage: resume <session_token>"
+  resume_ok: "Session restored. Welcome back, {name}."
+  invalid_session: "Invalid or expired session token."
+  account_locked: "Account locked after too many failed logins. Try again in about {minutes} minutes."
 
 lock:
   denied: "You do not meet the requirements."
@@ -469,6 +490,10 @@ lock:
 
 scheduler:
   implant_side_effect: "Chrome aftershock hits—{label} neural feedback spikes."
+  ctos_blackout_on: "◈ ctOS — lights die across {district}; blackout active."
+  ctos_blackout_off: "◈ ctOS — power relays restore in {district}; lights flicker back on."
+  ctos_traffic_lock_on: "◈ ctOS — traffic mesh locked in {district}; intersections gridlock."
+  ctos_traffic_lock_off: "◈ ctOS — traffic signals reset in {district}; flow returns."
 
 take:
   usage: "Usage: take <item> [from <corpse>]"
@@ -653,6 +678,84 @@ map:
   empty: "No areas explored yet."
   legend: "Legend: [@] you  ■ known"
   room_line: "  {marker} {name}"
+
+ctos:
+  mesh:
+    header: "◈ ctOS mesh (discovered links)"
+    line: "  {a} ↔ {b}"
+    discovered: "Mesh link discovered: {link}"
+    lock_probe: "Street cred too low to map that cross-district hop."
+    lock_hack: "Locked out of that cross-district hop."
+  hack:
+    no_infra: "No hackable {hack} infrastructure in this sector."
+    need_ram: "Need {cost} RAM for that ctOS hack."
+    need_cred: "Need {cost} street cred for that ctOS hack."
+    blackout:
+      ok: "Lights die across the block — blackout active."
+    jam_signals:
+      ok: "Traffic and camera feeds stutter — signals jammed."
+    overload:
+      ok: "Grid relays scream and vent steam — overload triggered."
+  infra:
+    power_grid:
+      look: "◈ ctOS — Dock substation feeds the district grid."
+      scan: "◈ ctOS node: power_grid relay (hackable infrastructure)"
+    traffic:
+      look: "◈ ctOS — Traffic signal mesh loops through the intersection."
+      scan: "◈ ctOS node: traffic control mesh (hackable infrastructure)"
+    surveillance:
+      look: "◈ ctOS — Surveillance cameras track movement under the neon."
+      scan: "◈ ctOS node: surveillance cluster (hackable infrastructure)"
+    steam:
+      look: "◈ ctOS — Steam vents tie into municipal service tunnels."
+      scan: "◈ ctOS node: steam service line (hackable infrastructure)"
+  distract:
+    usage: "Usage: jam <npc> or distract <npc> — disrupt a patrol or suppress aggro."
+    missing: "No {name} here to jam or distract."
+    no_patrol: "{name} has no patrol route to jam."
+    no_aggro: "{name} isn't hostile enough to distract."
+    need_ram: "Jamming costs {cost} RAM."
+    jam_ok: "You flood {name}'s relay — patrol feed scrambled for {ticks} ticks."
+    distract_ok: "You misdirect {name} — aggro suppressed for {ticks} ticks."
+    resisted: "{name}'s security detail shrugs off the signal — shorter effect."
+
+footprint:
+  gain: "Surveillance heat +{amount} (footprint {total}/100)."
+  high_warning: "You are lighting up every camera in the district."
+  pda_label: "Footprint"
+  pda_row: "Digital footprint: {value}/100"
+
+profiler:
+  usage: "Usage: scan <person> — profiler intel on someone in the room."
+  no_data: "No profiler data for {name}."
+  header: "◈ Profiler — {name}"
+  header_cached: "◈ Profiler (cached) — {name}"
+  occupation: "Occupation: {value}"
+  income: "Income band: {value}"
+  line_traits: "Traits: {value}"
+  vulnerability: "Vulnerability: {value}"
+  income_band:
+    low: "low"
+    mid: "mid"
+    high: "high"
+    corp: "corporate"
+  traits:
+    gambling_debt: "gambling debt"
+    street_intel: "street intel"
+    violent_impulse: "violent impulse"
+    corp_access: "corp access"
+    security_detail: "security detail"
+    eager_contact: "eager contact"
+    gray_market: "gray market"
+    trainer: "trainer"
+    netrunner: "netrunner"
+  talk:
+    bribe_ok: "They pocket the {item} and lean in closer."
+    broker:
+      gambling_debt: "The broker's eyes flick to your scan data: \"You know about the tables. I can trade a route tip for discretion.\""
+      gambling_debt_bribe: "He slots the chip and whispers a gray-market ledger route."
+    corp_scout:
+      corp_access: "The scout's relay stutters — your profiler read gives you an opening on patrol handoff codes."
 
 scan:
   header: "◈ Scan — {name}"
@@ -897,7 +1000,7 @@ talk:
   broker_quest: "◈ The broker flags you for new street work."
   thug: "The thug grins: \"Maelstrom's scooping chrome lately. Tell your broker I talked.\""
   instructor: "The holo instructor flickers: \"Up briefing—east graduation checkpoint for the rotation drill; north combat, east netrun, south gear; canteen west of armory. When stamped, go west to the square.\""
-  netcoach: "The net coach taps a terminal: \"Type net to enter the sim, then hack or probe the training terminal. North sim-clinic for install practice.\""
+  netcoach: "The net coach taps a terminal: \"Type net to enter the sim, then hack or probe the training terminal. scan me for a profiler drill—north sim-clinic for install practice.\""
   quartermaster: "The quartermaster gestures at the racks: \"Free practice gear on the floor; use shop, buy, and sell to trade. Canteen west for eat and drink.\""
   rookie_fixer: "The rookie fixer taps the board: \"accept tutorial_rotation for the yard drill—journal tracks it. Other gigs need street cred. stats for level; recall returns you here.\""
   canteen_tech: "The tech points at dispensers: \"eat rations when hungry, drink electrolyte when thirsty; use med_stim when hurt. interact the locker for a one-time stash.\""
@@ -942,6 +1045,9 @@ quest:
   hint_have_item: "Obtain {target}."
   hint_give_npc: "Give {item} to {npc}."
   hint_hack_net: "Jack in (net) and hack {target}."
+  hint_scan_npc: "Scan {target} with profiler intel."
+  hint_profile_trait: "Profile {target} and confirm trait {trait}."
+  hint_hack_infra: "Hack room infrastructure: {target}."
 
 gigs:
   header: "◈ Street Gigs"
@@ -1129,6 +1235,7 @@ server:
   boot_title: "Startup"
   content: "  Content: {rooms} rooms · {items} items · {npcs} NPCs"
   listening: "cyber_mud server listening {addrs}"
+  transport: "Transport: {transport}"
   stopped: "Server stopped"
   ready_line: "Server {brief}"
   heartbeat: "♥ tick={tick} · {clock} ({period}) · conn {players}/{sessions} · combat {combats} · corpses {corpses} · respawn {respawns} · uptime {uptime}{dev}"

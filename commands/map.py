@@ -54,6 +54,9 @@ def format_map(ctx: CommandContext) -> list[str]:
                 name=room_name(room, ctx.player.locale),
             )
         )
+    from world.ctos_mesh import format_mesh_map_lines
+
+    lines.extend(format_mesh_map_lines(ctx.player, ctx.state, ctx.player.locale))
     return lines
 
 

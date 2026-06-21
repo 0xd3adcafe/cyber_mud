@@ -11,7 +11,7 @@ from textual.containers import Container, Horizontal, Vertical, VerticalScroll
 from textual.events import Click, DescendantFocus, Resize
 from textual.widgets import Checkbox, Footer, Header, Input, RichLog, Select, Static
 
-from client.auth_ui import build_auth_command
+from client.auth_ui import build_auth_command, build_resume_command
 from client.credentials import (
     clear_credentials,
     has_stored_credentials,
@@ -130,6 +130,7 @@ class CyberMudApp(App):
         self._needs_reauth = False
         self._reconnecting = False
         self._last_auth_line = ""
+        self._session_token = ""
         self._local_prompt_override = ""
         self._auth_pending = False
         self._theme_id = DEFAULT_THEME_ID
@@ -138,7 +139,7 @@ class CyberMudApp(App):
         self._log_buffer.set_display(self._log_display)
         self._focus_tracker = FocusTracker()
         self._command_history = CommandHistory.load()
-        self._pending_credential_save: tuple[str, str, str, str] | None = None
+        self._pending_credential_save: tuple[str, str, str] | None = None
         self._startup_hint = ""
         self._pending_logout = False
         self._sidebar_refresh_lock = asyncio.Lock()
@@ -630,6 +631,7 @@ class CyberMudApp(App):
         self._reconnect_attempts = 0
         self._needs_reauth = False
         self._last_auth_line = ""
+        self._session_token = ""
         self._auth_pending = False
         self._pending_logout = False
         self.view = ClientViewState()
@@ -647,8 +649,15 @@ class CyberMudApp(App):
         pending = self._pending_credential_save
         if pending is None:
             return
-        name, password, mode, pin = pending
-        err = save_credentials(username=name, password=password, mode=mode, pin=pin)
+        if not self._session_token:
+            return
+        name, mode, pin = pending
+        err = save_credentials(
+            username=name,
+            mode=mode,
+            pin=pin,
+            session_token=self._session_token,
+        )
         self._pending_credential_save = None
         if err:
             self._set_login_status(self._ui("client.login.save_failed", err=err))
@@ -946,6 +955,12 @@ class CyberMudApp(App):
             new_room_id=value,
         ):
             self._queue_sidebar_refresh(panels_to_refresh_on_move(self.view))
+        if key == "session_token" and value:
+            self._session_token = value
+            resume_cmd = build_resume_command(value)
+            if resume_cmd:
+                self._last_auth_line = resume_cmd
+            self._persist_credentials_if_pending()
         if key == "auth" and value == "1":
             self._auth_pending = False
             self._needs_reauth = False
@@ -1343,7 +1358,7 @@ class CyberMudApp(App):
             if pin_setup != pin_confirm:
                 self._set_login_status(self._ui("client.login.pin_mismatch"))
                 return
-            self._pending_credential_save = (name, password, mode, pin_setup)
+            self._pending_credential_save = (name, mode, pin_setup)
         else:
             self._pending_credential_save = None
         mature_opt_in = bool(self.query_one("#login_mature", Checkbox).value)
@@ -1383,8 +1398,24 @@ class CyberMudApp(App):
             return
         self.query_one("#auth_mode", Select).value = creds.mode
         self.query_one("#login_name", Input).value = creds.username
-        self.query_one("#login_password", Input).value = creds.password
         pin_widget.value = ""
+        if creds.session_token:
+            command = build_resume_command(creds.session_token)
+            if command is None or not self.conn.connected:
+                self._set_login_status(self._ui("client.login.not_connected"))
+                return
+            self._session_token = creds.session_token
+            self._auth_pending = True
+            self._last_auth_line = command
+            self._set_login_status(self._ui("client.login.verifying"))
+            try:
+                self._note_outbound()
+                await self.conn.send_line(command)
+            except OSError as exc:
+                self._auth_pending = False
+                self._set_login_status(self._ui("client.login.send_failed", err=str(exc)))
+            return
+        self.query_one("#login_password", Input).value = creds.password
         await self._submit_login(from_pin_unlock=True)
 
     @on(Checkbox.Changed, "#remember_credentials")

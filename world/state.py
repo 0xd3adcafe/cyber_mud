@@ -22,6 +22,9 @@ class WorldState:
     weather: dict[str, str] = field(default_factory=dict)
     tick_count: int = 0
     scheduler: Scheduler = field(default_factory=Scheduler)
+    district_events: dict[str, list[str]] = field(default_factory=dict)
+    npc_patrol_jam: dict[str, int] = field(default_factory=dict)
+    npc_aggro_distract: dict[str, int] = field(default_factory=dict)
 
     def items_in_room(self, room_id: str) -> list[str]:
         return list(self.room_items.get(room_id, []))

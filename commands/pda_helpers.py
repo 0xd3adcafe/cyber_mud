@@ -14,6 +14,7 @@ from world.proficiencies import (
     proficiency_level,
 )
 from world.progression import skill_label, xp_to_next_level
+from world.footprint import footprint_pda_row
 from world.street_cred import street_cred_rank
 from shared.ui_json import panel_json
 
@@ -101,6 +102,7 @@ def format_pda(ctx: CommandContext) -> list[str]:
             cred=str(ctx.player.street_cred),
             rank=street_cred_rank(ctx.player, locale),
         ),
+        footprint_pda_row(ctx.player, locale),
         t(locale, "pda.faction", faction=faction_label(ctx.state.world, ctx.player.faction, locale)),
         "",
         t(locale, "pda.implants_header"),
@@ -242,6 +244,12 @@ def build_pda_ui(ctx: CommandContext) -> str:
                 cred=str(ctx.player.street_cred),
                 rank=street_cred_rank(ctx.player, locale),
             ),
+        },
+        {
+            "id": "footprint",
+            "kind": "row",
+            "label": t(locale, "footprint.pda_label"),
+            "value": str(ctx.player.footprint),
         },
         {
             "id": "faction",

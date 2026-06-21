@@ -24,8 +24,9 @@ PIN_MAX_LEN = 6
 @dataclass(frozen=True)
 class StoredCredentials:
     username: str
-    password: str
     mode: str
+    session_token: str = ""
+    password: str = ""
 
 
 def credentials_path() -> Path:
@@ -84,11 +85,26 @@ def _decrypt_payload(pin: str, data: dict) -> dict[str, str] | None:
     if not isinstance(parsed, dict):
         return None
     username = str(parsed.get("username", "")).strip()
-    password = str(parsed.get("password", ""))
     mode = str(parsed.get("mode", "login"))
-    if not username or not password or mode not in ("login", "register"):
+    session_token = str(parsed.get("session_token", "")).strip()
+    password = str(parsed.get("password", ""))
+    if not username or mode not in ("login", "register"):
         return None
-    return {"username": username, "password": password, "mode": mode}
+    if session_token:
+        return {
+            "username": username,
+            "mode": mode,
+            "session_token": session_token,
+            "password": "",
+        }
+    if password:
+        return {
+            "username": username,
+            "mode": mode,
+            "session_token": "",
+            "password": password,
+        }
+    return None
 
 
 def load_store_blob() -> dict | None:
@@ -106,19 +122,31 @@ def has_stored_credentials() -> bool:
     return load_store_blob() is not None
 
 
-def save_credentials(*, username: str, password: str, mode: str, pin: str) -> str | None:
+def save_credentials(
+    *,
+    username: str,
+    mode: str,
+    pin: str,
+    session_token: str = "",
+    password: str = "",
+) -> str | None:
     pin_err = validate_pin(pin, "en")
     if pin_err:
         return pin_err
     name = username.strip()
-    if not name or not password:
-        return "帳號或密碼不可為空。"
+    token = session_token.strip()
+    if not name:
+        return "帳號不可為空。"
+    if not token and not password:
+        return "缺少可儲存的登入憑證。"
     if mode not in ("login", "register"):
         return "無效的帳號模式。"
-    blob = _encrypt_payload(
-        pin,
-        {"username": name, "password": password, "mode": mode},
-    )
+    payload: dict[str, str] = {"username": name, "mode": mode}
+    if token:
+        payload["session_token"] = token
+    else:
+        payload["password"] = password
+    blob = _encrypt_payload(pin, payload)
     path = credentials_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(blob, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -138,8 +166,9 @@ def unlock_credentials(pin: str) -> StoredCredentials | None:
         return None
     return StoredCredentials(
         username=payload["username"],
-        password=payload["password"],
         mode=payload["mode"],
+        session_token=payload.get("session_token", ""),
+        password=payload.get("password", ""),
     )
 
 

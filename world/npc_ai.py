@@ -7,9 +7,18 @@ from pathlib import Path
 import yaml
 
 from entities.npc import NPC
+from entities.player import Player
+from shared.i18n import t
+from shared.locale_content import npc_label_with_id
 from world.npc_respawn import schedule_npc_respawn
+from world.profiler import is_profiled, profiler_entry
 from world.state import WorldState
 from world.tick_events import TickEvent, move_npc
+
+JAM_RAM_COST = 1
+DISTRACT_TICKS = 2
+JAM_TICKS = 2
+RESIST_TICKS = 1
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "npc_ai.yaml"
 NPC_AI_EVERY = 4
@@ -260,6 +269,75 @@ def _maybe_hunt_move(state: WorldState, config: NpcAiConfig, *, roll: float) -> 
                 )
                 break
     return events
+
+
+def has_security_detail_resistance(player: Player, npc_id: str) -> bool:
+    if not is_profiled(player, npc_id):
+        return False
+    profile = profiler_entry(npc_id)
+    return profile is not None and "security_detail" in profile.traits
+
+
+def tick_npc_distract(state: WorldState) -> None:
+    for store in (state.npc_patrol_jam, state.npc_aggro_distract):
+        for npc_id in list(store.keys()):
+            store[npc_id] -= 1
+            if store[npc_id] <= 0:
+                store.pop(npc_id, None)
+
+
+def patrol_is_jammed(state: WorldState, npc_id: str) -> bool:
+    return state.npc_patrol_jam.get(npc_id, 0) > 0
+
+
+def aggro_is_suppressed(state: WorldState, npc_id: str) -> bool:
+    return state.npc_aggro_distract.get(npc_id, 0) > 0
+
+
+def _effect_ticks(player: Player, npc_id: str, base: int) -> tuple[int, bool]:
+    if has_security_detail_resistance(player, npc_id):
+        return RESIST_TICKS, True
+    return base, False
+
+
+def try_jam_npc(player: Player, state: WorldState, npc_id: str, locale: str) -> list[str]:
+    npc = state.world.npc(npc_id)
+    if npc is None:
+        return [t(locale, "ctos.distract.missing", name=npc_id)]
+    label = npc_label_with_id(npc, locale)
+    if len(npc.patrol) < 2:
+        return [t(locale, "ctos.distract.no_patrol", name=label)]
+    if player.ram < JAM_RAM_COST:
+        return [t(locale, "ctos.distract.need_ram", cost=str(JAM_RAM_COST))]
+
+    player.ram -= JAM_RAM_COST
+    ticks, resisted = _effect_ticks(player, npc_id, JAM_TICKS)
+    state.npc_patrol_jam[npc_id] = ticks
+    lines = [t(locale, "ctos.distract.jam_ok", name=label, ticks=str(ticks))]
+    if resisted:
+        lines.append(t(locale, "ctos.distract.resisted", name=label))
+    from world.life import gain_fatigue
+
+    gain_fatigue(player, "netrun")
+    return lines
+
+
+def try_distract_npc(player: Player, state: WorldState, npc_id: str, locale: str) -> list[str]:
+    npc = state.world.npc(npc_id)
+    if npc is None:
+        return [t(locale, "ctos.distract.missing", name=npc_id)]
+    label = npc_label_with_id(npc, locale)
+    if not npc.hostile or npc.aggro <= 0:
+        return [t(locale, "ctos.distract.no_aggro", name=label)]
+
+    ticks, resisted = _effect_ticks(player, npc_id, DISTRACT_TICKS)
+    state.npc_aggro_distract[npc_id] = ticks
+    if player.chased_by_npc == npc_id:
+        player.chased_by_npc = ""
+    lines = [t(locale, "ctos.distract.distract_ok", name=label, ticks=str(ticks))]
+    if resisted:
+        lines.append(t(locale, "ctos.distract.resisted", name=label))
+    return lines
 
 
 def process_npc_ai(state: WorldState, config: NpcAiConfig | None = None, *, roll: float | None = None) -> list[TickEvent]:

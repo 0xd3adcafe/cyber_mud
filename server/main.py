@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import ssl
 import time
+from pathlib import Path
 
 from entities.player import Player
 from server.connection_limits import can_accept_connection, peer_ip
@@ -64,7 +66,23 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
             pass
 
 
-async def run_server(host: str, port: int, *, dev: bool = False) -> None:
+def _build_ssl_context(cert_file: str, key_file: str) -> ssl.SSLContext:
+    cert = Path(cert_file)
+    key = Path(key_file)
+    if not cert.is_file() or not key.is_file():
+        raise FileNotFoundError(f"TLS cert/key not found: {cert_file!r}, {key_file!r}")
+    context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    context.load_cert_chain(certfile=str(cert), keyfile=str(key))
+    return context
+
+
+async def run_server(
+    host: str,
+    port: int,
+    *,
+    dev: bool = False,
+    ssl_context: ssl.SSLContext | None = None,
+) -> None:
     from shared.startup import StartupReport
 
     boot = StartupReport()
@@ -89,7 +107,12 @@ async def run_server(host: str, port: int, *, dev: bool = False) -> None:
         dev_task = asyncio.create_task(start_dev_watcher(game))
         print(t(loc, "server.dev_watch"))
     with boot.measure("network_listen"):
-        server = await asyncio.start_server(lambda r, w: handle_client(r, w, game), host=host, port=port)
+        server = await asyncio.start_server(
+            lambda r, w: handle_client(r, w, game),
+            host=host,
+            port=port,
+            ssl=ssl_context,
+        )
     addrs = ", ".join(str(sock.getsockname()) for sock in server.sockets or [])
     world = game.state.world
     print(load_report.format_console(title=t(loc, "server.load_title")))
@@ -103,7 +126,9 @@ async def run_server(host: str, port: int, *, dev: bool = False) -> None:
         )
     )
     print(boot.format_console(title=t(loc, "server.boot_title")))
+    transport = "TLS" if ssl_context is not None else "TCP"
     print(t(loc, "server.listening", addrs=addrs))
+    print(t(loc, "server.transport", transport=transport))
     try:
         async with server:
             await server.serve_forever()
@@ -127,9 +152,16 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--host", default=DEFAULT_HOST)
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
     parser.add_argument("--dev", action="store_true", help="Development mode (data + code hot-reload)")
+    parser.add_argument("--tls-cert", default="", help="PEM certificate for optional TLS (ASVS.8)")
+    parser.add_argument("--tls-key", default="", help="PEM private key for optional TLS (ASVS.8)")
     args = parser.parse_args(argv)
+    ssl_context = None
+    if args.tls_cert or args.tls_key:
+        if not args.tls_cert or not args.tls_key:
+            parser.error("--tls-cert and --tls-key must be supplied together")
+        ssl_context = _build_ssl_context(args.tls_cert, args.tls_key)
     try:
-        asyncio.run(run_server(args.host, args.port, dev=args.dev))
+        asyncio.run(run_server(args.host, args.port, dev=args.dev, ssl_context=ssl_context))
     except KeyboardInterrupt:
         print(f"\n{t(server_locale(), 'server.stopped')}")
 

@@ -158,6 +158,18 @@ def _stage_matches(
         if stage.objective_item:
             return item_id == stage.objective_item
         return True
+    if stage.objective_type == "scan_npc":
+        return event == "scan" and npc_id == stage.objective_target
+    if stage.objective_type == "profile_trait":
+        if event != "profile_trait":
+            return False
+        if stage.objective_target and item_id != stage.objective_target:
+            return False
+        if stage.objective_item and npc_id != stage.objective_item:
+            return False
+        return True
+    if stage.objective_type == "hack_infra":
+        return event == "hack_infra" and item_id == stage.objective_target
     return False
 
 
@@ -303,6 +315,64 @@ def advance_quest_on_hack(
     return _check_stage_progress(player, state, quest, locale, event="hack", net_node_id=node_id)
 
 
+def advance_quest_on_scan(
+    player: Player,
+    state: WorldState,
+    npc_id: str,
+    locale: str,
+) -> list[str]:
+    if not player.active_quest:
+        return []
+    quest = state.world.quest(player.active_quest)
+    if quest is None:
+        return []
+    return _check_stage_progress(player, state, quest, locale, event="scan", npc_id=npc_id)
+
+
+def advance_quest_on_profile_trait(
+    player: Player,
+    state: WorldState,
+    npc_id: str,
+    trait_id: str,
+    locale: str,
+) -> list[str]:
+    if not player.active_quest:
+        return []
+    quest = state.world.quest(player.active_quest)
+    if quest is None:
+        return []
+    return _check_stage_progress(
+        player,
+        state,
+        quest,
+        locale,
+        event="profile_trait",
+        npc_id=npc_id,
+        item_id=trait_id,
+    )
+
+
+def advance_quest_on_infra_hack(
+    player: Player,
+    state: WorldState,
+    hack_id: str,
+    locale: str,
+) -> list[str]:
+    if not player.active_quest:
+        return []
+    quest = state.world.quest(player.active_quest)
+    if quest is None:
+        return []
+    return _check_stage_progress(
+        player,
+        state,
+        quest,
+        locale,
+        event="hack_infra",
+        item_id=hack_id,
+    )
+
+
 def advance_quest_on_give(
     player: Player,
     state: WorldState,
@@ -432,6 +502,29 @@ def quest_hint_for_quest(player: Player, state: WorldState, quest: Quest, locale
                     item=item_label_text,
                 )
             return t(locale, "quest.hint_talk", target=npc_label_text or stage.objective_target)
+        if stage.objective_type == "scan_npc":
+            npc = state.world.npc(stage.objective_target)
+            label = npc.name_zh if npc and locale == "zh" else (npc.name_en if npc else stage.objective_target)
+            return t(locale, "quest.hint_scan_npc", target=label or stage.objective_target)
+        if stage.objective_type == "profile_trait":
+            trait_key = f"profiler.traits.{stage.objective_target}"
+            trait_label = t(locale, trait_key)
+            if trait_label == trait_key:
+                trait_label = stage.objective_target
+            npc = state.world.npc(stage.objective_item) if stage.objective_item else None
+            npc_label_text = (
+                npc.name_zh
+                if npc and locale == "zh"
+                else (npc.name_en if npc else (stage.objective_item or "any target"))
+            )
+            return t(
+                locale,
+                "quest.hint_profile_trait",
+                target=npc_label_text or stage.objective_item or "a target",
+                trait=trait_label,
+            )
+        if stage.objective_type == "hack_infra":
+            return t(locale, "quest.hint_hack_infra", target=stage.objective_target)
     base = quest.hint_zh if locale == "zh" else (quest.hint_en or quest.hint_zh)
     from world.factions import faction_quest_hint_suffix
 

@@ -9,6 +9,9 @@ MAX_WANTED = 5
 def add_wanted(player: Player, amount: int = 1, locale: str = "zh") -> list[str]:
     if amount <= 0:
         return []
+    from world.footprint import wanted_gain_multiplier
+
+    amount = max(1, int(amount * wanted_gain_multiplier(player)))
     before = player.wanted_level
     player.wanted_level = min(MAX_WANTED, player.wanted_level + amount)
     if player.wanted_level <= before:

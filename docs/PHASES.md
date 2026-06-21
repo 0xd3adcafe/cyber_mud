@@ -267,18 +267,18 @@ Not yet implemented or only partially implemented.
 
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
-| WD.1 | Profiler data model | `data/profiler.yaml` NPC `profile:` (occupation, income_band, traits[], vulnerability); `Player.profiled_npcs`; `scan <npc>` reveals cached intel; locale `profiler.*`; `tests/test_profiler.py` |
-| WD.2 | Infrastructure room tags | Room tags `power_grid`, `traffic`, `surveillance`, `steam`; `look`/`scan` shows ctOS-connected objects; `data/locale` flavor lines |
-| WD.3 | Environment hacks (NETRUN) | `commands/net_shell.py` or `hack <infra>` on tagged rooms: `blackout`, `jam_signals`, `overload` (period/weather/district modifiers via `world/modifiers.py`); RAM + street cred cost; `tests/test_ctos_hacks.py` |
-| WD.4 | Digital footprint & surveillance heat | `Player.footprint` 0–100 from hacks/failed locks; corpo-district `scan`/`hack` raises footprint; high footprint buffs `wanted` gain / corp NPC aggro; tick decay; PDA row; `tests/test_footprint.py` |
-| WD.5 | Profiler-gated social engineering | `talk <npc>` branches when `profiled` + trait match (`gambling_debt`, `corp_access`); optional bribe item; quest flag hooks; `tests/test_profiler_talk.py` |
-| WD.6 | Fixer profiler contracts | Extend `data/quests.yaml`: objectives `scan_npc`, `profile_trait`, `hack_infra`; broker/fixer turn-in; F7 gigs sidebar progress; `tests/test_profiler_gigs.py` |
-| WD.7 | Jam / distract patrol NPCs | NETRUN or combat `jam`/`distract <npc>`: skip patrol tick or lower aggro 1–2 ticks; profiler trait `security_detail` resistance; `world/npc_ai.py`; `tests/test_ctos_distract.py` |
-| WD.8 | ctOS node connection map | `data/net_nodes.yaml` `links:` between district nodes; `probe` / sidebar map shows discovered mesh; ARCH.1 locks on cross-district hops; `tests/test_ctos_mesh.py` |
-| WD.9 | Scheduled city events | ARCH.2 scheduler: district `blackout` / `traffic_lock` intervals from hacked `power_grid`; broadcast `scheduler.ctos_*`; restore on tick; `tests/test_ctos_events.py` |
-| WD.10 | DedSec faction & tutorial beat | Faction `dedsec` (`pledge`); oppose corpo surveillance rep; tutorial NETRUN room profiler lesson + `help` category **City OS**; `tests/test_dedsec.py` |
+| ~~WD.1~~ | ~~Profiler data model~~ | ✅ `data/profiler.yaml`; `Player.profiled_npcs`; `scan <npc>`; `world/profiler.py`; `tests/test_profiler.py` |
+| ~~WD.2~~ | ~~Infrastructure room tags~~ | ✅ `power_grid`/`traffic`/`surveillance`/`steam` room tags; `world/infrastructure.py`; `look`/`scan` ctOS lines; `tests/test_infrastructure.py` |
+| ~~WD.3~~ | ~~Environment hacks (NETRUN)~~ | ✅ `hack blackout`/`jam_signals`/`overload` on tagged rooms; `world/ctos_hacks.py`; RAM + street cred; `tests/test_ctos_hacks.py` |
+| ~~WD.4~~ | ~~Digital footprint & surveillance heat~~ | ✅ `Player.footprint`; corpo `scan`/`hack`; wanted/aggro buffs; tick decay; PDA row; `tests/test_footprint.py` |
+| ~~WD.5~~ | ~~Profiler-gated social engineering~~ | ✅ `world/profiler_talk.py`; trait branches + bribe/flags; `tests/test_profiler_talk.py` |
+| ~~WD.6~~ | ~~Fixer profiler contracts~~ | ✅ `profiler_contract` quest; `scan_npc`/`profile_trait`/`hack_infra`; `tests/test_profiler_gigs.py` |
+| ~~WD.7~~ | ~~Jam / distract patrol NPCs~~ | ✅ `jam`/`distract` commands; `security_detail` resistance; `tests/test_ctos_distract.py` |
+| ~~WD.8~~ | ~~ctOS node connection map~~ | ✅ `net_nodes.yaml` `links:`; `probe`/`map` mesh; cross-district `link_locks`; `tests/test_ctos_mesh.py` |
+| ~~WD.9~~ | ~~Scheduled city events~~ | ✅ `world/ctos_events.py`; scheduler `ctos_*`; district restore on tick; `tests/test_ctos_events.py` |
+| ~~WD.10~~ | ~~DedSec faction & tutorial beat~~ | ✅ Faction `dedsec`; `pledge`; tutorial profiler lesson; help **City OS**; `tests/test_dedsec.py` |
 
-**Suggested order:** WD.1 → WD.2 → WD.3 → WD.4 (systems core) → WD.8 → WD.5 → WD.6 → WD.7 → WD.9 → WD.10 (content).
+**Suggested order:** WD.1–WD.10 shipped (2026-06).
 
 **Deferred (out of scope for text MUD):** open-world driving, physical parkour, smartphone UI clone, real-time multiplayer ctOS invasion.
 
@@ -414,16 +414,16 @@ Not yet implemented or only partially implemented.
 | ~~ASVS.4~~ | ~~Input bounds~~ | ✅ Name/password length; `maxsplit=1` passwords with spaces; 4 KiB line cap; `shared/protocol.py`, `server/main.py` |
 | ~~ASVS.5~~ | ~~Auth rate limiting~~ | ✅ Per-connection 5 fails / 60s → 5 min block; `server/rate_limit.py`, `server/game.py` |
 | ~~ASVS.6~~ | ~~Idle / connection limits~~ | ✅ `server/connection_limits.py`; per-IP cap + guest/auth idle prune; `auth.too_many_connections` / `auth.idle_disconnect`; `tests/test_security_auth.py` |
-| ASVS.7 | Save file permissions | ✅ `chmod 0o600` on write (partial — no directory hardening yet) |
-| ASVS.8 | Transport encryption | TLS wrapper or documented VPN-only deployment |
-| ASVS.9 | Reconnect without password replay | Token-based session resume |
-| ASVS.10 | `changepass` command | Authenticated password change |
-| ASVS.11 | Account lockout | Persistent lockout after repeated failures |
-| ASVS.12 | Security audit log | Structured auth-failure / admin log |
-| ASVS.13 | Client credential hygiene | Optional PIN-only unlock; no raw password storage |
-| ASVS.14 | Security regression suite | Rate-limit integration + protocol edge cases in `tests/test_security_auth.py` |
+| ~~ASVS.7~~ | ~~Save file permissions~~ | ✅ `chmod 0o600` files; save dir `0o700`; `persistence/save.py` |
+| ~~ASVS.8~~ | ~~Transport encryption~~ | ✅ Optional TLS `--tls-cert`/`--tls-key`; VPN-only doc in `SECURITY.md` |
+| ~~ASVS.9~~ | ~~Reconnect without password replay~~ | ✅ `server/session_tokens.py`; `resume` command; client token storage |
+| ~~ASVS.10~~ | ~~`changepass` command~~ | ✅ `commands/changepass.py`; token rotate on change |
+| ~~ASVS.11~~ | ~~Account lockout~~ | ✅ `persistence/account_lockout.py`; save-backed lockout |
+| ~~ASVS.12~~ | ~~Security audit log~~ | ✅ `server/audit_log.py` structured stderr |
+| ~~ASVS.13~~ | ~~Client credential hygiene~~ | ✅ PIN-encrypted session token only; `client/credentials.py` |
+| ~~ASVS.14~~ | ~~Security regression suite~~ | ✅ Expanded `tests/test_security_auth.py` (30+ cases) |
 
-**Suggested order:** ASVS.1–6 (shipped) → ASVS.10 → ASVS.9 → ASVS.11 → ASVS.12 → ASVS.13 → ASVS.8 → ASVS.14.
+**Suggested order:** ASVS.1–14 shipped (2026-06). See [`SECURITY.md`](SECURITY.md).
 
 ### Tutorial zone (onboarding depth)
 

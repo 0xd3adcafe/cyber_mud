@@ -5,6 +5,7 @@ factions:
   maelstrom: 漩渦幫
   militech: 軍武科技
   tyrell: 泰瑞公司
+  dedsec: DedSec
 room_items:
   square:
   - glowstick
@@ -86,6 +87,8 @@ rooms:
     tags:
     - transit
     - metro
+    - surveillance
+    - traffic
     exits:
       north: alley
       east: tutorial
@@ -103,6 +106,8 @@ rooms:
     grid_y: 0
     hidden_hint_zh: 牆縫裡似乎藏著走私貨櫃的密碼。
     hidden_hint_en: A smuggler cache password seems hidden in the wall seam.
+    tags:
+    - surveillance
     exits:
       south: square
       down: undercity
@@ -285,6 +290,7 @@ rooms:
     grid_y: -1
     tags:
     - undercity
+    - steam
     exits:
       up: alley
       north: docks
@@ -498,6 +504,7 @@ rooms:
     tags:
     - vehicle_dealer
     - transit
+    - power_grid
     shop_id: docks_gray
     exits:
       north: square
@@ -552,6 +559,7 @@ rooms:
     tags:
     - corpo
     - transit
+    - surveillance
     exits:
       east: tyrell_plaza
       north: corpo_3_1

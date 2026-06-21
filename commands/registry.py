@@ -361,6 +361,7 @@ def register_builtin_commands() -> None:
         vehicles_cmd,
         drive,
         inventory,
+        changepass,
         login,
         look,
         lang,
@@ -380,6 +381,7 @@ def register_builtin_commands() -> None:
         quickhack,
         quit_cmd,
         register,
+        resume,
         scan,
         sell,
         shop_cmd,
@@ -396,4 +398,6 @@ def register_builtin_commands() -> None:
         taunt,
         finish_cmd,
         life,
+        jam,
+        distract,
     )

@@ -232,6 +232,30 @@ quests:
         objective_target: tutorial_grad_pad
       - objective_type: talk_npc
         objective_target: grad_warden
+  profiler_contract:
+    name_zh: Profiler 合約
+    name_en: Profiler Contract
+    npc_id: broker
+    description_zh: 經紀人要完整的 Profiler 流程——掃描企業偵察員、確認企業權限特徵、在廣場干擾訊號，再回報他。
+    description_en: The broker wants a full profiler run—scan the corpo scout, confirm corp access, jam square signals, then report.
+    hint_zh: scan corp_scout；確認 corp_access；在廣場 hack jam_signals；talk broker 交件。
+    hint_en: scan corp_scout, confirm corp_access, hack jam_signals at the square, then talk to the broker.
+    complete_npc_id: broker
+    requires_quest: broker_rumor
+    street_cred_req: 2
+    reward_gold: 85
+    reward_xp: 45
+    reward_street_cred: 10
+    stages:
+      - objective_type: scan_npc
+        objective_target: corp_scout
+      - objective_type: profile_trait
+        objective_target: corp_access
+        objective_item: corp_scout
+      - objective_type: hack_infra
+        objective_target: jam_signals
+      - objective_type: talk_npc
+        objective_target: broker
   zone_sweep:
     name_zh: 戰區掃描
     name_en: Zone Sweep
