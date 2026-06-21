@@ -170,6 +170,21 @@ New log channel kinds and optional `@meta mature_voice` chip (`noir` / `lewd`) i
 
 **M.24** wires consumable, BD, and cyberpsychosis triggers into `resolve_mature_voice`. **M.25** ships dual-voice NPC content in the mature pack. **M.26** extends `mature_validate` with ban-list checks and `noir` / `lewd` key parity between `mature_en.yaml` and `mature_zh.yaml`.
 
+## Combat noir voice (M.27, shipped)
+
+**Confirmed (2026-06):** combat mature copy is a **noir writing-style layer** only—hard sci-fi violence prose, not RPG mechanics and not lewd combat. Social `lewd` voice does **not** switch combat lines.
+
+| Area | Today (M.1 / M.17) | M.27 target |
+|------|-------------------|-------------|
+| Locale keys | Flat `mature.combat.*` | `mature.noir.combat.*` (+ fallback from legacy keys) |
+| Gore | `combat/gore.py` → `tm("combat.crit_*")` | `mature_voice_line(..., voice="noir")` via `resolve_mature_combat_voice()` |
+| Taunt / finish | `mature.combat.taunt_*` / `finish_*` | Expanded noir pools; chrome insults, coup de grace imagery |
+| Broadcasts | `victory/defeat_broadcast_*` | Same voice resolver; peer observers unchanged |
+| Style guide | Social noir/lewd in `STYLE.md` | New § **Combat noir** — sensory chrome, wet impacts, no porn phrasing |
+| Reference | — | [RPG Mars preset](https://chub.ai/presets/Viicell/rpg-mars-super-descriptive-viicell-s-preset-b7952a6f6e19) for descriptive fight prose (Chub “combat Slutbunny” analogue) |
+
+Shipped with **BB.2 Trauma** (2026-06): bleed tick + ripperdoc loop shares trauma/gore tone. See [PHASES.md](PHASES.md) **M.27** / **BB.2**.
+
 ## Planned spotlight NPCs (BB)
 
 Backlog: [PHASES.md](PHASES.md) **Bleachbunny-inspired spotlight NPCs (BB)**. Original homage archetypes from [Bleachbunny](https://bleachbunny.net/)—not copied card plots.

@@ -6,6 +6,7 @@ from entities.player import Player
 from shared.i18n import t
 from shared.mature_i18n import tm
 from world.mature import has_mature_tag, is_mature
+from world.mature_voice import mature_combat_key_line, mature_combat_line
 from world.world import Room
 
 MATURE_PRESENCE_ROOMS = frozenset(
@@ -36,7 +37,13 @@ def localized_broadcast_line(
     locale = player.locale
     if mature_key and is_mature(player):
         for key in (mature_key, mature_fallback_key):
-            if key and (line := _resolved_tm(locale, key, **kwargs)):
+            if not key:
+                continue
+            if key.startswith("combat."):
+                if line := mature_combat_key_line(locale, key, **kwargs):
+                    return line
+                continue
+            if line := _resolved_tm(locale, key, **kwargs):
                 return line
     return t(locale, default_key, **kwargs)
 
@@ -73,15 +80,17 @@ def presence_mature_key_for_room(room_id: str, event: str) -> str:
 
 
 def random_mature_combat_broadcast(event: str) -> str:
-    index = random.randint(1, 3)
+    from world.mature_voice import COMBAT_LINE_COUNTS
+
+    pool = f"{event}_broadcast"
+    count = COMBAT_LINE_COUNTS.get(pool, 3)
+    index = random.randint(1, count)
     return f"combat.{event}_broadcast_{index}"
 
 
 def random_mature_taunt_line(locale: str, *, target: str) -> str | None:
-    key = f"combat.taunt_{random.randint(1, 3)}"
-    return _resolved_tm(locale, key, target=target)
+    return mature_combat_line(locale, "taunt", target=target)
 
 
 def random_mature_finish_line(locale: str, *, target: str) -> str | None:
-    key = f"combat.finish_{random.randint(1, 3)}"
-    return _resolved_tm(locale, key, target=target)
+    return mature_combat_line(locale, "finish", target=target)

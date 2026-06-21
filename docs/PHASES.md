@@ -332,8 +332,18 @@ Not yet implemented or only partially implemented.
 | ~~M.24~~ | ~~Lewd trigger wiring~~ | ✅ Mature BD `_voice_mature` flag; cleared on `go`; consumable/trace/humanity/status hooks in `resolve_mature_voice` |
 | ~~M.25~~ | ~~Dual-voice NPC content~~ | ✅ `kabuki_host`, `bd_den_clerk`, `kabuki_dancer`; stages 4–5; noir + lewd line sets in mature pack |
 | ~~M.26~~ | ~~Mature validate expansion~~ | ✅ `BANNED_LEWD_CLICHES`; noir/lewd key parity; EN lewd ban-list scan |
+| ~~M.27~~ | ~~Combat noir voice~~ | ✅ `resolve_mature_combat_voice()`; `mature.noir.combat.*` (5-line pools); `combat/gore.py` + `mature_social.py` voice resolver; `STYLE.md` § Combat noir; `tests/test_combat_noir_voice.py` |
 
-**Suggested order:** M.0–M.26 shipped (2026-06).
+**Design decisions (2026-06, confirmed):**
+
+| Decision | Choice |
+|----------|--------|
+| Combat prose scope | **Writing style only** — no dice/RPG mechanics layer |
+| Combat voice | **Noir hard sci-fi violence** — chrome, synth-flesh, arterial spray, neon; blunt CP2077-adjacent tone |
+| Lewd in combat | **No** — combat narration pins `noir`; `lewd` applies to social/romance/scene only |
+| Chub analogue | Descriptive combat preset (RPG Mars), not Slutbunny lewd RP |
+
+**Suggested order:** M.0–M.27 shipped (2026-06).
 
 ### Bleachbunny-inspired spotlight NPCs (BB)
 
@@ -356,7 +366,7 @@ Not yet implemented or only partially implemented.
 | Phase | Item | Module / acceptance |
 |-------|------|---------------------|
 | BB.Arcana | Tarot draw interact | `data/interactables.yaml` `shrine_arcana_spread`; `interact` / `interact … three`; 22× `arcana.draw.*` (+ mature `mature.noir/lewd.arcana.draw.*`); period cooldown; optional gig unlock via `quest_flags`; `tests/test_arcana_draw.py` |
-| BB.2 | Trauma Team line (priority) | `trauma_team_medic`, `ripperdoc_triage` (extend clinic); SFW gig `trauma_run` (bleed tutorial); mature optional `trauma_intimate` scene gate; `tests/test_trauma_gig.py` |
+| ~~BB.2~~ | ~~Trauma Team line (priority)~~ | ✅ `trauma_team_medic`, `ripperdoc_triage` @ `ripper_clinic`; SFW `trauma_run` gig; `scene_requires_quest` + `trauma_intimate` noir scene; `tests/test_trauma_gig.py` |
 | BB.3 | Idol interconnected gigs | `kabuki_idol_haejin`, `kabuki_idol_airi`; `idol_blackmail` → `idol_fall`; `quest_flags` ending `haejin` \| `airi`; `romance.yaml` + mature locale; `tests/test_idol_quests.py` |
 | BB.1 | Kabuki entertainment expansion | `kabuki_fixer_amara`, `kabuki_streamer_jenna`, `kabuki_artist_selene`, `kabuki_brat_neon` in `data/world.yaml`; romance + lewd-heavy voices; gigs from bazaar; `tests/test_bb_kabuki.py` |
 | BB.4 | Tyrell corpo line | `tyrell_liaison_vera` (or deepen hub), `tyrell_gene_thief_seojin`, `tyrell_corp_attendant_meera`, `corpo_ghost_control` net node; profiler + SFW/mature gigs; `tests/test_bb_tyrell.py` |

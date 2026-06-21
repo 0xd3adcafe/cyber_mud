@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -16,6 +17,16 @@ from world.world import Room
 
 VOICE_PATH = MATURE_DATA_ROOT / "voice.yaml"
 MatureVoice = str  # "noir" | "lewd"
+
+COMBAT_LINE_COUNTS: dict[str, int] = {
+    "crit": 5,
+    "kill": 5,
+    "corpse": 2,
+    "taunt": 5,
+    "finish": 5,
+    "victory_broadcast": 5,
+    "defeat_broadcast": 5,
+}
 
 
 @dataclass
@@ -61,6 +72,39 @@ def mature_voice_line(locale: str, base_key: str, voice: str, **kwargs: str) -> 
         if line := _resolved_mature_line(locale, candidate, **kwargs):
             return line
     return tm(locale, f"mature.{bare}", **kwargs)
+
+
+def resolve_mature_combat_voice(player: Player) -> MatureVoice:
+    """Combat narration always uses noir — lewd voice does not apply in fights."""
+    return "noir"
+
+
+def _combat_line_ok(line: str, stem: str) -> bool:
+    if not line:
+        return False
+    bare = stem.removeprefix("mature.")
+    return line not in {stem, bare, f"mature.{bare}"}
+
+
+def mature_combat_line(
+    locale: str,
+    pool: str,
+    *,
+    voice: str = "noir",
+    variant: int | None = None,
+    **kwargs: str,
+) -> str | None:
+    count = COMBAT_LINE_COUNTS.get(pool, 3)
+    idx = variant if variant is not None else random.randint(1, count)
+    key = f"combat.{pool}_{idx}"
+    line = mature_voice_line(locale, key, voice, **kwargs)
+    return line if _combat_line_ok(line, key) else None
+
+
+def mature_combat_key_line(locale: str, key: str, **kwargs: str) -> str | None:
+    voice = "noir"
+    line = mature_voice_line(locale, key, voice, **kwargs)
+    return line if _combat_line_ok(line, key) else None
 
 
 def _mature_bd_active(player: Player, cfg: VoiceConfig) -> bool:

@@ -479,6 +479,7 @@ scene:
   status_row: "{name}：階段 {stage}（scene 需 {min_stage}）"
   no_targets: "此房間沒有可發展的對象。"
   need_stage: "{name} 需要好感階段 {stage} 才能進入 scene。"
+  need_quest: "{name} 要你完成委託 {quest} 才肯 scene。"
 
 whisper:
   usage: "用法：whisper <目標> <訊息>"
@@ -1056,6 +1057,8 @@ talk:
   zone_warden: "守衛指著燒焦的界碑：「過了這線，槍桿說了算。每次穿越我都記錄。」"
   plaza_handler: "接待員掃描你的臉對照訪客名單：「企業廣場——禁止攝影、禁止武器。」"
   gate_herbalist: "藥販遞上線香：「雨沖得掉街道，沖不掉債。」"
+  trauma_team_medic: "急救員點你的病歷：「gigs accept trauma_run 學失血循環。先去小巷——再帶著傷回來。」"
+  ripperdoc_triage: "分診目不轉睛：「穩定了？委託顯示可結案就 talk 我——我關檔。」"
   watson_spotter: "線人低聲說：「診所在北——黃昏後 cred 往東流。回去告訴你的經紀人。」"
   tyrell_courier: "快遞員檢查封條：「樣本車道今晚很熱。有通行證就去東邊廣場。」"
   zone_medic: "野戰醫纏著繃帶說：「界碑在西——沒彈藥或急救包別過線。」"

@@ -100,6 +100,29 @@ quests:
         objective_item: mod_chip
       - objective_type: talk_npc
         objective_target: broker
+  trauma_run:
+    name_zh: Trauma 出勤
+    name_en: Trauma Run
+    npc_id: trauma_team_medic
+    description_zh: Trauma Team 要你在小巷捱一頓打、失血、再回診所穩定——學會創傷循環。
+    description_en: Trauma Team wants you hit in the alley, bleed out, then stabilize at the clinic—the trauma loop.
+    hint_zh: 前往小巷擊倒暴徒，再回 ripper_clinic 找分診 ripperdoc 結案。
+    hint_en: Hit the alley, drop the thug, return to ripper_clinic and talk ripperdoc triage.
+    complete_npc_id: ripperdoc_triage
+    street_cred_req: 0
+    reward_gold: 60
+    reward_xp: 30
+    reward_street_cred: 2
+    reward_items: [trauma_kit]
+    stages:
+      - objective_type: visit_room
+        objective_target: alley
+      - objective_type: defeat_npc
+        objective_target: thug
+      - objective_type: visit_room
+        objective_target: ripper_clinic
+      - objective_type: talk_npc
+        objective_target: ripperdoc_triage
   alley_clearance:
     name_zh: 小巷清剿
     name_en: Alley Clearance

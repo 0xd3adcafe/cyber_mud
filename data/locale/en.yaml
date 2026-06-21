@@ -479,6 +479,7 @@ scene:
   status_row: "{name}: stage {stage} (scene from {min_stage})"
   no_targets: "No romance targets in this room."
   need_stage: "{name} needs romance stage {stage} before a scene."
+  need_quest: "{name} won't scene until you finish gig: {quest}."
 
 whisper:
   usage: "Usage: whisper <target> <message>"
@@ -1057,6 +1058,8 @@ talk:
   zone_warden: "The warden points at the scorched marker: \"Past this line, guns set the rules. I log every crossing.\""
   plaza_handler: "The handler scans your face against a guest list: \"Corpo plaza—no recordings, no weapons.\""
   gate_herbalist: "The herbalist offers incense: \"Rain washes the street, not the debt.\""
+  trauma_team_medic: "The medic taps your chart: \"gigs accept trauma_run for the bleed loop. Alley first—then back here if you're still leaking.\""
+  ripperdoc_triage: "Triage doesn't blink: \"Stabilized? talk me when the gig marks ready—I'll close the file.\""
   watson_spotter: "The spotter mutters: \"Ripper's north—cred flows east at dusk. Tell your broker.\""
   tyrell_courier: "The courier checks a seal: \"Sample lane's hot tonight. Plaza east if you're cleared.\""
   zone_medic: "The medic tapes a gauze arm: \"Gate's west—don't cross without ammo or a medic kit.\""

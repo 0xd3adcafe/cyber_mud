@@ -4492,6 +4492,28 @@ npcs:
     talk_key: gate_herbalist
     idle_msg_zh: 攪拌著冒熱氣的藥湯。
     idle_msg_en: Stirs steaming herbal broth.
+  trauma_team_medic:
+    name_zh: Trauma Team 急救員
+    name_en: Trauma Team Medic
+    room_id: ripper_clinic
+    description_zh: Trauma Team 臂章貼在防血外套上——掃描儀只對選擇成熟內容的訪客亮綠燈。
+    description_en: Trauma Team insignia on a blood-proof jacket—scanner green for mature guests.
+    hp: 48
+    hostile: false
+    talk_key: trauma_team_medic
+    idle_msg_zh: 核對失血協定與診所動線。
+    idle_msg_en: Checks bleed protocols and clinic routing.
+  ripperdoc_triage:
+    name_zh: 診所分診 Ripperdoc
+    name_en: Ripperdoc Triage
+    room_id: ripper_clinic
+    description_zh: 手術燈罩住裂紋 chrome 雙手；分診板從不停歇。
+    description_en: Surgical lamps halo cracked chrome hands; triage slate never stops scrolling.
+    hp: 52
+    hostile: false
+    talk_key: ripperdoc_triage
+    idle_msg_zh: 「穩定生命徵象再說話。」
+    idle_msg_en: '"Stabilize first—then talk."'
   watson_spotter:
     name_zh: 沃森線人
     name_en: Watson Spotter

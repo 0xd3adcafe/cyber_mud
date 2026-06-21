@@ -170,6 +170,21 @@ git submodule update --init data/mature
 
 **M.24** 將消耗品、腦舞、賽博精神病觸發接入 `resolve_mature_voice`。**M.25** 於內容包交付雙聲線 NPC 文案。**M.26** 擴充 `mature_validate`：禁用詞與 `noir`／`lewd` 雙語鍵同步。
 
+## 戰鬥 noir 聲線（M.27，已交付）
+
+**已確認（2026-06）：** 成熟戰鬥文案為 **noir 敘事層**——硬科幻暴力文筆，不加 RPG 機制、不做 lewd 戰鬥。社交 `lewd` 聲線**不**切換戰鬥台詞。
+
+| 範圍 | 現況（M.1／M.17） | M.27 目標 |
+|------|------------------|-----------|
+| 語系鍵 | 扁平 `mature.combat.*` | `mature.noir.combat.*`（保留舊鍵 fallback） |
+| 血腥 | `combat/gore.py` | `resolve_mature_combat_voice()` → 固定 `noir` |
+| 嘲諷／終結 | `taunt_*`／`finish_*` | 擴充 noir 池；chrome 羞辱、近距終結意象 |
+| 廣播 | `victory/defeat_broadcast_*` | 同上 voice 解析 |
+| 文風指南 | 社交 noir／lewd | `STYLE.md` 新增 § **戰鬥 noir** |
+| 參考 | — | [RPG Mars preset](https://chub.ai/presets/Viicell/rpg-mars-super-descriptive-viicell-s-preset-b7952a6f6e19)（Chub「戰鬥向 Slutbunny」文筆對照） |
+
+與 **BB.2 Trauma**（2026-06）一併交付：失血 tick＋ ripperdoc 循環。見 [PHASES.zh.md](PHASES.zh.md) **M.27**／**BB.2**。
+
 ## 規劃 spotlight NPC（BB）
 
 Backlog：[PHASES.zh.md](PHASES.zh.md) **Bleachbunny 風 spotlight NPC（BB）**。借 [Bleachbunny](https://bleachbunny.net/) 原型，不複製卡內劇情。

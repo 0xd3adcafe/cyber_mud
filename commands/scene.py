@@ -70,6 +70,28 @@ def handle(ctx: CommandContext):
             ]
         )
 
+    if profile.scene_requires_quest:
+        from world.quests import quest_is_done
+
+        if not quest_is_done(ctx.player, profile.scene_requires_quest):
+            label = npc_label(ctx.state, npc_id, locale)
+            quest = ctx.state.world.quest(profile.scene_requires_quest)
+            quest_name = (
+                quest.name_en or quest.name_zh
+                if quest and locale == "en"
+                else (quest.name_zh if quest else profile.scene_requires_quest)
+            )
+            return ok(
+                [
+                    t(
+                        locale,
+                        "scene.need_quest",
+                        name=label,
+                        quest=quest_name or profile.scene_requires_quest,
+                    )
+                ]
+            )
+
     room = ctx.state.world.room(ctx.player.room_id)
     voice = resolve_mature_voice(ctx.player, ctx.state, room, npc_id=npc_id)
     npc_name = npc_label(ctx.state, npc_id, locale)

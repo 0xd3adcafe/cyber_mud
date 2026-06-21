@@ -163,7 +163,11 @@ def test_taunt_and_finish_in_combat():
     state.npc_rooms["thug"] = "alley"
     start_encounter(state, player, "thug")
     taunt = dispatch("taunt thug", player, state, [], [player])
-    assert any("taunt" in line.lower() or "chrome" in line.lower() or "challenge" in line.lower() for line in taunt.lines)
+    assert any(
+        word in line.lower()
+        for line in taunt.lines
+        for word in ("taunt", "chrome", "challenge", "optics", "plating", "ozone", "lag")
+    )
 
     encounter = encounter_for_player(state, player)
     assert encounter is not None
@@ -177,7 +181,23 @@ def test_taunt_and_finish_in_combat():
     assert not player.in_combat
     assert any(
         word in joined
-        for word in ("finish", "coup", "mercy", "brutal", "blood", "smear", "wet", "crunch", "unmistakable")
+        for word in (
+            "finish",
+            "coup",
+            "mercy",
+            "brutal",
+            "blood",
+            "smear",
+            "wet",
+            "crunch",
+            "unmistakable",
+            "monofilament",
+            "point-blank",
+            "vent",
+            "mesh",
+            "stomp",
+            "slack",
+        )
     )
     assert finish.broadcast_mature_key.startswith("combat.victory_broadcast_")
 

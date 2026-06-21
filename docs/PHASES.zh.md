@@ -328,8 +328,18 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | ~~M.24~~ | ~~Lewd 觸發接線~~ | ✅ 成熟腦舞 `_voice_mature`；`go` 清除；消耗品／追蹤／人性／狀態接入 `resolve_mature_voice` |
 | ~~M.25~~ | ~~雙聲線 NPC 內容~~ | ✅ `kabuki_host`、`bd_den_clerk`、`kabuki_dancer`；階段 4–5；noir＋lewd 台詞集 |
 | ~~M.26~~ | ~~成熟驗證擴充~~ | ✅ `BANNED_LEWD_CLICHES`；noir／lewd 鍵同步；EN lewd 禁用詞掃描 |
+| ~~M.27~~ | ~~戰鬥 noir 聲線~~ | ✅ `resolve_mature_combat_voice()`；`mature.noir.combat.*`（五條池）；`combat/gore.py`＋`mature_social.py`；`STYLE.md` § 戰鬥 noir；`tests/test_combat_noir_voice.py` |
 
-**建議順序：** M.0–M.26 已交付（2026-06）。
+**設計決策（2026-06，已確認）：**
+
+| 決策 | 選擇 |
+|------|------|
+| 戰鬥文筆範圍 | **僅敘事風格**——不加擲骰／RPG 機制層 |
+| 戰鬥聲線 | **noir 硬科幻暴力**——chrome、合成肉、動脈噴濺、霓虹；直球 CP2077 氛圍 |
+| 戰鬥 lewd | **否**——戰鬥敘事鎖 `noir`；`lewd` 僅社交／浪漫／scene |
+| Chub 對照 | 描述性戰鬥 preset（RPG Mars），非 Slutbunny 色文 |
+
+**建議順序：** M.0–M.27 已交付（2026-06）。
 
 ### Bleachbunny 風 spotlight NPC（BB）
 
@@ -352,7 +362,7 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 | 階段 | 項目 | 模組／驗收 |
 |------|------|------------|
 | BB.Arcana | 塔羅抽牌 interact | `shrine_arcana_spread`；`interact`／三張 spread；22× `arcana.draw.*`（＋ mature noir／lewd）；時段冷卻；`tests/test_arcana_draw.py` |
-| BB.2 | Trauma Team 線（優先） | `trauma_team_medic`、`ripperdoc_triage`；SFW `trauma_run`；可選成熟 `trauma_intimate`；`tests/test_trauma_gig.py` |
+| ~~BB.2~~ | ~~Trauma Team 線（優先）~~ | ✅ `trauma_team_medic`、`ripperdoc_triage` @ `ripper_clinic`；SFW `trauma_run`；`scene_requires_quest`＋`trauma_intimate` noir scene；`tests/test_trauma_gig.py` |
 | BB.3 | 偶像互連委託 | `kabuki_idol_haejin`、`kabuki_idol_airi`；`idol_blackmail`→`idol_fall`；結局 `haejin`｜`airi`；`tests/test_idol_quests.py` |
 | BB.1 | Kabuki 娛樂擴充 | `kabuki_fixer_amara`、`kabuki_streamer_jenna`、`kabuki_artist_selene`、`kabuki_brat_neon`；romance＋偏高 lewd；`tests/test_bb_kabuki.py` |
 | BB.4 | Tyrell 企業線 | `tyrell_liaison_vera`、`tyrell_gene_thief_seojin`、`tyrell_corp_attendant_meera`、`corpo_ghost_control`；`tests/test_bb_tyrell.py` |
