@@ -4,6 +4,18 @@
 
 All mature / NSFW-adjacent content in **cyber_mud** is **opt-in**. Default player rating is `teen`.
 
+## Table of contents
+
+- [Player opt-in](#player-opt-in)
+- [Content pack (private submodule, M.18)](#content-pack-private-submodule-m18)
+  - [Pack documentation (`cyber_mud_mature`)](#pack-documentation)
+- [World data](#world-data)
+- [Romance scaffold](#romance-scaffold)
+- [Mature flavor hooks (look / scan / interact)](#mature-flavor-hooks-look-scan-interact)
+- [Mature social & combat (M.13–M.17)](#mature-social-combat-m13m17)
+- [Validation](#validation)
+- [Help and client](#help-and-client)
+
 ## Player opt-in
 
 | Mechanism | Detail |

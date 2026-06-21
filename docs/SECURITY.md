@@ -6,6 +6,14 @@ This document tracks **OWASP Application Security Verification Standard (ASVS)**
 
 **Scope:** Level 1 (L1) first; Level 2 items remain backlog.
 
+## Table of contents
+
+- [Threat model (summary)](#threat-model-summary)
+- [ASVS L1 — shipped (2026-06)](#asvs-l1-shipped-2026-06)
+- [ASVS backlog (not yet implemented)](#asvs-backlog-not-yet-implemented)
+- [Developer checklist](#developer-checklist)
+- [References](#references)
+
 ## Threat model (summary)
 
 | Asset | Risk |

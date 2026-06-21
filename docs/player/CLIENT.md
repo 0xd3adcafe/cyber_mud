@@ -15,6 +15,20 @@ Launch:
 ./run.sh --client
 ```
 
+## Table of contents
+
+- [Layout](#layout)
+- [Function keys](#function-keys)
+- [Input](#input)
+- [Local commands (`/` prefix)](#local-commands-prefix)
+- [Login screen](#login-screen)
+- [Prompt tokens (preview)](#prompt-tokens-preview)
+- [NETRUN mode](#netrun-mode)
+- [Reconnect](#reconnect)
+- [Themes & readability](#themes-readability)
+  - [Log channel legend](#log-channel-legend)
+- [Tips](#tips)
+
 ## Layout
 
 ```text

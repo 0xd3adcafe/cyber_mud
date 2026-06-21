@@ -10,6 +10,16 @@
 +-------------------------------------------------------+
 ```
 
+## Table of contents
+
+- [1. Requirements](#1-requirements)
+- [2. Install & run](#2-install-run)
+- [3. Create an account](#3-create-an-account)
+- [4. First five minutes](#4-first-five-minutes)
+- [5. Training yard](#5-training-yard)
+- [6. Language](#6-language)
+- [7. When stuck](#7-when-stuck)
+
 ## 1. Requirements
 
 - **Python 3.13** (see repo `.python-version`)

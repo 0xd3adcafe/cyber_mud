@@ -13,6 +13,27 @@
 
 遊戲內：`help` 或 **F3**。重複執行：`10 punch` 或 `punch.10`（間隔 0.5 秒）。
 
+## 目錄
+
+- [簡寫別名](#簡寫別名)
+- [帳號（Account）](#帳號account)
+- [探索（Explore）](#探索explore)
+- [生活與生命徵象（Life & vitals）](#生活與生命徵象life-vitals)
+- [物品（Items）](#物品items)
+- [裝備與消耗品（Gear）](#裝備與消耗品gear)
+- [義體（Cyberware）](#義體cyberware)
+- [住宅（Housing）](#住宅housing)
+- [交通（Travel）](#交通travel)
+- [商店（Trade）](#商店trade)
+- [社交（Social）](#社交social)
+- [戰鬥（Combat）](#戰鬥combat)
+- [NETRUN](#netrun)
+- [委託（Gigs）](#委託gigs)
+- [成長（Progression）](#成長progression)
+- [面板（Panels）](#面板panels)
+- [腦舞（Braindance）](#腦舞braindance)
+- [僅 Client（不送伺服器）](#僅-client不送伺服器)
+
 ## 簡寫別名
 
 | 別名 | 展開 |

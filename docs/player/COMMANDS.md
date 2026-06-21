@@ -11,6 +11,27 @@
 
 In-game: `help` or **F3**. Repeat commands: `10 punch` or `punch.10` (0.5s between).
 
+## Table of contents
+
+- [Short aliases](#short-aliases)
+- [Account](#account)
+- [Explore](#explore)
+- [Life & vitals](#life-vitals)
+- [Items](#items)
+- [Gear & consumables](#gear-consumables)
+- [Cyberware](#cyberware)
+- [Housing](#housing)
+- [Transit & vehicles](#transit-vehicles)
+- [Shops](#shops)
+- [Social](#social)
+- [Combat](#combat)
+- [NETRUN](#netrun)
+- [Gigs](#gigs)
+- [Progression](#progression)
+- [UI panels](#ui-panels)
+- [Braindance](#braindance)
+- [Client-only (not sent to server)](#client-only-not-sent-to-server)
+
 ## Short aliases
 
 | Alias | Expands to |

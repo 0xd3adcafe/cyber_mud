@@ -4,6 +4,16 @@
 
 Thank you for contributing to **cyber_mud** — human or AI-assisted.
 
+## Table of contents
+
+- [Licenses](#licenses)
+- [AI-assisted development](#ai-assisted-development)
+- [Before you commit](#before-you-commit)
+- [Commit messages](#commit-messages)
+- [World authoring tools](#world-authoring-tools)
+- [Pull requests](#pull-requests)
+- [Questions](#questions)
+
 ## Licenses
 
 By contributing, you agree that:

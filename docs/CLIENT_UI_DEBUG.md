@@ -4,6 +4,20 @@
 
 This document records **June 2026** Textual client layout/sidebar issues that were hard to fix, with root causes and final solutions. Use when changing `client/`.
 
+## Table of contents
+
+- [Symptom summary](#symptom-summary)
+- [Root cause 1: Textual `region` vs `size`](#root-cause-1-textual-vs)
+- [Root cause 2: Dock stacking](#root-cause-2-dock-stacking)
+- [Root cause 3: Sidebar state machine (dual paths)](#root-cause-3-sidebar-state-machine-dual-paths)
+- [Root cause 4: Async blocking](#root-cause-4-async-blocking)
+- [Pre-delivery checklist (client UI changes)](#pre-delivery-checklist-client-ui-changes)
+- [Test conventions (avoid false positives)](#test-conventions-avoid-false-positives)
+- [Anti-patterns](#anti-patterns)
+- [Related tests](#related-tests)
+- [Change history (summary)](#change-history-summary)
+- [Client log UX (CL.1–CL.8 shipped)](#client-log-ux-cl1cl8-shipped)
+
 ## Symptom summary
 
 | Symptom | User observation | Actual root cause |

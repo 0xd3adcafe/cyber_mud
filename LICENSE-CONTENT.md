@@ -2,6 +2,14 @@
 
 > **中文：** 世界文案採 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh-Hant)；程式碼見 [LICENSE](LICENSE)（Apache 2.0）。
 
+## Table of contents
+
+- [License](#license)
+- [Scope (CC BY 4.0)](#scope-cc-by-40)
+- [Out of scope (Apache 2.0)](#out-of-scope-apache-20)
+- [Attribution](#attribution)
+- [Disclaimer](#disclaimer)
+
 ## License
 
 **World narrative and game copy** in this repository are licensed under the  

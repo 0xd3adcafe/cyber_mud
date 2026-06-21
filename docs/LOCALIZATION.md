@@ -5,6 +5,16 @@
 > **Default locale: English (`en`)**  
 > User-facing text, logs, docs, and commits use **English primary + Traditional Chinese mirror**.
 
+## Table of contents
+
+- [Project rule (mandatory)](#project-rule-mandatory)
+- [Scope](#scope)
+- [Documentation layout](#documentation-layout)
+- [Switching language in-game](#switching-language-in-game)
+- [Tests](#tests)
+- [Adding strings](#adding-strings)
+- [Commit message format](#commit-message-format)
+
 ## Project rule (mandatory)
 
 **English is the default locale for this project.** This is enforced in [`CLAUDE.md`](../CLAUDE.md) § Project rules (mandatory).

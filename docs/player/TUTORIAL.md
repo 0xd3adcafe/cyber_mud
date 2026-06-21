@@ -11,6 +11,22 @@
 
 Use `recall` anytime to return to the hub. Tutorial is isolated from open PvP in the city.
 
+## Table of contents
+
+- [Recommended route](#recommended-route)
+- [Hub — Training Yard (`tutorial`)](#hub-training-yard)
+- [1. Mission Briefing (`tutorial_briefing`)](#1-mission-briefing)
+- [1b. Graduation Checkpoint (`tutorial_debrief`)](#1b-graduation-checkpoint)
+- [2. Armory (`tutorial_armory`)](#2-armory)
+- [2b. Trainee Canteen (`tutorial_canteen`)](#2b-trainee-canteen)
+- [3. Combat Drill (`tutorial_combat`)](#3-combat-drill)
+- [4. Firing Range (`tutorial_range`)](#4-firing-range)
+- [5. Obstacle Course (`tutorial_course`)](#5-obstacle-course)
+- [6. Netrun Sim Bay (`tutorial_net`)](#6-netrun-sim-bay)
+- [7. Sim Ripper Bay (`tutorial_medbay`)](#7-sim-ripper-bay)
+- [8. Graduate to the city](#8-graduate-to-the-city)
+- [9. Rest outside the tutorial](#9-rest-outside-the-tutorial)
+
 ## Recommended route
 
 | Step | Room | Practice |

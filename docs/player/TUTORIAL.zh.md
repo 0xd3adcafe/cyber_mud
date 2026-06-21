@@ -13,6 +13,22 @@
 
 隨時 `recall` 回中樞。訓練場與公開城區隔離。
 
+## 目錄
+
+- [建議路線](#建議路線)
+- [中樞 — Training Yard (`tutorial`)](#中樞-training-yard)
+- [1. 任務簡報室 (`tutorial_briefing`)](#1-任務簡報室)
+- [1b. 畢業檢定室 (`tutorial_debrief`)](#1b-畢業檢定室)
+- [2. 軍械庫 (`tutorial_armory`)](#2-軍械庫)
+- [2b. 學員餐廳 (`tutorial_canteen`)](#2b-學員餐廳)
+- [3. 戰鬥訓練區 (`tutorial_combat`)](#3-戰鬥訓練區)
+- [4. 靶場 (`tutorial_range`)](#4-靶場)
+- [5. 障礙訓練道 (`tutorial_course`)](#5-障礙訓練道)
+- [6. 駭客模擬區 (`tutorial_net`)](#6-駭客模擬區)
+- [7. 模擬義體診所 (`tutorial_medbay`)](#7-模擬義體診所)
+- [8. 畢業進城](#8-畢業進城)
+- [9. 訓練場外的休息](#9-訓練場外的休息)
+
 ## 建議路線
 
 | 步驟 | 房間 | 練習 |

@@ -11,6 +11,13 @@
 
 Welcome to **cyber_mud**. These guides mirror what you will see in-game, but you can read them on GitHub before connecting.
 
+## Table of contents
+
+- [Quick path](#quick-path)
+- [In-game vs GitHub](#in-game-vs-github)
+- [Lore (optional)](#lore-optional)
+- [License](#license)
+
 ## Quick path
 
 | Step | Guide | Time |
