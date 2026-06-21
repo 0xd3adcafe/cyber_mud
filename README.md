@@ -25,6 +25,21 @@ Cyberpunk text MUD set in **Night City** — jack in, take gigs, hack the grid, 
 
 **中文說明：** [README.zh.md](README.zh.md)
 
+## Table of contents
+
+- [Why jack in?](#why-jack-in)
+  - [Play the city](#play-the-city)
+  - [Optional 18+ (opt-in)](#optional-18-opt-in)
+  - [Built for players and builders](#built-for-players-and-builders)
+- [Player guides (read on GitHub)](#player-guides-read-on-github)
+- [Agent guide](#agent-guide)
+- [Documentation](#documentation)
+- [Reading order](#reading-order)
+- [Core principles](#core-principles)
+- [Quick start](#quick-start)
+- [Git](#git)
+- [License](#license)
+
 ## Why jack in?
 
 Original Night City fiction with **homage vibes** you will recognize — neon rain and corporate dystopia (**Blade Runner**), street cred, cyberware, and quickhacks (**Cyberpunk 2077**), plus a **Watch Dogs**-style surveillance-hacking roadmap (profiler, ctOS hacks, digital footprint). Not official IP; built to *feel* like the worlds you already love.
