@@ -23,7 +23,7 @@
 
 > **English（canonical）：** [README.md](README.md)
 
-賽博龐克文字 MUD，背景為**夜城**——接入神經連結、接委託、駭入節點、在霓虹與黑市中活下去。由原 **mud** 專案 fork；**263 房**、**109 NPC**、內建 **Textual TUI**，不必另裝傳統 MUD 客戶端。
+賽博龐克文字 MUD，背景為**夜城**——接入神經連結、接委託、駭入節點、在霓虹與黑市中活下去。**263 房**、**109 NPC**、完整 Python 程式庫與內建 **Textual TUI**，不必另裝傳統 MUD 客戶端。
 
 **預設語系為英文**；遊戲內輸入 `lang zh` 可切換繁體中文。雙語慣例見 [docs/LOCALIZATION.zh.md](docs/LOCALIZATION.zh.md)。
 
@@ -42,9 +42,19 @@
 - [Commit](#commit)
 - [授權](#授權)
 
+---
+
+```text
+  ◈ 為什麼接入 ── 致敬世界觀、可選 18+、今晚就開玩
+```
+
 ## 為什麼要接入？
 
 原創夜城劇情，帶著你熟悉的**致敬氛圍**——霓虹雨與企業反烏托邦（**銀翼殺手**）、街頭聲望、義體與快速破解（**電馭叛客 2077**），以及 **看門狗**風格的監控駭客路線圖（Profiler、ctOS、數位足跡）。非官方授權；目的是重現你已在其他媒介愛上的那種賽博感。
+
+```text
+  · 玩法亮點 ·
+```
 
 ### 玩法亮點
 
@@ -58,9 +68,17 @@
 
 新手訓練場 → 沃森公寓 → 歌舞伎俱樂部與企業中樞。輸入 `look`、`scan`、`go`、`talk`、`gigs`——城市會回應你。
 
+```text
+  · 可選 18+ ·
+```
+
 ### 可選 18+（自願啟用）
 
 限制級內容**預設關閉**（`teen`）。註冊時選 `mature` 或 `settings mature on` 可解鎖 18+ 場域、浪漫劇情、限制級委託／腦舞與更血腥的戰鬥文案——登入與指令層雙重門檻。內容包在 private **`cyber_mud_mature`**；公開 clone 維持 teen 安全。見 [docs/MATURE_CONTENT.zh.md](docs/MATURE_CONTENT.zh.md)。
+
+```text
+  · 玩家與開發者 ·
+```
 
 ### 給玩家與開發者
 
@@ -74,11 +92,13 @@
 ./run.sh --client               # 接入——這才是正式遊玩方式
 ```
 
-## 玩家指南（GitHub 閱讀）
+---
 
 ```text
   ◈ 神經連結文件 ── 連線前先讀
 ```
+
+## 玩家指南（GitHub 閱讀）
 
 | 指南 | 用途 |
 |------|------|
@@ -90,9 +110,21 @@
 
 English: [docs/player/README.md](docs/player/README.md)
 
+---
+
+```text
+  ◈ 協作指引 ── 人類與 AI 共同開發
+```
+
 ## 協作指引
 
 Agent 行為準則：**[CLAUDE.zh.md](CLAUDE.zh.md)**
+
+---
+
+```text
+  ◈ 文件 ── 世界觀、架構、階段清單
+```
 
 ## 文件
 
@@ -109,6 +141,12 @@ Agent 行為準則：**[CLAUDE.zh.md](CLAUDE.zh.md)**
 
 英文版（GitHub 預設）：同路徑無 `.zh` 後綴，例如 [docs/WORLD.md](docs/WORLD.md)。
 
+---
+
+```text
+  ◈ 建議閱讀順序 ── 五份文件、一條路徑
+```
+
 ## 建議閱讀順序
 
 1. [WORLD.zh.md](docs/WORLD.zh.md) — 夜城是什麼  
@@ -117,6 +155,12 @@ Agent 行為準則：**[CLAUDE.zh.md](CLAUDE.zh.md)**
 4. [IMPLEMENTATION.zh.md](docs/IMPLEMENTATION.zh.md) — 模組細節  
 5. [PHASES.zh.md](docs/PHASES.zh.md) — 排程與驗收
 
+---
+
+```text
+  ◈ 核心原則 ── 本 repo 的開發慣例
+```
+
 ## 核心原則
 
 1. **英文為預設語系（強制）** — 執行時 `locale=en`；`lang zh` 為選用。見 [CLAUDE.zh.md](CLAUDE.zh.md) § 專案規則與 [docs/LOCALIZATION.zh.md](docs/LOCALIZATION.zh.md)。  
@@ -124,6 +168,12 @@ Agent 行為準則：**[CLAUDE.zh.md](CLAUDE.zh.md)**
 3. **世界放 `data/`**，程式只負責解讀。  
 4. **一指令一模組**，`commands/` 註冊制。  
 5. **雙語對照** — `en.yaml` + `zh.yaml`；英文 `*.md` + 中文 `*.zh.md`。
+
+---
+
+```text
+  ◈ 快速開始 ── 兩個終端、一條神經連結
+```
 
 ## 快速開始
 
@@ -135,6 +185,12 @@ Agent 行為準則：**[CLAUDE.zh.md](CLAUDE.zh.md)**
 ./admin.sh validate
 ```
 
+---
+
+```text
+  ◈ COMMIT ── 提交與 backlog 維護
+```
+
 ## Commit
 
 ```
@@ -142,6 +198,12 @@ feat: English summary / 中文簡述（可選）
 ```
 
 變更須同步 [PHASES.zh.md](docs/PHASES.zh.md) backlog。
+
+---
+
+```text
+  ◈ 授權 ── 程式碼與世界文案
+```
 
 ## 授權
 
