@@ -527,6 +527,42 @@ Not yet implemented or only partially implemented.
 
 **Suggested order:** T.1 (prior) → T.2 → T.3 → T.4 → T.5 → T.6 → T.7. **All phases shipped (2026-06).**
 
+### Traditional Chinese locale quality (ZH)
+
+**Policy:** [`LOCALIZATION.md`](LOCALIZATION.md) — English default (`en`); Chinese is opt-in (`lang zh`). All `zh` mirrors must be **Traditional Chinese (繁體)** and semantically aligned with English sources.
+
+**Audit snapshot (2026-06-21, discussion only — no copy edits yet):**
+
+| Asset | Keys / fields | Parity vs `en` | 繁體 quality |
+|-------|---------------|----------------|--------------|
+| `data/locale/zh.yaml` | 1241 keys | ✅ 0 missing / 0 extra | ✅ Mostly 繁體; **1 known line** mirrors simplified BB copy (`district.grid.little_china_sister_sayaka`) |
+| `data/mature/locale/mature_zh.yaml` | 409 keys | ✅ 0 missing / 0 extra (`mature_validate.py`) | ⚠️ **BB / Arcana / lewd batch** (~L18–50, L133+, L342–409) mixes **Simplified** (`书包`, `划过`, `湿吻`, `喉结`, `场关`, `干到`, `舞台妆`, `环形灯`, …) with earlier 繁體 noir lines |
+| World `*_zh` in `data/*.yaml` | rooms, NPCs, items, quests, interactables | Spot-check OK | ✅ Predominantly 繁體; bilingual **command tokens** in hints (`gigs`, `install`, `interact`) match main `zh.yaml` pattern |
+| `*.zh.md` docs (main + mature pack) | ~26 mirrors | Manual | ✅ No obvious simplified bigrams in sample scan; parity with English `*.md` not automated |
+| CI today | `mature_validate.py` | en/zh **key** parity + EN lewd ban-list | ❌ No 繁體／簡體 script; no `en.yaml`↔`zh.yaml` parity in `admin.sh validate` |
+
+**Goal:** Player-facing `lang zh` reads as consistent Night City 繁體—not mainland simplified drift, not untranslated English except where deliberately bilingual.
+
+| Phase | Item | Module / acceptance |
+|-------|------|---------------------|
+| ~~ZH.1~~ | ~~Main locale parity gate~~ | ✅ `shared/locale_validate.py`; `admin.sh validate` hard-fail on `en.yaml`↔`zh.yaml` key mismatch; `tests/test_locale_zh.py` |
+| ~~ZH.2~~ | ~~繁體 script + mature pack sweep~~ | ✅ `shared/zh_traditional_audit.py` (`opencc` s2tw + game-term fixes); `mature_zh.yaml` BB/Arcana/lewd 繁體化; `world/mature_validate.py` hook; `tools/fix_mature_zh_traditional.py` |
+| ~~ZH.3~~ | ~~World `*_zh` field audit~~ | ✅ `audit_world_zh_fields()` in `admin.sh validate`; world YAML spot-fix |
+| ~~ZH.4~~ | ~~Recent feature copy review~~ | ✅ BB `talk.*`, Arcana `arcana.draw.*`, `district.grid` / `talk` mirrors; `tools/fix_zh_locale_traditional.py` |
+| ~~ZH.5~~ | ~~Doc mirror sync~~ | ✅ Existing `*.zh.md` pairs maintained; ongoing section parity = doc maintenance (non-runtime) |
+| ~~ZH.6~~ | ~~Terminology glossary~~ | ✅ `LOCALIZATION.md` + `LOCALIZATION.zh.md` § Traditional Chinese terminology |
+
+**Confirmed decisions (2026-06-21):**
+
+| Decision | Choice |
+|----------|--------|
+| Simplified in mature/lewd copy | **Convert all to 繁體** — no simplified exception |
+| English command tokens in `zh` UI | **Keep bilingual hints** — e.g. `互動物件（interact <物件>）`, `gigs accept`; players type English verbs |
+| Priority | **ZH.2 mature_zh** → ZH.4 spot fixes → ZH.1 CI → ZH.3 world → ZH.5 docs → ZH.6 glossary |
+| CI strictness | **`admin.sh validate` hard-fail** once ZH.1–2 land — no warn-only pilot |
+
+**Suggested order:** ZH.1–6 shipped (2026-06-21).
+
 ---
 
 Suggested route: **0 → A → D.2/D.7 (playability) → B → C → remaining D → E**; for a social-exploration MUD, consider B before C.

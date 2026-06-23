@@ -79,6 +79,21 @@ lang zh    # Traditional Chinese
 
 Example (life commands): add `life.sit_ok`, `life.sleep_ok`, `help_cmds.sit`, `pda.life` to **both** YAML files; mirror player docs in [COMMANDS.md](player/COMMANDS.md) and [COMMANDS.zh.md](player/COMMANDS.zh.md).
 
+## Traditional Chinese terminology (ZH glossary)
+
+Night City `lang zh` copy uses **Taiwan Traditional (繁體)**. English command verbs stay **bilingual in hints** (players still type English verbs).
+
+| Term | `en` / command | `zh` display policy |
+|------|----------------|-------------------|
+| NETRUN | `net`, `hack`, `probe` | Keep **NETRUN**; explain in 繁體 around the verb |
+| Gig / Fixer job | `gigs`, `gigs accept`, `journal` | Keep command tokens; 委託／街頭委託 in prose |
+| Chrome / cyberware | `chrome`, `install`, `cyberware` | Keep **chrome** where styled; 義體 for implants |
+| Cred | `cred`, `street_cred` | Keep **cred** / 信用點 in 繁體 hints |
+| Mature opt-in | `mature`, `flirt`, `spend_time` | Keep verbs; 繁體 scene tone in `mature_zh.yaml` |
+| District grid | room `look` flavor | `district.grid.*` in `zh.yaml` — 繁體 only |
+
+**CI:** `./admin.sh validate` hard-fails on `en.yaml`↔`zh.yaml` key mismatch, `zh.yaml` / `mature_zh.yaml` simplified forms, and world `*_zh` simplified forms (`shared/zh_traditional_audit.py`, `shared/locale_validate.py`).
+
 ## Commit message format
 
 ```

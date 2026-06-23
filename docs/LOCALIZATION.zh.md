@@ -79,6 +79,21 @@ lang zh    # 繁體中文
 
 範例（生活指令）：`life.sit_ok`、`life.sleep_ok`、`help_cmds.sit`、`pda.life` 須**同時**寫入兩份 YAML；玩家文件同步 [COMMANDS.md](player/COMMANDS.md) 與 [COMMANDS.zh.md](player/COMMANDS.zh.md)。
 
+## 繁體術語表（ZH 詞彙）
+
+夜城 `lang zh` 文案使用**台灣繁體**；英文指令動詞在提示中**保留雙語**（玩家仍輸入英文動詞）。
+
+| 術語 | `en`／指令 | `zh` 顯示政策 |
+|------|------------|---------------|
+| NETRUN | `net`、`hack`、`probe` | 保留 **NETRUN**；周邊說明用繁體 |
+| 委託 | `gigs`、`gigs accept`、`journal` | 保留指令；正文用委託／街頭委託 |
+| Chrome／義體 | `chrome`、`install` | 風格字保留 **chrome**；義體指 cyberware |
+| 信用點 | `cred`、`street_cred` | **cred**／信用點並列於繁體提示 |
+| 成熟內容 | `mature`、`flirt`、`spend_time` | 保留動詞；場景語氣在 `mature_zh.yaml` |
+| 區域格點 | `look` 氛圍 | `district.grid.*` 僅繁體 |
+
+**CI：** `./admin.sh validate` 對 `en.yaml`↔`zh.yaml` 鍵差異、`zh.yaml`／`mature_zh.yaml` 簡體、`data/*.yaml` 的 `*_zh` 簡體 **hard-fail**（`shared/zh_traditional_audit.py`、`shared/locale_validate.py`）。
+
 ## Commit 格式
 
 ```

@@ -12,6 +12,7 @@ from shared.mature_paths import (
     quests_mature_path,
     romance_path,
 )
+from shared.zh_traditional_audit import audit_yaml_strings
 
 ROMANCE_PATH = romance_path()
 QUESTS_MATURE_PATH = quests_mature_path()
@@ -121,6 +122,10 @@ def validate_mature_content(world) -> list[MatureIssue]:
         issues.append(MatureIssue("error", f"mature locale missing zh key: {key}"))
     for key in missing_en:
         issues.append(MatureIssue("warn", f"mature locale missing en key: {key}"))
+
+    for audit in audit_yaml_strings(mature_locale_path("zh"), label="mature_zh"):
+        if audit.severity == "error":
+            issues.append(MatureIssue("error", audit.message + f" ({audit.path})"))
 
     for voice in ("noir", "lewd"):
         en_voice = _voice_subtree_keys("en", voice)

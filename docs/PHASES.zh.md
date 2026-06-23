@@ -523,6 +523,42 @@ Agent／協作者亦同：交付前若改動遊戲或 client 行為，**必須**
 
 **建議順序：** T.1 → T.2 → T.3 → T.4 → T.5 → T.6 → T.7。**全階段已交付（2026-06）。**
 
+### 繁體中文語系品質（ZH）
+
+**原則：** [`LOCALIZATION.zh.md`](LOCALIZATION.zh.md) — 預設英文（`en`）；中文為 opt-in（`lang zh`）。所有 `zh` 鏡像須為**繁體中文**，語意與英文來源對齊。
+
+**盤點快照（2026-06-21，僅討論紀錄，尚未改文案）：**
+
+| 資產 | 鍵／欄位 | 與 `en` 同步 | 繁體品質 |
+|------|----------|--------------|----------|
+| `data/locale/zh.yaml` | 1241 鍵 | ✅ 缺 0／多 0 | ✅ 多為繁體；**1 行**鏡像簡體 BB 文案（`district.grid.little_china_sister_sayaka`） |
+| `data/mature/locale/mature_zh.yaml` | 409 鍵 | ✅ `mature_validate.py` 鍵同步 | ⚠️ **BB／Arcana／lewd 批次**（約 L18–50、L133+、L342–409）混有**簡體**（`书包`、`划过`、`湿吻`、`舞台妆`、`环形灯` 等）與早期繁體 noir 文風 |
+| 世界 `data/*.yaml` 的 `*_zh` | 房間、NPC、物品、委託 | 抽樣 OK | ✅ 多為繁體；提示內**雙語指令**（`gigs`、`install`）與主 `zh.yaml` 一致 |
+| `*.zh.md` 文件 | 約 26 份鏡像 | 手動 | ✅ 抽樣無明顯簡體詞；與英文 `*.md` 章節對齊未自動化 |
+| CI | `mature_validate.py` | en/zh **鍵**同步 + EN lewd 禁詞 | ❌ 無繁簡稽核；`admin.sh validate` 未檢 `en.yaml`↔`zh.yaml` |
+
+**目標：** `lang zh` 玩家讀到一致夜城繁體——非大陸簡體漂移，非未譯英文（刻意雙語指令提示除外）。
+
+| 階段 | 項目 | 模組／驗收 |
+|------|------|------------|
+| ~~ZH.1~~ | ~~主語系鍵同步閘門~~ | ✅ `shared/locale_validate.py`；`admin.sh validate` hard-fail；`tests/test_locale_zh.py` |
+| ~~ZH.2~~ | ~~繁體腳本 + mature 包掃描~~ | ✅ `shared/zh_traditional_audit.py`；`mature_zh.yaml` 繁體化；`world/mature_validate.py`；`tools/fix_mature_zh_traditional.py` |
+| ~~ZH.3~~ | ~~世界 `*_zh` 欄位稽核~~ | ✅ `audit_world_zh_fields()`；`admin.sh validate` |
+| ~~ZH.4~~ | ~~近期功能文案審閱~~ | ✅ BB `talk.*`、Arcana、`tools/fix_zh_locale_traditional.py` |
+| ~~ZH.5~~ | ~~文件鏡像同步~~ | ✅ 既有 `*.zh.md` 維護；章節對照為持續文件維護 |
+| ~~ZH.6~~ | ~~術語表~~ | ✅ `LOCALIZATION.md`／`LOCALIZATION.zh.md` § 繁體術語表 |
+
+**已確認決策（2026-06-21）：**
+
+| 決策 | 選擇 |
+|------|------|
+| mature／lewd 簡體 | **全部改繁體** — 無簡體例外 |
+| `zh` UI 英文指令 | **保留雙語提示** — 如 `互動物件（interact <物件>）`；玩家仍輸入英文動詞 |
+| 優先順序 | **ZH.2 mature_zh** → ZH.4 → ZH.1 → ZH.3 → ZH.5–6 |
+| CI 嚴格度 | **ZH.1–2 落地後 `admin.sh validate` hard-fail** — 不設僅警告試行期 |
+
+**建議順序：** ZH.1–6 已交付（2026-06-21）。
+
 ---
 
 建議路線：**0 → A → D.2/D.7（可玩性）→ B → C → D 其餘 → E**；若新 MUD 偏社交探索，可先做 B 再做 C。

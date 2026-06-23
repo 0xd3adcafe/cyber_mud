@@ -25,6 +25,36 @@ def _pytest_argv() -> list[str]:
 
 
 def validate() -> int:
+    from shared.locale_validate import validate_main_locale_parity
+    from shared.zh_traditional_audit import audit_world_zh_fields, audit_yaml_strings
+    from shared.i18n import DATA_ROOT
+
+    locale_errors = [
+        issue for issue in validate_main_locale_parity() if issue.severity == "error"
+    ]
+    if locale_errors:
+        for issue in locale_errors:
+            print(f"ERR  [locale] {issue.message}")
+        return 1
+    print("OK: main locale en/zh key parity")
+
+    zh_issues = audit_yaml_strings(DATA_ROOT / "zh.yaml", label="zh")
+    zh_errors = [issue for issue in zh_issues if issue.severity == "error"]
+    if zh_errors:
+        for issue in zh_errors:
+            print(f"ERR  [{issue.path}] {issue.message}")
+        return 1
+    print("OK: zh.yaml traditional audit")
+
+    world_zh_errors = [
+        issue for issue in audit_world_zh_fields() if issue.severity == "error"
+    ]
+    if world_zh_errors:
+        for issue in world_zh_errors:
+            print(f"ERR  [{issue.path}] {issue.message}")
+        return 1
+    print("OK: world *_zh traditional audit")
+
     world = load_world()
     assert world.start_room in world.rooms, "start_room missing"
     for rid, room in world.rooms.items():
